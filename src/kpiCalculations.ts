@@ -299,7 +299,10 @@ export function calculateClientGoals(dataDir: string): {
       });
     } else {
       // Update info if recovered
-      const info = customerInfo.get(customerId)!;
+      const info = customerInfo.get(customerId);
+      if (!info) {
+        return;
+      }
       if (status === 'Recovered') {
         info.isRecovered = true;
       }
