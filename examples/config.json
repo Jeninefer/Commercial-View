@@ -1,0 +1,256 @@
+{
+  "version": "1.0.0",
+  "environment": "production",
+  "dashboards": [
+    {
+      "id": "executive-dashboard",
+      "name": "Executive Dashboard",
+      "description": "High-level business metrics for executive team",
+      "metrics": [
+        {
+          "id": "revenue",
+          "name": "Monthly Recurring Revenue",
+          "description": "Total MRR across all products",
+          "category": "Financial",
+          "unit": "USD",
+          "currentValue": 0,
+          "targetValue": 1000000,
+          "threshold": {
+            "excellent": 1000000,
+            "good": 800000,
+            "warning": 600000,
+            "critical": 400000
+          },
+          "trend": {
+            "direction": "stable",
+            "percentage": 0,
+            "comparisonPeriod": "monthly"
+          },
+          "historicalData": [],
+          "status": "unknown",
+          "tags": ["revenue", "financial", "executive"]
+        },
+        {
+          "id": "churn-rate",
+          "name": "Customer Churn Rate",
+          "description": "Monthly customer churn percentage",
+          "category": "Customer",
+          "unit": "%",
+          "currentValue": 0,
+          "targetValue": 2.0,
+          "threshold": {
+            "excellent": 2.0,
+            "good": 3.5,
+            "warning": 5.0,
+            "critical": 7.0
+          },
+          "trend": {
+            "direction": "stable",
+            "percentage": 0,
+            "comparisonPeriod": "monthly"
+          },
+          "historicalData": [],
+          "status": "unknown",
+          "tags": ["churn", "customer", "retention"]
+        },
+        {
+          "id": "nps",
+          "name": "Net Promoter Score",
+          "description": "Overall customer satisfaction and loyalty metric",
+          "category": "Customer",
+          "unit": "score",
+          "currentValue": 0,
+          "targetValue": 50,
+          "threshold": {
+            "excellent": 50,
+            "good": 30,
+            "warning": 10,
+            "critical": 0
+          },
+          "trend": {
+            "direction": "stable",
+            "percentage": 0,
+            "comparisonPeriod": "quarterly"
+          },
+          "historicalData": [],
+          "status": "unknown",
+          "tags": ["nps", "satisfaction", "customer"]
+        },
+        {
+          "id": "cac",
+          "name": "Customer Acquisition Cost",
+          "description": "Average cost to acquire a new customer",
+          "category": "Marketing",
+          "unit": "USD",
+          "currentValue": 0,
+          "targetValue": 500,
+          "threshold": {
+            "excellent": 500,
+            "good": 750,
+            "warning": 1000,
+            "critical": 1500
+          },
+          "trend": {
+            "direction": "stable",
+            "percentage": 0,
+            "comparisonPeriod": "monthly"
+          },
+          "historicalData": [],
+          "status": "unknown",
+          "tags": ["cac", "marketing", "acquisition"]
+        }
+      ],
+      "refreshInterval": 300000,
+      "layout": {
+        "columns": 2,
+        "rows": 2
+      }
+    },
+    {
+      "id": "sales-dashboard",
+      "name": "Sales Performance Dashboard",
+      "description": "Detailed sales metrics and performance indicators",
+      "metrics": [
+        {
+          "id": "pipeline-value",
+          "name": "Sales Pipeline Value",
+          "description": "Total value of opportunities in pipeline",
+          "category": "Sales",
+          "unit": "USD",
+          "currentValue": 0,
+          "targetValue": 5000000,
+          "threshold": {
+            "excellent": 5000000,
+            "good": 4000000,
+            "warning": 3000000,
+            "critical": 2000000
+          },
+          "trend": {
+            "direction": "stable",
+            "percentage": 0,
+            "comparisonPeriod": "weekly"
+          },
+          "historicalData": [],
+          "status": "unknown",
+          "tags": ["pipeline", "sales", "opportunities"]
+        },
+        {
+          "id": "win-rate",
+          "name": "Win Rate",
+          "description": "Percentage of closed deals won",
+          "category": "Sales",
+          "unit": "%",
+          "currentValue": 0,
+          "targetValue": 30,
+          "threshold": {
+            "excellent": 30,
+            "good": 25,
+            "warning": 20,
+            "critical": 15
+          },
+          "trend": {
+            "direction": "stable",
+            "percentage": 0,
+            "comparisonPeriod": "monthly"
+          },
+          "historicalData": [],
+          "status": "unknown",
+          "tags": ["win-rate", "sales", "conversion"]
+        },
+        {
+          "id": "avg-deal-size",
+          "name": "Average Deal Size",
+          "description": "Average value of closed deals",
+          "category": "Sales",
+          "unit": "USD",
+          "currentValue": 0,
+          "targetValue": 50000,
+          "threshold": {
+            "excellent": 50000,
+            "good": 40000,
+            "warning": 30000,
+            "critical": 20000
+          },
+          "trend": {
+            "direction": "stable",
+            "percentage": 0,
+            "comparisonPeriod": "monthly"
+          },
+          "historicalData": [],
+          "status": "unknown",
+          "tags": ["deal-size", "sales", "revenue"]
+        }
+      ],
+      "refreshInterval": 60000,
+      "layout": {
+        "columns": 3,
+        "rows": 1
+      }
+    }
+  ],
+  "dataSources": [
+    {
+      "id": "crm-api",
+      "name": "CRM System API",
+      "type": "api",
+      "connectionString": "https://api.crm.example.com/v1",
+      "authentication": {
+        "type": "apikey",
+        "credentials": {
+          "api_key": "YOUR_API_KEY_HERE"
+        }
+      },
+      "refreshRate": 60000,
+      "enabled": true
+    },
+    {
+      "id": "analytics-db",
+      "name": "Analytics Database",
+      "type": "database",
+      "connectionString": "postgresql://localhost:5432/analytics",
+      "authentication": {
+        "type": "basic",
+        "credentials": {
+          "username": "analytics_user",
+          "password": "YOUR_PASSWORD_HERE"
+        }
+      },
+      "refreshRate": 300000,
+      "enabled": true
+    }
+  ],
+  "integrations": [
+    {
+      "id": "slack-notifications",
+      "name": "Slack Notifications",
+      "type": "webhook",
+      "endpoint": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+      "enabled": true,
+      "settings": {
+        "channel": "#commercial-alerts",
+        "notifyOn": ["critical", "warning"]
+      }
+    },
+    {
+      "id": "github-metrics",
+      "name": "GitHub Repository Metrics",
+      "type": "repository",
+      "endpoint": "https://api.github.com",
+      "apiKey": "YOUR_GITHUB_TOKEN",
+      "enabled": true,
+      "settings": {
+        "repositories": [
+          "yourorg/repo1",
+          "yourorg/repo2"
+        ]
+      }
+    }
+  ],
+  "settings": {
+    "defaultRefreshInterval": 60000,
+    "enableAI": true,
+    "enablePredictions": true,
+    "maxHistoricalDataPoints": 1000,
+    "logLevel": "info"
+  }
+}
