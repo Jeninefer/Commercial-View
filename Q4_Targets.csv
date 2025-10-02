@@ -1,0 +1,4 @@
+Month,Outstanding_Target,Disbursement_Target,APR_Target,NPL_Target,Tenor_30_Target,Tenor_60_Target,Tenor_90_Target,Tenor_90plus_Target
+2025-10-01,7800000,450000,18.5,2.5,25,35,25,15
+2025-11-01,8200000,450000,18.5,2.5,25,35,25,15
+2025-12-01,8500000,370000,18.5,2.5,25,35,25,15
