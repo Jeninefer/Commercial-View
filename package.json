@@ -1,0 +1,19 @@
+{
+  "name": "commercial-view",
+  "version": "1.0.0",
+  "description": "Principal KPI",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "test": "ts-node tests/kpiCalculations.test.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
