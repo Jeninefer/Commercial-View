@@ -39,7 +39,7 @@ class PaymentProcessor:
         r'paid[_\s]*date',
         r'actual[_\s]*date',
         r'transaction[_\s]*date',
-        r'date',  # Generic pattern that matches "True Payment Date"
+        r'(?:^|[_\s])date(?:$|[_\s])',  # Anchored pattern to avoid matching substrings like 'updated'
     ]
     
     # Payment Amount Patterns - added "Total Payment"/"total_payment"
