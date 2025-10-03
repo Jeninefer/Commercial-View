@@ -130,7 +130,7 @@ def _interval_join(
         raise KeyError(f"Missing required band join columns: {missing}")
 
     # Apply interval conditions
-    mask = pd.Series([True] * len(merged))
+    mask = pd.Series(True, index=merged.index)
     for df_col, (min_col, max_col) in band_keys.items():
         # Check if value is within [min, max] range
         mask &= (merged[df_col] >= merged[min_col]) & (merged[df_col] <= merged[max_col])
