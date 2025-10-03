@@ -50,8 +50,6 @@ All patterns support:
 1. **payment_logic.py** - Main implementation with PaymentProcessor class
 2. **test_payment_logic.py** - Comprehensive test suite (11 tests, all passing)
 3. **demo_field_detection.py** - Demonstration script showing the patterns in action
-4. **.gitignore** - To exclude Python cache files and build artifacts
-
 ## Testing
 
 All 11 unit tests pass successfully, verifying:
