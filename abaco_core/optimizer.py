@@ -100,5 +100,5 @@ class DisbursementOptimizer:
             str: 'Top1' for rank 1 (inclusive), 'Top10' for ranks 2-10 (inclusive), 'Rest' for rank > 10.
         """
         if rank == 1: return "Top1"
-        if rank <= 10: return "Top10"
+        if 2 <= rank <= 10: return "Top10"
         return "Rest"
