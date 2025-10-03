@@ -118,7 +118,8 @@ class PricingEnricher:
                         # Validate matched_df before concatenation
                         if matched_df.empty or matched_df.isnull().all(axis=None):
                             # Create a DataFrame of the same length as 'without' with NaNs
-                            matched_df = pd.DataFrame(np.nan, index=without.index, columns=matched_df.columns)
+                            expected_grid_cols = [f"{col}_grid" for col in grid.columns]
+                            matched_df = pd.DataFrame(np.nan, index=without.index, columns=expected_grid_cols)
                         elif len(matched_df) != len(without):
                             logger.warning("matched_df and without have different lengths; skipping concatenation for this feature.")
                             continue
