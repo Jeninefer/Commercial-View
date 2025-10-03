@@ -108,7 +108,7 @@ class DPDAnalyzer:
             p_low = p.lower()
             match = [c for c in cols if p_low in c.lower()]
             if match:
-                # elige el más corto para evitar falsos positivos
+                # choose the shortest one to avoid false positives
                 return min(match, key=len)
         
         # regex fallback
