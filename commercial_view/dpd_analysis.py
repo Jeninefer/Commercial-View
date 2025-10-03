@@ -105,10 +105,7 @@ class DPDAnalyzer:
         )
 
         out = customer_df.merge(agg, on=customer_id_field, how="left")
-        if "payment_status" in out.columns:
-            out["payment_status"] = np.where(out["payment_status"].isna(), status, out["payment_status"])
-        else:
-            out["payment_status"] = status
+        out["payment_status"] = out.get("payment_status", pd.Series([np.nan] * len(out))).fillna(status)
         # Fill NaNs for metrics where useful
         fill_zero = ["max_dpd", "mean_dpd", "median_dpd", "loan_count"]
         for c in fill_zero:
