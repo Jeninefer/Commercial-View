@@ -32,7 +32,6 @@ jobs:
         shell: bash
         run: |
           git clone git@github.com:${{ github.repository }}.git repo
-          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo
           git fetch --all --tags --prune
           git rev-parse --short HEAD
 
