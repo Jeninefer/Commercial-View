@@ -53,10 +53,7 @@ export interface KPIMetric {
   id: string;
   name: string;
   /**
-   * A mandatory, clear, and concise explanation of the KPI metric.
-   * This description should provide enough context for users to understand
-   * the metric's purpose, calculation, and business relevance.
-   * Example: "Total revenue generated in the current fiscal quarter, excluding refunds."
+   * Brief explanation of the KPI metric's purpose and context.
    */
   description: string;
   category: string;
