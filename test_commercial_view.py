@@ -120,7 +120,7 @@ class TestDPDCalculation:
             'amount_due': [1000.0]
         })
         
-        payments = pd.DataFrame(columns=['loan_id', 'payment_date', 'amount_paid'])
+        payments = pd.DataFrame({'loan_id': [], 'payment_date': [], 'amount_paid': []})
         
         # Reference date is 100 days after due date
         result = portfolio.calculate_dpd(
