@@ -4,7 +4,7 @@ Tests for PaymentAnalyzer module to verify the refactoring that avoids redundant
 
 import pandas as pd
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime
 from payment_analyzer import PaymentAnalyzer
 
 
