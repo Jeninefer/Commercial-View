@@ -144,7 +144,7 @@ class LoanAnalyzer:
         # DPD calculation
         fad = pd.to_datetime(out["first_arrears_date"], errors="coerce")
         dpd = (pd.to_datetime(reference_date) - fad).dt.days
-        out["days_past_due"] = np.where(fad.notna(), np.maximum(dpd, 0), 0)
+        out["days_past_due"] = np.where(fad.notna(), np.maximum(dpd, 0), 0).astype('int64')
 
         # Auxiliary dates
         last_pay = payments_df.groupby("loan_id")["payment_date"].max().reset_index().rename(columns={"payment_date":"last_payment_date"})
