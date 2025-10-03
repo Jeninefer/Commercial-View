@@ -94,7 +94,7 @@ The `calculate_dpd` method returns a DataFrame with the following columns:
 
 ## Requirements
 
-- Python >= 3.8
+- Python >= 3.9
 - pandas >= 1.3.0
 - numpy >= 1.20.0
 
