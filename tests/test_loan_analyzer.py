@@ -124,7 +124,7 @@ class TestLoanAnalyzer(unittest.TestCase):
         self.assertTrue((dpd_result['days_past_due'] >= 0).all())
         
         # Check is_default is boolean
-        self.assertTrue(dpd_result['is_default'].dtype == bool)
+        self.assertTrue(pd.api.types.is_bool_dtype(dpd_result['is_default']))
     
     def test_calculate_dpd_default_classification(self):
         """Test that default classification works correctly"""
