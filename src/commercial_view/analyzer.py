@@ -126,12 +126,21 @@ class PaymentAnalyzer:
         # detect IDs and date
         loan_id_col, _ = self.detect_loan_ids(df)
         cust_col = next((c for c in df.columns if any(k in c.lower() for k in ["customer","client","borrower","cliente"])), None)
-        date_col = next((c for c in df.columns if any(k in c.lower() for k in ["origination","issue","start","fecha"]) and pd.api.types.is_datetime64_any_dtype(pd.to_datetime(df[c], errors="coerce"))), None)
+        # Find the first date-like column and cache its conversion
+        date_col = None
+        date_series = None
+        for c in df.columns:
+            if any(k in c.lower() for k in ["origination","issue","start","fecha"]):
+                converted = pd.to_datetime(df[c], errors="coerce")
+                if pd.api.types.is_datetime64_any_dtype(converted):
+                    date_col = c
+                    date_series = converted
+                    break
         if not (cust_col and date_col):
             logger.warning("Missing customer/date columns for customer type")
             return df
 
-        df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+        df[date_col] = date_series
         df = df.sort_values([cust_col, date_col, loan_id_col])
         types = []
 
