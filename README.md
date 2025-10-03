@@ -31,7 +31,7 @@ Use your live DataFrames with the exact column names described in the "Data cont
 - Optional interval keys in grid: e.g. `tenor_min`, `tenor_max`, `amount_min`, `amount_max`
 
 **Recommended pricing CSV:**
-- Columns to match on any of: `[segment, risk_score|risk_rating, term, amount]`
+- Columns to match on (any subset): segment, risk_score|risk_rating, term, amount
 
 ### KPIs
 
