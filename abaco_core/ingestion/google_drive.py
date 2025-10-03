@@ -11,7 +11,7 @@ logger = logging.getLogger("abaco_core.ingestion.drive")
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 
 
-def _creds(token_path: Path, client_secret_path: Path):
+def _creds(token_path: Path, client_secret_path: Path) -> "Credentials":
     """
     Get or refresh Google Drive credentials.
     
