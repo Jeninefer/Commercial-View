@@ -94,6 +94,8 @@ export class AIAnalytics {
       return [];
     }
 
+    // Filter and return data points that are more than `threshold` standard deviations from the mean
+    return data.filter(d => Math.abs((d.value - mean) / stdDev) > threshold);
   }
 
   /**
