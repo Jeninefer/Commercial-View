@@ -9,17 +9,19 @@ This script demonstrates the core functionality without requiring actual data fi
 No external dependencies required - uses only Python standard library.
 """
 
+import pandas as pd
+
 # --- Feature 1: Dynamic Percentage Calculation ---
 def calculate_percentage_vs_target(current: float, target: float) -> float:
     """Calculate percentage achievement vs target (e.g., 7.61M / 7.80M = 97.5%)."""
-    if target is None or target == 0:
+    if pd.isna(target) or target == 0:
         return None
     return (current / target) * 100
 
 # --- Feature 2: Tolerance Checks ---
 def within_tolerance(value: float, target: float, tol: float = 0.01) -> bool:
     """Check if value is within tolerance of target."""
-    if value is None or target is None or target == 0:
+    if pd.isna(value) or pd.isna(target) or target == 0:
         return False
     return abs(value - target) <= tol * target
 
