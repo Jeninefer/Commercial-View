@@ -19,7 +19,6 @@ jobs:
             echo "SSH key secret is not set!" >&2
             exit 1
           fi
-          umask 177
           echo "${{ secrets.DEPLOY_VISUAL_CI_KEY }}" | install -m 600 /dev/stdin ~/.ssh/id_ed25519
           if [ ! -s ~/.ssh/id_ed25519 ]; then
             echo "Failed to write SSH key!" >&2
