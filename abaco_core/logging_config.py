@@ -28,6 +28,11 @@ def configure_logging(level=logging.INFO):
         >>> logger = logging.getLogger("abaco_core.my_module")
         >>> logger.debug("This is a debug message")
     """
+    # Configure the root logger to ensure all messages are displayed
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s [%(levelname)s] %(name)s - %(message)s"
+    )
     # Configure logging using basicConfig with force=True to avoid duplicate handlers
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s - %(message)s")
     logging.basicConfig(
