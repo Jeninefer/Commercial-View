@@ -29,7 +29,7 @@ class PaymentProcessor:
         r'due[_\s]*amount',
         r'scheduled[_\s]*amount',
         r'expected[_\s]*amount',
-        r'total[_\s]*payment',  # Added to match "Total Payment" and "total_payment"
+        r'(?:^|[_\s])total(?:[_\s]*)payment(?:$|[_\s])',  # Anchored to avoid matching substrings like 'subtotal_payment'
         r'installment[_\s]*amount',
     ]
     
