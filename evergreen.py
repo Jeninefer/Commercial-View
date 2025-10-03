@@ -16,7 +16,8 @@ def monthly_cohort(df: pd.DataFrame, customer_id: str, dt_col: str) -> pd.DataFr
 
 def reactivation_flag(events: pd.DataFrame, customer_id: str, dt_col: str, gap_days: int = 90) -> pd.DataFrame:
     d = events[[customer_id, dt_col]].copy()
-    d[dt_col] = pd.to_datetime(d[dt_col]).sort_values()
+    d[dt_col] = pd.to_datetime(d[dt_col])
+    d = d.sort_values([customer_id, dt_col])
     d["prev"] = d.groupby(customer_id)[dt_col].shift(1)
     d["gap"] = (d[dt_col] - d["prev"]).dt.days
     d["reactivated"] = (d["gap"] > gap_days).fillna(False)
