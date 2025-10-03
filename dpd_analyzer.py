@@ -84,7 +84,6 @@ class DPDBucketAnalyzer:
                 labels.append(label)
             # Convert to boundaries for pd.cut
             # Example: [(0,0),(1,29),...,(180,inf)]
-            bounds = sorted({0, *[low for low, _ in edges], *[hi for _, hi in edges if np.isfinite(hi)], np.inf})
             # Map each interval to label
             # Build categories by scanning each dpd and assigning matching interval
             bucket_series = pd.Series(index=df.index, dtype="object")
