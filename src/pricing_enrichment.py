@@ -133,9 +133,7 @@ def enrich_with_pricing(
             df = pd.concat([df.reset_index(drop=True), matched[add_cols]], axis=1)
 
     # Compute spreads if both rate columns exist
-    apr_col, eir_col = (
-        (c for c in rate_cols) if len(rate_cols) >= 2 else (None, None)
-    )
+    apr_col, eir_col = rate_cols[:2] if len(rate_cols) >= 2 else (None, None)
     if apr_col in df.columns and eir_col in df.columns:
         df["apr_eir_spread"] = pd.to_numeric(
             df[apr_col], errors="coerce"
