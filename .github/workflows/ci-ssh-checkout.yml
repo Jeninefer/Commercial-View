@@ -19,12 +19,13 @@ jobs:
             echo "SSH key secret is not set!" >&2
             exit 1
           fi
-          echo "${{ secrets.DEPLOY_VISUAL_CI_KEY }}" | install -m 600 /dev/stdin ~/.ssh/id_ed25519
+          printf '%s' "${{ secrets.DEPLOY_VISUAL_CI_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
           if [ ! -s ~/.ssh/id_ed25519 ]; then
             echo "Failed to write SSH key!" >&2
             exit 1
           fi
-          # install -m 600 sets correct permissions for id_ed25519
+          # chmod 600 sets correct permissions for id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Test SSH clone
