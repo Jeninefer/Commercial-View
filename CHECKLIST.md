@@ -200,7 +200,7 @@ git status
 
 # 3. Check environment variables are loadable
 # Note: The import is 'from dotenv import ...' but the package to install is 'python-dotenv'
-python3 -c "from dotenv import load_dotenv; load_dotenv(); import os; print('✅ Environment loaded')" 2>/dev/null || echo "Install python-dotenv: pip install python-dotenv"
+python3 -c "try: from dotenv import load_dotenv; load_dotenv(); import os; print('✅ Environment loaded')\nexcept ImportError:\n    print('❌ python-dotenv not installed. Install with: pip install python-dotenv'); exit(1)" 
 
 # 4. Verify GitHub Actions workflow syntax
 cd .github/workflows
