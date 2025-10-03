@@ -70,7 +70,19 @@ ps_path   = newest_by_root(PAY_SCH_ROOT)
 hist_path = newest_by_root(HIST_PAY_ROOT)
 
 if not all([loan_path, ps_path, hist_path]):
-    raise SystemExit("Missing one or more input files. Ensure the three loan-tape files are in this folder.")
+    missing = []
+    if not loan_path:
+        missing.append(f"Loan Data file (pattern: '{LOAN_ROOT}*')")
+    if not ps_path:
+        missing.append(f"Payment Schedule file (pattern: '{PAY_SCH_ROOT}*')")
+    if not hist_path:
+        missing.append(f"Historic Real Payment file (pattern: '{HIST_PAY_ROOT}*')")
+    msg = (
+        "Missing required input files:\n  - " +
+        "\n  - ".join(missing) +
+        "\nPlease ensure these files are present in the folder with the correct naming patterns."
+    )
+    raise SystemExit(msg)
 
 def read_any(path):
     """Read CSV or Excel file."""
