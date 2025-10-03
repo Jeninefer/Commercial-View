@@ -5,12 +5,8 @@ from datetime import datetime
 import sys
 import os
 
-# Add src directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
-
-from feature_engineer import FeatureEngineer
-
-
+# Import FeatureEngineer from src package
+from src.feature_engineer import FeatureEngineer
 def main():
     """Demonstrate customer classification."""
     # Create instance
