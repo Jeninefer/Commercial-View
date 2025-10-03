@@ -24,13 +24,10 @@ This document defines the expected performance characteristics and SLOs for the 
 
 - **Extra-large portfolios**: > 1,000,000 loans
   - Expected processing time: < 2 hours
-    _(Processing time may vary based on hardware specifications and optimization level.)_
   - Memory requirement: 16-32GB
   - Chunking required: 5,000 records per chunk
   - Parallel processing enabled
   - Consider distributed processing
-
-## Memory Management
 ### Chunking Strategy
 ```yaml
 chunking:
