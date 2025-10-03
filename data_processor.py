@@ -30,6 +30,9 @@ def process_loan_data(schedule_df, payments_df):
     # pricing_enricher = PricingEnricher()
     # def enrich_pricing(...): ... "timestamp": datetime.utcnow().isoformat() + "Z"
     
+    # Drop rows with nulls in key columns
+    schedule_df = schedule_df.dropna(subset=["loan_id", "due_date"])
+    payments_df = payments_df.dropna(subset=["loan_id", "payment_date"])
     return schedule_df, payments_df
 
 
