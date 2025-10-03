@@ -1,6 +1,4 @@
 import pandas as pd
-from datetime import datetime
-
 def monthly_cohort(df: pd.DataFrame, customer_id: str, dt_col: str) -> pd.DataFrame:
     x = df[[customer_id, dt_col]].copy()
     x[dt_col] = pd.to_datetime(x[dt_col]).dt.to_period("M").dt.to_timestamp()
