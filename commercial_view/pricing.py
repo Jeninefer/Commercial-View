@@ -184,13 +184,7 @@ def _interval_join(
             on='_temp_idx',
             how='left'
         )
-        # Optionally, rename suffixed columns back to original names
-        rename_map = {
-            f'{col}_pricing': col
-            for col in pricing_cols if col in df.columns and f'{col}_pricing' in final_result.columns
-        }
-        if rename_map:
-            final_result = final_result.rename(columns=rename_map)
+        # Do not rename suffixed columns; keep both original and pricing columns to avoid data loss
     else:
         # No matches, just add NaN columns
         final_result = result_df.copy()
