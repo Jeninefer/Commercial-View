@@ -9,9 +9,10 @@ This script demonstrates the core functionality without requiring actual data fi
 No external dependencies required - uses only Python standard library.
 """
 
+import math
 
 def is_missing(x):
-    return x is None or (isinstance(x, float) and x != x)
+    return x is None or (isinstance(x, float) and math.isnan(x))
 
 # --- Feature 1: Dynamic Percentage Calculation ---
 def calculate_percentage_vs_target(current: float, target: float) -> float:
