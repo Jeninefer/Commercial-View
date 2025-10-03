@@ -111,11 +111,9 @@ class PaymentAnalyzer:
             # Data is already standardized, just make copies
             sched, pays = schedule_df.copy(), payments_df.copy()
             # Ensure date columns are datetime, even if columns are present
-            if 'due_date' in sched and not pd.api.types.is_datetime64_any_dtype(sched['due_date']):
+            if 'due_date' in sched.columns and not pd.api.types.is_datetime64_any_dtype(sched['due_date']):
                 sched['due_date'] = pd.to_datetime(sched['due_date'])
-            if 'payment_date' in sched and not pd.api.types.is_datetime64_any_dtype(sched['payment_date']):
-                sched['payment_date'] = pd.to_datetime(sched['payment_date'])
-            if 'payment_date' in pays and not pd.api.types.is_datetime64_any_dtype(pays['payment_date']):
+            if 'payment_date' in pays.columns and not pd.api.types.is_datetime64_any_dtype(pays['payment_date']):
                 pays['payment_date'] = pd.to_datetime(pays['payment_date'])
         
         # Set reference date if not provided
