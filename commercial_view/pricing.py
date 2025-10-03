@@ -173,13 +173,24 @@ def _interval_join(
     # Merge back to ensure we have all original rows (even those without matches)
     # Only merge the pricing columns
     if len(filtered) > 0:
-        cols_to_merge = ['_temp_idx'] + pricing_cols
+        # Use suffixed column names for overlapping columns
+        cols_to_merge = ['_temp_idx'] + [
+            col if col not in df.columns else f'{col}_pricing'
+            for col in pricing_cols
+        ]
         cols_to_merge = [col for col in cols_to_merge if col in filtered.columns]
         final_result = result_df.merge(
             filtered[cols_to_merge],
             on='_temp_idx',
             how='left'
         )
+        # Optionally, rename suffixed columns back to original names
+        rename_map = {
+            f'{col}_pricing': col
+            for col in pricing_cols if col in df.columns and f'{col}_pricing' in final_result.columns
+        }
+        if rename_map:
+            final_result = final_result.rename(columns=rename_map)
     else:
         # No matches, just add NaN columns
         final_result = result_df.copy()
