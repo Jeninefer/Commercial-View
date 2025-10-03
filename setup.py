@@ -12,7 +12,7 @@ setup(
     name="commercial-view",
     version="0.1.0",
     author="Commercial View Team",
-    description="Principal KPI calculator for loan portfolio analysis",
+    description="Comprehensive KPI calculator for loan portfolio analysis",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Jeninefer/Commercial-View",
