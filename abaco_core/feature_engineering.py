@@ -122,7 +122,7 @@ class FeatureEngineer:
                                    loan_amount_field: str = "outstanding_balance") -> pd.DataFrame:
         df = loan_df.copy()
         if credit_line_field not in df.columns:
-            cands = [c for c in df.columns if any(k in c.lower() for k in ["line_amount","credit_line","line_limit","limite"])]
+            cands = [c for c in df.columns if any(k in c.lower() for k in ["line_amount", "credit_line", "line_limit", "limite"])]
             if not cands:
                 return df
             credit_line_field = cands[0]
