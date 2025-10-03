@@ -73,8 +73,8 @@ class CSVDataReader:
 
 def load_sample_data() -> Dict[str, pd.DataFrame]:
     """
-    Load sample data for testing and development.
-    Creates mock data if no files are available.
+    Always creates and returns mock (synthetic) data for testing and development.
+    This function does not load data from files.
     """
     import numpy as np
     from datetime import datetime, timedelta
