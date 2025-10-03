@@ -52,7 +52,7 @@ Use your live DataFrames with the exact column names described in the "Data cont
 - Optional columns: `days_past_due|dpd|dias_atraso`, `revenue`, `apr`, `eir`
 
 **Financial DF:**
-- Required columns: `pre_money_valuation`
+- Required column: `pre_money_valuation`
 - Optional columns: `investment_amount`, `enterprise_value`, `ebitda`, `shares_before`, `shares_after`
 
 ## Interval pricing example (configure keys in code where you call enrich_loan_data)
