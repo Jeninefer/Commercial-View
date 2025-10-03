@@ -167,14 +167,9 @@ class PricingEnricher:
             # Find the index of the interval each value falls into
             matched_idx = intervals.get_indexer(values)
             # For each column to add, assign the matched value or pd.NA if no match
-            for col in pricing_cols_to_add:
-                result[col] = pd.Series(
-                    [
-                        pricing_df.iloc[i][col] if i != -1 else pd.NA
-                        for i in matched_idx
-                    ],
-                    index=result.index
-                )
+            # Vectorized assignment for all columns to add
+            matched = pricing_df.take(matched_idx, allow_fill=True, fill_value=pd.NA)
+            result[pricing_cols_to_add] = matched[pricing_cols_to_add].to_numpy()
         return result
     
     def enrich_loan_data(
