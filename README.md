@@ -1,4 +1,4 @@
-# Abaco Core
+# abaco-core
 
 Core modules for Payments + DPD, Feature Engineering, Pricing Enrichment, and KPI computation.
 
