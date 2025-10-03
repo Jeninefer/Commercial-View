@@ -1,5 +1,4 @@
 import re
-import pandas as pd
 from typing import Optional, List
 
 
