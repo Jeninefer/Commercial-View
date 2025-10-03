@@ -24,7 +24,7 @@ jobs:
             echo "Failed to write SSH key!" >&2
             exit 1
           fi
-          # chmod 600 ~/.ssh/id_ed25519  # Not needed, install sets permissions
+          # install -m 600 sets correct permissions for id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Test SSH clone
