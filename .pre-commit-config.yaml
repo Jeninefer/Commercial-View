@@ -97,7 +97,6 @@ repos:
         name: Type check with mypy
         additional_dependencies: [types-PyYAML, types-requests]
         args: ['--ignore-missing-imports', '--no-strict-optional']
-        exclude: ^tests/
 
   # Spell checking
   - repo: https://github.com/codespell-project/codespell
