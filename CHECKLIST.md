@@ -199,6 +199,7 @@ git status
 # Expected: .env should NOT appear in untracked files
 
 # 3. Check environment variables are loadable
+# Note: The import is 'from dotenv import ...' but the package to install is 'python-dotenv'
 python3 -c "from dotenv import load_dotenv; load_dotenv(); import os; print('✅ Environment loaded')" 2>/dev/null || echo "Install python-dotenv: pip install python-dotenv"
 
 # 4. Verify GitHub Actions workflow syntax
