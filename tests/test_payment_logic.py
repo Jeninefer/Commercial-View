@@ -4,8 +4,6 @@ import pytest
 import pandas as pd
 import numpy as np
 from datetime import datetime, date, timedelta
-import sys
-import os
 
 from abaco_core.payment_logic import PaymentProcessor
 
