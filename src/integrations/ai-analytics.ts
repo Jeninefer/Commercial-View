@@ -90,6 +90,8 @@ export class AIAnalytics {
     const mean = values.reduce((a, b) => a + b, 0) / values.length;
     const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
     const stdDev = Math.sqrt(variance);
+    // If standard deviation is zero, all values are identical (no variance),
+    // so anomaly detection is meaningless; return empty array.
     if (stdDev === 0) {
       return [];
     }
