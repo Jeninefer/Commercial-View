@@ -85,6 +85,7 @@ class LoanPortfolio:
         
         # Merge and calculate cumulative gap
         last = total_due.merge(total_paid, on='loan_id', how='left')
+        # If a loan has no payments, total_paid will be NaN after the merge; fill with 0.0 to indicate no payments made.
         last['total_paid'] = last['total_paid'].fillna(0.0)
         last['cumulative_gap'] = last['total_due'] - last['total_paid']
         
