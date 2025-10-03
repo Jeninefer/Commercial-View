@@ -243,7 +243,13 @@ class KPICalculator:
     # ---------- Export ----------
     def export_metrics_to_json(self, metrics: Dict[str, Dict[str, float]]) -> str:
         os.makedirs(self.export_path, exist_ok=True)
-        payload = {"metrics": metrics, "metadata": {"timestamp": datetime.utcnow().isoformat()+"Z", "thresholds": self.thresholds}}
+        payload = {
+            "metrics": metrics,
+            "metadata": {
+                "timestamp": datetime.utcnow().isoformat() + "Z",
+                "thresholds": self.thresholds
+            }
+        }
         path = os.path.join(self.export_path, f"startup_fintech_valuation_summary.json")
         with open(path, "w") as f:
             json.dump(payload, f, indent=2, default=str)
