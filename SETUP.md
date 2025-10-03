@@ -5,8 +5,8 @@
 ### Step 1: Environment Setup
 ```bash
 # Clone and navigate
-git clone https://github.com/Jeninefer/Commercial-View.git
-cd Commercial-View
+git clone <REPO_URL>
+cd <REPO_DIRECTORY>
 
 # Create virtual environment
 python -m venv .venv
