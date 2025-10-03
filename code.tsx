@@ -87,21 +87,14 @@ function Chart({
   const series = data.map((d, i) => ({ x: sx(i), y: sy(d.y) }));
   const pathData = series.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
 
-  // Only allow M/L commands and numbers, spaces, dots, and minus signs
-  function isValidPathData(str: string): boolean {
-    return /^[ML\s\d\.\-]+$/.test(str);
-  }
+  // Render SVG directly using JSX to avoid string-based injection
 
   return (
     <AutoLayout direction="vertical" spacing={8}>
       <Frame width={w} height={h} fill="#FFFFFF" cornerRadius={12} stroke="#CED4D9">
-        {isValidPathData(pathData) ? (
-          <SVG 
-            src={`<svg width="${w}" height="${h}"><path d="${pathData}" stroke="${color}" stroke-width="2" fill="none" /></svg>`}
-          />
-        ) : (
-          <Text fill="#6D7D8E">Invalid chart data</Text>
-        )}
+        <svg width={w} height={h}>
+          <path d={pathData} stroke={color} strokeWidth={2} fill="none" />
+        </svg>
       </Frame>
       <AutoLayout spacing={12}>
         {xs.map((m, i) => (
