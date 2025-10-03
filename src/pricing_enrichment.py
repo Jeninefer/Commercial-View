@@ -30,7 +30,8 @@ def _load_pricing_grid(path: str) -> pd.DataFrame:
     if ext in (".json",):
         return pd.read_json(path)
     if ext in (".yml", ".yaml"):
-        cfg = yaml.safe_load(open(path, "r"))
+        with open(path, "r") as f:
+            cfg = yaml.safe_load(f)
         # Expect cfg to contain a list under key "pricing_grid"
         # If cfg is already a list, use it directly; otherwise try to get "pricing_grid" key
         if isinstance(cfg, list):
