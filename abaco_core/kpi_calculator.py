@@ -212,7 +212,9 @@ class KPICalculator:
                      data_dict: Dict[str, pd.DataFrame],
                      thresholds: Optional[Dict[str, float]] = None) -> Dict[str, Dict[str, float]]:
         if thresholds:
-            self.thresholds.update(thresholds)  # partial overrides
+            # Only update with keys that are valid for Thresholds
+            valid_thresholds = {k: v for k, v in thresholds.items() if k in self.thresholds}
+            self.thresholds.update(valid_thresholds)  # partial overrides
 
         result: Dict[str, Dict[str, float]] = {"startup": {}, "fintech": {}, "valuation": {}, "viability": {}}
 
