@@ -126,7 +126,7 @@ class PricingEnricher:
                             columns=columns
                         ).add_suffix("_grid")
                         # Validate matched_df before concatenation
-                        if matched_df.empty or matched_df.isnull().all(axis=None):
+                        if matched_df.empty or matched_df.isna().all().all():
                             # Create a DataFrame of the same length as 'without' with NaNs
                             expected_grid_cols = [f"{col}_grid" for col in grid.columns]
                             matched_df = pd.DataFrame(np.nan, index=without.index, columns=expected_grid_cols)
