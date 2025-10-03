@@ -224,7 +224,11 @@ if not current_targets.empty:
     # APR vs Target
     if "APR_Target" in target_row and not pd.isna(w_apr):
         apr_target = target_row["APR_Target"]
-        apr_pct = w_apr  # already a decimal, do not multiply by 100
+        # Both w_apr and apr_target are expected as decimals (e.g., 0.185 for 18.5%).
+        # If apr_target is > 1, assume it is a percentage and convert to decimal.
+        if apr_target > 1:
+            apr_target = apr_target / 100.0
+        apr_pct = w_apr  # keep as decimal for calculations; multiply by 100 only for display
         target_comparisons["apr"] = {
             "current": round(apr_pct * 100, 2),  # display as percentage
             "target": round(apr_target * 100, 2),  # display as percentage
