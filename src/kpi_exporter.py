@@ -31,7 +31,7 @@ class KPIExporter:
             The full path to the exported JSON file.
         """
         os.makedirs(self.export_path, exist_ok=True)
-        ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        ts = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
         fp = os.path.join(self.export_path, f"{name}_{ts}.json")
         with open(fp, "w") as f:
             json.dump(payload, f, indent=2, default=str)
