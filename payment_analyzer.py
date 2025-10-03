@@ -143,12 +143,11 @@ class PaymentAnalyzer:
             timeline['payment_date'] - timeline['due_date']
         ).dt.days
 
-        timeline['payment_status'] = timeline.apply(
-            lambda row: 'paid_on_time' if pd.notna(row['payment_date']) and row['days_difference'] <= 0
-            else 'paid_late' if pd.notna(row['payment_date']) and row['days_difference'] > 0
-            else 'unpaid',
-            axis=1
-        )
+        # Vectorized assignment for payment_status
+        timeline['payment_status'] = 'unpaid'
+        mask_paid = timeline['payment_date'].notna()
+        timeline.loc[mask_paid & (timeline['days_difference'] <= 0), 'payment_status'] = 'paid_on_time'
+        timeline.loc[mask_paid & (timeline['days_difference'] > 0), 'payment_status'] = 'paid_late'
         return timeline
     
     def calculate_dpd(
