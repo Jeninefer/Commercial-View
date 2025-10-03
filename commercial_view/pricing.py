@@ -78,6 +78,17 @@ def enrich_with_pricing(
     # If no band_keys, perform simple exact join
     if band_keys is None:
         result_df = df.merge(pricing_df, on=join_keys, how='left')
+        # Filter columns if rate_cols and/or recommended_col are specified (for exact join)
+        if rate_cols is not None or recommended_col is not None:
+            cols_to_keep = list(df.columns)
+            if rate_cols:
+                for rate_col in rate_cols:
+                    if rate_col in result_df.columns and rate_col not in cols_to_keep:
+                        cols_to_keep.append(rate_col)
+            if recommended_col:
+                if recommended_col in result_df.columns and recommended_col not in cols_to_keep:
+                    cols_to_keep.append(recommended_col)
+            result_df = result_df[[col for col in cols_to_keep if col in result_df.columns]]
         return result_df
     
     # Perform interval/band join
