@@ -299,13 +299,7 @@ export function calculateClientGoals(dataDir: string): {
       });
     } else {
       // Update info if recovered
-      const info = customerInfo.get(customerId);
-      if (!info) {
-        // This should not happen; log a warning and skip this row
-        console.warn(`Warning: customerInfo missing for customerId ${customerId} during update. Skipping row.`);
-        // Skip property assignments since info is missing
-        return;
-      }
+      const info = customerInfo.get(customerId)!;
       // Update info if recovered
       if (status === 'Recovered') {
         info.isRecovered = true;
