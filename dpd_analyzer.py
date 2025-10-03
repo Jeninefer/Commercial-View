@@ -85,7 +85,7 @@ class DPDBucketAnalyzer:
             # Convert to boundaries for pd.cut
             # Example: [(0,0),(1,29),...,(180,inf)]
             # Map each interval to label
-            # Build categories by scanning each dpd and assigning matching interval
+            # Assign bucket labels by iterating over each interval and setting the label for matching DPD values
             bucket_series = pd.Series(index=df.index, dtype="object")
             for (low, high), label in zip(edges, labels):
                 mask = (dpd >= low) & (dpd <= high)
