@@ -35,10 +35,10 @@ class PaymentProcessor:
     
     # Payment Date Patterns - already includes generic "date" which matched "True Payment Date"
     PAYMENT_DATE_PATTERNS = [
-        r'payment[_\s]*date',
-        r'paid[_\s]*date',
-        r'actual[_\s]*date',
-        r'transaction[_\s]*date',
+        r'(?:^|[_\s])payment(?:[_\s]*)date(?:$|[_\s])',
+        r'(?:^|[_\s])paid(?:[_\s]*)date(?:$|[_\s])',
+        r'(?:^|[_\s])actual(?:[_\s]*)date(?:$|[_\s])',
+        r'(?:^|[_\s])transaction(?:[_\s]*)date(?:$|[_\s])',
         r'(?:^|[_\s])date(?:$|[_\s])',  # Anchored pattern to avoid matching substrings like 'updated'
     ]
     
