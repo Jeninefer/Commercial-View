@@ -71,8 +71,12 @@ class DisbursementOptimizer:
             return 0.0
         
         # Combine selected loans with existing portfolio
-        combined_portfolio = pd.concat([self.portfolio, selected_loans], ignore_index=True)
-        total_exposure = combined_portfolio['principal'].sum() + selected_loans['requested_amount'].sum()
+        # Ensure selected_loans has a 'principal' column for consistency
+        selected_loans_with_principal = selected_loans.copy()
+        if 'principal' not in selected_loans_with_principal.columns and 'requested_amount' in selected_loans_with_principal.columns:
+            selected_loans_with_principal['principal'] = selected_loans_with_principal['requested_amount']
+        combined_portfolio = pd.concat([self.portfolio, selected_loans_with_principal], ignore_index=True)
+        total_exposure = combined_portfolio['principal'].sum()
         
         # Client concentration
         client_concentration = 0.0
