@@ -1,0 +1,89 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.hypothesis/
+*.cover
+
+# Runtime exports
+abaco_runtime/
+*.log
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+tmp/
+temp/
+
+# Build artifacts
+node_modules/
+package-lock.json
+
+# OS
+Thumbs.db
+
+# Security
+.secrets.baseline
+*.key
+*.pem
+*.crt
+
+# Data files (add specific patterns as needed)
+data/raw/
+data/processed/
+data/temp/
+
+# Archives
+*.zip
+*.tar.gz
+*.tar
+*.rar
