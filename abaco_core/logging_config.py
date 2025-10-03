@@ -34,7 +34,6 @@ def configure_logging(level=logging.INFO):
         format="%(asctime)s [%(levelname)s] %(name)s - %(message)s"
     )
     # Configure logging using basicConfig with force=True to avoid duplicate handlers
-    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s - %(message)s")
     logging.basicConfig(
         level=level,
         format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
