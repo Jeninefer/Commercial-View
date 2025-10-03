@@ -136,15 +136,22 @@ class PaymentAnalyzer:
                 if converted.notna().sum() > 0:
                     date_col = c
                     break
-        date_col = None
         date_series = None
-        for c in df.columns:
-            if any(k in c.lower() for k in ["origination","issue","start","fecha"]):
-                converted = pd.to_datetime(df[c], errors="coerce")
-                if pd.api.types.is_datetime64_any_dtype(converted):
-                    date_col = c
-                    date_series = converted
-                    break
+        if date_col:
+            # Ensure the series is datetime
+            if pd.api.types.is_datetime64_any_dtype(df[date_col]):
+                date_series = df[date_col]
+            else:
+                date_series = pd.to_datetime(df[date_col], errors="coerce")
+        else:
+            # Fallback: try to find any column that can be converted to datetime
+            for c in df.columns:
+                if any(k in c.lower() for k in ["origination","issue","start","fecha"]):
+                    converted = pd.to_datetime(df[c], errors="coerce")
+                    if pd.api.types.is_datetime64_any_dtype(converted):
+                        date_col = c
+                        date_series = converted
+                        break
         if not (cust_col and date_col):
             logger.warning("Missing customer/date columns for customer type")
             return df
