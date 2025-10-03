@@ -123,13 +123,17 @@ def _interval_join(
     # Perform exact join on join_keys (cross join effect for each matching key combination)
     merged = result_df.merge(pricing_df, on=join_keys, how='left', suffixes=('', '_pricing'))
     
+    # Validate that all required band join columns are present
+    required = list(band_keys.keys()) + [c for pair in band_keys.values() for c in pair]
+    missing = [c for c in required if c not in merged.columns]
+    if missing:
+        raise KeyError(f"Missing required band join columns: {missing}")
+
     # Apply interval conditions
     mask = pd.Series([True] * len(merged))
-    
     for df_col, (min_col, max_col) in band_keys.items():
-        if df_col in merged.columns and min_col in merged.columns and max_col in merged.columns:
-            # Check if value is within [min, max] range
-            mask &= (merged[df_col] >= merged[min_col]) & (merged[df_col] <= merged[max_col])
+        # Check if value is within [min, max] range
+        mask &= (merged[df_col] >= merged[min_col]) & (merged[df_col] <= merged[max_col])
     
     # Filter to only matching intervals
     filtered = merged[mask].copy()
