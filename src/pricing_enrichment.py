@@ -210,7 +210,10 @@ class PricingEnricher:
                 )
                 # Add recommended rate column if it exists in pricing data
                 if recommended_rate_col in self.recommended_pricing.columns:
-                    result[recommended_rate_col] = result[f"{recommended_rate_col}"]
+                    pricing_col = f"{recommended_rate_col}_pricing"
+                    if pricing_col in result.columns:
+                        result[recommended_rate_col] = result[pricing_col]
+                        result = result.drop(columns=[pricing_col])
         
         # Apply band matching with pricing grid
         if band_keys and self.pricing_grid is not None:
