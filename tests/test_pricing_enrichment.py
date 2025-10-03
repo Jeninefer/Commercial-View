@@ -304,9 +304,9 @@ class TestEnrichWithPricing:
         try:
             result = enrich_with_pricing(loans_df, temp_path, join_keys=['product'])
             assert 'has_pricing' in result.columns
-            assert result.loc[result['product'] == 'A', 'has_pricing'].values[0] == True
-            assert result.loc[result['product'] == 'B', 'has_pricing'].values[0] == True
-            assert result.loc[result['product'] == 'C', 'has_pricing'].values[0] == False
+            assert result.loc[result['product'] == 'A', 'has_pricing'].values[0] is True
+            assert result.loc[result['product'] == 'B', 'has_pricing'].values[0] is True
+            assert result.loc[result['product'] == 'C', 'has_pricing'].values[0] is False
         finally:
             os.unlink(temp_path)
 
