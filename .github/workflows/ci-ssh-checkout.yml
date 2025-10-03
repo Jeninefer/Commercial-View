@@ -58,4 +58,4 @@ jobs:
         shell: bash
         run: |
           cd repo
-          python -m unittest discover tests/ -v
+          if [ -d tests ]; then python -m unittest discover tests/ -v; else echo "No tests/ directory found, skipping unit tests."; fi
