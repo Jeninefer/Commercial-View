@@ -108,6 +108,8 @@ class DPDAnalyzer:
         out["payment_status"] = np.where(
             pd.isna(out.get("payment_status")), status, out.get("payment_status")
         )
+        fill_zero = ["max_dpd", "mean_dpd", "median_dpd", "loan_count"]
+        for c in fill_zero:
             if c in out.columns:
                 out[c] = out[c].fillna(0)
         if "has_defaulted" in out.columns:
