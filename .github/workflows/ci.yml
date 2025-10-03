@@ -119,7 +119,7 @@ jobs:
         run: |
           set -e
           if [ -n "${CODE_DIRS// }" ]; then
-            pylint $CODE_DIRS --fail-under=7.0
+            pylint $CODE_DIRS --fail-under=8.0
           else
             echo "No code directories found to check with Pylint."
           fi
