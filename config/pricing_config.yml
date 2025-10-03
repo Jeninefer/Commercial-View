@@ -67,4 +67,8 @@ pricing_rules:
   amount_decimal_places: 2
   
   # Matching strategy when multiple rows match
-  matching_strategy: "best_fit"  # Options: "best_fit", "first_match", "conservative"
+  # Options for matching_strategy:
+  #   - "best_fit": Selects the row that most closely matches all provided criteria (e.g., the narrowest interval that contains the input values).
+  #   - "first_match": Selects the first row that matches the input criteria, based on the order in the pricing grid.
+  #   - "conservative": Selects the row with the most conservative (e.g., highest) rate among all matches, prioritizing risk-averse pricing.
+  matching_strategy: "best_fit"
