@@ -216,6 +216,9 @@ class KPICalculator:
         if thresholds:
             # Only update with keys that are valid for Thresholds
             valid_thresholds = {k: v for k, v in thresholds.items() if k in self.thresholds}
+            invalid_keys = [k for k in thresholds if k not in self.thresholds]
+            if invalid_keys:
+                logger.warning(f"Unrecognized threshold keys: {invalid_keys}. These will be ignored.")
             self.thresholds.update(valid_thresholds)  # partial overrides
 
         result: Dict[str, Dict[str, float]] = {"startup": {}, "fintech": {}, "valuation": {}, "viability": {}}
