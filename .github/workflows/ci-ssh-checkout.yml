@@ -71,14 +71,17 @@ if not os.path.isfile(req_file):
     sys.exit(0)
 
 def parse_pkg(line):
-    # Remove comments and extras, get the package name
+    # Remove comments, get the package name
     line = line.split('#', 1)[0].strip()
     if not line or line.startswith('-'):
         return None
-    # Remove version specifiers and extras
-    m = re.match(r'^([A-Za-z0-9_-]+)([A-Za-z0-9_.-]*)', line)
-    return (m.group(1) + (m.group(2) or "")) if m else None
-
+    # Match package name at start, optionally with extras and version specifiers
+    m = re.match(r'^([A-Za-z0-9_.-]+)', line)
+    if not m:
+        return None
+    # Normalize for import: replace '-' and '.' with '_'
+    pkg = m.group(1).replace('-', '_').replace('.', '_')
+    return pkg
 pkgs = []
 with open(req_file) as f:
     for line in f:
