@@ -30,7 +30,7 @@ class MetricsRegistry:
 
     def record_data_metrics(self, df: pd.DataFrame, operation: str = "processing") -> None:
         self.record_metric("n_rows", int(len(df)), {"operation": operation})
-        denom = len(df) * len(df.columns) if len(df) and len(df.columns) else 1
+        denom = len(df) * len(df.columns) if len(df) > 0 and len(df.columns) > 0 else 1
         completeness = 1 - (df.isnull().sum().sum() / denom)
         self.record_metric("quality_score", float(completeness), {"operation": operation})
 
