@@ -9,19 +9,21 @@ This script demonstrates the core functionality without requiring actual data fi
 No external dependencies required - uses only Python standard library.
 """
 
-import pandas as pd
+
+def is_missing(x):
+    return x is None or (isinstance(x, float) and x != x)
 
 # --- Feature 1: Dynamic Percentage Calculation ---
 def calculate_percentage_vs_target(current: float, target: float) -> float:
     """Calculate percentage achievement vs target (e.g., 7.61M / 7.80M = 97.5%)."""
-    if pd.isna(target) or target == 0:
+    if is_missing(target) or target == 0:
         return None
     return (current / target) * 100
 
 # --- Feature 2: Tolerance Checks ---
 def within_tolerance(value: float, target: float, tol: float = 0.01) -> bool:
     """Check if value is within tolerance of target."""
-    if pd.isna(value) or pd.isna(target) or target == 0:
+    if is_missing(value) or is_missing(target) or target == 0:
         return False
     return abs(value - target) <= tol * target
 
