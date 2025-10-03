@@ -5,6 +5,7 @@ import json
 import os
 import tempfile
 from datetime import datetime, timedelta
+from metrics_registry import MetricsRegistry
 
 class TestMetricsRegistry(unittest.TestCase):
     def setUp(self):
