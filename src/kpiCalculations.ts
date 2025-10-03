@@ -303,12 +303,15 @@ export function calculateClientGoals(dataDir: string): {
       if (!info) {
         // This should not happen; log a warning and skip this row
         console.warn(`Warning: customerInfo missing for customerId ${customerId} during update. Skipping row.`);
-        if (status === 'Recovered') {
-          info.isRecovered = true;
-        }
-        if (isRecurring) {
-          info.isRecurring = true;
-        }
+        // Skip property assignments since info is missing
+        return;
+      }
+      // Update info if recovered
+      if (status === 'Recovered') {
+        info.isRecovered = true;
+      }
+      if (isRecurring) {
+        info.isRecurring = true;
       }
     }
   });
