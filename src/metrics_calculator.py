@@ -69,7 +69,7 @@ class MetricsCalculator:
                 m["mrr"] = mrr
                 m["arr"] = mrr * 12.0
             else:
-                logger.warning("MRR/ARR: missing {'date','recurring_revenue'}")
+                logger.warning("MRR/ARR: missing {'date', 'recurring_revenue'}")
         except Exception as e:
             logger.error(f"MRR/ARR error: {e}")
 
