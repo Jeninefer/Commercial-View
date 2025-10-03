@@ -78,8 +78,8 @@ def parse_pkg(line):
     if not line or line.startswith('-'):
         return None
     # Remove version specifiers and extras
-    m = re.match(r'^([A-Za-z0-9_.-]+)', line)
-    return m.group(1) if m else None
+    m = re.match(r'^([A-Za-z0-9_-]+)([A-Za-z0-9_.-]*)', line)
+    return (m.group(1) + (m.group(2) or "")) if m else None
 
 pkgs = []
 with open(req_file) as f:
