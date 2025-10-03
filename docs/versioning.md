@@ -9,15 +9,7 @@ This document defines the versioning strategy, release workflow, and tagging con
 We follow [Semantic Versioning 2.0.0](https://semver.org/) with the format:
 
 ```
-MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]
-```
-
-**Examples:**
-- `1.0.0` - Initial stable release
-- `1.2.3` - Regular release
-- `2.0.0-beta.1` - Pre-release version
-- `1.5.2+20231201.001` - Release with build metadata
-
+MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD-METADATA]
 ### Version Components
 
 #### MAJOR (X.0.0)
