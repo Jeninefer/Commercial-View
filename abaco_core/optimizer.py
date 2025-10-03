@@ -1,13 +1,8 @@
 from __future__ import annotations
-import logging
-from typing import Dict, Any, Optional
+from typing import Optional
 import pandas as pd
-import numpy as np
 
 from .config import Config
-
-logger = logging.getLogger("abaco_core.optimizer")
-
 class DisbursementOptimizer:
     """
     Greedy, explainable portfolio optimizer to approximate target mix under hard limits.
