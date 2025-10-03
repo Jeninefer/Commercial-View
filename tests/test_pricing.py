@@ -112,7 +112,7 @@ def pricing_yaml_file(temp_dir):
     
     file_path = Path(temp_dir) / 'pricing_grid.yaml'
     with open(file_path, 'w') as f:
-        yaml.dump(pricing_data, f)
+        yaml.safe_dump(pricing_data, f)
     return str(file_path)
 
 
