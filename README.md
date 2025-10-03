@@ -75,7 +75,7 @@ Exported files follow the naming convention:
 {name}_{timestamp}.json
 ```
 
-Where timestamp is in ISO 8601 format: `YYYYMMDDTHHMMSSZjson`
+Where timestamp is in ISO 8601 format: `YYYYMMDDTHHMMSSZ.json`
 
 Example: `revenue_kpi_20231225T103045Z.json`
 
