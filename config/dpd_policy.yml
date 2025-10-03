@@ -25,40 +25,40 @@ dpd_buckets:
   - bucket: "1-30 Days"
     value: 1
     min_dpd: 1
-    max_dpd: 30
-    description: "1 to 30 days past due"
+    max_dpd: 31  # Exclusive upper bound
+    description: "1 to 30 days past due (max_dpd exclusive)"
     risk_level: "low"
     default_flag: false
   
   - bucket: "31-60 Days"
     value: 2
     min_dpd: 31
-    max_dpd: 60
-    description: "31 to 60 days past due"
+    max_dpd: 61  # Exclusive upper bound
+    description: "31 to 60 days past due (max_dpd exclusive)"
     risk_level: "medium"
     default_flag: false
   
   - bucket: "61-90 Days"
     value: 3
     min_dpd: 61
-    max_dpd: 90
-    description: "61 to 90 days past due"
+    max_dpd: 91  # Exclusive upper bound
+    description: "61 to 90 days past due (max_dpd exclusive)"
     risk_level: "medium"
     default_flag: false
   
   - bucket: "91-120 Days"
     value: 4
     min_dpd: 91
-    max_dpd: 120
-    description: "91 to 120 days past due"
+    max_dpd: 121  # Exclusive upper bound
+    description: "91 to 120 days past due (max_dpd exclusive)"
     risk_level: "high"
     default_flag: false
   
   - bucket: "121-180 Days"
     value: 5
     min_dpd: 121
-    max_dpd: 180
-    description: "121 to 180 days past due"
+    max_dpd: 181  # Exclusive upper bound
+    description: "121 to 180 days past due (max_dpd exclusive)"
     risk_level: "high"
     default_flag: false
   
