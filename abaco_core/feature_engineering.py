@@ -101,7 +101,7 @@ class FeatureEngineer:
         metrics = metrics or ["apr", "eir", "term"]
         df = loan_df.copy()
         if weight_field not in df.columns:
-            candidates = [c for c in df.columns if any(k in c.lower() for k in ["outstanding_balance","olb","current_balance","balance","saldo"])]
+            candidates = [c for c in df.columns if any(k in c.lower() for k in ["outstanding_balance", "olb", "current_balance", "balance", "saldo"])]
             if not candidates:
                 raise ValueError("Weight field not found")
             weight_field = candidates[0]
