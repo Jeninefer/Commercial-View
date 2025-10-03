@@ -36,9 +36,13 @@ GEMINI_PROJECT_ID=your-gemini-project-id-here
 ### Usage
 
 ```python
+import os
 import google.generativeai as genai
 
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise RuntimeError("GEMINI_API_KEY environment variable not set. Please set it in your .env file.")
+genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-pro')
 response = model.generate_content("Your prompt here")
 ```
