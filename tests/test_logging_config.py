@@ -24,7 +24,9 @@ class TestLoggingConfig(unittest.TestCase):
         """Clean up after tests."""
         # Restore original logger configuration
         logging.root.setLevel(self.original_level)
-        logging.root.handlers = self.original_handlers
+        logging.root.handlers.clear()
+        for handler in self.original_handlers:
+            logging.root.addHandler(handler)
         
     def test_configure_logging_default_level(self):
         """Test that configure_logging sets up logging with default INFO level."""
