@@ -1,6 +1,6 @@
 # Commercial-View
 
-Principal KPI Calculator for Commercial Loan Portfolio Analysis
+Comprehensive KPI Calculator for Commercial Loan Portfolio Analysis
 
 ## Overview
 
