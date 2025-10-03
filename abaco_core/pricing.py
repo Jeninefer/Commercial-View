@@ -125,7 +125,7 @@ class PricingEnricher:
                     grid_ren = grid.rename(columns={pk[i]: lk[i] for i in range(len(lk))})
                     result = result.merge(grid_ren, on=lk, how="left", suffixes=("", "_grid"))
 
-        # APR–EIR spread
+        # APR-EIR spread
         apr_cols = [apr_col_hint] if apr_col_hint else [c for c in result.columns if "apr" in c.lower()]
         eir_cols = [eir_col_hint] if eir_col_hint else [c for c in result.columns if "eir" in c.lower()]
         apr_col = next((c for c in apr_cols if c in result.columns), None)
