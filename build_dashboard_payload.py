@@ -255,8 +255,8 @@ first_seen = df_loans.groupby("Customer ID")["Disbursement Date"].min()
 df_loans["is_new_2025"] = df_loans["Customer ID"].map(lambda c: is_new_client_2025(c, first_seen))
     return False
 
-df_loans["is_new_2025"] = df_loans["Customer ID"].map(lambda c: is_new_client_2025(c, first_seen))
 first_seen = df_loans.groupby("Customer ID")["Disbursement Date"].min()
+df_loans["is_new_2025"] = df_loans["Customer ID"].map(lambda c: is_new_client_2025(c, first_seen))
 span = df_loans.groupby("Customer ID").agg(first=("Disbursement Date","min"), last=("Disbursement Date","max"))
 recurrent_ids = span.index[(span["last"] - span["first"]).dt.days > 90]
 
