@@ -166,5 +166,5 @@ class FeatureEngineer:
             if m in res.columns:
                 s = res[m].astype(float)
                 std = s.std(ddof=0)
-                res[f"{m}_zscore"] = (s - s.mean()) / std if std > 0 else 0.0
+                res[f"{m}_zscore"] = (s - s.mean()) / std if std > 0 else pd.Series(0.0, index=s.index)
         return res
