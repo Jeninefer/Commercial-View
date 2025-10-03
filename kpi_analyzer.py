@@ -294,7 +294,7 @@ class KPIAnalyzer:
             "startup": self.compute_startup_metrics(
                 revenue_df, 
                 customer_df, 
-                valuation_df if "marketing_expense" in valuation_df.columns else None
+                valuation_df if (valuation_df is not None and isinstance(valuation_df, pd.DataFrame) and "marketing_expense" in valuation_df.columns) else None
             ),
             "fintech": self.compute_fintech_metrics(
                 loan_df if loan_df is not None else pd.DataFrame(),
