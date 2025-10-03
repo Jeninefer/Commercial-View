@@ -123,7 +123,7 @@ export function groupByTimePeriod(
         key = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
         break;
       case TimePeriod.WEEKLY: {
-        const weekNumber = Math.floor(date.getDate() / 7);
+        const weekNumber = Math.floor((date.getDate() - 1) / 7);
         key = `${date.getFullYear()}-${date.getMonth()}-W${weekNumber}`;
         break;
       }
