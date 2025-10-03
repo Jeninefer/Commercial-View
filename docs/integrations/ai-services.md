@@ -103,12 +103,18 @@ FIGMA_FILE_KEY=your-figma-file-key-here
 ### Usage
 
 ```python
+import os
 import requests
 
+figma_token = os.getenv("FIGMA_ACCESS_TOKEN")
+if not figma_token:
+    raise RuntimeError("FIGMA_ACCESS_TOKEN environment variable not set. Please set it in your .env file.")
+file_key = os.getenv("FIGMA_FILE_KEY")
+if not file_key:
+    raise RuntimeError("FIGMA_FILE_KEY environment variable not set. Please set it in your .env file.")
 headers = {
-    'X-Figma-Token': os.environ["FIGMA_ACCESS_TOKEN"]
+    'X-Figma-Token': figma_token
 }
-file_key = os.environ["FIGMA_FILE_KEY"]
 response = requests.get(
     f'https://api.figma.com/v1/files/{file_key}',
     headers=headers
