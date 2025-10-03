@@ -168,6 +168,3 @@ Commercial-View/
 - pandas >= 1.3.0
 - numpy >= 1.20.0
 
-### License
-
-Principal KPI
