@@ -62,7 +62,7 @@ class MetricsCalculator:
         # MRR/ARR
         try:
             if {"date","recurring_revenue"}.issubset(revenue_df.columns):
-                r = revenue_df[["date","recurring_revenue"]].copy()
+                r = revenue_df[["date", "recurring_revenue"]].copy()
                 r["date"] = pd.to_datetime(r["date"], errors="coerce")
                 r = r.sort_values("date").dropna(subset=["date"]).tail(1)
                 mrr = float(r["recurring_revenue"].iloc[0]) if not r.empty else 0.0
