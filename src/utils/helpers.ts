@@ -131,7 +131,7 @@ export function groupByTimePeriod(
         key = `${date.getFullYear()}-${date.getMonth()}`;
         break;
       case TimePeriod.QUARTERLY: {
-        const quarter = Math.floor(date.getMonth() / 3);
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
         key = `${date.getFullYear()}-Q${quarter}`;
         break;
       }
