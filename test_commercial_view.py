@@ -274,7 +274,7 @@ class TestDPDCalculation:
             'amount_due': [1000.0]
         })
         
-        payments = pd.DataFrame(columns=['loan_id', 'payment_date', 'amount_paid'])
+        payments = pd.DataFrame({'loan_id': [], 'payment_date': [], 'amount_paid': []})
         
         result = portfolio.calculate_dpd(
             payment_schedule=payment_schedule,
