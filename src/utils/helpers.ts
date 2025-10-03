@@ -169,7 +169,16 @@ export function validateDataQuality(data: DataPoint[]): {
     issues.push(`${nullValues.length} null values found`);
   }
 
-  const duplicateTimestamps = new Set(data.map(p => p.timestamp.getTime())).size !== data.length;
+  let duplicateTimestamps = false;
+  const seenTimestamps = new Set<number>();
+  for (const p of data) {
+    const time = p.timestamp.getTime();
+    if (seenTimestamps.has(time)) {
+      duplicateTimestamps = true;
+      break;
+    }
+    seenTimestamps.add(time);
+  }
   if (duplicateTimestamps) {
     issues.push('Duplicate timestamps detected');
   }
