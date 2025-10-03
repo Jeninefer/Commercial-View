@@ -82,7 +82,7 @@ class DPDBucketAnalyzer:
                 else:
                     edges.append((low, high))
                 labels.append(label)
-            # Convert to boundaries for pd.cut
+            # Prepare interval boundaries and labels for manual bucketing
             # Example: [(0,0),(1,29),...,(180,inf)]
             # Map each interval to label
             # Assign bucket labels by iterating over each interval and setting the label for matching DPD values
