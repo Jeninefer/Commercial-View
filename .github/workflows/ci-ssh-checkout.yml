@@ -20,14 +20,12 @@ jobs:
             exit 1
           fi
           umask 177
-          cat > ~/.ssh/id_ed25519 <<'EOF'
-${{ secrets.DEPLOY_VISUAL_CI_KEY }}
-EOF
+          echo "${{ secrets.DEPLOY_VISUAL_CI_KEY }}" | install -m 600 /dev/stdin ~/.ssh/id_ed25519
           if [ ! -s ~/.ssh/id_ed25519 ]; then
             echo "Failed to write SSH key!" >&2
             exit 1
           fi
-          chmod 600 ~/.ssh/id_ed25519
+          # chmod 600 ~/.ssh/id_ed25519  # Not needed, install sets permissions
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Test SSH clone
