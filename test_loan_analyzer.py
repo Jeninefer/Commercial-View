@@ -32,19 +32,20 @@ class TestCalculateWeightedStats:
         
         result = self.analyzer.calculate_weighted_stats(df)
         
-        # Expected weighted averages:
-        # apr: (1000*5.0 + 2000*6.0 + 3000*7.0) / (1000+2000+3000) = 38000/6000 = 6.333...
-        # eir: (1000*5.1 + 2000*6.1 + 3000*7.1) / 6000 = 38600/6000 = 6.433...
-        # term: (1000*12 + 2000*24 + 3000*36) / 6000 = 168000/6000 = 28
+        # Calculate expected weighted averages dynamically for maintainability
+        weights = df['outstanding_balance']
+        expected_weighted_apr = np.average(df['apr'], weights=weights)
+        expected_weighted_eir = np.average(df['eir'], weights=weights)
+        expected_weighted_term = np.average(df['term'], weights=weights)
         
         assert not result.empty
         assert 'weighted_apr' in result.columns
         assert 'weighted_eir' in result.columns
         assert 'weighted_term' in result.columns
         
-        assert abs(result['weighted_apr'].iloc[0] - 6.333333) < 0.001
-        assert abs(result['weighted_eir'].iloc[0] - 6.433333) < 0.001
-        assert abs(result['weighted_term'].iloc[0] - 28.0) < 0.001
+        assert abs(result['weighted_apr'].iloc[0] - expected_weighted_apr) < 0.001
+        assert abs(result['weighted_eir'].iloc[0] - expected_weighted_eir) < 0.001
+        assert abs(result['weighted_term'].iloc[0] - expected_weighted_term) < 0.001
 
     def test_case_insensitive_column_matching(self):
         """Test that column matching is case-insensitive"""
