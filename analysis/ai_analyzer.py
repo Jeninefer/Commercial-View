@@ -123,7 +123,7 @@ Keep your analysis concise but insightful, focusing on what matters most from yo
             return "Google Gemini not configured"
         
         try:
-            from vertexai.preview.generative_models import GenerativeModel
+            from vertexai.generative_models import GenerativeModel
             
             model = GenerativeModel("gemini-pro")
             response = model.generate_content(prompt)
