@@ -34,7 +34,7 @@ Use your live DataFrames with the exact column names described in the "Data cont
 - Columns to match on (any subset): segment, risk_score|risk_rating, term, amount
 
 ### KPIs
-
+- Optional columns: `start_revenue`, `end_revenue`, `revenue`, `customer_count`  <!-- `customer_count` is optional; if present, enables customer-based metrics. -->
 **Revenue DF:**
 - Required columns: `date`, `recurring_revenue`
 - Optional columns: `start_revenue`, `end_revenue`, `revenue`, `customer_count`
