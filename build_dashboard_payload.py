@@ -354,7 +354,7 @@ if not q4_targets.empty:
 # --- Build JSON payload ---
 payload = {
     "as_of": datetime.now().strftime("%Y-%m-%d"),
-    "files_used": {
+        "weighted_apr": None if pd.isna(w_apr) else round(float(w_apr), 2),
         "loan_data": os.path.basename(loan_path),
         "payment_schedule": os.path.basename(ps_path),
         "historic_real_payment": os.path.basename(hist_path)
