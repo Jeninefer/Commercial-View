@@ -94,10 +94,6 @@ export class AIAnalytics {
       return [];
     }
 
-    return data.filter(point => {
-      const zScore = Math.abs((point.value - mean) / stdDev);
-      return zScore > threshold;
-    });
   }
 
   /**
