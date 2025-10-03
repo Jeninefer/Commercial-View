@@ -42,7 +42,7 @@ The PaymentProcessor._detect_field method needed to recognize additional column 
 
 All patterns support:
 - **Case-insensitive matching**: Works with any case combination
-- **Flexible separators**: Matches both spaces and underscores using `[_\s]*`
+- **Flexible separators**: Patterns support spaces/underscores (via `[_\s]*` or boundary-anchored forms)
 - **Partial matching**: Uses regex search to find patterns within column names
 
 ## Files Created
