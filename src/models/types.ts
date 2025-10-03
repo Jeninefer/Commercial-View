@@ -52,7 +52,7 @@ export interface DataPoint {
 export interface KPIMetric {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   category: string;
   unit: string;
   currentValue: number;
