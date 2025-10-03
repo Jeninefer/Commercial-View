@@ -43,7 +43,7 @@ def download_from_gdrive():
                     refreshed_dt = datetime.datetime.fromisoformat(refreshed_at)
                 except Exception:
                     # If fromisoformat fails (e.g., Python <3.7), fallback to parsing manually
-                    refreshed_dt = datetime.datetime.strptime(refreshed_at[:19], "%Y-%m-%dT%H:%M:%S")
+                    refreshed_dt = datetime.datetime.strptime(refreshed_at[:19], "%Y-%m-%dT%H:%M:%S").replace(tzinfo=datetime.UTC)
                 if refreshed_dt.date() == today:
                     print(f"Data already refreshed today at {refreshed_at}. Skipping download.")
                     return
