@@ -137,8 +137,7 @@ class LoanAnalyzer:
             ]
             return pd.DataFrame(columns=columns)
         # Last state per loan
-        idx = tl.groupby("loan_id")["date"].idxmax()
-        last = tl.loc[idx].copy()
+        out = last[["loan_id","cumulative_gap","date"]].rename(columns={"cumulative_gap":"past_due_amount"})
 
         # First arrears date (gap > 0) per loan
         arrears = tl.loc[tl["cumulative_gap"] > 0, ["loan_id","date"]].groupby("loan_id", as_index=False).min()
