@@ -66,7 +66,10 @@ OPENAI_ORGANIZATION_ID=your-openai-org-id-here
 import os
 import openai
 
-client = openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise RuntimeError("OPENAI_API_KEY environment variable not set. Please set it in your .env file.")
+client = openai.OpenAI(api_key=api_key)
 response = client.chat.completions.create(
     model="gpt-4",
     messages=[{"role": "user", "content": "Your prompt"}]
