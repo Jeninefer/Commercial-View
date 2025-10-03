@@ -32,7 +32,7 @@ def process_loan_data(schedule_df, payments_df):
     # pricing_enricher = PricingEnricher()
     # def enrich_pricing(...): ... "timestamp": datetime.utcnow().isoformat() + "Z"
     
-    # Drop rows with nulls in key columns
+    # Return processed DataFrames with nulls removed from key columns
     return schedule_df, payments_df
 
 
