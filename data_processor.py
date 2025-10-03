@@ -26,7 +26,7 @@ def process_loan_data(schedule_df, payments_df):
     schedule_df = schedule_df.dropna(subset=["loan_id", "due_date"])
     payments_df = payments_df.dropna(subset=["loan_id", "payment_date"])
     
-    # NO mezclar pagos con pricing aquí:
+    # Do not mix payments with pricing here:
     # pricing_enricher = PricingEnricher()
     # def enrich_pricing(...): ... "timestamp": datetime.utcnow().isoformat() + "Z"
     
