@@ -159,8 +159,9 @@ class PricingEnricher:
                     result[col] = pd.NA
             
             # Vectorized interval matching using IntervalIndex
+            # Use closed="left" to ensure non-overlapping bands: intervals are [min, max)
             intervals = pd.IntervalIndex.from_arrays(
-                pricing_df[min_col], pricing_df[max_col], closed="both"
+                pricing_df[min_col], pricing_df[max_col], closed="left"
             )
             # Get the values from the loan column
             values = result[loan_col].values
