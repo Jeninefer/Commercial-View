@@ -313,7 +313,11 @@ def main():
     all_valid = validator.validate_all()
 
     # Exit with appropriate code
-    sys.exit(0 if all_valid else 1)
+    if all_valid:
+        sys.exit(0)
+    else:
+        print("\nERROR: Validation failed. See errors above for details.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
