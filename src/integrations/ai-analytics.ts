@@ -50,7 +50,25 @@ export class AIAnalytics {
     const denominator = n * sumX2 - sumX * sumX;
     const slope = (n * sumXY - sumX * sumY) / denominator;
     const intercept = (sumY - slope * sumX) / n;
-
+      // Fallback: repeat the last known value for the requested periods
+      const lastPoint = sortedData[n - 1];
+      const lastTimestamp = lastPoint.timestamp.getTime();
+      const timeDiff = n > 1
+        ? sortedData[n - 1].timestamp.getTime() - sortedData[n - 2].timestamp.getTime()
+        : 0;
+      const fallbackPredictions: DataPoint[] = [];
+      for (let i = 1; i <= periodsAhead; i++) {
+        fallbackPredictions.push({
+          timestamp: new Date(lastTimestamp + timeDiff * i),
+          value: lastPoint.value,
+          metadata: {
+            predicted: true,
+            confidence: 0, // Cannot estimate confidence
+            fallback: true // Indicate this is a fallback prediction
+          }
+        });
+      }
+      return fallbackPredictions;
     const lastTimestamp = sortedData[n - 1].timestamp.getTime();
     const timeDiff = sortedData[n - 1].timestamp.getTime() - sortedData[n - 2].timestamp.getTime();
 
