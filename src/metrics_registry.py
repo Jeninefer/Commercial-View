@@ -47,7 +47,7 @@ class MetricsRegistry:
                 out[name] = {
                     "count": len(vals),
                     "latest": vals[-1],
-                    "avg": sum(vals)/len(vals),
+                    "avg": sum(vals)/len(vals) if vals else None,
                     "min": min(vals),
                     "max": max(vals)
                 }
