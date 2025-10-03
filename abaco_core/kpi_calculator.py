@@ -79,9 +79,8 @@ class KPICalculator:
                         m["ltv_cac_ratio"] = float(self.safe_division(m["ltv"], m["cac"], np.nan))
         # Burn/Runway
         if expense_df is not None and {"date", "total_expense"}.issubset(expense_df.columns):
-            cols = ["date", "total_expense"]
-            if "cash_balance" in expense_df.columns:
-                cols.append("cash_balance")
+            desired_cols = ["date", "total_expense", "cash_balance"]
+            cols = [col for col in desired_cols if col in expense_df.columns]
             e = expense_df[cols].copy()
             e["date"] = pd.to_datetime(e["date"], errors="coerce")
             e = e.dropna(subset=["date"]).sort_values("date")
