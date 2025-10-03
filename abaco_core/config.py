@@ -53,12 +53,12 @@ class Config:
         
         if path and path.exists():
             try:
-                with open(path, 'r') as f:
+                with open(path, 'r', encoding='utf-8') as f:
                     config = json.load(f)
-                    logger.info(f"Loaded configuration from {path}")
+                    logger.info("Loaded configuration from %s", path)
                     return config
             except Exception as e:
-                logger.warning(f"Failed to load config from {path}: {e}")
+                logger.warning("Failed to load config from %s: %s", path, e)
         
         # Return default configuration
         logger.info("Using default configuration")
