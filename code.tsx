@@ -225,14 +225,14 @@ export default function () {
         title="Weighted APR" 
         value={fmtPct(k?.weighted_apr)}
         target={tc?.apr ? fmtPct(tc.apr.target) : undefined}
-        subtitle={tc?.apr ? `Target: ${tc.apr.target.toFixed(1)}%` : "Σ(APR×Outstanding)/Σ(Outstanding)"}
+        subtitle={tc?.apr ? `Target: ${fmtPct(tc.apr.target)}` : "Σ(APR×Outstanding)/Σ(Outstanding)"}
         status={aprStatus}
       />
       <Tile 
         title="NPL ≥180" 
         value={fmtMoney(k?.npl_180_amount)}
-        target={tc?.npl ? `${tc.npl.target.toFixed(1)}%` : undefined}
-        subtitle={tc?.npl ? `${tc.npl.current.toFixed(1)}% of portfolio` : "Source: PS × Historic"}
+        target={tc?.npl ? fmtPct(tc.npl.target) : undefined}
+        subtitle={tc?.npl ? `${fmtPct(tc.npl.current)} of portfolio` : "Source: PS × Historic"}
         status={nplStatus}
       />
       <Tile 
