@@ -1,5 +1,17 @@
 import pandas as pd
 def monthly_cohort(df: pd.DataFrame, customer_id: str, dt_col: str) -> pd.DataFrame:
+    """
+    Computes a monthly cohort retention matrix for a given customer event DataFrame.
+
+    Parameters:
+        df (pd.DataFrame): Input DataFrame containing customer event data.
+        customer_id (str): Name of the column identifying unique customers.
+        dt_col (str): Name of the column containing event timestamps (must be parseable as dates).
+
+    Returns:
+        pd.DataFrame: A DataFrame where each row represents a cohort (customers grouped by their first month),
+            each column represents a month, and each value is the retention rate (fraction of the cohort active in that month).
+    """
     x = df[[customer_id, dt_col]].copy()
     x[dt_col] = pd.to_datetime(x[dt_col]).dt.to_period("M").dt.to_timestamp()
     first = x.groupby(customer_id)[dt_col].min().rename("cohort")
