@@ -86,7 +86,7 @@ class MetricsCalculator:
 
         # NRR
         try:
-            if {"start_revenue","end_revenue"}.issubset(revenue_df.columns):
+            if {"start_revenue", "end_revenue"}.issubset(revenue_df.columns):
                 m["nrr"] = float(self.safe_division(revenue_df["end_revenue"].sum(),
                                                     revenue_df["start_revenue"].sum(), 0.0))
         except Exception as e:
