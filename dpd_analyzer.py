@@ -88,7 +88,6 @@ class DPDBucketAnalyzer:
             # Assign bucket labels by iterating over each interval and setting the label for matching DPD values
             bucket_series = pd.Series(index=df.index, dtype="object")
             for (low, high), label in zip(edges, labels):
-                mask = (dpd >= low) & (dpd <= high)
                 mask = (dpd >= low) & ((dpd <= high) if not np.isinf(high) else True)
         else:
             # Defaults: 0, 1–29, 30–59, 60–89, 90–119, 120–149, 150–179, 180+
