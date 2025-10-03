@@ -47,7 +47,9 @@ class FeatureEngineer:
             out["days_since_last"] = np.nan
 
         def _label(row):
-            cnt = row.get(loan_count_col, 0) or 0
+            cnt = row.get(loan_count_col, 0)
+            if pd.isna(cnt):
+                cnt = 0
             dsl = row.get("days_since_last", np.nan)
             if cnt <= 1:
                 return self.CUSTOMER_TYPES['NEW']
