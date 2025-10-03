@@ -9,13 +9,15 @@ to ensure data integrity and catch configuration errors early.
 import json
 import os
 import sys
+import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+logging.basicConfig(level=logging.ERROR, format='%(asctime)s %(levelname)s: %(message)s')
 try:
     import yaml
 except ImportError:
-    print("ERROR: PyYAML is required. Install with: pip install pyyaml")
+    logging.error("PyYAML is required. Install with: pip install pyyaml")
     sys.exit(1)
 
 
