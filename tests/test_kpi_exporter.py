@@ -72,8 +72,11 @@ class TestKPIExporter:
             # Mock datetime to get predictable timestamp
             mock_dt = datetime(2023, 12, 25, 10, 30, 45)
             with patch('src.kpi_exporter.datetime') as mock_datetime:
-                mock_datetime.now.return_value = mock_dt
-                mock_datetime.timezone.utc = None  # Provide timezone.utc if needed
+                # Ensure timezone.utc is available in the mock
+                from datetime import timezone as real_timezone
+                mock_datetime.timezone = real_timezone
+                # Patch now() to return mock_dt when called with timezone.utc
+                mock_datetime.now.side_effect = lambda tz=None: mock_dt if tz == real_timezone.utc else datetime.now(tz)
                 
                 payload = {"metric": "test"}
                 result = exporter._export_json(payload, "test")
