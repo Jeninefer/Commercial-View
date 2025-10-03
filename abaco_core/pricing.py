@@ -114,7 +114,17 @@ class PricingEnricher:
                             hits = grid[(grid_low_numeric <= v) & (grid_high_numeric >= v)]
                             return hits.iloc[0].to_dict() if not hits.empty else None
                         matched = val.apply(pick_row)
-                        matched_df = pd.DataFrame(list(matched)).add_suffix("_grid")
+                        # Find the set of columns from the first non-None dict, if any
+                        first_non_none = next((x for x in matched if x is not None), None)
+                        if first_non_none is not None:
+                            columns = list(first_non_none.keys())
+                        else:
+                            columns = []
+                        # Build DataFrame with correct columns and length
+                        matched_df = pd.DataFrame(
+                            [{k: d.get(k, np.nan) if d is not None else np.nan for k in columns} for d in matched],
+                            columns=columns
+                        ).add_suffix("_grid")
                         # Validate matched_df before concatenation
                         if matched_df.empty or matched_df.isnull().all(axis=None):
                             # Create a DataFrame of the same length as 'without' with NaNs
