@@ -237,8 +237,8 @@ span = df_loans.groupby("Customer ID").agg(first=("Disbursement Date","min"), la
 recurrent_ids = span.index[(span["last"] - span["first"]).dt.days > 90]
 
 recovered_ids = []
-for cid, g in df_loans.sort_values("Disbursement Date").groupby("Customer ID"):
-    s = g["Disbursement Date"].sort_values()
+for cid, g in df_loans.sort_values(["Customer ID", "Disbursement Date"]).groupby("Customer ID"):
+    s = g["Disbursement Date"]  # already sorted within group
     if (s.diff().dt.days > 90).fillna(False).any():
         recovered_ids.append(cid)
 recovered_ids = set(map(str, recovered_ids))
