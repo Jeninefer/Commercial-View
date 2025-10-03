@@ -123,26 +123,32 @@ class PaymentAnalyzer:
             reference_date = datetime.now()
         
         # Proceed with timeline calculation on sched and pays
-        # Merge schedule with payments
-        timeline = sched.merge(
-            pays,
-            on='loan_id',
-            how='left',
+        # Sort both DataFrames for merge_asof
+        sched_sorted = sched.sort_values(['loan_id', 'due_date']).reset_index(drop=True)
+        pays_sorted = pays.sort_values(['loan_id', 'payment_date']).reset_index(drop=True)
+
+        # Use merge_asof to match each due with the next payment for that loan
+        timeline = pd.merge_asof(
+            sched_sorted,
+            pays_sorted,
+            by='loan_id',
+            left_on='due_date',
+            right_on='payment_date',
+            direction='forward',
             suffixes=('_schedule', '_payment')
         )
-        
+
         # Calculate payment status
         timeline['days_difference'] = (
             timeline['payment_date'] - timeline['due_date']
         ).dt.days
-        
+
         timeline['payment_status'] = timeline.apply(
             lambda row: 'paid_on_time' if pd.notna(row['payment_date']) and row['days_difference'] <= 0
             else 'paid_late' if pd.notna(row['payment_date']) and row['days_difference'] > 0
             else 'unpaid',
             axis=1
         )
-        
         return timeline
     
     def calculate_dpd(
