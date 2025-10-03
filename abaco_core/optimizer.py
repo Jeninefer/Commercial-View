@@ -62,6 +62,15 @@ class DisbursementOptimizer:
 
     @staticmethod
     def _payer_bucket(rank: int) -> str:
+        """
+        Bucket payer ranks into 'Top1', 'Top10', or 'Rest'.
+
+        Args:
+            rank (int): Payer rank (expected: positive integer, 1 = best).
+
+        Returns:
+            str: 'Top1' for rank 1 (inclusive), 'Top10' for ranks 2-10 (inclusive), 'Rest' for rank > 10.
+        """
         if rank <= 1: return "Top1"
         if rank <= 10: return "Top10"
         return "Rest"
