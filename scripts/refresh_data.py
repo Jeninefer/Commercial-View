@@ -27,7 +27,28 @@ def download_from_gdrive():
     """
     Download files from Google Drive folder to data/ directory.
     Only downloads files once per day (on the first run).
+    Skips download if data was already refreshed today.
     """
+    snapshot_path = os.path.join(TARGET, "snapshot.json")
+    today = datetime.datetime.now(datetime.UTC).date()
+    # Check if snapshot.json exists and if refreshed today
+    if os.path.exists(snapshot_path):
+        try:
+            with open(snapshot_path, "r") as f:
+                snapshot = json.load(f)
+            refreshed_at = snapshot.get("refreshed_at")
+            if refreshed_at:
+                # Parse the ISO datetime string
+                try:
+                    refreshed_dt = datetime.datetime.fromisoformat(refreshed_at)
+                except Exception:
+                    # If fromisoformat fails (e.g., Python <3.7), fallback to parsing manually
+                    refreshed_dt = datetime.datetime.strptime(refreshed_at[:19], "%Y-%m-%dT%H:%M:%S")
+                if refreshed_dt.date() == today:
+                    print(f"Data already refreshed today at {refreshed_at}. Skipping download.")
+                    return
+        except Exception as e:
+            print(f"Warning: Could not read snapshot.json: {e}. Proceeding with download.")
     print(f"Starting data refresh at {datetime.datetime.now(datetime.UTC).isoformat()}")
     
     try:
