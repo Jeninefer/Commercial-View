@@ -13,7 +13,7 @@ import {
   generateSampleData,
   formatNumber,
   formatPercentage
-} from '../src/index';
+} from 'commercial-view';
 
 // Initialize components
 const engine = new CommercialViewEngine();
