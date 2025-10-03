@@ -28,9 +28,7 @@ def process_loan_data(schedule_df, payments_df):
     # Drop rows with null values in key columns
     schedule_df = schedule_df.dropna(subset=["loan_id", "due_date"])
     payments_df = payments_df.dropna(subset=["loan_id", "payment_date"])
-    # Do not mix payments with pricing here:
-    # pricing_enricher = PricingEnricher()
-    # def enrich_pricing(...): ... "timestamp": datetime.utcnow().isoformat() + "Z"
+    # Do not mix payments with pricing here
     
     # Return processed DataFrames with nulls removed from key columns
     return schedule_df, payments_df
