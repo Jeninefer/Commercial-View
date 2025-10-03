@@ -1,5 +1,9 @@
 """Example usage of Commercial-View analytics package."""
 
+import os
+import sys
+# Ensure the parent directory is in sys.path for local development usage
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pandas as pd
 import numpy as np
 from commercial_view import PaymentAnalyzer
