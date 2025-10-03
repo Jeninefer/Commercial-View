@@ -181,7 +181,11 @@ else:
 
 # Weighted APR
 if {"Interest Rate APR","Outstanding Loan Value"}.issubset(df_loans.columns):
-    w_apr = (df_loans["Interest Rate APR"]*df_loans["Outstanding Loan Value"]).sum() / max(1.0, df_loans["Outstanding Loan Value"].sum())
+    # Normalize APR to decimal if necessary (assume >1 means percentage)
+    apr = df_loans["Interest Rate APR"].astype(float)
+    if (apr > 1).any():
+        apr = apr / 100.0
+    w_apr = (apr * df_loans["Outstanding Loan Value"]).sum() / max(1.0, df_loans["Outstanding Loan Value"].sum())
 else:
     w_apr = np.nan
 
