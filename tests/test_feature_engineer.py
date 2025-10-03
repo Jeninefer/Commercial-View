@@ -164,11 +164,11 @@ class TestFeatureEngineer:
         assert 'days_since_last' in result.columns
     
     def test_null_loan_count(self):
-        """Test handling of null loan count values.
+        """Test handling of null (NaN) loan count values.
         
-        Note: Due to how 'or' operator works with NaN in Python,
-        NaN values are not converted to 0 as might be expected.
-        NaN <= 1 evaluates to False, so these are classified as Recurrent.
+        Note: The implementation uses explicit NaN checking for loan_count.
+        When loan_count is NaN, classification is based on days_since_last.
+        If days_since_last < 90, the customer is classified as Recurrent.
         """
         df = pd.DataFrame({
             'customer_id': [1, 2],
