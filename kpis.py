@@ -16,7 +16,10 @@ def compute_post_money(pre_money: float, new_money: float) -> float:
 def update_snapshot(snap: dict, new_money: float | None = None) -> dict:
     startup = snap.get("startup")
     if not isinstance(startup, dict) or "mrr" not in startup:
-        # Required keys missing; return snap unchanged or handle as needed
+    if (
+        new_money is not None
+        and snap.get("valuation", {}).get("pre_money") is not None
+    ):
         return snap
     mrr = startup["mrr"]
     startup["arr"] = compute_arr(mrr)
