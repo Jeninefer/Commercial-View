@@ -24,7 +24,7 @@ This document defines the expected performance characteristics and SLOs for the 
 
 - **Extra-large portfolios**: > 1,000,000 loans
   - Expected processing time: < 2 hours  
-    _(Actual processing time may vary significantly depending on hardware specifications (e.g., CPU cores, RAM, disk speed) and the degree of parallel or distributed processing and code optimization. On standard hardware, processing may take longer (e.g., 2-4+ hours). Estimates assume high-performance, well-optimized environments.)_
+    _(Processing time may vary based on hardware specifications and optimization level.)_
   - Memory requirement: 16-32GB
   - Chunking required: 5,000 records per chunk
   - Parallel processing enabled
