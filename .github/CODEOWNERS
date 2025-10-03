@@ -1,4 +1,4 @@
 # Data directory - files should only be loaded from Google Drive
 # https://drive.google.com/drive/folders/1qIg_BnIf_IWYcWqCuvLaYU_Gu4C2-Dj8
 # Only the daily workflow should update these files (first run of the day)
-/data/
+/data/    @github-actions[bot]
