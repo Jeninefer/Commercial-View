@@ -112,11 +112,11 @@ example:
 security_level: "internal"
 pii_masking_required: true
 masking_rules:
-  - customer_id: "hash"
-  - customer_name: "full_mask"
-  - loan_id: "hash"
-  - email: "full_mask"
-  - phone: "full_mask"
+  customer_id: "hash"
+  customer_name: "full_mask"
+  loan_id: "hash"
+  email: "full_mask"
+  phone: "full_mask"
 access_control: "role_based"
 encryption_at_rest: true
 encryption_in_transit: true
