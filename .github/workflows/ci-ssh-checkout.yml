@@ -15,7 +15,18 @@ jobs:
         shell: bash
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_VISUAL_CI_KEY }}" > ~/.ssh/id_ed25519
+          if [ -z "${{ secrets.DEPLOY_VISUAL_CI_KEY }}" ]; then
+            echo "SSH key secret is not set!" >&2
+            exit 1
+          fi
+          umask 177
+          cat > ~/.ssh/id_ed25519 <<'EOF'
+${{ secrets.DEPLOY_VISUAL_CI_KEY }}
+EOF
+          if [ ! -s ~/.ssh/id_ed25519 ]; then
+            echo "Failed to write SSH key!" >&2
+            exit 1
+          fi
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
