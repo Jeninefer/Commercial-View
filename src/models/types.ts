@@ -53,7 +53,8 @@ export interface KPIMetric {
   id: string;
   name: string;
   /**
-   * Brief explanation of the KPI metric's purpose and context.
+   * A concise summary (1–2 sentences, up to 200 characters) describing the KPI metric's business purpose,
+   * context of use, and any relevant details that help users understand its significance.
    */
   description: string;
   category: string;
