@@ -80,35 +80,48 @@ jobs:
           if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
           pip install flake8 black isort pylint mypy yamllint
       
+      - name: Set code directories variable
+        id: set_code_dirs
+        run: |
+          CODE_DIRS=""
+          [ -d "src" ] && CODE_DIRS="$CODE_DIRS src"
+          [ -d "validators" ] && CODE_DIRS="$CODE_DIRS validators"
+          echo "CODE_DIRS=${CODE_DIRS}" >> $GITHUB_ENV
+      
       - name: Run Black (code formatting)
         run: |
           set -e
-          if [ -d "src" ] || [ -d "validators" ]; then
-            black --check --diff src validators
+          if [ -n "${CODE_DIRS// }" ]; then
+            black --check --diff $CODE_DIRS
+          else
+            echo "No code directories found to check with Black."
           fi
-      
       
       - name: Run isort (import sorting)
         run: |
           set -e
-          if [ -d "src" ] || [ -d "validators" ]; then
-            isort --check-only --diff src validators
+          if [ -n "${CODE_DIRS// }" ]; then
+            isort --check-only --diff $CODE_DIRS
+          else
+            echo "No code directories found to check with isort."
           fi
-      
       
       - name: Run Flake8 (style guide)
         run: |
           set -e
-          if [ -d "src" ] || [ -d "validators" ]; then
-            flake8 src validators --max-line-length=120
+          if [ -n "${CODE_DIRS// }" ]; then
+            flake8 $CODE_DIRS --max-line-length=120
+          else
+            echo "No code directories found to check with Flake8."
           fi
-      
       
       - name: Run Pylint
         run: |
           set -e
-          if [ -d "src" ] || [ -d "validators" ]; then
-            pylint src validators --fail-under=7.0
+          if [ -n "${CODE_DIRS// }" ]; then
+            pylint $CODE_DIRS --fail-under=7.0
+          else
+            echo "No code directories found to check with Pylint."
           fi
       
       
