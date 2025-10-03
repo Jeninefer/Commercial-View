@@ -187,12 +187,6 @@ class PaymentAnalyzer:
             "apr": ["apr","effective_apr","annual_percentage_rate","tasa_anual"],
             "eir": ["eir","effective_interest_rate","tasa_efectiva"],
         # Precompute lowercased column names for efficient matching
-        lower_columns = {c.lower(): c for c in base.columns}
-        for key, names in alias.items():
-            col = next(
-                (orig_col for lc_col, orig_col in lower_columns.items() for n in names if n in lc_col),
-                None
-            )
         res: Dict[str,float] = {}
         base = loans_df.copy()
         base[weight_col] = pd.to_numeric(base[weight_col], errors="coerce")
