@@ -158,17 +158,23 @@ class PricingEnricher:
                 if col not in result.columns:
                     result[col] = pd.NA
             
-            # Perform interval matching for each row
-            for idx, row in result.iterrows():
-                value = row[loan_col]
-                matching_rows = pricing_df[
-                    (pricing_df[min_col] <= value) & (pricing_df[max_col] >= value)
-                ]
-                if not matching_rows.empty:
-                    pricing_row = matching_rows.iloc[0]
-                    for col in pricing_cols_to_add:
-                        result.loc[idx, col] = pricing_row[col]
-        
+            # Vectorized interval matching using IntervalIndex
+            intervals = pd.IntervalIndex.from_arrays(
+                pricing_df[min_col], pricing_df[max_col], closed="both"
+            )
+            # Get the values from the loan column
+            values = result[loan_col].values
+            # Find the index of the interval each value falls into
+            matched_idx = intervals.get_indexer(values)
+            # For each column to add, assign the matched value or pd.NA if no match
+            for col in pricing_cols_to_add:
+                result[col] = pd.Series(
+                    [
+                        pricing_df.iloc[i][col] if i != -1 else pd.NA
+                        for i in matched_idx
+                    ],
+                    index=result.index
+                )
         return result
     
     def enrich_loan_data(
