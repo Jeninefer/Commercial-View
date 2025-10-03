@@ -323,5 +323,113 @@ class TestDPDCalculation:
         assert result.iloc[0]['is_default'] == False
 
 
+    def test_default_rate_reduction_scenario(self):
+        """
+        Test the scenario mentioned in problem statement where corrected logic
+        reduces default count from ~22% to ~4.5%.
+        
+        This validates that loans which went into arrears but later caught up
+        are not incorrectly flagged as defaults.
+        """
+        portfolio = LoanPortfolio(dpd_threshold=90)
+        
+        # Create a portfolio where some loans had historical arrears but caught up
+        loan_ids = [f'L{i:03d}' for i in range(1, 101)]  # 100 loans
+        
+        payment_schedule_data = []
+        payments_data = []
+        
+        # Scenario 1: 70 loans that are current (some had past arrears but caught up)
+        for i, loan_id in enumerate(loan_ids[:70]):
+            # All loans have 3 payments due
+            payment_schedule_data.extend([
+                {'loan_id': loan_id, 'due_date': '2024-01-01', 'amount_due': 1000.0},
+                {'loan_id': loan_id, 'due_date': '2024-02-01', 'amount_due': 1000.0},
+                {'loan_id': loan_id, 'due_date': '2024-03-01', 'amount_due': 1000.0}
+            ])
+            
+            if i < 50:
+                # 50 loans always paid on time
+                payments_data.extend([
+                    {'loan_id': loan_id, 'payment_date': '2024-01-01', 'amount_paid': 1000.0},
+                    {'loan_id': loan_id, 'payment_date': '2024-02-01', 'amount_paid': 1000.0},
+                    {'loan_id': loan_id, 'payment_date': '2024-03-01', 'amount_paid': 1000.0}
+                ])
+            else:
+                # 20 loans had arrears but caught up
+                payments_data.extend([
+                    {'loan_id': loan_id, 'payment_date': '2024-01-01', 'amount_paid': 1000.0},
+                    {'loan_id': loan_id, 'payment_date': '2024-03-15', 'amount_paid': 1000.0},
+                    {'loan_id': loan_id, 'payment_date': '2024-03-15', 'amount_paid': 1000.0}
+                ])
+        
+        # Scenario 2: 25 loans with minor arrears (< 90 days)
+        for loan_id in loan_ids[70:95]:
+            payment_schedule_data.extend([
+                {'loan_id': loan_id, 'due_date': '2024-01-01', 'amount_due': 1000.0},
+                {'loan_id': loan_id, 'due_date': '2024-02-01', 'amount_due': 1000.0},
+                {'loan_id': loan_id, 'due_date': '2024-03-01', 'amount_due': 1000.0}
+            ])
+            # Only paid first two payments
+            payments_data.extend([
+                {'loan_id': loan_id, 'payment_date': '2024-01-01', 'amount_paid': 1000.0},
+                {'loan_id': loan_id, 'payment_date': '2024-02-01', 'amount_paid': 1000.0}
+            ])
+        
+        # Scenario 3: 5 loans in default (>= 90 days past due from first payment)
+        for loan_id in loan_ids[95:100]:
+            payment_schedule_data.extend([
+                {'loan_id': loan_id, 'due_date': '2024-01-01', 'amount_due': 1000.0},
+                {'loan_id': loan_id, 'due_date': '2024-02-01', 'amount_due': 1000.0},
+                {'loan_id': loan_id, 'due_date': '2024-03-01', 'amount_due': 1000.0}
+            ])
+            # Only paid first payment
+            payments_data.append(
+                {'loan_id': loan_id, 'payment_date': '2024-01-01', 'amount_paid': 1000.0}
+            )
+        
+        payment_schedule = pd.DataFrame(payment_schedule_data)
+        payments = pd.DataFrame(payments_data)
+        
+        # Calculate DPD as of April 15, 2024
+        # - Scenario 2 loans: 45 days past due (from March 1) - not in default
+        # - Scenario 3 loans: 105 days past due (from Feb 1) - in default
+        result = portfolio.calculate_dpd(
+            payment_schedule=payment_schedule,
+            payments=payments,
+            reference_date='2024-05-01'
+        )
+        
+        # Verify the results
+        total_loans = len(result)
+        loans_in_default = result['is_default'].sum()
+        default_rate = (loans_in_default / total_loans) * 100
+        loans_current = (result['days_past_due'] == 0).sum()
+        loans_in_arrears = (result['days_past_due'] > 0).sum()
+        
+        # Assertions based on expected behavior
+        assert total_loans == 100, "Should have 100 loans"
+        assert loans_current == 70, "70 loans should be current (including those that caught up)"
+        assert loans_in_arrears == 30, "30 loans should have some arrears"
+        assert loans_in_default == 5, "Only 5 loans should be in default"
+        assert 4.0 <= default_rate <= 5.0, f"Default rate should be ~5% (was {default_rate:.1f}%)"
+        
+        # Verify that loans which caught up have DPD = 0
+        caught_up_loans = result[result['loan_id'].isin([f'L{i:03d}' for i in range(51, 71)])]
+        assert all(caught_up_loans['days_past_due'] == 0), "Caught-up loans should have DPD = 0"
+        assert all(~caught_up_loans['is_default']), "Caught-up loans should not be in default"
+        
+        # Verify scenario 2 loans are in arrears but not default
+        scenario2_loans = result[result['loan_id'].isin([f'L{i:03d}' for i in range(71, 96)])]
+        assert all(scenario2_loans['days_past_due'] > 0), "Scenario 2 loans should have positive DPD"
+        assert all(scenario2_loans['days_past_due'] < 90), "Scenario 2 loans should be < 90 DPD"
+        assert all(~scenario2_loans['is_default']), "Scenario 2 loans should not be in default"
+        
+        print(f"\n✓ Default rate correctly calculated: {default_rate:.1f}%")
+        print(f"✓ Current loans: {loans_current}")
+        print(f"✓ Loans in arrears (but not default): {loans_in_arrears - loans_in_default}")
+        print(f"✓ Loans in default: {loans_in_default}")
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
