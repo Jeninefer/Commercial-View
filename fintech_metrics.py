@@ -93,6 +93,8 @@ class FintechMetricsCalculator:
         # EIR, APR–EIR spread
         apr_col = next((c for c in df.columns if "apr" in c.lower()), None)
         eir_col = next((c for c in df.columns if "eir" in c.lower()), None)
+        if eir_col:
+            eir_vals = pd.to_numeric(df[eir_col], errors="coerce")
             eir_mean = eir_vals.mean()
             m["avg_eir"] = float(eir_mean) if not pd.isna(eir_mean) else None
         if apr_col and eir_col:
