@@ -403,7 +403,7 @@ class TestEnrichWithPricing:
                 recommended_col='custom_rate'
             )
             assert 'has_pricing' in result.columns
-            assert result.loc[result['product'] == 'A', 'has_pricing'].values[0] == True
+            assert result.loc[result['product'] == 'A', 'has_pricing'].values[0]
         finally:
             os.unlink(temp_path)
 
