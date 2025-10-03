@@ -131,11 +131,17 @@ class LoanAnalyzer:
 
         # Guard for empty timeline to avoid ValueError in groupby().idxmax()
         if tl.empty:
-            columns = [
-                "loan_id", "past_due_amount", "days_past_due", "first_arrears_date",
-                "last_payment_date", "last_due_date", "is_default", "reference_date"
-            ]
-            return pd.DataFrame(columns=columns)
+            # Return empty DataFrame with explicit dtypes for schema consistency
+            return pd.DataFrame({
+                "loan_id": pd.Series(dtype="object"),
+                "past_due_amount": pd.Series(dtype="float64"),
+                "days_past_due": pd.Series(dtype="int64"),
+                "first_arrears_date": pd.Series(dtype="object"),
+                "last_payment_date": pd.Series(dtype="object"),
+                "last_due_date": pd.Series(dtype="object"),
+                "is_default": pd.Series(dtype="bool"),
+                "reference_date": pd.Series(dtype="object"),
+            })
         # Last state per loan
         # First arrears date (gap > 0) per loan
         arrears = tl.loc[tl["cumulative_gap"] > 0, ["loan_id","date"]].groupby("loan_id", as_index=False).min()
