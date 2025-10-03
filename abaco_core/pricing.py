@@ -145,8 +145,18 @@ class PricingEnricher:
                     result = result.merge(grid_ren, on=lk, how="left", suffixes=("", "_grid"))
 
         # APR-EIR spread
-        apr_cols = [apr_col_hint] if apr_col_hint else [c for c in result.columns if "apr" in c.lower()]
-        eir_cols = [eir_col_hint] if eir_col_hint else [c for c in result.columns if "eir" in c.lower()]
+        if apr_col_hint is not None and apr_col_hint not in result.columns:
+            logger.warning(f"APR column hint '{apr_col_hint}' not found in DataFrame columns. Falling back to auto-detection.")
+            apr_col_hint_valid = False
+        else:
+            apr_col_hint_valid = apr_col_hint is not None
+        if eir_col_hint is not None and eir_col_hint not in result.columns:
+            logger.warning(f"EIR column hint '{eir_col_hint}' not found in DataFrame columns. Falling back to auto-detection.")
+            eir_col_hint_valid = False
+        else:
+            eir_col_hint_valid = eir_col_hint is not None
+        apr_cols = [apr_col_hint] if apr_col_hint_valid else [c for c in result.columns if "apr" in c.lower()]
+        eir_cols = [eir_col_hint] if eir_col_hint_valid else [c for c in result.columns if "eir" in c.lower()]
         apr_col = next((c for c in apr_cols if c in result.columns), None)
         eir_col = next((c for c in eir_cols if c in result.columns), None)
         if apr_col and eir_col:
