@@ -158,7 +158,10 @@ enrich_with_pricing(
 
 ### Running Tests
 
+Before running tests, ensure all dependencies are installed. Run:
+
 ```bash
+pip install -e .
 pip install -r requirements-dev.txt
 pytest tests/ -v
 ```
