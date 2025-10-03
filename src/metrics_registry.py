@@ -44,13 +44,22 @@ class MetricsRegistry:
             recent = [r for r in recs if datetime.fromisoformat(r["timestamp"].replace("Z","")).timestamp() > cutoff]
             if recent:
                 vals = [r["value"] for r in recent]
-                out[name] = {
-                    "count": len(vals),
-                    "latest": vals[-1],
-                    "avg": sum(vals)/len(vals),
-                    "min": min(vals),
-                    "max": max(vals)
-                }
+                if vals:
+                    out[name] = {
+                        "count": len(vals),
+                        "latest": vals[-1],
+                        "avg": sum(vals)/len(vals),
+                        "min": min(vals),
+                        "max": max(vals)
+                    }
+                else:
+                    out[name] = {
+                        "count": 0,
+                        "latest": None,
+                        "avg": None,
+                        "min": None,
+                        "max": None
+                    }
         return out
 
     def export_metrics(self, filepath: str) -> None:
