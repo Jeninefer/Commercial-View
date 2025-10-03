@@ -113,7 +113,7 @@ class MetricsCalculator:
 
         # Burn / Runway
         try:
-            if expense_df is not None and {"date","total_expense"}.issubset(expense_df.columns):
+            if expense_df is not None and {"date", "total_expense"}.issubset(expense_df.columns):
                 e = expense_df[["date","total_expense","cash_balance"]].copy()
                 e["date"] = pd.to_datetime(e["date"], errors="coerce")
                 e = e.dropna(subset=["date"]).sort_values("date")
