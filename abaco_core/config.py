@@ -116,9 +116,10 @@ class Config:
         value = self._config
         for k in keys:
             if isinstance(value, dict):
-                value = value.get(k)
+                if k in value:
+                    value = value[k]
+                else:
+                    return default
             else:
-                return default
-            if value is None:
                 return default
         return value
