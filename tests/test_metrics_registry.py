@@ -5,14 +5,12 @@ import json
 import os
 import tempfile
 from datetime import datetime, timedelta
-import sys
-
-# Add src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
-
-from metrics_registry import MetricsRegistry
 
 
+
+
+
+from src.metrics_registry import MetricsRegistry
 class TestMetricsRegistry(unittest.TestCase):
     
     def setUp(self):
