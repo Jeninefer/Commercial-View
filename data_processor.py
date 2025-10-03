@@ -26,9 +26,6 @@ def process_loan_data(schedule_df, payments_df):
     payments_df["payment_date"] = pd.to_datetime(payments_df["payment_date"], errors="coerce").dt.date
     
     # Drop rows with null values in key columns
-    schedule_df = schedule_df.dropna(subset=["loan_id", "due_date"])
-    payments_df = payments_df.dropna(subset=["loan_id", "payment_date"])
-    
     # Do not mix payments with pricing here:
     # pricing_enricher = PricingEnricher()
     # def enrich_pricing(...): ... "timestamp": datetime.utcnow().isoformat() + "Z"
