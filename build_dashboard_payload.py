@@ -248,15 +248,6 @@ if not current_targets.empty:
         }
 
 # Disbursements by month / client types
-df_loans["Month"] = to_month(df_loans["Disbursement Date"])
-disb_m = df_loans.groupby("Month")["Disbursement Amount"].sum().reset_index()
-
-
-def is_new_client_2025(customer_id, first_seen_series):
-    """Return True if the customer's first disbursement year is 2025, else False."""
-    first_date = first_seen_series.loc[customer_id]
-first_seen = df_loans.groupby("Customer ID")["Disbursement Date"].min()
-df_loans["is_new_2025"] = df_loans["Customer ID"].map(lambda c: is_new_client_2025(c, first_seen))
     return False
 
 first_seen = df_loans.groupby("Customer ID")["Disbursement Date"].min()
