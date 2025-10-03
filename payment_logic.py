@@ -18,10 +18,10 @@ class PaymentProcessor:
     
     # Schedule Date Patterns - added "Payment Date" with space
     SCHEDULE_DATE_PATTERNS = [
-        r'due[_\s]*date',
-        r'payment[_\s]*date',  # Added to match "Payment Date"
-        r'schedule[_\s]*date',
-        r'expected[_\s]*date',
+        r'(?:^|[_\s])due(?:[_\s]*)date(?:$|[_\s])',
+        r'(?:^|[_\s])payment(?:[_\s]*)date(?:$|[_\s])',  # Anchored to avoid matching substrings
+        r'(?:^|[_\s])schedule(?:[_\s]*)date(?:$|[_\s])',
+        r'(?:^|[_\s])expected(?:[_\s]*)date(?:$|[_\s])',
     ]
     
     # Schedule Amount Patterns - added "Total Payment" and "total_payment"
