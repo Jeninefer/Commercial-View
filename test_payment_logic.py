@@ -61,7 +61,7 @@ class TestPaymentProcessor(unittest.TestCase):
         # Test with "True Payment Date" - should match the generic "date" pattern
         columns1 = ['Loan ID', 'True Payment Date', 'True Total Payment']
         detected1 = self.processor.detect_payment_date_field(columns1)
-        self.assertIn(detected1, ['True Payment Date'])  # Should match via "payment[_\s]*date" or "date"
+        self.assertEqual(detected1, 'True Payment Date')  # Should match via "payment[_\s]*date" or "date"
         
         columns2 = ['loan_id', 'paid_date', 'amount']
         self.assertEqual(self.processor.detect_payment_date_field(columns2), 'paid_date')
