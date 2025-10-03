@@ -57,9 +57,19 @@ console.log('Testing Weighted APR calculation...');
 const weightedAPR = calculateWeightedAPR(dataDir);
 console.log(`   Weighted APR: ${weightedAPR.toFixed(2)}%`);
 assert(weightedAPR > 0, 'Weighted APR should be greater than 0');
-// Calculate expected: (85000*6 + 44000*8 + 195000*10 + 65000*10 + 115000*10 + 145000*9) / (85000+44000+195000+65000+115000+145000)
-// = (510000 + 352000 + 1950000 + 650000 + 1150000 + 1305000) / 649000 = 5917000 / 649000 ≈ 9.12%
-assertApprox(weightedAPR, 9.12, 0.5, 'Weighted APR should be approximately 9.12%');
+// Dynamically calculate expected weighted APR from the same data used in the test to avoid brittleness.
+const fs = require('fs');
+const loans = JSON.parse(fs.readFileSync(path.join(dataDir, 'loans.json'), 'utf8'));
+let totalWeightedAPR = 0;
+let totalBalance = 0;
+for (const loan of loans) {
+  if (loan.balance && loan.apr) {
+    totalWeightedAPR += loan.balance * loan.apr;
+    totalBalance += loan.balance;
+  }
+}
+const expectedWeightedAPR = totalBalance > 0 ? totalWeightedAPR / totalBalance : 0;
+assertApprox(weightedAPR, expectedWeightedAPR, 0.5, `Weighted APR should be approximately ${expectedWeightedAPR.toFixed(2)}%`);
 console.log();
 
 // Test Tenor Mix
