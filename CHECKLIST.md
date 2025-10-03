@@ -5,7 +5,7 @@ Use this checklist to verify your Commercial-View setup is complete and correct.
 ## ✅ Repository Setup
 
 - [ ] Repository cloned successfully
-- [ ] All files are present (13 files total)
+- [ ] All files are present (14 files total)
 - [ ] `.git` directory exists
 - [ ] No uncommitted changes in working directory
 
@@ -192,7 +192,7 @@ Run these commands to validate your setup:
 # 1. Check repository structure
 cd /path/to/Commercial-View
 find . -type f ! -path './.git/*' | wc -l
-# Expected: 13 files
+# Expected: 14 files
 
 # 2. Verify .gitignore is working
 git status
@@ -237,7 +237,7 @@ When all items are checked:
 
 ## Quick Reference
 
-**Total Files**: 13
+**Total Files**: 14
 **Documentation Pages**: 8
 **Configuration Files**: 5
 **Integrations**: 5 (Figma, Gemini, Google Cloud, OpenAI, HubSpot)
