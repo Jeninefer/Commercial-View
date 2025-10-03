@@ -42,17 +42,42 @@ class DisbursementOptimizer:
             self.apr_above_label = self.DEFAULT_APR_ABOVE_LABEL
 
     # ------------- helpers -------------
-    def _bucket_apr(self, apr: float) -> str:
+    @staticmethod
+    def _bucket_apr(
+        apr: float,
+        edges=None,
+        below_label=None,
+        above_label=None
+    ) -> str:
+        """
+        Static APR bucketing helper. Accepts optional edges/labels, defaults to class constants.
+        """
         if pd.isna(apr):
             return "Unknown"
-        for lo, hi in self.apr_bucket_edges:
+        # Use defaults if not provided
+        if edges is None:
+            edges = DisbursementOptimizer.DEFAULT_APR_BUCKET_EDGES
+        if below_label is None:
+            below_label = DisbursementOptimizer.DEFAULT_APR_BELOW_LABEL
+        if above_label is None:
+            above_label = DisbursementOptimizer.DEFAULT_APR_ABOVE_LABEL
+        for lo, hi in edges:
             if lo <= apr < hi:
                 return f"{lo}-{hi}"
-        if apr >= self.apr_bucket_edges[-1][1]:
-            return self.apr_above_label
-        return self.apr_below_label
+        if apr >= edges[-1][1]:
+            return above_label
+        return below_label
 
-    @staticmethod
+    def bucket_apr(self, apr: float) -> str:
+        """
+        Instance wrapper for APR bucketing using configured edges/labels.
+        """
+        return self._bucket_apr(
+            apr,
+            edges=self.apr_bucket_edges,
+            below_label=self.apr_below_label,
+            above_label=self.apr_above_label,
+        )
     def _bucket_line(amount: float) -> str:
         if amount <= 3000: return "<=3k"
         if amount <= 10000: return "<=10k"
