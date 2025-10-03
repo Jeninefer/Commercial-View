@@ -140,15 +140,15 @@ class FeatureEngineer:
             # Classification logic
             if pd.isna(loan_count) or loan_count == 0:
                 return 'Inactive'
-            elif loan_count == 1 and days_inactive > 180:
-                return 'Dormant'
             elif loan_count == 1:
-                return 'New'
+                if days_inactive > 180:
+                    return 'Dormant'
+                else:
+                    return 'New'
             elif loan_count <= 5:
                 return 'Regular'
             else:
                 return 'High-Value'
-        
         result_df['client_type'] = result_df.apply(get_client_type, axis=1)
         
         return result_df
