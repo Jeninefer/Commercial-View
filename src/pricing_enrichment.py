@@ -291,4 +291,6 @@ def enrich_pricing(
     )
 
 
-logger.info("Pricing Enrichment Module loaded successfully")
+
+if __name__ == "__main__":
+    logger.info("Pricing Enrichment Module loaded successfully")
