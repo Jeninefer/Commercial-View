@@ -113,7 +113,14 @@ class PricingEnricher:
                                         (pd.to_numeric(grid[high_col], errors="coerce") >= v)]
                             return hits.iloc[0].to_dict() if not hits.empty else None
                         matched = val.apply(pick_row)
-                        matched_df = pd.DataFrame(matched.tolist()).add_suffix("_grid")
+                        matched_df = pd.DataFrame(list(matched)).add_suffix("_grid")
+                        # Validate matched_df before concatenation
+                        if matched_df.empty or matched_df.isnull().all(axis=None):
+                            # Create a DataFrame of the same length as 'without' with NaNs
+                            matched_df = pd.DataFrame(np.nan, index=without.index, columns=matched_df.columns)
+                        elif len(matched_df) != len(without):
+                            logger.warning("matched_df and without have different lengths; skipping concatenation for this feature.")
+                            continue
                         without = pd.concat([without.reset_index(drop=True), matched_df.reset_index(drop=True)], axis=1)
                 if recommended_rate_col in result.columns:
                     result.update(without)
