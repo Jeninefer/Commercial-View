@@ -110,7 +110,7 @@ Loan ID: L003
 
 ### Dependencies
 
-- Python ≥ 3.8
+- Python ≥ 3.9
 - pandas ≥ 1.3.0
 - numpy ≥ 1.20.0
 
