@@ -129,6 +129,13 @@ class LoanAnalyzer:
         schedule_df, payments_df = self.standardize_dataframes(schedule_df, payments_df)
         tl = self.calculate_payment_timeline(schedule_df, payments_df, reference_date)
 
+        # Guard for empty timeline to avoid ValueError in groupby().idxmax()
+        if tl.empty:
+            columns = [
+                "loan_id", "past_due_amount", "days_past_due", "first_arrears_date",
+                "last_payment_date", "last_due_date", "is_default", "reference_date"
+            ]
+            return pd.DataFrame(columns=columns)
         # Last state per loan
         idx = tl.groupby("loan_id")["date"].idxmax()
         last = tl.loc[idx].copy()
