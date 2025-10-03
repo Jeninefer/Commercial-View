@@ -30,7 +30,10 @@ class DisbursementOptimizer:
         apr_bucket_cfg = self.rules.get("apr_bucket_edges", None)
         if apr_bucket_cfg is not None:
             # Expecting a dict with 'edges', 'below_label', 'above_label'
-            self.apr_bucket_edges = apr_bucket_cfg.get("edges", self.DEFAULT_APR_BUCKET_EDGES)
+            edges = apr_bucket_cfg.get("edges", self.DEFAULT_APR_BUCKET_EDGES)
+            if not all(isinstance(t, (list, tuple)) and len(t) == 2 and t[0] < t[1] for t in edges):
+                raise ValueError("apr_bucket_edges.edges must be a list of [lo, hi] with lo < hi")
+            self.apr_bucket_edges = edges
             self.apr_below_label = apr_bucket_cfg.get("below_label", self.DEFAULT_APR_BELOW_LABEL)
             self.apr_above_label = apr_bucket_cfg.get("above_label", self.DEFAULT_APR_ABOVE_LABEL)
         else:
