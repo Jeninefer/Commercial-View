@@ -111,7 +111,7 @@ class DPDAnalyzer:
                 # choose the shortest one to avoid false positives
                 return min(match, key=len)
         
-        # regex fallback
+        # Use regular expression as a fallback.
         for p in patterns:
             try:
                 rgx = re.compile(p, re.IGNORECASE)
