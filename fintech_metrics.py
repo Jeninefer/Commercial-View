@@ -84,6 +84,8 @@ class FintechMetricsCalculator:
             base = len(df) if len(df) > 0 else np.nan
             m["default_rate"] = float(self.safe_division(defaults, base, 0.0))
         # Take rate
+        # Only calculate take rate if revenue column exists, GMV has been computed, and GMV is non-zero.
+        # This ensures that take rate (revenue as a percentage of GMV) is only computed when all required data is present and avoids division by zero.
         if "revenue" in df.columns and "gmv" in m and m["gmv"] > 0:
             rev = float(pd.to_numeric(df["revenue"], errors="coerce").fillna(0).sum())
             m["take_rate"] = float(self.safe_division(rev, m["gmv"], 0.0))
