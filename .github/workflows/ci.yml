@@ -85,28 +85,28 @@ jobs:
           if [ -d "src" ] || [ -d "validators" ]; then
             black --check --diff src validators || echo "No Python files found or Black not configured"
           fi
-        continue-on-error: true
+      
       
       - name: Run isort (import sorting)
         run: |
           if [ -d "src" ] || [ -d "validators" ]; then
             isort --check-only --diff src validators || echo "No Python files found or isort not configured"
           fi
-        continue-on-error: true
+      
       
       - name: Run Flake8 (style guide)
         run: |
           if [ -d "src" ] || [ -d "validators" ]; then
             flake8 src validators --max-line-length=120 || echo "No Python files found or Flake8 not configured"
           fi
-        continue-on-error: true
+      
       
       - name: Run Pylint
         run: |
           if [ -d "src" ] || [ -d "validators" ]; then
             pylint src validators --fail-under=7.0 || echo "No Python files found or Pylint not configured"
           fi
-        continue-on-error: true
+      
       
       - name: Validate YAML files
         run: |
