@@ -102,18 +102,17 @@ class ConfigValidator:
         # Validate band_keys structure
         if 'band_keys' in config:
             required_bands = ['tenor_days', 'amount']
+            required_fields = ['lower_bound', 'upper_bound']
             for band in required_bands:
                 if band not in config['band_keys']:
                     self.errors.append(f"Required band key missing: {band}")
                     valid = False
                 else:
                     band_config = config['band_keys'][band]
-                    if 'lower_bound' not in band_config:
-                        self.errors.append(f"Band {band} missing lower_bound")
-                        valid = False
-                    if 'upper_bound' not in band_config:
-                        self.errors.append(f"Band {band} missing upper_bound")
-                        valid = False
+                    for field in required_fields:
+                        if field not in band_config:
+                            self.errors.append(f"Band {band} missing {field}")
+                            valid = False
 
         # Validate pricing grid structure
         if 'pricing_grid' in config:
