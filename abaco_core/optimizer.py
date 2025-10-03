@@ -69,7 +69,7 @@ class DisbursementOptimizer:
         score = 0.0
         
         # Calculate current portfolio metrics
-        total_current = current_portfolio["amount"].sum()
+        total_current = current_portfolio["amount"].sum() if len(current_portfolio) > 0 else 0.0
         total_with_new = total_current + amount
         
         # Check hard limits
