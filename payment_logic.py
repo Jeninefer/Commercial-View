@@ -47,7 +47,7 @@ class PaymentProcessor:
         r'paid[_\s]*amount',
         r'payment[_\s]*amount',
         r'actual[_\s]*amount',
-        r'total[_\s]*payment',  # Added to match "True Total Payment" and "total_payment"
+        r'(?:^|[_\s])total(?:[_\s]*)payment(?:$|[_\s])',  # Anchored to avoid matching substrings like 'subtotal_payment'
         r'transaction[_\s]*amount',
         r'amount',
     ]
