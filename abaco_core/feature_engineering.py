@@ -161,7 +161,7 @@ class FeatureEngineer:
 
         res = self.calculate_line_utilization(res)
 
-        key_metrics = ["apr","term","days_past_due","outstanding_balance","line_utilization"]
+        key_metrics = ["apr", "term", "days_past_due", "outstanding_balance", "line_utilization"]
         for m in key_metrics:
             if m in res.columns:
                 s = res[m].astype(float)
