@@ -15,7 +15,7 @@ Use your live DataFrames with the exact column names described in the "Data cont
   - Only the names shown are supported; `...` is not a literal option.
 
 **Payments DF:**
-- Required columns: `loan_id` or `id_loan`, `payment_date` or `fecha_pago`, `payment_amount`, `amount`, or `monto_pago`
+- Required columns: `loan_id|id_loan`, `payment_date|fecha_pago`, `payment_amount|amount|monto_pago`
   - Only the names shown are supported; `...` is not a literal option.
 
 ### Feature engineering
