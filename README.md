@@ -36,6 +36,8 @@ den = np.array([2, 0, 5])
 result = calc.safe_division(num, den)  # Returns array([5.0, nan, 6.0])
 ```
 
+For more examples, see [example.py](example.py).
+
 ## Testing
 
 Run the tests:
