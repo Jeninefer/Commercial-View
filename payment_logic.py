@@ -9,11 +9,11 @@ class PaymentProcessor:
     
     # Loan ID Patterns - existing patterns suffice
     LOAN_ID_PATTERNS = [
-        r'loan[_\s]*id',
-        r'loan[_\s]*number',
-        r'loan[_\s]*no',
-        r'account[_\s]*id',
-        r'account[_\s]*number',
+        r'\bloan(?:[_\s]*)id\b',
+        r'\bloan(?:[_\s]*)number\b',
+        r'\bloan(?:[_\s]*)no\b',
+        r'\baccount(?:[_\s]*)id\b',
+        r'\baccount(?:[_\s]*)number\b',
     ]
     
     # Schedule Date Patterns - added "Payment Date" with space
