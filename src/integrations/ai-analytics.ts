@@ -113,10 +113,6 @@ export class AIAnalytics {
       return [];
     }
 
-    if (stdDev === 0) {
-      // All values are identical; no anomalies possible
-      return [];
-    }
     return data.filter(point => {
       const zScore = Math.abs((point.value - mean) / stdDev);
       return zScore > threshold;
