@@ -13,7 +13,7 @@ from typing import Dict, Any, Optional
 from config import BRAND_COLORS, ENABLE_VIEW_ONLY_ROLE
 from analysis.kpi_calculator import KPICalculator, calculate_portfolio_kpis
 from optimization.disbursement_optimizer import DisbursementOptimizer, optimize_disbursements
-from ingestion.sample_data_loader import load_sample_data
+from ingestion import load_sample_data
 
 
 # Page configuration
