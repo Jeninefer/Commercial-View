@@ -243,7 +243,15 @@ if not current_targets.empty:
 df_loans["Month"] = to_month(df_loans["Disbursement Date"])
 disb_m = df_loans.groupby("Month")["Disbursement Amount"].sum().reset_index()
 
-# New / Recurrent / Recovered
+
+def is_new_client_2025(customer_id, first_seen_series):
+    """Return True if the customer's first disbursement year is 2025, else False."""
+    first_date = first_seen_series.loc[customer_id]
+    if pd.notna(first_date):
+        return first_date.year == 2025
+    return False
+
+df_loans["is_new_2025"] = df_loans["Customer ID"].map(lambda c: is_new_client_2025(c, first_seen))
 first_seen = df_loans.groupby("Customer ID")["Disbursement Date"].min()
 span = df_loans.groupby("Customer ID").agg(first=("Disbursement Date","min"), last=("Disbursement Date","max"))
 recurrent_ids = span.index[(span["last"] - span["first"]).dt.days > 90]
