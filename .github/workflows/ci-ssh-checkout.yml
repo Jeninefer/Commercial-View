@@ -51,17 +51,49 @@ jobs:
         shell: bash
         run: |
           cd repo
-          if grep -i '^flask' requirements.txt >/dev/null 2>&1; then \
-            python -c "import flask; print('✅ Flask import works')"; \
-          else \
-            echo "⚠️ Flask not in requirements.txt, skipping import test."; \
-          fi
-          if grep -i '^sklearn' requirements.txt >/dev/null 2>&1; then \
-            python -c "import sklearn; print('✅ Sklearn import works')"; \
-          else \
-            echo "⚠️ Sklearn not in requirements.txt, skipping import test."; \
-          fi
+          python <<EOF
+import re
+import sys
+import os
 
+req_file = "requirements.txt"
+if not os.path.isfile(req_file):
+    print("requirements.txt not found, skipping import smoke test.")
+    sys.exit(0)
+
+def parse_pkg(line):
+    # Remove comments and extras, get the package name
+    line = line.split('#', 1)[0].strip()
+    if not line or line.startswith('-'):
+        return None
+    # Remove version specifiers and extras
+    m = re.match(r'^([A-Za-z0-9_.-]+)', line)
+    return m.group(1) if m else None
+
+pkgs = []
+with open(req_file) as f:
+    for line in f:
+        pkg = parse_pkg(line)
+        if pkg:
+            pkgs.append(pkg)
+
+if not pkgs:
+    print("No packages found in requirements.txt, skipping import smoke test.")
+    sys.exit(0)
+
+failed = []
+for pkg in pkgs:
+    try:
+        __import__(pkg)
+        print(f"✅ {pkg} import works")
+    except Exception as e:
+        print(f"❌ {pkg} import failed: {e}")
+        failed.append(pkg)
+
+if failed:
+    print(f"Some imports failed: {failed}")
+    sys.exit(1)
+EOF
       - name: Run unit tests (verbose)
         shell: bash
         run: |
