@@ -324,7 +324,7 @@ class KPIAnalyzer:
                 "enterprise_value": ev,
                 "revenue_multiple": self.safe_division(ev, rev, np.nan),
                 "ebitda_multiple": self.safe_division(ev, ebitda, np.nan) if (ebitda is not None and np.isfinite(ebitda) and ebitda > 0) else np.nan,
-                "dilution": self.safe_division(inv, post, 0.0) if (post and post > 0) else 0.0,
+                "dilution": self.safe_division(inv, post, 0.0) if (np.isfinite(post) and post > 0) else 0.0,
             }
         except Exception as e:
             logger.error(f"Valuation error: {e}")
