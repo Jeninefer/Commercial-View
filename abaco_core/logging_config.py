@@ -28,15 +28,13 @@ def configure_logging(level=logging.INFO):
         >>> logger = logging.getLogger("abaco_core.my_module")
         >>> logger.debug("This is a debug message")
     """
-    # Configure logging for the abaco_core logger explicitly
+    # Configure logging using basicConfig with force=True to avoid duplicate handlers
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s - %(message)s")
+    logging.basicConfig(
+        level=level,
+        format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
+        force=True
+    )
+    # Optionally, set the level for the abaco_core logger explicitly
     logger = logging.getLogger("abaco_core")
     logger.setLevel(level)
-    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s - %(message)s")
-    # Remove all existing handlers
-    while logger.handlers:
-        logger.removeHandler(logger.handlers[0])
-    # Add a new StreamHandler
-    handler = logging.StreamHandler()
-    handler.setLevel(level)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
