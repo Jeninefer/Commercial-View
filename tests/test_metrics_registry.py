@@ -6,10 +6,6 @@ import os
 import tempfile
 from datetime import datetime, timedelta
 
-from src.metrics_registry import MetricsRegistry
-class TestMetricsRegistry(unittest.TestCase):
-    
-    def setUp(self):
         """Set up test fixtures."""
         self.registry = MetricsRegistry()
     
