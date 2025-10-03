@@ -17,7 +17,7 @@ class FeatureEngineer:
         "DPD_150": 150,
         "DPD_180": 180
     }
-    SEGMENTS = ["A","B","C","D","E","F"]
+    SEGMENTS = ["A", "B", "C", "D", "E", "F"]
 
     def __init__(self):
         pass
