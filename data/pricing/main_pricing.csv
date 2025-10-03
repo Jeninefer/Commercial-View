@@ -1,0 +1,13 @@
+tenor_min,tenor_max,amount_min,amount_max,base_rate,margin,total_rate,product_type,customer_segment
+0,90,0,50000,0.0500,0.0200,0.0700,Commercial,Standard
+91,180,0,50000,0.0550,0.0200,0.0750,Commercial,Standard
+181,365,0,50000,0.0600,0.0200,0.0800,Commercial,Standard
+366,730,0,50000,0.0650,0.0250,0.0900,Commercial,Standard
+0,90,50001,100000,0.0450,0.0150,0.0600,Commercial,Premium
+91,180,50001,100000,0.0500,0.0150,0.0650,Commercial,Premium
+181,365,50001,100000,0.0550,0.0150,0.0700,Commercial,Premium
+366,730,50001,100000,0.0600,0.0200,0.0800,Commercial,Premium
+0,90,100001,500000,0.0400,0.0100,0.0500,Commercial,VIP
+91,180,100001,500000,0.0450,0.0100,0.0550,Commercial,VIP
+181,365,100001,500000,0.0500,0.0100,0.0600,Commercial,VIP
+366,730,100001,500000,0.0550,0.0150,0.0700,Commercial,VIP

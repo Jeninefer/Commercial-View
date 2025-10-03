@@ -1,0 +1,66 @@
+# Column Mapping Configuration
+# Maps dataset field names to contract field names
+# Update these mappings if your field names differ from the contracts
+
+# Loan/Portfolio Dataset Column Mappings
+loan_data:
+  # Core Loan Identifiers
+  loan_id: "loan_id"              # Unique loan identifier
+  customer_id: "customer_id"      # Customer identifier
+  
+  # Loan Details
+  loan_amount: "amount"           # Original loan amount
+  outstanding_balance: "balance"  # Current outstanding balance
+  interest_rate: "rate"           # Interest rate
+  
+  # Dates
+  origination_date: "origination_date"
+  maturity_date: "maturity_date"
+  last_payment_date: "last_payment_date"
+  last_due_date: "last_due_date"
+  first_arrears_date: "first_arrears_date"
+  reference_date: "reference_date"
+  
+  # Status Fields
+  loan_status: "status"
+  days_past_due: "dpd"
+  past_due_amount: "past_due_amount"
+  
+  # Tenor Information
+  tenor_months: "tenor_months"
+  tenor_days: "tenor_days"
+
+# Payment Dataset Column Mappings
+payment_data:
+  payment_id: "payment_id"
+  loan_id: "loan_id"
+  payment_date: "payment_date"
+  payment_amount: "payment_amount"
+  principal_paid: "principal_paid"
+  interest_paid: "interest_paid"
+  fees_paid: "fees_paid"
+
+# DPD Frame Output Columns (Contract Output)
+dpd_frame_output:
+  past_due_amount: "past_due_amount"
+  days_past_due: "days_past_due"
+  first_arrears_date: "first_arrears_date"
+  last_payment_date: "last_payment_date"
+  last_due_date: "last_due_date"
+  is_default: "is_default"
+  reference_date: "reference_date"
+
+# Buckets Output Columns (Contract Output)
+buckets_output:
+  dpd_bucket: "dpd_bucket"
+  dpd_bucket_value: "dpd_bucket_value"
+  dpd_bucket_description: "dpd_bucket_description"
+  default_flag: "default_flag"
+
+# Customer/Entity Dataset Column Mappings
+customer_data:
+  customer_id: "customer_id"
+  customer_name: "customer_name"
+  customer_type: "customer_type"
+  registration_date: "registration_date"
+  credit_score: "credit_score"
