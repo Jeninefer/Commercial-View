@@ -91,6 +91,9 @@ export class AIAnalytics {
     const mean = values.reduce((a, b) => a + b, 0) / values.length;
     const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
     const stdDev = Math.sqrt(variance);
+    if (stdDev === 0) {
+      return [];
+    }
 
     if (stdDev === 0) {
       // All values are identical; no anomalies possible
