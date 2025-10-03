@@ -98,7 +98,7 @@ class FeatureEngineer:
     def calculate_weighted_stats(self, loan_df: pd.DataFrame,
                                  weight_field: str = "outstanding_balance",
                                  metrics: Optional[List[str]] = None) -> pd.DataFrame:
-        metrics = metrics or ["apr","eir","term"]
+        metrics = metrics or ["apr", "eir", "term"]
         df = loan_df.copy()
         if weight_field not in df.columns:
             candidates = [c for c in df.columns if any(k in c.lower() for k in ["outstanding_balance","olb","current_balance","balance","saldo"])]
