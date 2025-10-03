@@ -5,7 +5,7 @@ Pricing enrichment functionality for loan data.
 import pandas as pd
 import yaml
 from pathlib import Path
-from typing import Union, List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple
 
 
 def enrich_with_pricing(
