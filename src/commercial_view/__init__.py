@@ -1,5 +1,5 @@
 """
-Commercial View - Principal KPI Calculator
+Commercial View - Comprehensive KPI Calculator
 
 A comprehensive library for calculating loan portfolio KPIs.
 """
