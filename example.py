@@ -5,12 +5,8 @@ import os
 import pandas as pd
 import time
 
-# Add src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
-
-from metrics_registry import MetricsRegistry
-
-
+# Import MetricsRegistry from src package
+from src.metrics_registry import MetricsRegistry
 def main():
     """Demonstrate MetricsRegistry usage."""
     print("=== Commercial View - MetricsRegistry Example ===\n")
