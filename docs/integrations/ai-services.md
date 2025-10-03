@@ -59,10 +59,11 @@ OPENAI_ORGANIZATION_ID=your-openai-org-id-here
 ### Usage
 
 ```python
+import os
 import openai
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
-response = openai.chat.completions.create(
+client = openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+response = client.chat.completions.create(
     model="gpt-4",
     messages=[{"role": "user", "content": "Your prompt"}]
 )
