@@ -25,7 +25,7 @@ jobs:
 
       - name: Install deps
         run: |
-          pip install -r requirements.txt || true
+          pip install -r requirements.txt
 
       - name: Clean target directory (remove manual uploads)
         run: |
