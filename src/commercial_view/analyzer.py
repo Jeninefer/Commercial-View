@@ -126,7 +126,16 @@ class PaymentAnalyzer:
         # detect IDs and date
         loan_id_col, _ = self.detect_loan_ids(df)
         cust_col = next((c for c in df.columns if any(k in c.lower() for k in ["customer","client","borrower","cliente"])), None)
-        # Find the first date-like column and cache its conversion
+        # First, look for a date column by name and dtype
+        date_candidates = [c for c in df.columns if any(k in c.lower() for k in ["origination","issue","start","fecha"])]
+        date_col = next((c for c in date_candidates if pd.api.types.is_datetime64_any_dtype(df[c])), None)
+        # If not found, try to convert candidate columns to datetime and check if conversion is meaningful
+        if not date_col:
+            for c in date_candidates:
+                converted = pd.to_datetime(df[c], errors="coerce")
+                if converted.notna().sum() > 0:
+                    date_col = c
+                    break
         date_col = None
         date_series = None
         for c in df.columns:
