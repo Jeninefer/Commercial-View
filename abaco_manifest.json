@@ -1,0 +1,86 @@
+{
+  "apr_buckets": ["15-20", "20-25", "25-30", "30-35", "35-40", "40-45", "45-50", "50-60", "60-70", ">70"],
+  "line_buckets": ["<=3k", "<=10k", "<=50k", "<=100k", "<=150k", "<=200k", "<=250k", ">250k"],
+  "client_type": ["NEW", "RECURRENT", "RECOVERED", "MICRO", "SMALL", "MEDIUM", "CORPORATE"],
+  "industry_scheme": "custom_or_NAICS2",
+  "payer_buckets": ["Top1", "Top10", "Rest", "<=1pct", "1-2pct", "2-4pct", ">4pct"],
+  "optimizer_constraints": {
+    "target_mix": {
+      "apr": {
+        "30-35": 0.15,
+        "35-40": 0.20,
+        "40-45": 0.20,
+        "45-50": 0.15,
+        "50-60": 0.10,
+        "60-70": 0.05,
+        ">70": 0.00
+      },
+      "line": {
+        "<=10k": 0.15,
+        "<=50k": 0.30,
+        "<=100k": 0.25,
+        ">100k": 0.30
+      },
+      "industry": {
+        "Manufacturing": 0.20,
+        "Retail": 0.20,
+        "Services": 0.30,
+        "Other": 0.30
+      },
+      "payer": {
+        "Top1_max_pct": 0.04,
+        "Top10_max_pct": 0.40
+      }
+    },
+    "hard_limits": {
+      "apr": {
+        ">70": {
+          "max_pct": 0.00
+        },
+        "60-70": {
+          "max_pct": 0.05
+        }
+      },
+      "payer": {
+        "any_anchor": {
+          "max_pct": 0.04
+        }
+      },
+      "industry": {
+        "any_sector": {
+          "max_pct": 0.35
+        }
+      }
+    },
+    "priority_weights": {
+      "apr": 0.6,
+      "term_fit": 0.35,
+      "origination_count": 0.05
+    }
+  },
+  "alerts": {
+    "concentration": {
+      "top1_max_pct": 0.04,
+      "any_gt_pct": 0.035,
+      "growth_bps": 25
+    },
+    "risk": {
+      "npl180_mom_bps": 50,
+      "rollrate_sigma": 2.0,
+      "dpd6090_or_180_growth_7d": 0.20
+    },
+    "yield": {
+      "apr_mix_sigma": 3.0,
+      "ewma_lambda": 0.2,
+      "apr_drop_bps": 100
+    },
+    "liquidity": {
+      "collections_vs_plan": -0.10,
+      "bank_shortfall_flag": true
+    },
+    "growth": {
+      "ltv_over_3_cac": false,
+      "payback_months_gt": 12
+    }
+  }
+}
