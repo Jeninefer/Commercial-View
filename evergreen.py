@@ -30,25 +30,17 @@ def reactivation_flag(events: pd.DataFrame, customer_id: str, dt_col: str, gap_d
     """
     Flags customer reactivations based on gaps between events.
 
-    Parameters
-    ----------
-    events : pd.DataFrame
-        DataFrame containing customer event data.
-    customer_id : str
-        Name of the column identifying customers.
-    dt_col : str
-        Name of the column containing event timestamps.
-    gap_days : int, optional
-        Number of days that must elapse between two events for the later event to be considered a "reactivation" (default is 90).
+    Parameters:
+        events (pd.DataFrame): DataFrame containing customer event data.
+        customer_id (str): Name of the column identifying customers.
+        dt_col (str): Name of the column containing event timestamps.
+        gap_days (int, optional): Number of days that must elapse between two events for the later event to be considered a "reactivation" (default is 90).
 
-    Returns
-    -------
-    pd.DataFrame
-        DataFrame with columns [customer_id, dt_col, "reactivated"], where "reactivated" is a boolean indicating if the event is a reactivation (i.e., the gap since the previous event exceeds `gap_days`).
+    Returns:
+        pd.DataFrame: DataFrame with columns [customer_id, dt_col, "reactivated"], where "reactivated" is a boolean indicating if the event is a reactivation (i.e., the gap since the previous event exceeds `gap_days`).
 
-    Reactivation logic
-    -----------------
-    For each customer, events are sorted chronologically. If the gap (in days) between the current event and the previous event exceeds `gap_days`, the event is flagged as a reactivation.
+    Reactivation logic:
+        For each customer, events are sorted chronologically. If the gap (in days) between the current event and the previous event exceeds `gap_days`, the event is flagged as a reactivation.
     """
     d = events[[customer_id, dt_col]].copy()
     d[dt_col] = pd.to_datetime(d[dt_col])
