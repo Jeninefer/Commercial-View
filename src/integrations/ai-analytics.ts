@@ -47,7 +47,12 @@ export class AIAnalytics {
       sumX2 += index * index;
     });
 
-    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const denominator = n * sumX2 - sumX * sumX;
+    if (denominator === 0) {
+      // All X values are identical; cannot perform linear regression
+      return [];
+    }
+    const slope = (n * sumXY - sumX * sumY) / denominator;
     const intercept = (sumY - slope * sumX) / n;
 
     const lastTimestamp = sortedData[n - 1].timestamp.getTime();
