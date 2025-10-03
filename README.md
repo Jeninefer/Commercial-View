@@ -48,7 +48,7 @@ Use your live DataFrames with the exact column names described in the "Data cont
 - Optional columns: `marketing_expense`
 
 **Loan DF:**
-- Required columns: one of `loan_amount|amount|monto_prestamo`
+- Required column: one of `loan_amount|amount|monto_prestamo`
 - Optional columns: `days_past_due|dpd|dias_atraso`, `revenue`, `apr`, `eir`
 
 **Financial DF:**
