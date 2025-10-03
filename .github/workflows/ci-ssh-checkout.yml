@@ -1,0 +1,61 @@
+name: CI SSH Checkout Test
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ssh-checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH for deploy key
+        shell: bash
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_VISUAL_CI_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Test SSH clone
+        shell: bash
+        run: |
+          git clone git@github.com:Jeninefer/Dashboard.git repo
+          cd repo
+          git fetch --all --tags --prune
+          git rev-parse --short HEAD
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-3.9-${{ hashFiles('repo/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-3.9-
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          cd repo
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install scikit-learn flask flask-cors
+
+      - name: Import smoke test
+        shell: bash
+        run: |
+          cd repo
+          python -c "import dashboard, api_server; print('✅ Imports work')"
+
+      - name: Run unit tests (verbose)
+        shell: bash
+        run: |
+          cd repo
+          python -m unittest discover tests/ -v
