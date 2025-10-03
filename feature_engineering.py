@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 
 def load_module():
     """Load the Feature Engineering module"""
-    logger.info("Módulo 3: Ingeniería de Características cargado correctamente")
+    logger.info("Module 3: Feature Engineering loaded successfully")
     # Additional module initialization code would go here
     pass
 
