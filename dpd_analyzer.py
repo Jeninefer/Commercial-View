@@ -97,7 +97,7 @@ class DPDAnalyzer:
         """
         cols = list(df.columns)
         
-        # exact
+        # Exact match
         for p in patterns:
             for c in cols:
                 if c == p or c.lower() == p.lower():
