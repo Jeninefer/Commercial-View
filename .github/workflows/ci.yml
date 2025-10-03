@@ -82,29 +82,33 @@ jobs:
       
       - name: Run Black (code formatting)
         run: |
+          set -e
           if [ -d "src" ] || [ -d "validators" ]; then
-            black --check --diff src validators || echo "No Python files found or Black not configured"
+            black --check --diff src validators
           fi
       
       
       - name: Run isort (import sorting)
         run: |
+          set -e
           if [ -d "src" ] || [ -d "validators" ]; then
-            isort --check-only --diff src validators || echo "No Python files found or isort not configured"
+            isort --check-only --diff src validators
           fi
       
       
       - name: Run Flake8 (style guide)
         run: |
+          set -e
           if [ -d "src" ] || [ -d "validators" ]; then
-            flake8 src validators --max-line-length=120 || echo "No Python files found or Flake8 not configured"
+            flake8 src validators --max-line-length=120
           fi
       
       
       - name: Run Pylint
         run: |
+          set -e
           if [ -d "src" ] || [ -d "validators" ]; then
-            pylint src validators --fail-under=7.0 || echo "No Python files found or Pylint not configured"
+            pylint src validators --fail-under=7.0
           fi
       
       
