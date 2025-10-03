@@ -365,7 +365,7 @@ export default function () {
 
           <Text fontSize={10} fill="#9EA9B3" padding={{top:8}}>
             Sources: Payment Schedule (Outstanding, NPL), Loan Data (APR, Tenor, Clients), 
-            Historic Real Payment (Collections). KAM & LineaCredito: Google Sheets "{data.mappings.data_sheet}" 
+            Historic Real Payment (Collections). KAM & Línea de Crédito: Google Sheets "{data.mappings.data_sheet}" 
             and range "{data.mappings.desembolsos_range}". Targets loaded from Q4_Targets.csv.
           </Text>
           
