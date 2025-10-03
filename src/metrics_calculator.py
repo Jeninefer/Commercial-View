@@ -75,7 +75,7 @@ class MetricsCalculator:
 
         # Churn
         try:
-            if {"churn_count","start_count"}.issubset(customer_df.columns):
+            if {"churn_count", "start_count"}.issubset(customer_df.columns):
                 m["churn_rate"] = float(self.safe_division(customer_df["churn_count"].sum(),
                                                            customer_df["start_count"].sum(), 0.0))
             elif "is_churned" in customer_df.columns:
