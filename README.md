@@ -1,5 +1,4 @@
 # Commercial-View
-Principal KPI
 
 ## Pricing Enrichment Module
 
