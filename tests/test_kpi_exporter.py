@@ -72,7 +72,7 @@ class TestKPIExporter:
             # Mock datetime to get predictable timestamp
             mock_dt = datetime(2023, 12, 25, 10, 30, 45)
             with patch('src.kpi_exporter.datetime') as mock_datetime:
-                mock_datetime.now.return_value = mock_dt
+                mock_datetime.utcnow.return_value = mock_dt
                 
                 payload = {"metric": "test"}
                 result = exporter._export_json(payload, "test")
