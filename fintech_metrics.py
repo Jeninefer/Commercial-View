@@ -93,13 +93,17 @@ class FintechMetricsCalculator:
         # EIR, APR–EIR spread
         apr_col = next((c for c in df.columns if "apr" in c.lower()), None)
         eir_col = next((c for c in df.columns if "eir" in c.lower()), None)
-        if eir_col:
-            eir_vals = pd.to_numeric(df[eir_col], errors="coerce")
-            m["avg_eir"] = float(eir_vals.mean())
+            eir_mean = eir_vals.mean()
+            m["avg_eir"] = float(eir_mean) if not pd.isna(eir_mean) else None
         if apr_col and eir_col:
             if "apr_eir_spread" in df.columns:
-                m["avg_apr_eir_spread"] = float(pd.to_numeric(df["apr_eir_spread"], errors="coerce").mean())
+                spread_mean = pd.to_numeric(df["apr_eir_spread"], errors="coerce").mean()
+                m["avg_apr_eir_spread"] = float(spread_mean) if not pd.isna(spread_mean) else None
             else:
+                apr_vals = pd.to_numeric(df[apr_col], errors="coerce")
+                eir_vals = pd.to_numeric(df[eir_col], errors="coerce")
+                spread_mean = (apr_vals - eir_vals).mean()
+                m["avg_apr_eir_spread"] = float(spread_mean) if not pd.isna(spread_mean) else None
                 m["avg_apr_eir_spread"] = float((pd.to_numeric(df[apr_col], errors="coerce") -
                                                  pd.to_numeric(df[eir_col], errors="coerce")).mean())
 
