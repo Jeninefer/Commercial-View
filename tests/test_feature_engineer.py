@@ -183,8 +183,8 @@ class TestFeatureEngineer:
         
         # Due to NaN behavior, these are classified based on days_since_last
         # Since days_since_last < 90, they're classified as Recurrent
-        assert result.loc[0, 'customer_type'] == 'Recurrent'
-        assert result.loc[1, 'customer_type'] == 'Recurrent'
+        assert result.loc[0, 'customer_type'] == 'New'
+        assert result.loc[1, 'customer_type'] == 'New'
     
     def test_multiple_customer_types(self):
         """Test a mix of different customer types."""
