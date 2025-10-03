@@ -1,0 +1,103 @@
+# Export Configuration
+# Defines output paths, formats, and export rules
+
+# Export Paths
+export_paths:
+  # Base export directory
+  base_path: "./abaco_runtime/exports"
+  
+  # Subdirectories for different outputs
+  kpi_json: "./abaco_runtime/exports/kpi/json"
+  kpi_csv: "./abaco_runtime/exports/kpi/csv"
+  dpd_frame: "./abaco_runtime/exports/dpd_frame"
+  buckets: "./abaco_runtime/exports/buckets"
+  reports: "./abaco_runtime/exports/reports"
+  archive: "./abaco_runtime/exports/archive"
+
+# File Naming Conventions
+file_naming:
+  # Timestamp format for filenames
+  timestamp_format: "%Y%m%d_%H%M%S"
+  
+  # Naming patterns
+  dpd_frame_pattern: "dpd_frame_{reference_date}_{timestamp}.csv"
+  buckets_pattern: "buckets_{reference_date}_{timestamp}.csv"
+  kpi_json_pattern: "kpi_metrics_{reference_date}_{timestamp}.json"
+  kpi_csv_pattern: "kpi_metrics_{reference_date}_{timestamp}.csv"
+  
+  # Include metadata in filename
+  include_timestamp: true
+  include_reference_date: true
+
+# Export Formats
+export_formats:
+  # DPD Frame exports
+  dpd_frame:
+    formats:
+      - "csv"
+      - "parquet"
+    csv_delimiter: ","
+    csv_encoding: "utf-8"
+    include_header: true
+    include_index: false
+  
+  # Buckets exports
+  buckets:
+    formats:
+      - "csv"
+      - "json"
+    csv_delimiter: ","
+    csv_encoding: "utf-8"
+    include_header: true
+  
+  # KPI exports
+  kpi:
+    formats:
+      - "json"
+      - "csv"
+    json_indent: 2
+    csv_delimiter: ","
+
+# Archival Settings
+archival:
+  # Enable automatic archiving of old exports
+  enabled: true
+  
+  # Age threshold for archiving (days)
+  archive_after_days: 30
+  
+  # Compression for archived files
+  compress_archives: true
+  compression_format: "gzip"
+  
+  # Retention period for archived files (days)
+  # Set to null for indefinite retention
+  retention_days: 365
+
+# Export Validation
+validation:
+  # Validate exports against schema before writing
+  validate_before_export: true
+  
+  # Validate required columns are present
+  check_required_columns: true
+  
+  # Validate data types
+  check_data_types: true
+  
+  # Check for null values in critical fields
+  check_null_values: true
+  
+  # Log validation errors
+  log_validation_errors: true
+
+# Performance Settings
+performance:
+  # Batch size for large exports
+  batch_size: 10000
+  
+  # Use chunked writes for large datasets
+  use_chunked_writes: true
+  
+  # Parallel export workers
+  max_workers: 4

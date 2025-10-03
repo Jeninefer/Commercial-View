@@ -1,0 +1,70 @@
+# Pricing Configuration
+# Defines pricing grid paths and interval bands for range-based features
+
+# Pricing file paths
+pricing_files:
+  # Main pricing CSV path
+  main_pricing_csv: "./data/pricing/main_pricing.csv"
+  
+  # Additional pricing files by product type
+  commercial_loans: "./data/pricing/commercial_loans_pricing.csv"
+  retail_loans: "./data/pricing/retail_loans_pricing.csv"
+  
+  # Risk-based pricing
+  risk_based_pricing: "./data/pricing/risk_based_pricing.csv"
+
+# Interval bands for range-based features
+# Format: feature_name: [lower_bound_column, upper_bound_column]
+band_keys:
+  tenor_days:
+    lower_bound: "tenor_min"
+    upper_bound: "tenor_max"
+    description: "Tenor range in days"
+  
+  amount:
+    lower_bound: "amount_min"
+    upper_bound: "amount_max"
+    description: "Loan amount range"
+  
+  credit_score:
+    lower_bound: "credit_score_min"
+    upper_bound: "credit_score_max"
+    description: "Credit score range for risk-based pricing"
+  
+  ltv_ratio:
+    lower_bound: "ltv_min"
+    upper_bound: "ltv_max"
+    description: "Loan-to-Value ratio range"
+
+# Pricing grid structure
+pricing_grid:
+  # Expected columns in pricing CSV files
+  required_columns:
+    - "tenor_min"
+    - "tenor_max"
+    - "amount_min"
+    - "amount_max"
+    - "base_rate"
+    - "margin"
+    - "total_rate"
+  
+  # Optional columns
+  optional_columns:
+    - "product_type"
+    - "customer_segment"
+    - "risk_category"
+    - "effective_date"
+    - "expiry_date"
+
+# Pricing calculation rules
+pricing_rules:
+  # Default values if not found in pricing grid
+  default_base_rate: 0.05
+  default_margin: 0.02
+  
+  # Rounding rules
+  rate_decimal_places: 4
+  amount_decimal_places: 2
+  
+  # Matching strategy when multiple rows match
+  matching_strategy: "best_fit"  # Options: "best_fit", "first_match", "conservative"

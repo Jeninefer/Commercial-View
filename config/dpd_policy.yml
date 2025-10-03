@@ -1,0 +1,99 @@
+# Days Past Due (DPD) Policy Configuration
+# Defines thresholds, buckets, and default classifications
+
+# Default Threshold Configuration
+default_threshold:
+  days: 180  # Number of days past due to classify as default
+  description: "Loans with DPD >= 180 days are considered defaulted"
+  
+  # Alternative thresholds for different scenarios
+  alternatives:
+    conservative: 90   # More conservative default threshold
+    moderate: 120      # Moderate default threshold
+    standard: 180      # Standard default threshold (current)
+
+# DPD Bucket Definitions
+dpd_buckets:
+  - bucket: "Current"
+    value: 0
+    min_dpd: 0
+    max_dpd: 0
+    description: "No payments overdue"
+    risk_level: "low"
+    default_flag: false
+  
+  - bucket: "1-30 Days"
+    value: 1
+    min_dpd: 1
+    max_dpd: 30
+    description: "1 to 30 days past due"
+    risk_level: "low"
+    default_flag: false
+  
+  - bucket: "31-60 Days"
+    value: 2
+    min_dpd: 31
+    max_dpd: 60
+    description: "31 to 60 days past due"
+    risk_level: "medium"
+    default_flag: false
+  
+  - bucket: "61-90 Days"
+    value: 3
+    min_dpd: 61
+    max_dpd: 90
+    description: "61 to 90 days past due"
+    risk_level: "medium"
+    default_flag: false
+  
+  - bucket: "91-120 Days"
+    value: 4
+    min_dpd: 91
+    max_dpd: 120
+    description: "91 to 120 days past due"
+    risk_level: "high"
+    default_flag: false
+  
+  - bucket: "121-180 Days"
+    value: 5
+    min_dpd: 121
+    max_dpd: 180
+    description: "121 to 180 days past due"
+    risk_level: "high"
+    default_flag: false
+  
+  - bucket: "180+ Days (Default)"
+    value: 6
+    min_dpd: 181
+    max_dpd: null  # No upper limit
+    description: "More than 180 days past due - Default"
+    risk_level: "critical"
+    default_flag: true
+
+# Business Rules
+business_rules:
+  # Grace period before DPD starts counting
+  grace_period_days: 0
+  
+  # Working days vs calendar days
+  use_calendar_days: true
+  
+  # Treatment of partial payments
+  partial_payment_resets_dpd: false
+  
+  # Cure period (moving from default back to performing)
+  cure_period_required: true
+  cure_period_days: 90
+
+# Calculation Settings
+calculation_settings:
+  # Reference date for DPD calculation
+  # Options: "system_date", "report_date", "custom"
+  reference_date_type: "report_date"
+  
+  # How to handle weekends and holidays
+  exclude_weekends: false
+  exclude_holidays: false
+  
+  # Timezone for date calculations
+  timezone: "UTC"
