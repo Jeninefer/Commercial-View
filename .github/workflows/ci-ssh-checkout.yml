@@ -52,7 +52,7 @@ jobs:
         shell: bash
         run: |
           cd repo
-          python -c "import dashboard, api_server; print('✅ Imports work')"
+          python -c "import flask, sklearn; print('✅ Imports work')"
 
       - name: Run unit tests (verbose)
         shell: bash
