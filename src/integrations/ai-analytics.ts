@@ -48,10 +48,6 @@ export class AIAnalytics {
     });
 
     const denominator = n * sumX2 - sumX * sumX;
-    if (denominator === 0) {
-      // All X values are identical; cannot perform linear regression
-      return [];
-    }
     const slope = (n * sumXY - sumX * sumY) / denominator;
     const intercept = (sumY - slope * sumX) / n;
 
