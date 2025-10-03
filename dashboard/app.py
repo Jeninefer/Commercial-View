@@ -60,25 +60,34 @@ def check_authentication() -> Optional[Dict[str, str]]:
     Simple authentication check.
     In production, integrate with proper auth system.
     """
+    # Demo-only: hardcoded credentials for demonstration purposes
+    DEMO_CREDENTIALS = {
+        "admin": {"password": "admin123", "role": UserRole.ADMIN},
+        "kam1": {"password": "kam123", "role": UserRole.KAM},
+        "kam2": {"password": "kam456", "role": UserRole.KAM},
+        "viewer": {"password": "viewer123", "role": UserRole.VIEWER},
+    }
     if 'user' not in st.session_state:
         st.session_state.user = None
     
     if st.session_state.user is None:
         st.sidebar.title("🔐 Login")
+        st.sidebar.warning("⚠️ This authentication is for demo purposes only. Do NOT use in production!")
         username = st.sidebar.text_input("Username")
         password = st.sidebar.text_input("Password", type="password")
         
         if st.sidebar.button("Login"):
-            # Simplified auth - in production, use proper authentication
-            if username and password:
-                # Default: admin for demo, KAM for specific users
-                role = UserRole.KAM if username.startswith("kam") else UserRole.ADMIN
+            # Demo-only authentication: check against hardcoded credentials
+            if username in DEMO_CREDENTIALS and password == DEMO_CREDENTIALS[username]["password"]:
+                role = DEMO_CREDENTIALS[username]["role"]
                 st.session_state.user = {
                     'username': username,
                     'role': role,
                     'kam_id': username if role == UserRole.KAM else None
                 }
                 st.rerun()
+            else:
+                st.sidebar.error("Invalid username or password.")
         
         st.info("👋 Please login to access the dashboard")
         return None
