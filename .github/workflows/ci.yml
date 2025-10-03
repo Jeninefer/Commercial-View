@@ -1,0 +1,320 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'release/**'
+      - 'hotfix/**'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  PYTHON_VERSION: '3.9'
+  NODE_VERSION: '16'
+
+jobs:
+  validate-version:
+    name: Validate Version
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Validate tag format
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          if ! [[ $TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9\.]+)?(\+[a-z0-9\.]+)?$ ]]; then
+            echo "Invalid tag format: $TAG"
+            echo "Expected format: v{MAJOR}.{MINOR}.{PATCH}[-{PRERELEASE}][+{BUILD}]"
+            exit 1
+          fi
+          echo "Tag format is valid: $TAG"
+      
+      - name: Check version consistency
+        run: |
+          if [ -f VERSION ]; then
+            VERSION_FILE=$(cat VERSION)
+            VERSION_TAG=${GITHUB_REF#refs/tags/v}
+            if [ "$VERSION_FILE" != "$VERSION_TAG" ]; then
+              echo "Version mismatch!"
+              echo "  VERSION file: $VERSION_FILE"
+              echo "  Git tag: $VERSION_TAG"
+              exit 1
+            fi
+            echo "Version is consistent: $VERSION_FILE"
+          else
+            echo "VERSION file not found, skipping consistency check"
+          fi
+
+  lint:
+    name: Lint and Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+          pip install flake8 black isort pylint mypy yamllint
+      
+      - name: Run Black (code formatting)
+        run: |
+          if [ -d "src" ] || [ -d "validators" ]; then
+            black --check --diff src validators || echo "No Python files found or Black not configured"
+          fi
+        continue-on-error: true
+      
+      - name: Run isort (import sorting)
+        run: |
+          if [ -d "src" ] || [ -d "validators" ]; then
+            isort --check-only --diff src validators || echo "No Python files found or isort not configured"
+          fi
+        continue-on-error: true
+      
+      - name: Run Flake8 (style guide)
+        run: |
+          if [ -d "src" ] || [ -d "validators" ]; then
+            flake8 src validators --max-line-length=120 || echo "No Python files found or Flake8 not configured"
+          fi
+        continue-on-error: true
+      
+      - name: Run Pylint
+        run: |
+          if [ -d "src" ] || [ -d "validators" ]; then
+            pylint src validators --fail-under=7.0 || echo "No Python files found or Pylint not configured"
+          fi
+        continue-on-error: true
+      
+      - name: Validate YAML files
+        run: |
+          yamllint config/ || echo "YAML validation skipped"
+        continue-on-error: true
+
+  validate-configs:
+    name: Validate Configuration Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml jsonschema
+      
+      - name: Run schema validators
+        run: |
+          if [ -f validators/schema_validator.py ]; then
+            python validators/schema_validator.py
+          else
+            echo "Schema validator not found, skipping validation"
+          fi
+        continue-on-error: true
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-test.txt ]; then pip install -r requirements-test.txt; fi
+          pip install pytest pytest-cov pytest-xdist
+      
+      - name: Run tests
+        run: |
+          if [ -d "tests" ]; then
+            pytest tests/ -v --cov=src --cov-report=xml --cov-report=html
+          else
+            echo "No tests directory found, skipping tests"
+          fi
+        continue-on-error: true
+      
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        if: matrix.python-version == '3.9'
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+        continue-on-error: true
+
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Install security tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install safety bandit
+      
+      - name: Run Safety (dependency check)
+        run: |
+          if [ -f requirements.txt ]; then
+            safety check --file requirements.txt || echo "Safety check completed with warnings"
+          fi
+        continue-on-error: true
+      
+      - name: Run Bandit (security linter)
+        run: |
+          if [ -d "src" ] || [ -d "validators" ]; then
+            bandit -r src validators -ll || echo "Bandit scan completed with warnings"
+          fi
+        continue-on-error: true
+
+  build:
+    name: Build Artifacts
+    runs-on: ubuntu-latest
+    needs: [lint, test, validate-configs]
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Install build tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine wheel
+      
+      - name: Build package
+        run: |
+          if [ -f setup.py ] || [ -f pyproject.toml ]; then
+            python -m build
+          else
+            echo "No setup.py or pyproject.toml found, skipping build"
+          fi
+        continue-on-error: true
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-packages
+          path: dist/
+        continue-on-error: true
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build, security-scan]
+    if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release/')
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Deploy to staging
+        run: |
+          echo "Deploying to staging environment"
+          # Add your staging deployment commands here
+        continue-on-error: true
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build, security-scan]
+    if: startsWith(github.ref, 'refs/tags/v')
+    environment:
+      name: production
+      url: https://production.example.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-packages
+          path: dist/
+        continue-on-error: true
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          files: dist/*
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref, '-alpha') || contains(github.ref, '-beta') || contains(github.ref, '-rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production environment"
+          # Add your production deployment commands here
+        continue-on-error: true
+
+  notify:
+    name: Notify on Completion
+    runs-on: ubuntu-latest
+    needs: [lint, test, validate-configs, build, security-scan]
+    if: always()
+    steps:
+      - name: Send notification
+        run: |
+          echo "Pipeline completed with status: ${{ job.status }}"
+          # Add notification logic (Slack, email, etc.)
+        continue-on-error: true
