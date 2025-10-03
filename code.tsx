@@ -92,9 +92,11 @@ function Chart({
   return (
     <AutoLayout direction="vertical" spacing={8}>
       <Frame width={w} height={h} fill="#FFFFFF" cornerRadius={12} stroke="#CED4D9">
-        <svg width={w} height={h}>
-          <path d={pathData} stroke={color} strokeWidth={2} fill="none" />
-        </svg>
+        <SVG
+          width={w}
+          height={h}
+          src={`<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><path d="${pathData}" stroke="${color}" stroke-width="2" fill="none"/></svg>`}
+        />
       </Frame>
       <AutoLayout spacing={12}>
         {xs.map((m, i) => (
