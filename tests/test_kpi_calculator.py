@@ -71,7 +71,9 @@ class TestKPICalculator:
         assert metrics["gmv"] == 6000.0
         assert "default_rate" in metrics
         # 1 loan has dpd >= 180
-        assert metrics["default_rate"] == 1/3
+        expected_defaults = (loan_df["days_past_due"] >= 180).sum()
+        total_loans = len(loan_df)
+        assert metrics["default_rate"] == expected_defaults / total_loans
 
     def test_compute_valuation_metrics_basic(self):
         """Test basic valuation metrics computation"""
