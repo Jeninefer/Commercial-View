@@ -106,11 +106,12 @@ class PricingEnricher:
                     if feat in without.columns and low_col in grid.columns and high_col in grid.columns:
                         # Select rows where value falls into [low, high]
                         val = pd.to_numeric(without[feat], errors="coerce")
+                        grid_low_numeric = pd.to_numeric(grid[low_col], errors="coerce")
+                        grid_high_numeric = pd.to_numeric(grid[high_col], errors="coerce")
                         def pick_row(v):
                             if pd.isna(v):
                                 return None
-                            hits = grid[(pd.to_numeric(grid[low_col], errors="coerce") <= v) &
-                                        (pd.to_numeric(grid[high_col], errors="coerce") >= v)]
+                            hits = grid[(grid_low_numeric <= v) & (grid_high_numeric >= v)]
                             return hits.iloc[0].to_dict() if not hits.empty else None
                         matched = val.apply(pick_row)
                         matched_df = pd.DataFrame(list(matched)).add_suffix("_grid")
