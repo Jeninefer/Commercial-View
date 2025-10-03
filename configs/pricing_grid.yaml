@@ -1,0 +1,69 @@
+- country: USA
+  risk_band: A
+  tenor_min: 30
+  tenor_max: 180
+  ticket_min: 10000
+  ticket_max: 100000
+  apr: 0.05
+  eir: 0.051
+  recommended_rate: 0.052
+
+- country: USA
+  risk_band: A
+  tenor_min: 181
+  tenor_max: 365
+  ticket_min: 10000
+  ticket_max: 100000
+  apr: 0.055
+  eir: 0.056
+  recommended_rate: 0.057
+
+- country: USA
+  risk_band: B
+  tenor_min: 30
+  tenor_max: 180
+  ticket_min: 50000
+  ticket_max: 250000
+  apr: 0.08
+  eir: 0.083
+  recommended_rate: 0.085
+
+- country: USA
+  risk_band: B
+  tenor_min: 181
+  tenor_max: 365
+  ticket_min: 50000
+  ticket_max: 250000
+  apr: 0.09
+  eir: 0.093
+  recommended_rate: 0.095
+
+- country: UK
+  risk_band: A
+  tenor_min: 30
+  tenor_max: 120
+  ticket_min: 20000
+  ticket_max: 150000
+  apr: 0.06
+  eir: 0.062
+  recommended_rate: 0.063
+
+- country: UK
+  risk_band: A
+  tenor_min: 121
+  tenor_max: 365
+  ticket_min: 20000
+  ticket_max: 150000
+  apr: 0.065
+  eir: 0.067
+  recommended_rate: 0.068
+
+- country: UK
+  risk_band: B
+  tenor_min: 30
+  tenor_max: 365
+  ticket_min: 100000
+  ticket_max: 500000
+  apr: 0.09
+  eir: 0.093
+  recommended_rate: 0.095
