@@ -131,7 +131,7 @@ class PricingEnricher:
                             expected_grid_cols = [f"{col}_grid" for col in grid.columns]
                             matched_df = pd.DataFrame(np.nan, index=without.index, columns=expected_grid_cols)
                         elif len(matched_df) != len(without):
-                            logger.warning("matched_df and without have different lengths; skipping concatenation for this feature.")
+                            logger.warning(f"matched_df and without have different lengths for feature {feat}; skipping concatenation.")
                             continue
                         without = pd.concat([without.reset_index(drop=True), matched_df.reset_index(drop=True)], axis=1)
                 if recommended_rate_col in result.columns:
