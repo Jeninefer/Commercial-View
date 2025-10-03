@@ -1,5 +1,5 @@
 # Commercial-View
-Principal KPI
+Principal KPIs
 
 ## Usage (no demo data)
 
