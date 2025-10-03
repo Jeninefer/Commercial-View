@@ -89,9 +89,7 @@ class DPDBucketAnalyzer:
             bucket_series = pd.Series(index=df.index, dtype="object")
             for (low, high), label in zip(edges, labels):
                 mask = (dpd >= low) & (dpd <= high)
-                if np.isinf(high):
-                    mask = (dpd >= low)
-                bucket_series[mask] = label
+                mask = (dpd >= low) & ((dpd <= high) if not np.isinf(high) else True)
         else:
             # Defaults: 0, 1–29, 30–59, 60–89, 90–119, 120–149, 150–179, 180+
             bins   = [-np.inf, 0, 29, 59, 89, 119, 149, 179, np.inf]
