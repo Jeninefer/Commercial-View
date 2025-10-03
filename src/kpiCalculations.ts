@@ -300,12 +300,6 @@ export function calculateClientGoals(dataDir: string): {
     } else {
       // Update info if recovered
       const info = customerInfo.get(customerId)!;
-      // Update info if recovered
-      if (status === 'Recovered') {
-        info.isRecovered = true;
-      }
-      if (isRecurring) {
-        info.isRecurring = true;
       }
     }
   });
