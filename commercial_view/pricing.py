@@ -149,10 +149,24 @@ def _interval_join(
     # Filter to only matching intervals
     filtered = merged[mask].copy()
     
-    # Handle multiple matches - take the first match per original row
+    # Handle multiple matches - deterministically select the most specific interval per original row
     if len(filtered) > 0:
-        filtered = filtered.sort_values('_temp_idx').groupby('_temp_idx', as_index=False).first()
-    
+        # Compute interval widths for each banded column
+        interval_width_cols = []
+        for df_col, (min_col, max_col) in band_keys.items():
+            width_col = f'_interval_width_{df_col}'
+            filtered[width_col] = (filtered[max_col] - filtered[min_col]).abs()
+            interval_width_cols.append(width_col)
+        # If multiple banded columns, sum widths for total specificity
+        if interval_width_cols:
+            filtered['_total_interval_width'] = filtered[interval_width_cols].sum(axis=1)
+        else:
+            filtered['_total_interval_width'] = 0
+        # Sort by total interval width (ascending), then by _temp_idx for determinism
+        filtered = filtered.sort_values(['_temp_idx', '_total_interval_width'])
+        filtered = filtered.groupby('_temp_idx', as_index=False).first()
+        # Drop helper columns
+        filtered = filtered.drop(columns=interval_width_cols + ['_total_interval_width'])
     # Get columns to keep from pricing_df (exclude join_keys as they're already in df)
     pricing_cols = [col for col in pricing_df.columns if col not in join_keys]
     
