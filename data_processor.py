@@ -18,6 +18,9 @@ def process_loan_data(schedule_df, payments_df):
     Returns:
         tuple: (processed_schedule_df, processed_payments_df)
     """
+    # Create copies to avoid mutating the original DataFrames
+    schedule_df = schedule_df.copy()
+    payments_df = payments_df.copy()
     # Convert date columns to datetime and then to date objects
     schedule_df["due_date"] = pd.to_datetime(schedule_df["due_date"], errors="coerce").dt.date
     payments_df["payment_date"] = pd.to_datetime(payments_df["payment_date"], errors="coerce").dt.date
