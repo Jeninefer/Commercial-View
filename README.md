@@ -7,6 +7,7 @@ Use your live DataFrames with the exact column names described in the "Data cont
 
 ## Data contracts (required columns)
 
+*Note: For any column name shown as `name1|name2|...`, use one of the names separated by `|` for a given column; any one will be recognized as valid.*
 ### Payments & DPD
 
 **Schedule DF:**
