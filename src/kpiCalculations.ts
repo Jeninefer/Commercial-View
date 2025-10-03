@@ -300,7 +300,9 @@ export function calculateClientGoals(dataDir: string): {
     } else {
       // Update info if recovered
       const info = customerInfo.get(customerId);
-      if (info) {
+      if (!info) {
+        // This should not happen; log a warning and skip this row
+        console.warn(`Warning: customerInfo missing for customerId ${customerId} during update. Skipping row.`);
         if (status === 'Recovered') {
           info.isRecovered = true;
         }
