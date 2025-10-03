@@ -61,7 +61,7 @@ repos:
       - id: bandit
         name: Security check with Bandit
         args: ['-ll', '-i']
-        files: ^src/.*\.py$
+        files: \.py$
 
   # YAML linting
   - repo: https://github.com/adrienverge/yamllint
