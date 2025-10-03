@@ -282,7 +282,7 @@ def enrich_pricing(
 
     # Optionally load pricing files once
     if autoload and (
-        pricing_enricher.pricing_grid is None and pricing_enricher.recommended_pricing is None
+        pricing_enricher.pricing_grid is None or pricing_enricher.recommended_pricing is None
     ):
         pricing_enricher.load_pricing_data()
 
