@@ -103,7 +103,7 @@ class DPDAnalyzer:
                 if c == p or c.lower() == p.lower():
                     return c
         
-        # contains
+        # Check for columns that contain the pattern.
         for p in patterns:
             p_low = p.lower()
             match = [c for c in cols if p_low in c.lower()]
