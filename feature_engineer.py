@@ -130,7 +130,7 @@ class FeatureEngineer:
                 if isinstance(last_active, str):
                     try:
                         last_active = pd.to_datetime(last_active)
-                    except:
+                    except Exception:
                         days_inactive = 0
                 else:
                     last_active = pd.to_datetime(last_active)
