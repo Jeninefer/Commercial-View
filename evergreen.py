@@ -47,7 +47,7 @@ def reactivation_flag(events: pd.DataFrame, customer_id: str, dt_col: str, gap_d
     if d.index.name:
         d = d.sort_values([customer_id, dt_col, d.index.name])
     else:
-        d = d.sort_values([customer_id, dt_col, d.index.to_series()])
+        d = d.sort_values([customer_id, dt_col])
     d["prev"] = d.groupby(customer_id)[dt_col].shift(1)
     d["gap"] = (d[dt_col] - d["prev"]).dt.days
     d["reactivated"] = (d["gap"] > gap_days).fillna(False)
