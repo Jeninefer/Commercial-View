@@ -6,7 +6,8 @@ import numpy as np
 from datetime import datetime, timedelta
 
 import sys
-sys.path.insert(0, '/home/runner/work/Commercial-View/Commercial-View/src')
+from pathlib import Path
+sys.path.insert(0, str((Path(__file__).parent.parent / "src").resolve()))
 
 from commercial_view.kpi_calculator import (
     KPIConfig,
