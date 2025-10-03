@@ -353,25 +353,12 @@ payload = {
         "recovered_clients": rev_m.rename(columns={"Month":"month"}).to_dict(orient="records"),
     },
     "revenue": {
-        # Break up the chained operations for clarity
-        # Step 1: Reset index
-        rev_tbl_step1 = rev_tbl.reset_index()
-        # Step 2: Rename columns
-        rev_tbl_step2 = rev_tbl_step1.rename(columns={"index": "Month", "Payment Date": "Month"})
-        # Step 3: Assign 'Month' column conditionally
-        if "index" in rev_tbl_step2.columns:
-            rev_tbl_step3 = rev_tbl_step2.assign(Month=rev_tbl_step2["index"])
-        else:
-            rev_tbl_step3 = rev_tbl_step2
-        # Step 4: Drop 'index' column if present
-        if "index" in rev_tbl_step3.columns:
-            rev_tbl_step4 = rev_tbl_step3.drop(columns=["index"])
-        else:
-            rev_tbl_step4 = rev_tbl_step3
-        # Step 5: Rename 'Month' to 'month'
-        rev_tbl_step5 = rev_tbl_step4.rename(columns={"Month": "month"})
-        # Step 6: Convert to dict
-        "by_month": rev_tbl_step5.to_dict(orient="records")
+        "by_month": (
+            rev_tbl
+            .reset_index()
+            .rename(columns={"Payment Date": "month", "index": "month"})
+            .to_dict(orient="records")
+        )
     },
     "kam_breakdown": kam_pivot.rename(columns={"Outstanding Loan Value":"outstanding"}).to_dict(orient="records"),
     "sector_breakdown": [] if sector_pivot.empty else sector_pivot.rename(columns={sector_col:"sector","Outstanding Loan Value":"outstanding"}).to_dict(orient="records"),
