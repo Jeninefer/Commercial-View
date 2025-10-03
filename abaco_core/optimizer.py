@@ -13,8 +13,8 @@ class DisbursementOptimizer:
       - aum_total: total target origination amount for the day
     Manifest (abaco_manifest.json):
       - optimizer_constraints.target_mix (apr/line/industry/payer)
-      - hard_limits (caps)
-      - priority_weights (apr/term_fit/origination_count)
+      - optimizer_constraints.hard_limits (caps)
+      - optimizer_constraints.priority_weights (apr/term_fit/origination_count)
     """
 
     # Default APR bucket edges and labels
