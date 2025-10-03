@@ -27,7 +27,7 @@ class FeatureEngineer:
                                       exposure_col: str = "outstanding_balance") -> pd.DataFrame:
         df = loan_df.copy()
         if exposure_col not in df.columns:
-            olb_candidates = [c for c in df.columns if any(k in c.lower() for k in ["outstanding_balance","olb","current_balance","saldo","balance"])]
+            olb_candidates = [c for c in df.columns if any(k in c.lower() for k in ["outstanding_balance", "olb", "current_balance", "saldo", "balance"])]
             if not olb_candidates:
                 raise ValueError("Exposure column not found")
             df[exposure_col] = pd.to_numeric(df[olb_candidates[0]], errors="coerce").fillna(0.0)
