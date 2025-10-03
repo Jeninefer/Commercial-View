@@ -6,7 +6,8 @@ to analyze a loan portfolio.
 """
 
 import sys
-sys.path.insert(0, '/home/runner/work/Commercial-View/Commercial-View/src')
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 import pandas as pd
 from datetime import datetime, timedelta
