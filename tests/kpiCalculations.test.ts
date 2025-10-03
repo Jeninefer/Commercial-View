@@ -59,13 +59,18 @@ console.log(`   Weighted APR: ${weightedAPR.toFixed(2)}%`);
 assert(weightedAPR > 0, 'Weighted APR should be greater than 0');
 // Dynamically calculate expected weighted APR from the same data used in the test to avoid brittleness.
 const fs = require('fs');
-const loans = JSON.parse(fs.readFileSync(path.join(dataDir, 'loans.json'), 'utf8'));
+const parse = require('csv-parse/sync').parse;
+const csvData = fs.readFileSync(path.join(dataDir, 'loan_data.csv'), 'utf8');
+const loans = parse(csvData, { columns: true });
 let totalWeightedAPR = 0;
 let totalBalance = 0;
 for (const loan of loans) {
-  if (loan.balance && loan.apr) {
-    totalWeightedAPR += loan.balance * loan.apr;
-    totalBalance += loan.balance;
+  // CSV fields are strings; convert to numbers
+  const balance = Number(loan.balance);
+  const apr = Number(loan.apr);
+  if (!isNaN(balance) && !isNaN(apr)) {
+    totalWeightedAPR += balance * apr;
+    totalBalance += balance;
   }
 }
 const expectedWeightedAPR = totalBalance > 0 ? totalWeightedAPR / totalBalance : 0;
