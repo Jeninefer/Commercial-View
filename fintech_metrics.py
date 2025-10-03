@@ -113,7 +113,7 @@ class FintechMetricsCalculator:
         if user_df is not None and "is_active" in user_df.columns:
             active = int(pd.to_numeric(user_df["is_active"], errors="coerce").fillna(0).sum())
             total = len(user_df) if len(user_df) > 0 else np.nan
-            m["active_users"] = float(active)
+            m["active_users"] = active
             m["active_rate"] = float(self.safe_division(active, total, 0.0))
         elif payment_df is not None and {"customer_id", "date"}.issubset(payment_df.columns):
             tmp = payment_df.copy()
