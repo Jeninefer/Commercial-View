@@ -89,9 +89,15 @@ def main():
     create_export_directories(configs.get('export_config', {}))
     
     # Load data
+    pricing_config = configs.get('pricing_config', {})
+    pricing_base_path = pricing_config.get('pricing_data_path')
+
     print("\nLoading data...")
-    loan_data = load_loan_data()
-    customer_data = load_customer_data()
+    if pricing_base_path:
+        print(f"Using pricing data directory: {pricing_base_path}")
+
+    loan_data = load_loan_data(pricing_base_path)
+    customer_data = load_customer_data(pricing_base_path)
     # historic_real_payment = load_historic_real_payment()
     # payment_schedule = load_payment_schedule()
     # collateral = load_collateral()
