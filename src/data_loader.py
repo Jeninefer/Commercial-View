@@ -81,7 +81,7 @@ def dataframe_to_models(dataframe: DataFrame, model: Type[TModel]) -> List[TMode
 
     The helper ensures that any values not serialisable by FastAPI—such as
     ``numpy`` scalar types or ``NaN``—are converted to native Python objects and
-    ``None`` respectively before instantiating the models. This centralises the
+    ``None`` respectively before instantiating the models. This centralizes the
     schema alignment between the raw CSV data and the API response models.
     """
 
