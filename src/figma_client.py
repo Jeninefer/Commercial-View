@@ -14,6 +14,5 @@ def get_figma_file(file_key: str) -> Dict[str, Any]:
     url = f"{FIGMA_API_BASE_URL}files/{file_key}"
     response = requests.get(url, headers=_build_headers())
     response.raise_for_status()
-    return response.json()
-    response.raise_for_status()  # Raise an exception for bad status codes
+    # For successful responses, return the JSON payload provided by Figma.
     return response.json()
