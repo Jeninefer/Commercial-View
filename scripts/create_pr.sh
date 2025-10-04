@@ -15,7 +15,7 @@ echo "Created branch: $BRANCH_NAME"
 
 # Remove all workflow files to avoid OAuth issues
 if [ -d ".github/workflows" ]; then
-    find .github/workflows -name '*.yml' -delete
+    find .github/workflows -type f -name '*.yml' -delete
     echo "Removed all workflow files (*.yml) from .github/workflows to avoid OAuth scope issue"
 fi
 # Add changes excluding workflow directory
