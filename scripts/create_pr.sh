@@ -13,17 +13,11 @@ git checkout -b "$BRANCH_NAME"
 
 echo "Created branch: $BRANCH_NAME"
 
-# Remove problematic workflow files to avoid OAuth issues
-if [ -f ".github/workflows/ci.yml" ]; then
-    rm ".github/workflows/ci.yml"
-    echo "Removed CI workflow to avoid OAuth scope issue"
+# Remove all workflow files to avoid OAuth issues
+if [ -d ".github/workflows" ]; then
+    find .github/workflows -name '*.yml' -delete
+    echo "Removed all workflow files (*.yml) from .github/workflows to avoid OAuth scope issue"
 fi
-
-if [ -f ".github/workflows/daily_refresh.yml" ]; then
-    rm ".github/workflows/daily_refresh.yml"
-    echo "Removed daily refresh workflow to avoid OAuth scope issue"
-fi
-
 # Add changes excluding workflow directory
 git add .
 # Remove any staged workflow files
