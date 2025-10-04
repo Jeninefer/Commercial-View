@@ -14,6 +14,15 @@ from typing import Dict, Any
 import yaml
 import json
 from datetime import datetime
+import pandas as pd
+
+from src.data_loader import (
+    load_loan_data,
+    load_historic_real_payment,
+    load_payment_schedule,
+    load_customer_data,
+    load_collateral
+)
 
 
 def load_config(config_dir: str) -> Dict[str, Any]:
@@ -56,52 +65,6 @@ def create_export_directories(export_config: Dict[str, Any]) -> None:
         print(f"Created directory: {directory}")
 
 
-def generate_sample_output(export_config: Dict[str, Any]) -> None:
-    """Generate sample output files to demonstrate the system."""
-    export_paths = export_config.get('export_paths', {})
-    base_path = export_paths.get('base_path', './abaco_runtime/exports')
-    
-    # Sample DPD data
-    dpd_data = {
-        "analysis_date": datetime.now().isoformat(),
-        "portfolio_summary": {
-            "total_loans": 1000,
-            "total_exposure": 50000000,
-            "default_rate": 0.05
-        },
-        "dpd_analysis": {
-            "current": {"count": 850, "amount": 42500000},
-            "1_30_days": {"count": 100, "amount": 5000000},
-            "31_60_days": {"count": 30, "amount": 1500000},
-            "61_90_days": {"count": 15, "amount": 750000},
-            "90_plus_days": {"count": 5, "amount": 250000}
-        }
-    }
-    
-    # Sample KPI data
-    kpi_data = {
-        "generated_at": datetime.now().isoformat(),
-        "kpis": {
-            "portfolio_at_risk": 0.15,
-            "default_rate": 0.05,
-            "recovery_rate": 0.75,
-            "provision_coverage": 0.12,
-            "net_charge_off_rate": 0.03
-        }
-    }
-    
-    # Write sample files
-    with open(f"{base_path}/dpd/dpd_analysis.json", 'w') as f:
-        json.dump(dpd_data, f, indent=2)
-    
-    with open(f"{export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json')}/kpi_report.json", 'w') as f:
-        json.dump(kpi_data, f, indent=2)
-    
-    print("Generated sample output files:")
-    print(f"  - {base_path}/dpd/dpd_analysis.json")
-    print(f"  - {export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json')}/kpi_report.json")
-
-
 def main():
     """Main processing function."""
     parser = argparse.ArgumentParser(description='Process commercial lending portfolio')
@@ -125,10 +88,19 @@ def main():
     print("\nCreating export directories...")
     create_export_directories(configs.get('export_config', {}))
     
-    # For now, generate sample output
-    print("\nGenerating sample analysis (demo mode)...")
-    generate_sample_output(configs.get('export_config', {}))
-    
+    # Load data
+    print("\nLoading data...")
+    loan_data = load_loan_data()
+    customer_data = load_customer_data()
+    # historic_real_payment = load_historic_real_payment()
+    # payment_schedule = load_payment_schedule()
+    # collateral = load_collateral()
+
+    print(f"Loaded {loan_data.shape[0]} rows and {loan_data.shape[1]} columns from loan_data.")
+    print(f"Loaded {customer_data.shape[0]} rows and {customer_data.shape[1]} columns from customer_data.")
+
+    # TODO: Implement the rest of the processing logic
+
     print("\n✅ Processing completed successfully!")
     print("\nNext steps:")
     print("1. Check the generated files in ./abaco_runtime/exports/")
