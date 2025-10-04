@@ -89,7 +89,7 @@ def main():
     create_export_directories(configs.get('export_config', {}))
     
     # Load data
-    pricing_config = configs.get('pricing_config', {})
+    pricing_config = configs.get('pricing_config') or {}
     pricing_base_path = pricing_config.get('pricing_data_path')
 
     print("\nLoading data...")
