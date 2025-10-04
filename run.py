@@ -57,8 +57,11 @@ def get_payment_schedule():
     try:
         schedule_df = load_payment_schedule()
         return dataframe_to_models(schedule_df, PaymentSchedule)
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Payment schedule data file not found. Please upload the CSV file to the data/pricing directory.")
+    except FileNotFoundError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Payment schedule data file not found at '{getattr(exc, 'filename', str(exc))}'. Please upload the CSV file to the data/pricing directory."
+        )
     except ValidationError as exc:
         raise HTTPException(status_code=500, detail=f"Failed to serialize payment schedule data: {exc}")
 
