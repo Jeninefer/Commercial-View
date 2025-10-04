@@ -18,8 +18,14 @@ def sample_pricing_dir(tmp_path: Path) -> Path:
 
     sample_df = pd.DataFrame(
         {
-            "id": [1, 2],
-            "value": [100, 200],
+            "product_type": ["commercial", "retail"],
+            "tenor_min": [0, 30],
+            "tenor_max": [30, 60],
+            "amount_min": [0, 50000],
+            "amount_max": [50000, 100000],
+            "base_rate": [0.05, 0.06],
+            "margin": [0.02, 0.025],
+            "total_rate": [0.07, 0.085],
         }
     )
 
@@ -34,7 +40,7 @@ def test_loaders_use_overridden_base_path(sample_pricing_dir: Path) -> None:
     customer_df = data_loader.load_customer_data(sample_pricing_dir)
 
     assert loan_df.equals(customer_df)
-    assert loan_df.iloc[0]["id"] == 1
+    assert loan_df.iloc[0]["product_type"] == "commercial"
 
 
 def test_missing_file_raises_clear_error(sample_pricing_dir: Path) -> None:

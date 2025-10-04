@@ -5,6 +5,8 @@ load_dotenv()
 
 from fastapi import FastAPI, HTTPException
 from typing import List, Dict, Any
+import pandas as pd
+from pandas import DataFrame
 from src.data_loader import (
     load_loan_data,
     load_historic_real_payment,
@@ -34,38 +36,45 @@ def read_root():
     return {"message": "Welcome to the Commercial View API"}
 
 # Data endpoints
+def _to_records(df: DataFrame) -> List[Dict[str, Any]]:
+    """Convert a pandas ``DataFrame`` into a JSON-serialisable list of dicts."""
+
+    cleaned = df.where(pd.notnull(df), None)
+    return cleaned.to_dict(orient="records")
+
+
 @app.get("/loan-data", response_model=List[LoanData])
 def get_loan_data():
     try:
-        return load_loan_data(PRICING_BASE_PATH)
+        return _to_records(load_loan_data(PRICING_BASE_PATH))
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Loan data file not found. Please upload the CSV file to the data/pricing directory.")
 
 @app.get("/historic-real-payment", response_model=List[HistoricRealPayment])
 def get_historic_real_payment():
     try:
-        return load_historic_real_payment(PRICING_BASE_PATH)
+        return _to_records(load_historic_real_payment(PRICING_BASE_PATH))
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Historic real payment data file not found. Please upload the CSV file to the data/pricing directory.")
 
 @app.get("/payment-schedule", response_model=List[PaymentSchedule])
 def get_payment_schedule():
     try:
-        return load_payment_schedule(PRICING_BASE_PATH)
+        return _to_records(load_payment_schedule(PRICING_BASE_PATH))
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Payment schedule data file not found. Please upload the CSV file to the data/pricing directory.")
 
 @app.get("/customer-data", response_model=List[CustomerData])
 def get_customer_data():
     try:
-        return load_customer_data(PRICING_BASE_PATH)
+        return _to_records(load_customer_data(PRICING_BASE_PATH))
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Customer data file not found. Please upload the CSV file to the data/pricing directory.")
 
 @app.get("/collateral", response_model=List[Collateral])
 def get_collateral():
     try:
-        return load_collateral(PRICING_BASE_PATH)
+        return _to_records(load_collateral(PRICING_BASE_PATH))
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Collateral data file not found. Please upload the CSV file to the data/pricing directory.")
 

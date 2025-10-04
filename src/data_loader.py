@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 import pandas as pd
 from pandas import DataFrame
+import yaml
 
 PathLike = Union[str, os.PathLike[str]]
 
@@ -15,13 +16,53 @@ _ENV_VAR = "COMMERCIAL_VIEW_PRICING_PATH"
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _DEFAULT_DATA_PATH = _REPO_ROOT / "data" / "pricing"
 
-PRICING_FILENAMES = {
-    "loan_data": "Abaco - Loan Tape_Loan Data_Table.csv",
-    "historic_real_payment": "Abaco - Loan Tape_Historic Real Payment_Table.csv",
-    "payment_schedule": "Abaco - Loan Tape_Payment Schedule_Table.csv",
-    "customer_data": "Abaco - Loan Tape_Customer Data_Table.csv",
-    "collateral": "Abaco - Loan Tape_Collateral_Table.csv",
+_CONFIG_FILENAME = "pricing_config.yml"
+_CONFIG_KEY_MAP = {
+    "loan_data": "main_pricing_csv",
+    "historic_real_payment": "commercial_loans",
+    "payment_schedule": "retail_loans",
+    "customer_data": "risk_based_pricing",
+    # No dedicated config entry exists for collateral; fall back to default filename.
+    "collateral": None,
 }
+
+_DEFAULT_PRICING_FILENAMES = {
+    "loan_data": "main_pricing.csv",
+    "historic_real_payment": "commercial_loans_pricing.csv",
+    "payment_schedule": "retail_loans_pricing.csv",
+    "customer_data": "risk_based_pricing.csv",
+    "collateral": "risk_based_pricing_enhanced.csv",
+}
+
+
+def _load_pricing_filenames() -> Dict[str, str]:
+    """Load pricing filenames from config, falling back to repository defaults."""
+
+    config_path = _REPO_ROOT / "config" / _CONFIG_FILENAME
+    if not config_path.exists():
+        return _DEFAULT_PRICING_FILENAMES.copy()
+
+    with config_path.open("r", encoding="utf-8") as config_file:
+        config = yaml.safe_load(config_file) or {}
+
+    pricing_files = config.get("pricing_files", {}) if isinstance(config, dict) else {}
+    resolved: Dict[str, str] = {}
+
+    for key, default_filename in _DEFAULT_PRICING_FILENAMES.items():
+        config_key = _CONFIG_KEY_MAP.get(key)
+        candidate = None
+        if config_key and isinstance(pricing_files, dict):
+            candidate = pricing_files.get(config_key)
+
+        if candidate:
+            resolved[key] = Path(candidate).name
+        else:
+            resolved[key] = default_filename
+
+    return resolved
+
+
+PRICING_FILENAMES = _load_pricing_filenames()
 
 
 def _resolve_base_path(base_path: Optional[PathLike] = None) -> Path:
