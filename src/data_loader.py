@@ -4,24 +4,59 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import Dict, Iterable, Optional, Union
 
 import pandas as pd
 from pandas import DataFrame
+import yaml
 
 PathLike = Union[str, os.PathLike[str]]
 
 _ENV_VAR = "COMMERCIAL_VIEW_PRICING_PATH"
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _DEFAULT_DATA_PATH = _REPO_ROOT / "data" / "pricing"
+_PRICING_CONFIG_PATH = _REPO_ROOT / "config" / "pricing_config.yml"
 
-PRICING_FILENAMES = {
-    "loan_data": "Abaco - Loan Tape_Loan Data_Table.csv",
-    "historic_real_payment": "Abaco - Loan Tape_Historic Real Payment_Table.csv",
-    "payment_schedule": "Abaco - Loan Tape_Payment Schedule_Table.csv",
-    "customer_data": "Abaco - Loan Tape_Customer Data_Table.csv",
-    "collateral": "Abaco - Loan Tape_Collateral_Table.csv",
+_DEFAULT_PRICING_FILENAMES: Dict[str, str] = {
+    "loan_data": "main_pricing.csv",
+    "historic_real_payment": "risk_based_pricing.csv",
+    "payment_schedule": "risk_based_pricing_enhanced.csv",
+    "customer_data": "commercial_loans_pricing.csv",
+    "collateral": "retail_loans_pricing.csv",
 }
+
+_CONFIG_KEYS: Dict[str, Iterable[str]] = {
+    "loan_data": ("loan_data", "main_pricing_csv"),
+    "historic_real_payment": ("historic_real_payment", "risk_based_pricing"),
+    "payment_schedule": ("payment_schedule", "risk_based_pricing_enhanced"),
+    "customer_data": ("customer_data", "commercial_loans"),
+    "collateral": ("collateral", "retail_loans"),
+}
+
+
+def _resolve_pricing_filenames() -> Dict[str, str]:
+    """Build the pricing filename mapping with optional config overrides."""
+
+    filenames = dict(_DEFAULT_PRICING_FILENAMES)
+
+    if not _PRICING_CONFIG_PATH.exists():
+        return filenames
+
+    with _PRICING_CONFIG_PATH.open("r", encoding="utf-8") as config_file:
+        config = yaml.safe_load(config_file) or {}
+
+    pricing_files = config.get("pricing_files", {})
+    for key, config_keys in _CONFIG_KEYS.items():
+        for config_key in config_keys:
+            configured_path = pricing_files.get(config_key)
+            if configured_path:
+                filenames[key] = Path(configured_path).name
+                break
+
+    return filenames
+
+
+PRICING_FILENAMES = _resolve_pricing_filenames()
 
 
 def _resolve_base_path(base_path: Optional[PathLike] = None) -> Path:
