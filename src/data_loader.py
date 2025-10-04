@@ -17,11 +17,12 @@ _REPO_ROOT = Path(__file__).resolve().parents[1]
 _DEFAULT_DATA_PATH = _REPO_ROOT / "data" / "pricing"
 
 _CONFIG_FILENAME = "pricing_config.yml"
+# Map internal data type names to config keys. Config keys are now descriptive and aligned with data type names.
 _CONFIG_KEY_MAP = {
-    "loan_data": "main_pricing_csv",
-    "historic_real_payment": "commercial_loans",
-    "payment_schedule": "retail_loans",
-    "customer_data": "risk_based_pricing",
+    "loan_data": "loan_data_csv",
+    "historic_real_payment": "historic_real_payment_csv",
+    "payment_schedule": "payment_schedule_csv",
+    "customer_data": "customer_data_csv",
     # No dedicated config entry exists for collateral; fall back to default filename.
     "collateral": None,
 }
