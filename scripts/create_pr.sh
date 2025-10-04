@@ -27,7 +27,9 @@ fi
 # Add changes excluding workflow directory
 git add .
 # Remove any staged workflow files
-git reset HEAD .github/workflows/ 2>/dev/null || true
+if [ -d ".github/workflows/" ]; then
+    git reset HEAD .github/workflows/ 2>/dev/null
+fi
 
 # Check if there are changes to commit
 if git diff --staged --quiet; then
