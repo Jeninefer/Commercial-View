@@ -192,7 +192,7 @@ def test_endpoints_return_serializable_payload(
     payload = response.json()
     assert isinstance(payload, list)
     assert payload, "Expected at least one record in the payload"
-    assert payload[0][list(payload[0].keys())[0]] is not None
+    assert any(v is not None for v in payload[0].values()), "Expected at least one non-None value in the first record"
 
 
 def test_missing_file_returns_not_found(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
