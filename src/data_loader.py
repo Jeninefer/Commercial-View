@@ -45,10 +45,7 @@ def _load_pricing_filenames() -> Dict[str, str]:
     with config_path.open("r", encoding="utf-8") as config_file:
         config = yaml.safe_load(config_file) or {}
 
-    if isinstance(config, dict):
-        pricing_files = config.get("pricing_files", {})
-    else:
-        pricing_files = {}
+    pricing_files = config.get("pricing_files", {})
     resolved: Dict[str, str] = {}
 
     for key, default_filename in _DEFAULT_PRICING_FILENAMES.items():
