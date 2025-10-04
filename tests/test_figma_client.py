@@ -1,6 +1,5 @@
 import pathlib
 import sys
-import types
 from typing import Any, Dict
 
 import pytest
