@@ -4,7 +4,12 @@ from pathlib import Path
 from unittest.mock import Mock
 
 sys.modules.setdefault("requests", types.SimpleNamespace(get=None))
-import figma_client
+
+root_path = Path(__file__).resolve().parent.parent
+if str(root_path) not in sys.path:
+    sys.path.insert(0, str(root_path))
+
+from src import figma_client
 
 
 def test_get_figma_file_success(monkeypatch):
