@@ -95,12 +95,12 @@ def generate_sample_output(export_config: Dict[str, Any]) -> None:
     }
     
     # Write sample files
-    dpd_json_path = export_paths.get('dpd_json', './abaco_runtime/exports/dpd/json')
+    dpd_json_path = export_paths.get('dpd_json', './abaco_runtime/exports/dpd')
     Path(dpd_json_path).mkdir(parents=True, exist_ok=True)
     with open(f"{dpd_json_path}/dpd_analysis.json", 'w') as f:
         json.dump(dpd_data, f, indent=2)
     
-    kpi_json_path = export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json')
+    kpi_json_path = export_paths.get('kpi_json', './abaco_runtime/exports/kpi')
     Path(kpi_json_path).mkdir(parents=True, exist_ok=True)
     with open(f"{kpi_json_path}/kpi_report.json", 'w') as f:
         json.dump(kpi_data, f, indent=2)
