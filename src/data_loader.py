@@ -83,6 +83,13 @@ def dataframe_to_models(dataframe: DataFrame, model: Type[TModel]) -> List[TMode
     ``numpy`` scalar types or ``NaN``—are converted to native Python objects and
     ``None`` respectively before instantiating the models. This centralizes the
     schema alignment between the raw CSV data and the API response models.
+
+    Args:
+        dataframe (pandas.DataFrame): The DataFrame containing the data to convert.
+        model (Type[TModel]): The Pydantic model class to instantiate for each row.
+
+    Returns:
+        List[TModel]: A list of Pydantic model instances created from the DataFrame rows.
     """
 
     if dataframe.empty:
