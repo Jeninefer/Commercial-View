@@ -1,10 +1,14 @@
+import os
 import sys
 import types
-from pathlib import Path
 from unittest.mock import Mock
 
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
 sys.modules.setdefault("requests", types.SimpleNamespace(get=None))
-import figma_client
+from src import figma_client
 
 
 def test_get_figma_file_success(monkeypatch):
