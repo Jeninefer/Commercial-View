@@ -100,7 +100,7 @@ def generate_sample_output(export_config: Dict[str, Any]) -> None:
     with open(f"{dpd_json_path}/dpd_analysis.json", 'w') as f:
         json.dump(dpd_data, f, indent=2)
     
-    kpi_json_path = export_paths.get('kpi_json', './abaco_runtime/exports/kpi')
+    kpi_json_path = export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json')
     Path(kpi_json_path).mkdir(parents=True, exist_ok=True)
     with open(f"{kpi_json_path}/kpi_report.json", 'w') as f:
         json.dump(kpi_data, f, indent=2)
