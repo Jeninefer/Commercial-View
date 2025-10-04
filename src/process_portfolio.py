@@ -16,18 +16,19 @@ import json
 from datetime import datetime
 
 
+# List of configuration files to load
+CONFIG_FILES = [
+    'column_maps.yml',
+    'pricing_config.yml',
+    'dpd_policy.yml',
+    'export_config.yml'
+]
+
 def load_config(config_dir: str) -> Dict[str, Any]:
     """Load all configuration files from the config directory."""
     configs = {}
     
-    config_files = [
-        'column_maps.yml',
-        'pricing_config.yml', 
-        'dpd_policy.yml',
-        'export_config.yml'
-    ]
-    
-    for config_file in config_files:
+    for config_file in CONFIG_FILES:
         config_path = Path(config_dir) / config_file
         if config_path.exists():
             with open(config_path, 'r') as f:
