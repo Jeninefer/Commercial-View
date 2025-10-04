@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI, HTTPException
 from typing import List, Dict, Any
 from src.data_loader import (
@@ -19,7 +22,7 @@ from src.figma_client import get_figma_file
 app = FastAPI(
     title="Commercial View API",
     description="API for the Commercial View dashboard, providing access to loan and payment data and Figma designs.",
-    version="0.3.0",
+    version="0.3.1",
 )
 
 @app.get("/")
@@ -67,5 +70,7 @@ def get_collateral():
 def get_figma_file_endpoint(file_key: str):
     try:
         return get_figma_file(file_key)
-    except Exception as e:
+    except ValueError as e:
         raise HTTPException(status_code=500, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
