@@ -2,8 +2,9 @@ import os
 import sys
 import types
 from unittest.mock import Mock
+from pathlib import Path
 
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ROOT_DIR = str(Path(__file__).parent.parent.resolve())
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 
