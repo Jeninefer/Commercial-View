@@ -84,8 +84,7 @@ ls -la abaco_runtime/exports/
 ### Configuring the Data Directory
 
 The analytics loaders read CSV files from the `data/pricing/` directory by default. To point the application to a different data
-source (e.g., in a production or staging environment), set the `COMMERCIAL_VIEW_DATA_PATH` environment variable or provide the `--
-data-dir` option when running the portfolio processor:
+source (e.g., in a production or staging environment), set the `COMMERCIAL_VIEW_DATA_PATH` environment variable or provide the `--data-dir` option when running the portfolio processor:
 
 ```bash
 # Use a custom directory for all loader functions
