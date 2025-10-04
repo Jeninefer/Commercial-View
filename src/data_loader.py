@@ -45,10 +45,8 @@ def _read_csv(filename: str, base_path: Optional[Union[str, Path]] = None) -> Da
 
     if not file_path.exists():
         raise FileNotFoundError(
-            "CSV file not found: "
-            f"{file_path}. Configure the data directory using the "
-            f"`{ENV_VAR_NAME}` environment variable or pass a `base_path` "
-            "argument."
+            f"""CSV file not found: {file_path}. Configure the data directory using the
+`{ENV_VAR_NAME}` environment variable or pass a `base_path` argument."""
         )
 
     return pd.read_csv(file_path)
