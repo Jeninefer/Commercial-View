@@ -75,7 +75,7 @@ def _loan_data_fields():
     return get_model_fields(LoanData)
 
 
-def test_get_loan_data_returns_serialisable_records(client):
+def test_get_loan_data_returns_serializable_records(client):
     response = client.get("/loan-data")
     assert response.status_code == 200
 
