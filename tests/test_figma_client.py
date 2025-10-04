@@ -4,8 +4,6 @@ from pathlib import Path
 from unittest.mock import Mock
 
 sys.modules.setdefault("requests", types.SimpleNamespace(get=None))
-sys.path.append(str(Path(__file__).resolve().parents[1] / "src"))
-
 import figma_client
 
 
