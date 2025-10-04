@@ -27,7 +27,7 @@ def test_main_uses_default_pricing_directory_for_empty_config(monkeypatch, tmp_p
     # Stub the CLI arguments consumed by ``main``.
     parsed_args = argparse.Namespace(config=str(config_dir), data=None)
 
-    def _fake_parse_args(self):  # pragma: no cover - exercised via main
+    def _fake_parse_args(self):  # pragma: no cover - test mock
         return parsed_args
 
     monkeypatch.setattr(argparse.ArgumentParser, "parse_args", _fake_parse_args)
