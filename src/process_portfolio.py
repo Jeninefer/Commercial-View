@@ -127,15 +127,9 @@ def main():
     configs = load_config(args.config)
     
     if not configs:
-        required_files = [
-            'column_maps.yml',
-            'pricing_config.yml',
-            'dpd_policy.yml',
-            'export_config.yml'
-        ]
         print(f"Error: No valid configuration files found in directory: '{args.config}'")
         print("Expected the following configuration files:")
-        for fname in required_files:
+        for fname in CONFIG_FILES:
             print(f"  - {fname}")
         print("Please ensure all required configuration files exist in the specified directory.")
         sys.exit(1)
