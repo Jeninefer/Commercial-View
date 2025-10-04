@@ -43,7 +43,7 @@ def _read_csv(filename: str, base_path: Optional[Union[str, Path]] = None) -> Da
     directory = _resolve_base_path(base_path)
     file_path = directory / filename
 
-    if not file_path.exists():
+    if not file_path.is_file():
         raise FileNotFoundError(
             "CSV file not found: "
             f"{file_path}. Configure the data directory using the "
