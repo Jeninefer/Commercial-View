@@ -91,15 +91,17 @@ def generate_sample_output(export_config: Dict[str, Any]) -> None:
     }
     
     # Write sample files
-    with open(f"{base_path}/dpd/dpd_analysis.json", 'w') as f:
+    dpd_json_path = export_paths.get('dpd_json', './abaco_runtime/exports/dpd/json')
+    with open(f"{dpd_json_path}/dpd_analysis.json", 'w') as f:
         json.dump(dpd_data, f, indent=2)
     
-    with open(f"{export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json')}/kpi_report.json", 'w') as f:
+    kpi_json_path = export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json')
+    with open(f"{kpi_json_path}/kpi_report.json", 'w') as f:
         json.dump(kpi_data, f, indent=2)
     
     print("Generated sample output files:")
-    print(f"  - {base_path}/dpd/dpd_analysis.json")
-    print(f"  - {export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json')}/kpi_report.json")
+    print(f"  - {dpd_json_path}/dpd_analysis.json")
+    print(f"  - {kpi_json_path}/kpi_report.json")
 
 
 def main():
