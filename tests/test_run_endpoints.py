@@ -197,10 +197,9 @@ def test_endpoints_return_serializable_payload(
 
 def test_missing_file_returns_not_found(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
     assert any(v is not None for v in payload[0].values()), "Expected at least one non-None value in the first record"
-        raise FileNotFoundError("missing file")
 
-    monkeypatch.setattr(run_module, "load_collateral", _raise_file_not_found)
-
+def test_missing_file_returns_not_found(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
+    raise FileNotFoundError("missing file")
     response = client.get("/collateral")
 
     assert response.status_code == 404
