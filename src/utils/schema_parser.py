@@ -17,8 +17,15 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 
-DEFAULT_SCHEMA_PATH = Path(__file__).resolve().parents[2] / "data" / "schema.json"
+def find_repo_root(start: Path = Path(__file__).resolve()) -> Path:
+    """Walk up from the start path to find the repository root, identified by 'pyproject.toml' or '.git'."""
+    for parent in [start] + list(start.parents):
+        if (parent / "pyproject.toml").is_file() or (parent / ".git").is_dir():
+            return parent
+    raise RuntimeError("Repository root not found (no 'pyproject.toml' or '.git' found in parent directories).")
 
+ROOT_DIR = find_repo_root()
+DEFAULT_SCHEMA_PATH = ROOT_DIR / "data" / "schema.json"
 
 def load_schema(json_path: str | Path) -> Dict[str, Any]:
     path = Path(json_path).expanduser().resolve()
