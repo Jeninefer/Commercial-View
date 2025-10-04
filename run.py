@@ -37,8 +37,8 @@ def get_loan_data():
     try:
         loan_df = load_loan_data()
         return dataframe_to_models(loan_df, LoanData)
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Loan data file not found. Please upload the CSV file to the data/pricing directory.")
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=f"Loan data file not found at '{getattr(exc, 'filename', str(exc))}'. Please upload the CSV file to the configured data directory.")
     except ValidationError as exc:
         raise HTTPException(status_code=500, detail=f"Failed to serialize loan data: {exc}")
 
