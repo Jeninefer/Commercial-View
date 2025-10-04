@@ -25,7 +25,7 @@ from src.figma_client import get_figma_file
 
 data_root = os.getenv("COMMERCIAL_VIEW_DATA_PATH")
 if data_root:
-    DATA_BASE_PATH = Path(data_root)
+    DATA_BASE_PATH = Path(data_root).expanduser().resolve()
 else:
     DATA_BASE_PATH = Path(__file__).resolve().parent / "data" / "pricing"
 
