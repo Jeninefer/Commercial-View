@@ -5,8 +5,9 @@ from unittest.mock import Mock
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT_DIR / "src"
-if str(SRC_DIR) not in sys.path:
-    sys.path.insert(0, str(SRC_DIR))
+resolved_src_dir = str(SRC_DIR.resolve())
+if resolved_src_dir not in [str(Path(p).resolve()) for p in sys.path]:
+    sys.path.insert(0, resolved_src_dir)
 
 sys.modules.setdefault("requests", types.SimpleNamespace(get=None))
 import figma_client
