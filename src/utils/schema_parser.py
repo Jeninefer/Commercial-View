@@ -46,7 +46,7 @@ def main() -> None:
         default=DEFAULT_SCHEMA_PATH,
         help=(
             "Path to the schema JSON file. Defaults to data/schema.json relative "
-            "to the project root."
+            "to the repository root."
         ),
     )
     args = parser.parse_args()
