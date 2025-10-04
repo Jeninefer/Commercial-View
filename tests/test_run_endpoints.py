@@ -68,7 +68,7 @@ def _historic_dataframe() -> pd.DataFrame:
         "TrueOtherPayment": pd.NA,
         "TrueTaxPayment": 0.0,
         "TrueFeeTaxPayment": 0.0,
-        "TrueRabates": 0,
+        "TrueRebates": 0,
         "TrueOutstandingLoanValue": 800.0,
         "TruePaymentStatus": "paid",
     }
