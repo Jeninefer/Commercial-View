@@ -47,8 +47,8 @@ def get_historic_real_payment():
     try:
         historic_df = load_historic_real_payment()
         return dataframe_to_models(historic_df, HistoricRealPayment)
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Historic real payment data file not found. Please upload the CSV file to the data/pricing directory.")
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=f"Historic real payment data file not found at '{exc.filename}'. Please upload the CSV file to the configured data directory.")
     except ValidationError as exc:
         raise HTTPException(status_code=500, detail=f"Failed to serialize historic real payment data: {exc}")
 
