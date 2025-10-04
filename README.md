@@ -45,6 +45,7 @@ Commercial-View is a comprehensive analytics platform that combines real-time KP
 - **Node.js 18+** (for dashboard frontend, if applicable)
 - **pip** (Python package manager)
 - **Git** for version control
+- **gdown** (for automated pricing data refresh; install with `pip install gdown`)
 
 ### Installation
 
@@ -73,6 +74,9 @@ python validators/schema_validator.py
 
 # View all pricing files
 ls -la data/pricing/
+
+# Refresh pricing data from the canonical Google Drive bundle
+python scripts/download_pricing_data.py
 
 # Start analytics processing
 # python src/process_portfolio.py --config config/
@@ -147,6 +151,27 @@ export_paths:
 - ⚠️ **Collateral** — missing (upload `Abaco - Loan Tape_Collateral_Table.csv`)
 
 Upload the missing CSV/XLSX files into `data/pricing/` so the Customer and Collateral endpoints can load successfully.
+
+### Refreshing Pricing Data Automatically
+
+To replace the contents of `data/pricing/` with the latest production bundle, use the new utility script:
+
+```bash
+# Ensure dependencies are installed first
+pip install -r requirements.txt
+
+# Download and populate the pricing directory
+python scripts/download_pricing_data.py
+```
+
+The script performs the following steps:
+
+1. Validates that the target directory is the repository's `data/pricing/` folder.
+2. Removes any existing files to prevent stale datasets from lingering.
+3. Downloads the CSV bundle from the Google Drive folder `1qIg_BnIf_IWYcWqCuvLaYU_Gu4C2-Dj8` using `gdown`.
+4. Extracts archives when present and copies each CSV into place using the filenames required by `src/data_loader.py`.
+
+Use `python scripts/download_pricing_data.py --help` for optional arguments (custom folder ID, alternate destination, or verbose logging).
 
 ## Pricing System
 
