@@ -30,7 +30,7 @@ def test_main_uses_default_pricing_directory_for_empty_config(monkeypatch, tmp_p
     def _fake_parse_args(self):  # pragma: no cover - test mock
         return parsed_args
 
-    monkeypatch.setattr(argparse.ArgumentParser, "parse_args", _fake_parse_args)
+    monkeypatch.setattr(process_portfolio.argparse.ArgumentParser, "parse_args", _fake_parse_args)
 
     loan_call = {}
 
