@@ -199,8 +199,9 @@ def test_missing_file_returns_not_found(client: TestClient, monkeypatch: pytest.
     assert any(v is not None for v in payload[0].values()), "Expected at least one non-None value in the first record"
 
 def test_missing_file_returns_not_found(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
-    raise FileNotFoundError("missing file")
+    def raise_fn():
+        raise FileNotFoundError("missing file")
+    monkeypatch.setattr(run_module, "load_collateral", raise_fn)
     response = client.get("/collateral")
-
     assert response.status_code == 404
     assert response.json()["detail"].startswith("Collateral data file not found")
