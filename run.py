@@ -62,7 +62,10 @@ def get_payment_schedule():
         df = load_payment_schedule(DATA_BASE_PATH)
         return df.to_dict(orient="records")
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Payment schedule data file not found. Please upload the CSV file to the data/pricing directory.")
+        raise HTTPException(
+            status_code=404,
+            detail=f"Payment schedule data file not found. Please upload the CSV file to the directory: {DATA_BASE_PATH}"
+        )
 
 @app.get("/customer-data", response_model=List[CustomerData])
 def get_customer_data():
