@@ -20,6 +20,9 @@ import pandas as pd
 from src.data_loader import (
     load_loan_data,
     load_customer_data,
+    load_historic_real_payment,
+    load_payment_schedule,
+    load_collateral
 )
 
 
@@ -61,6 +64,29 @@ def create_export_directories(export_config: Dict[str, Any]) -> None:
     for directory in directories:
         Path(directory).mkdir(parents=True, exist_ok=True)
         print(f"Created directory: {directory}")
+
+
+def calculate_risk_score(loan_df: pd.DataFrame) -> pd.Series:
+    """Calculate risk score for loans.
+    
+    Implementation strategy:
+    1. Use credit score + payment history
+    2. Integrate with external risk API
+    3. Apply machine learning model for risk prediction
+    
+    Args:
+        loan_df: DataFrame containing loan data
+        
+    Returns:
+        Series of risk scores (0.0 to 1.0)
+    """
+    # Placeholder implementation - returns median risk score
+    # TODO: Implement full risk scoring logic based on:
+    #   - Days in Default
+    #   - Loan Status
+    #   - Interest Rate APR
+    #   - Outstanding Loan Value
+    return pd.Series([0.5] * len(loan_df), index=loan_df.index)
 
 
 def main():
@@ -108,17 +134,18 @@ def main():
     print(f"Loaded {loan_data.shape[0]} rows and {loan_data.shape[1]} columns from loan_data.")
     print(f"Loaded {customer_data.shape[0]} rows and {customer_data.shape[1]} columns from customer_data.")
 
-    # TODO: Implement the rest of the processing logic
+    # Calculate risk scores
+    print("\nCalculating risk scores...")
+    risk_scores = calculate_risk_score(loan_data)
+    loan_data['risk_score'] = risk_scores
+    print(f"Risk scores calculated for {len(risk_scores)} loans")
 
-    print("\n✅ Processing completed successfully!")
-    print("\nNext steps:")
-    print("1. Check the generated files in ./abaco_runtime/exports/")
-    print("2. Customize the configuration files for your data")
-    print("3. Implement actual data processing logic in this script")
+    # Process data according to configuration
+    print("\nProcessing portfolio data...")
+    # TODO: Implement DPD bucketing based on dpd_policy config
+    # TODO: Implement KPI calculations
+    # TODO: Export results to configured locations
 
-
-if __name__ == '__main__':
-    main()
     print("\n✅ Processing completed successfully!")
     print("\nNext steps:")
     print("1. Check the generated files in ./abaco_runtime/exports/")

@@ -6,6 +6,32 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Set, Tuple
 from datetime import datetime
 from dataclasses import dataclass
+from typing import List, Dict, Any, Optional
+
+
+@dataclass
+class ColumnMetadata:
+    """Metadata for a column in a dataset."""
+
+    name: str
+    dtype: str
+    non_null: int
+    nulls: int
+    sample_values: List[Any]
+    coerced_dtype: Optional[str] = None
+
+    def __post_init__(self):
+        if self.sample_values is None:
+            self.sample_values = []
+
+
+@dataclass
+class ValidationError:
+    """Validation error information."""
+
+    message: str
+    column_name: Optional[str] = None
+    severity: str = "error"
 
 
 @dataclass
@@ -17,9 +43,9 @@ class ColumnInfo:
     coerced_dtype: Optional[str] = None
     nullable: bool = True
     unique_count: Optional[int] = None
-    sample_values: List[Any] = None
+    sample_values: List[Any]
     business_category: Optional[str] = None
-    validation_rules: Dict[str, Any] = None
+    validation_rules: Dict[str, Any]
 
     def __post_init__(self):
         if self.sample_values is None:
@@ -524,6 +550,149 @@ def export_schema_documentation(
 
     with open(output_file, "w", encoding="utf-8") as f:
         f.write("\n".join(doc_lines))
+
+
+def _parse_column_metadata(column_data: Dict[str, Any]) -> ColumnMetadata:
+    """Parse column metadata from JSON schema."""
+    return ColumnMetadata(
+        name=column_data.get("name", ""),
+        dtype=column_data.get("dtype", "string"),
+        non_null=column_data.get("non_null", 0),
+        nulls=column_data.get("nulls", 0),
+        sample_values=column_data.get("sample_values", []),
+        coerced_dtype=column_data.get("coerced_dtype"),
+    )
+
+
+def _determine_python_type(dtype: str, coerced_dtype: Optional[str]) -> str:
+    """Determine Python type from schema dtype."""
+    if coerced_dtype == "datetime":
+        return "date"
+
+    type_mapping = {
+        "string": "str",
+        "float": "float",
+        "int": "int",
+        "boolean": "bool",
+    }
+    return type_mapping.get(dtype, "str")
+
+
+def _generate_validators(column: ColumnMetadata) -> List[str]:
+    """Generate validator strings for a column."""
+    validators = []
+
+    # Add numeric validators
+    if column.dtype in ["float", "int"]:
+        # Most numeric fields should be non-negative
+        if "fee" in column.name.lower() or "amount" in column.name.lower():
+            validators.append("ge=0")
+
+    return validators
+
+
+def _build_field_string(
+    name: str,
+    python_type: str,
+    is_optional: bool,
+    validators: List[str],
+    description: str = "",
+) -> str:
+    """Build a Pydantic field string."""
+    type_str = f"Optional[{python_type}]" if is_optional else python_type
+    default = "None" if is_optional else "..."
+
+    validator_str = ", ".join(validators)
+    if validator_str:
+        validator_str += ", "
+
+    desc = description or f"Field {name}"
+
+    return f'{name}: {type_str} = Field({default}, {validator_str}description="{desc}")'
+
+
+def generate_pydantic_field(
+    column: ColumnMetadata,
+) -> str:
+    """Generate a single Pydantic field definition."""
+    python_type = _determine_python_type(column.dtype, column.coerced_dtype)
+    is_optional = column.nulls > 0
+    validators = _generate_validators(column)
+
+    # Build field definition
+    return _build_field_string(
+        name=column.name,
+        python_type=python_type,
+        is_optional=is_optional,
+        validators=validators,
+        description=f"{column.name} field",
+    )
+
+
+def _validate_column_types(columns: List[ColumnMetadata]) -> List[ValidationError]:
+    """Validate column type definitions."""
+    errors = []
+    for column in columns:
+        error = _validate_single_column(column)
+        if error:
+            errors.append(error)
+    return errors
+
+
+def _validate_single_column(column: ColumnMetadata) -> Optional[ValidationError]:
+    """Validate a single column's type definition."""
+    if not column.dtype:
+        return ValidationError(
+            message=f"Missing dtype for column {column.name}",
+            column_name=column.name,
+        )
+
+    if column.non_null + column.nulls == 0:
+        return ValidationError(
+            message=f"Invalid counts for column {column.name}",
+            column_name=column.name,
+        )
+
+    return None
+
+
+def validate_schema_consistency(
+    schema: Dict[str, Any]
+) -> List[ValidationError]:
+    """Validate schema consistency - refactored version."""
+    errors = []
+
+    # Validate datasets exist
+    if "datasets" not in schema:
+        errors.append(ValidationError(message="Missing 'datasets' key"))
+        return errors
+
+    # Validate each dataset
+    for dataset_name, dataset_data in schema["datasets"].items():
+        dataset_errors = _validate_dataset(dataset_name, dataset_data)
+        errors.extend(dataset_errors)
+
+    return errors
+
+
+def _validate_dataset(name: str, data: Dict[str, Any]) -> List[ValidationError]:
+    """Validate a single dataset."""
+    errors = []
+
+    if "columns" not in data:
+        errors.append(
+            ValidationError(
+                message=f"Missing 'columns' in dataset {name}",
+            )
+        )
+        return errors
+
+    # Convert column dicts to ColumnMetadata objects
+    columns = [_parse_column_metadata(col) for col in data["columns"]]
+    column_errors = _validate_column_types(columns)
+    errors.extend(column_errors)
+
+    return errors
 
 
 if __name__ == "__main__":

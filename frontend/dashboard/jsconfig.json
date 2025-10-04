@@ -2,10 +2,11 @@
     "compilerOptions": {
         "checkJs": false,
         "resolveJsonModule": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "target": "es2020",
         "module": "commonjs",
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "ignoreDeprecations": "6.0"
     },
     "exclude": [
         "node_modules",

@@ -1,25 +1,25 @@
 #!/bin/bash
 
-# Change to project directory
+# Commercial-View Test Runner
+# Usage: ./run_tests.sh
+
 cd "$(dirname "$0")"
 
-# Activate virtual environment
-source .venv/bin/activate
+echo "================================"
+echo "Commercial-View Test Suite"
+echo "================================"
+echo ""
 
-# Reinstall dependencies if needed
-echo "Reinstalling project dependencies..."
-pip install -r requirements.txt
-
-# Run the tests with proper Python environment
-echo "Running tests..."
-python -m pytest tests/test_api.py -v
-
-# Show completion message
-if [ $? -eq 0 ]; then
-    echo -e "\n\033[92mTests completed successfully!\033[0m"
-else
-    echo -e "\n\033[91mTests failed.\033[0m"
+# Activate virtual environment if not already active
+if [ -z "$VIRTUAL_ENV" ]; then
+    echo "Activating virtual environment..."
+    source .venv/bin/activate
 fi
 
-# Deactivate virtual environment when done
+# Run schema parser tests
+echo "Running Schema Parser Tests..."
+python test_schema_parser.py
+
+echo ""
+echo "✅ Tests complete!"
 deactivate

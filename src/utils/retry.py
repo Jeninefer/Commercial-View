@@ -290,8 +290,16 @@ class CommercialLendingRetry:
 default_retry = CommercialLendingRetry()
 
 
-def with_retry(call: Callable[..., T], *args: Any, **kwargs: Any) -> T:
-    """Legacy retry function with enhanced commercial lending support"""
+def with_retry(
+    config: Optional[RetryConfig] = None,
+    call: Callable[..., T] = None,
+    *args: Any,
+    **kwargs: Any
+) -> T:
+    """Decorator to add retry logic to a function."""
+    if config is None:
+        config = RetryConfig()  # Create default config instead of passing None
+
     # Extract operation type from function name or kwargs
     operation_type = kwargs.pop("operation_type", None)
 
@@ -417,7 +425,7 @@ if __name__ == "__main__":
         """Example risk assessment function with retry protection"""
         # Simulate rate limiting
         if random.random() < 0.2:
-            raise Exception("HTTP 429 Rate Limited")
+            raise ConnectionError("HTTP 429 Rate Limited")
         return {"risk_score": 720, "grade": "A", "pd": 0.02}
 
     # Demo the retry functionality

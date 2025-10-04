@@ -71,6 +71,9 @@ except ImportError as e:
 
 logger = logging.getLogger(__name__)
 
+# Column name constants
+TRUE_PAYMENT_DATE = "True Payment Date"
+
 
 class CommercialViewPipeline:
     """Enterprise-grade data pipeline for Abaco Commercial View."""
@@ -220,12 +223,12 @@ class CommercialViewPipeline:
             return pd.DataFrame()
 
         loan_data = self._datasets["loan_data"].copy()
-        payments = self._datasets["historic_real_payment"].copy()
-
-        try:
             # Convert dates
             loan_data["Disbursement Date"] = pd.to_datetime(
                 loan_data["Disbursement Date"]
+            )
+            payments[TRUE_PAYMENT_DATE] = pd.to_datetime(
+                payments[TRUE_PAYMENT_DATE]
             )
             payments["True Payment Date"] = pd.to_datetime(
                 payments["True Payment Date"]
@@ -240,18 +243,18 @@ class CommercialViewPipeline:
                     ["Loan ID", "Disbursement Amount", "cohort", "Disbursement Date"]
                 ],
                 on="Loan ID",
-                how="left",
-            )
-
             # Calculate months since disbursement
             recovery_data["months_since_disbursement"] = (
                 (
                     (
-                        recovery_data["True Payment Date"]
+                        recovery_data[TRUE_PAYMENT_DATE]
                         - recovery_data["Disbursement Date"]
                     ).dt.days
                     / 30.44
                 )
+                .round()
+                .astype("Int64")
+            )
                 .round()
                 .astype("Int64")
             )

@@ -13,15 +13,17 @@ from typing import Dict, Any, List, Optional
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 try:
-    from fastapi import FastAPI, HTTPException, Request
-    from fastapi.middleware.cors import CORSMiddleware
+    from fastapi import FastAPI, HTTPException
     from fastapi.responses import JSONResponse
+    from fastapi.middleware.cors import CORSMiddleware
     import uvicorn
     
     # Import application modules
-    from pipeline import CommercialViewPipeline
-    from data_loader import DataLoader
+    from src import pipeline
+    from src import data_loader
     
+    PIPELINE_AVAILABLE = True
+    DATA_LOADER_AVAILABLE = True
 except ImportError as e:
     print(f"❌ Import error: {e}")
     print("Please ensure all dependencies are installed: pip install -r requirements.txt")
@@ -62,6 +64,11 @@ except Exception as e:
     logger.error(f"❌ Failed to initialize application components: {e}")
     data_loader = None
     pipeline = None
+
+# Constants
+DATA_LOADER_NOT_AVAILABLE_MSG = "Data loader not available"
+CUSTOMER_ID_COL = "Customer ID"
+LOAN_ID_COL = "Loan ID"
 
 # Global exception handler
 @app.exception_handler(Exception)
@@ -167,31 +174,25 @@ async def get_portfolio_metrics() -> Dict[str, Any]:
         }
 
 # Loan data endpoint
-@app.get("/loan-data")
-async def get_loan_data() -> List[Dict[str, Any]]:
-    """
-    Get active commercial loan portfolio data
-    Returns real loan records from production sources
-    """
+@app.get("/api/loans")
+async def get_loans() -> JSONResponse:
+    """Get loan data."""
+    if not DATA_LOADER_AVAILABLE:
+        raise HTTPException(status_code=500, detail=DATA_LOADER_NOT_AVAILABLE_MSG)
+    
     try:
-        if not data_loader:
-            raise HTTPException(status_code=503, detail="Data loader not available")
+        loans_df = data_loader.load_loan_data()
         
-        # Load real loan data
-        loan_df = data_loader.load_loan_data()
+        # Convert DataFrame to dict
+        loans_data = loans_df.to_dict('records')
         
-        if loan_df is not None and not loan_df.empty:
-            # Convert to records format for API response
-            records = loan_df.to_dict('records')
-            logger.info(f"✅ Loaded {len(records)} loan records")
-            return records
-        else:
-            logger.warning("No loan data available")
-            return []
-            
+        return JSONResponse(content={
+            "status": "success",
+            "data": loans_data,
+            "count": len(loans_data)
+        })
     except Exception as e:
-        logger.error(f"Failed to load loan data: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to load loan data: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Payment schedule endpoint  
 @app.get("/payment-schedule")

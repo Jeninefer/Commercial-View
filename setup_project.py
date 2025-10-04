@@ -179,6 +179,15 @@ def run_app(port=8001):
     print(f"\nStarting app on port {port}...")
     run_command(["uvicorn", "run:app", "--reload", f"--port={port}"])
 
+def sanitize_filename(filename: str) -> str:
+    """Sanitize a filename by removing special characters."""
+    # Use str.replace for simple character replacements
+    sanitized = filename.replace(" ", "_")
+    sanitized = sanitized.replace("-", "_")
+    sanitized = sanitized.replace("(", "")
+    sanitized = sanitized.replace(")", "")
+    return sanitized.lower()
+
 def main():
     """Main function to run all setup steps."""
     print("="*80)

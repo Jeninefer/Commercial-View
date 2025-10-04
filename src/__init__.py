@@ -1,6 +1,6 @@
-"""
-Commercial-View package initialization
-Enterprise commercial lending analytics platform
+"""Commercial-View package initialization."""
+
+__version__ = "1.0.0"
 Production-ready with comprehensive feature set
 """
 
