@@ -43,7 +43,8 @@ def read_root():
 @app.get("/loan-data", response_model=List[LoanData])
 def get_loan_data():
     try:
-        return load_loan_data(DATA_BASE_PATH)
+        df = load_loan_data(DATA_BASE_PATH)
+        return df.to_dict(orient="records")
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Loan data file not found. Please upload the CSV file to the data/pricing directory.")
 
