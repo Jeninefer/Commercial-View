@@ -131,7 +131,10 @@ def sync_pricing_data(
         missing = [name for name in PRICING_FILENAMES.values() if name not in csv_sources]
         if missing:
             raise FileNotFoundError(
-                "The downloaded bundle is missing required files: " + ", ".join(missing)
+                "The downloaded bundle is missing required files: "
+                + ", ".join(missing)
+                + ". Found files: "
+                + ", ".join(sorted(csv_sources.keys()))
             )
 
         for logical_name, filename in PRICING_FILENAMES.items():
