@@ -66,7 +66,8 @@ def get_payment_schedule():
 @app.get("/customer-data", response_model=List[CustomerData])
 def get_customer_data():
     try:
-        return load_customer_data(DATA_BASE_PATH)
+        df = load_customer_data(DATA_BASE_PATH)
+        return df.to_dict(orient="records")
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Customer data file not found. Please upload the CSV file to the data/pricing directory.")
 
