@@ -75,7 +75,8 @@ def get_customer_data():
 @app.get("/collateral", response_model=List[Collateral])
 def get_collateral():
     try:
-        return load_collateral(DATA_BASE_PATH)
+        df = load_collateral(DATA_BASE_PATH)
+        return df.to_dict(orient="records")
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Collateral data file not found. Please upload the CSV file to the data/pricing directory.")
 
