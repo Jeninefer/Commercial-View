@@ -30,7 +30,10 @@ else
 fi
 
 # Push branch
-git push origin "$BRANCH_NAME"
-
-echo "Branch pushed. You can now create a PR from GitHub interface."
-echo "Branch name: $BRANCH_NAME"
+if git push origin "$BRANCH_NAME"; then
+    echo "Branch pushed. You can now create a PR from GitHub interface."
+    echo "Branch name: $BRANCH_NAME"
+else
+    echo "Error: Failed to push branch to origin. Please check the error above." >&2
+    exit 1
+fi
