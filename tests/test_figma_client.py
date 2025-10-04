@@ -5,10 +5,6 @@ from typing import Any, Dict
 
 import pytest
 
-PROJECT_ROOT = pathlib.Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
 from src.figma_client import FIGMA_API_BASE_URL, get_figma_file
 
 
