@@ -23,12 +23,11 @@ from src.models import (
 from src.figma_client import get_figma_file
 
 
-DATA_BASE_PATH = Path(
-    os.getenv(
-        "COMMERCIAL_VIEW_DATA_PATH",
-        Path(__file__).resolve().parent / "data" / "pricing",
-    )
-)
+data_root = os.getenv("COMMERCIAL_VIEW_DATA_PATH")
+if data_root:
+    DATA_BASE_PATH = Path(data_root)
+else:
+    DATA_BASE_PATH = Path(__file__).resolve().parent / "data" / "pricing"
 
 app = FastAPI(
     title="Commercial View API",
