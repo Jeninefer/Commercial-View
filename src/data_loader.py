@@ -23,7 +23,7 @@ _CONFIG_KEY_MAP = {
     "historic_real_payment": "historic_real_payment_csv",
     "payment_schedule": "payment_schedule_csv",
     "customer_data": "customer_data_csv",
-    # No dedicated config entry exists for collateral; fall back to default filename.
+    # 'collateral' is not mapped to a config key and will always use the default filename, regardless of config.
 }
 
 _DEFAULT_PRICING_FILENAMES = {
