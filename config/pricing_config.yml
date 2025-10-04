@@ -1,6 +1,9 @@
 # Pricing Configuration
 # Defines pricing grid paths and interval bands for range-based features
 
+# Base directory for pricing source data (can be overridden per environment)
+pricing_data_path: "./data/pricing"
+
 # Pricing file paths
 pricing_files:
   # Main pricing CSV path
