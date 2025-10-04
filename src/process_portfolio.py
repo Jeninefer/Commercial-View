@@ -51,8 +51,8 @@ def create_export_directories(export_config: Dict[str, Any]) -> None:
         export_paths.get('base_path', './abaco_runtime/exports'),
         export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json'),
         export_paths.get('kpi_csv', './abaco_runtime/exports/kpi/csv'),
-        './abaco_runtime/exports/dpd',
-        './abaco_runtime/exports/buckets'
+        export_paths.get('dpd_json', './abaco_runtime/exports/dpd'),
+        export_paths.get('buckets', './abaco_runtime/exports/buckets')
     ]
     
     for directory in directories:
