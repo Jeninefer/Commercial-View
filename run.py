@@ -60,7 +60,7 @@ def get_payment_schedule():
     except FileNotFoundError as exc:
         raise HTTPException(
             status_code=404,
-            detail=f"Payment schedule data file not found at '{getattr(exc, 'filename', str(exc))}'. Please upload the CSV file to the data/pricing directory."
+            detail=f"Payment schedule data file not found at '{getattr(exc, 'filename', str(exc))}'. Please upload the CSV file to the configured data directory."
         )
     except ValidationError as exc:
         raise HTTPException(status_code=500, detail=f"Failed to serialize payment schedule data: {exc}")
