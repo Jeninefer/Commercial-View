@@ -58,7 +58,7 @@ def _load_pricing_filenames() -> Dict[str, str]:
             candidate = pricing_files.get(config_key)
 
         if candidate and isinstance(candidate, (str, os.PathLike)):
-            resolved[key] = Path(candidate).name
+            resolved[key] = str(candidate)
         else:
             resolved[key] = default_filename
 
