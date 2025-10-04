@@ -99,11 +99,11 @@ def main():
     
     # Load data
     print("\nLoading data...")
-    default_data_dir = Path(
-        os.getenv(
-            'COMMERCIAL_VIEW_DATA_PATH',
-            Path(__file__).resolve().parents[1] / 'data' / 'pricing',
-        )
+    env = os.getenv('COMMERCIAL_VIEW_DATA_PATH')
+    default_data_dir = (
+        Path(env).expanduser().resolve()
+        if env
+        else (Path(__file__).resolve().parents[1] / 'data' / 'pricing')
     )
     base_data_dir = Path(args.data_dir) if args.data_dir else default_data_dir
 
