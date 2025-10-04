@@ -99,20 +99,19 @@ def main():
     
     # Load data
     print("\nLoading data...")
-    env = os.getenv('COMMERCIAL_VIEW_DATA_PATH')
-    default_data_dir = (
-        Path(env).expanduser().resolve()
-        if env
-        else (Path(__file__).resolve().parents[1] / 'data' / 'pricing')
-    )
-    base_data_dir = Path(args.data_dir) if args.data_dir else default_data_dir
-
-    loan_data = load_loan_data(base_data_dir)
-    customer_data = load_customer_data(base_data_dir)
-    # historic_real_payment = load_historic_real_payment(base_data_dir)
-    # payment_schedule = load_payment_schedule(base_data_dir)
-    # collateral = load_collateral(base_data_dir)
-
+    # Only pass base_path if CLI override is provided; otherwise, let loaders resolve internally
+    if args.data_dir:
+        loan_data = load_loan_data(args.data_dir)
+        customer_data = load_customer_data(args.data_dir)
+        # historic_real_payment = load_historic_real_payment(args.data_dir)
+        # payment_schedule = load_payment_schedule(args.data_dir)
+        # collateral = load_collateral(args.data_dir)
+    else:
+        loan_data = load_loan_data()
+        customer_data = load_customer_data()
+        # historic_real_payment = load_historic_real_payment()
+        # payment_schedule = load_payment_schedule()
+        # collateral = load_collateral()
     print(f"Loaded {loan_data.shape[0]} rows and {loan_data.shape[1]} columns from loan_data.")
     print(f"Loaded {customer_data.shape[0]} rows and {customer_data.shape[1]} columns from customer_data.")
 
