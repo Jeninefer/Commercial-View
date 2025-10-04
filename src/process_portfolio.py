@@ -11,6 +11,7 @@ import os
 import sys
 from pathlib import Path
 from typing import Dict, Any
+
 import yaml
 import json
 from datetime import datetime
@@ -70,7 +71,15 @@ def main():
     parser = argparse.ArgumentParser(description='Process commercial lending portfolio')
     parser.add_argument('--config', required=True, help='Configuration directory path')
     parser.add_argument('--data', help='Input data file path (optional for demo)')
-    
+    parser.add_argument(
+        '--data-dir',
+        help=(
+            'Base directory containing the pricing CSV files. '
+            'Defaults to the COMMERCIAL_VIEW_DATA_PATH environment variable or '
+            'the repository data/pricing directory.'
+        ),
+    )
+
     args = parser.parse_args()
     
     print("Commercial-View Portfolio Processing")
@@ -90,11 +99,19 @@ def main():
     
     # Load data
     print("\nLoading data...")
-    loan_data = load_loan_data()
-    customer_data = load_customer_data()
-    # historic_real_payment = load_historic_real_payment()
-    # payment_schedule = load_payment_schedule()
-    # collateral = load_collateral()
+    default_data_dir = Path(
+        os.getenv(
+            'COMMERCIAL_VIEW_DATA_PATH',
+            Path(__file__).resolve().parents[1] / 'data' / 'pricing',
+        )
+    )
+    base_data_dir = Path(args.data_dir) if args.data_dir else default_data_dir
+
+    loan_data = load_loan_data(base_data_dir)
+    customer_data = load_customer_data(base_data_dir)
+    # historic_real_payment = load_historic_real_payment(base_data_dir)
+    # payment_schedule = load_payment_schedule(base_data_dir)
+    # collateral = load_collateral(base_data_dir)
 
     print(f"Loaded {loan_data.shape[0]} rows and {loan_data.shape[1]} columns from loan_data.")
     print(f"Loaded {customer_data.shape[0]} rows and {customer_data.shape[1]} columns from customer_data.")

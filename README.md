@@ -81,6 +81,25 @@ ls -la data/pricing/
 ls -la abaco_runtime/exports/
 ```
 
+### Configuring the Data Directory
+
+The analytics loaders read CSV files from the `data/pricing/` directory by default. To point the application to a different data
+source (e.g., in a production or staging environment), set the `COMMERCIAL_VIEW_DATA_PATH` environment variable or provide the `--
+data-dir` option when running the portfolio processor:
+
+```bash
+# Use a custom directory for all loader functions
+export COMMERCIAL_VIEW_DATA_PATH=/mnt/shared/pricing-data
+
+# Or override per run of the CLI processor
+python src/process_portfolio.py \
+  --config config/ \
+  --data-dir /mnt/shared/pricing-data
+```
+
+Both approaches ensure that `src/data_loader.py` resolves the correct base path and will raise a descriptive error if any of the e
+xpected CSV files are missing.
+
 ## Configuration
 
 ### Configuration Files
