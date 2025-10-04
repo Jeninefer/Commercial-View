@@ -81,7 +81,10 @@ def get_collateral():
         df = load_collateral(DATA_BASE_PATH)
         return df.to_dict(orient="records")
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Collateral data file not found. Please upload the CSV file to the data/pricing directory.")
+        raise HTTPException(
+            status_code=404,
+            detail=f"Collateral data file not found. Please upload the CSV file to the directory: {DATA_BASE_PATH}"
+        )
 
 # Figma endpoint
 @app.get("/figma-file/{file_key}", response_model=Dict[str, Any])
