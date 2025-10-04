@@ -37,8 +37,7 @@ def load_config(config_dir: str) -> Dict[str, Any]:
         else:
             print(
                 f"Warning: Configuration file '{config_file}' not found at '{config_path}'.\n"
-                f"Please ensure this file exists in the configuration directory ('{config_dir}'),\n"
-                "or create it based on the sample templates provided."
+                f"Please ensure this file exists in the configuration directory ('{config_dir}'), "
             )
     
     return configs
