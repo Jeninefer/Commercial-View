@@ -9,10 +9,6 @@ PROJECT_ROOT = pathlib.Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-requests_stub = types.ModuleType("requests")
-requests_stub.get = lambda *_, **__: None
-sys.modules.setdefault("requests", requests_stub)
-
 from src.figma_client import FIGMA_API_BASE_URL, get_figma_file
 
 
