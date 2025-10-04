@@ -16,11 +16,11 @@ _REPO_ROOT = Path(__file__).resolve().parents[1]
 _DEFAULT_DATA_PATH = _REPO_ROOT / "data" / "pricing"
 
 PRICING_FILENAMES = {
-    "loan_data": "Abaco - Loan Tape_Loan Data_Table.csv",
-    "historic_real_payment": "Abaco - Loan Tape_Historic Real Payment_Table.csv",
-    "payment_schedule": "Abaco - Loan Tape_Payment Schedule_Table.csv",
-    "customer_data": "Abaco - Loan Tape_Customer Data_Table.csv",
-    "collateral": "Abaco - Loan Tape_Collateral_Table.csv",
+    "loan_data": "main_pricing.csv",
+    "historic_real_payment": "commercial_loans_pricing.csv",
+    "payment_schedule": "retail_loans_pricing.csv",
+    "customer_data": "risk_based_pricing.csv",
+    "collateral": "risk_based_pricing_enhanced.csv",
 }
 
 
