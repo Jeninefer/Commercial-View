@@ -65,8 +65,19 @@ def load_loan_data(base_path: Optional[Union[str, Path]] = None) -> DataFrame:
     """Load the loan data CSV file."""
     return _read_csv("Abaco - Loan Tape_Loan Data_Table.csv", base_path)
 
+    """
+    Load the loan data CSV file as a pandas DataFrame.
 
-def load_historic_real_payment(base_path: Optional[Union[str, Path]] = None) -> DataFrame:
+    Args:
+        base_path (Optional[Union[str, Path]], optional): The base directory to look for the file.
+            If None, uses the COMMERCIAL_VIEW_DATA_PATH environment variable or the default path.
+
+    Returns:
+        DataFrame: The contents of the loan data CSV file.
+
+    Raises:
+        FileNotFoundError: If the resolved CSV file does not exist.
+    """
     """Load the historic real payment CSV file."""
     return _read_csv("Abaco - Loan Tape_Historic Real Payment_Table.csv", base_path)
 
