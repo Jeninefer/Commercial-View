@@ -67,6 +67,19 @@ def client(app):
 
 # Centralized function to get model fields for Pydantic v1/v2 compatibility
 def get_model_fields(model_cls):
+    """
+    Retrieve the set of field names from a Pydantic model class, supporting both Pydantic v1 and v2.
+
+    Parameters:
+        model_cls: The Pydantic model class to inspect.
+
+    Returns:
+        Set[str]: A set containing the names of the model's fields.
+
+    Notes:
+        - For Pydantic v2, uses the 'model_fields' attribute.
+        - For Pydantic v1, uses the '__fields__' attribute.
+    """
     if hasattr(model_cls, "model_fields"):
         return set(model_cls.model_fields.keys())  # Pydantic v2
     return set(model_cls.__fields__.keys())  # Pydantic v1
