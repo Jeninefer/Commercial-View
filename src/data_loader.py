@@ -28,14 +28,11 @@ def _resolve_base_path(base_path: Optional[Union[str, Path]] = None) -> Path:
     Returns:
         Path: The resolved base directory containing the source CSV files.
     """
-
     if base_path is not None:
         return Path(base_path)
-
     env_value = os.getenv(ENV_VAR_NAME)
     if env_value:
         return Path(env_value)
-
     return DEFAULT_BASE_PATH
 
 
