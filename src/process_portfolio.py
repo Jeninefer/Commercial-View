@@ -34,7 +34,7 @@ def load_config(config_dir: str) -> Dict[str, Any]:
                 config_name = config_file.replace('.yml', '')
                 configs[config_name] = yaml.safe_load(f)
         else:
-            print(f"Warning: Configuration file {config_file} not found")
+            print(f"Warning: Configuration file {config_path} not found")
     
     return configs
 
