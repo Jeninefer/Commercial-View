@@ -63,7 +63,7 @@ if git push origin "$BRANCH_NAME" 2>/dev/null; then
 else
     echo "⚠️  Push may have failed due to workflow files"
     echo "Trying to push without workflow files..."
-    git push origin "$BRANCH_NAME" 2>&1 || echo "Manual push needed"
+    git push origin "$BRANCH_NAME" 2>&1 || echo "❌ Push failed. Please check for errors above, resolve any issues (such as authentication or workflow file problems), and manually push your branch with: git push origin \"$BRANCH_NAME\""
 fi
 
 echo "Branch name: $BRANCH_NAME"
