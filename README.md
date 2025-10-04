@@ -1,22 +1,5 @@
 # Commercial-View
-<<<<<<< HEAD
 
-A comprehensive dashboard for monitoring and analyzing principal Key Performance Indicators (KPIs) in commercial operations.
-
-## Description
-
-Commercial-View provides real-time insights into business performance metrics, enabling data-driven decision making through intuitive visualizations and analytics.
-
-## Features
-
-- 📊 Real-time KPI monitoring
-- 📈 Interactive data visualizations
-- 🎯 Performance tracking
-- 📱 Responsive design
-- 🔍 Advanced filtering and search
-
-## Installation
-=======
 Principal KPI Analytics System for Commercial Lending
 
 ## Overview
@@ -28,16 +11,6 @@ Commercial-View is a comprehensive analytics system for commercial lending portf
 - **Pricing Management**: Configurable pricing grids with interval bands
 - **Data Export**: Export analytics results in multiple formats (JSON, CSV, Parquet)
 
-## Table of Contents
-
-- [Quick Start](#quick-start)
-- [Configuration](#configuration)
-- [Documentation](#documentation)
-- [Development](#development)
-- [CI/CD](#cicd)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Quick Start
 
 ### Prerequisites
@@ -47,74 +20,20 @@ Commercial-View is a comprehensive analytics system for commercial lending portf
 - Git
 
 ### Installation
->>>>>>> pr-50
 
 ```bash
 # Clone the repository
 git clone https://github.com/Jeninefer/Commercial-View.git
-<<<<<<< HEAD
-
-# Navigate to project directory
 cd Commercial-View
 
-# Install dependencies
-npm install
-```
-
-## Usage
-
-```bash
-# Start development server
-npm start
-
-# Build for production
-npm run build
-
-# Run tests
-npm test
-```
-
-## Project Structure
-
-```
-Commercial-View/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   └── utils/
-├── public/
-├── tests/
-└── docs/
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/new-feature`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
-4. Push to the branch (`git push origin feature/new-feature`)
-5. Create a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-For questions or support, please open an issue on GitHub.
-=======
-cd Commercial-View
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On bash/zsh
+# source .venv/bin/activate.csh  # On csh/tcsh
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Install development dependencies (optional)
-pip install -r requirements-dev.txt
-
-# Install pre-commit hooks (optional, for contributors)
-pip install pre-commit
-pre-commit install
+pip install -r requirements-dev.txt  # Optional for development
 ```
 
 ### Running the System
@@ -123,11 +42,29 @@ pre-commit install
 # Validate configuration files
 python validators/schema_validator.py
 
-# Process portfolio data (placeholder - implement your processing script)
-# python src/process_portfolio.py --config config/
+# Process portfolio data
+python src/process_portfolio.py --config config/
 
-# View exports
+# View generated exports
 ls -la abaco_runtime/exports/
+```
+
+### Quick Verification
+
+After installation, verify the system is ready:
+
+```bash
+# Check Python version (should be 3.8+)
+python --version
+
+# Verify required packages are installed
+pip list | grep -E "(pandas|pyyaml|numpy)"
+
+# Test configuration validation
+python validators/schema_validator.py
+
+# Check if export directories exist
+mkdir -p abaco_runtime/exports/kpi/{json,csv}
 ```
 
 ## Configuration
@@ -447,4 +384,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 **Version**: 1.0.0  
 **Last Updated**: 2024-12-03  
 **Maintainer**: Jeninefer
->>>>>>> pr-50
