@@ -71,7 +71,7 @@ def get_customer_data():
         customer_df = load_customer_data()
         return dataframe_to_models(customer_df, CustomerData)
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Customer data file not found. Please upload the CSV file to the data/pricing directory.")
+        raise HTTPException(status_code=404, detail="Customer data file not found. Please upload the CSV file to the configured data directory.")
     except ValidationError as exc:
         raise HTTPException(status_code=500, detail=f"Failed to serialize customer data: {exc}")
 
