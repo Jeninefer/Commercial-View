@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import List, Optional, Type, TypeVar, Union
 
 import pandas as pd
 from pandas import DataFrame
+from pydantic import BaseModel
 
 PathLike = Union[str, os.PathLike[str]]
 
@@ -72,6 +73,33 @@ def _load_csv(filename: str, base_path: Optional[PathLike] = None) -> DataFrame:
     return pd.read_csv(file_path)
 
 
+TModel = TypeVar("TModel", bound=BaseModel)
+
+
+def dataframe_to_models(dataframe: DataFrame, model: Type[TModel]) -> List[TModel]:
+    """Convert a :class:`~pandas.DataFrame` to a list of Pydantic model instances.
+
+    The helper ensures that any values not serialisable by FastAPI—such as
+    ``numpy`` scalar types or ``NaN``—are converted to native Python objects and
+    ``None`` respectively before instantiating the models. This centralises the
+    schema alignment between the raw CSV data and the API response models.
+    """
+
+    if dataframe.empty:
+        return []
+
+    records = dataframe.to_dict(orient="records")
+    sanitised_records = [
+        {
+            key: (None if pd.isna(value) else value)
+            for key, value in record.items()
+        }
+        for record in records
+    ]
+
+    return [model(**record) for record in sanitised_records]
+
+
 def load_loan_data(base_path: Optional[PathLike] = None) -> DataFrame:
     """Load the loan data CSV."""
 
@@ -104,6 +132,7 @@ def load_collateral(base_path: Optional[PathLike] = None) -> DataFrame:
 
 __all__ = [
     "PRICING_FILENAMES",
+    "dataframe_to_models",
     "load_loan_data",
     "load_historic_real_payment",
     "load_payment_schedule",
