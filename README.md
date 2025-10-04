@@ -1,4 +1,5 @@
 # Commercial-View
+
 Principal KPI Analytics System for Commercial Lending
 
 ## Overview
@@ -137,6 +138,16 @@ export_paths:
   kpi_csv: "./abaco_runtime/exports/kpi/csv"
 ```
 
+### Dataset Status
+
+- ✅ **Loan Data** — `/mnt/data/Abaco - Loan Tape_Loan Data_Table.csv` (16,205 rows)
+- ✅ **Historic Real Payment** — `/mnt/data/Abaco - Loan Tape_Historic Real Payment_Table.csv` (16,443 rows)
+- ✅ **Payment Schedule** — `/mnt/data/Abaco - Loan Tape_Payment Schedule_Table.csv` (16,205 rows)
+- ⚠️ **Customer Data** — missing (upload `Abaco - Loan Tape_Customer Data_Table.csv`)
+- ⚠️ **Collateral** — missing (upload `Abaco - Loan Tape_Collateral_Table.csv`)
+
+Upload the missing CSV/XLSX files into `data/pricing/` so the Customer and Collateral endpoints can load successfully.
+
 ## Pricing System
 
 Your Commercial-View system includes a sophisticated 4-tier risk-based pricing model:
@@ -184,7 +195,8 @@ open risk_based_pricing.csv
 
 ### Project Structure
 
-```
+```text
+
 Commercial-View/
 ├── config/                      # YAML configuration system
 │   ├── dpd_policy.yml          # ✅ 7-tier DPD classification
@@ -206,6 +218,7 @@ Commercial-View/
 ### Usage Options
 
 #### Analytics Backend (Python)
+
 ```bash
 # Validate configuration
 python validators/schema_validator.py
@@ -218,6 +231,7 @@ python validators/schema_validator.py
 ```
 
 #### Dashboard Frontend (TypeScript/React)
+
 ```bash
 # Start development server
 npm start
@@ -279,6 +293,10 @@ git tag -a v1.2.0 -m "Release version 1.2.0"
 git push origin main --tags
 ```
 
+## Documentation
+
+Commercial-View ships with detailed references in the [`docs/`](docs/) directory covering performance SLOs, security constraints, versioning, and other operational guides.
+
 ## Performance and Scalability
 
 The system is designed to handle portfolios of various sizes:
@@ -307,6 +325,7 @@ See [Security Constraints](docs/security_constraints.md) for complete security g
 ### Compliance
 
 The system supports compliance with:
+
 - GDPR (General Data Protection Regulation)
 - SOX (Sarbanes-Oxley Act)
 - PCI DSS (Payment Card Industry Data Security Standard)
@@ -335,8 +354,6 @@ The system supports compliance with:
 - Keep commits focused and atomic
 
 ### Pre-commit Hooks
-
-The project uses pre-commit hooks to ensure code quality:
 
 ```bash
 # Install pre-commit
@@ -391,60 +408,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 **Version**: 1.0.0  
 **Last Updated**: 2024-12-03  
 **Maintainer**: Jeninefer
-
-*Transformed from simple "Principal KPI" to sophisticated commercial lending analytics platform* 🚀
-- Update documentation as needed
-- Keep commits focused and atomic
-
-### Pre-commit Hooks
-
-The project uses pre-commit hooks to ensure code quality:
-
-```bash
-# Install pre-commit
-pip install pre-commit
-pre-commit install
-
-# Run manually
-pre-commit run --all-files
-```
-
-## Checklist for Production Deployment
-
-Before deploying to production, ensure you have:
-
-- [ ] **Column mappings** configured for your dataset (`config/column_maps.yml`)
-- [ ] **Pricing files** created and paths configured (`config/pricing_config.yml`, `data/pricing/`)
-- [ ] **DPD policy** reviewed and threshold set (90, 120, or 180 days in `config/dpd_policy.yml`)
-- [ ] **Export paths** configured (`config/export_config.yml`)
-- [ ] **Performance settings** tuned for your portfolio size (`docs/performance_slos.md`)
-- [ ] **Security controls** reviewed and PII masking enabled (`docs/security_constraints.md`)
-- [ ] **Versioning workflow** established (`docs/versioning.md`)
-- [ ] **CI/CD pipeline** configured (`.github/workflows/ci.yml`)
-- [ ] **Configuration validation** passes (`python validators/schema_validator.py`)
-- [ ] **Tests** pass (if implemented)
-
-## Support and Contact
-
-For issues, questions, or contributions:
-
-- **Issues**: [GitHub Issues](https://github.com/Jeninefer/Commercial-View/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Jeninefer/Commercial-View/discussions)
-- **Email**: Contact repository maintainer
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Built for commercial lending analytics
-- Designed for scalability and compliance
-- Community-driven development
-
----
-
-**Version**: 1.0.0  
-**Last Updated**: 2024-12-03  
-**Maintainer**: Jeninefer
->>>>>>> pr-50
