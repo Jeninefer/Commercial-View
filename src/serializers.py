@@ -25,12 +25,13 @@ def _coerce_value(value):
 def dataframe_to_models(df: DataFrame, model: Type[ModelT]) -> List[ModelT]:
     records = df.to_dict(orient="records")
     normalized_records = _normalize_records(records)
+    if hasattr(model, "model_validate"):
+        validate = model.model_validate  # type: ignore[attr-defined]
+    else:
+        validate = model.parse_obj  # type: ignore[attr-defined]
     instances: List[ModelT] = []
     for record in normalized_records:
-        if hasattr(model, "model_validate"):
-            instances.append(model.model_validate(record))  # type: ignore[attr-defined]
-        else:
-            instances.append(model.parse_obj(record))  # type: ignore[attr-defined]
+        instances.append(validate(record))
     return instances
 
 
