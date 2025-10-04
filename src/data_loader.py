@@ -63,29 +63,24 @@ def _read_csv(filename: str, base_path: Optional[Union[str, Path]] = None) -> Da
 
 def load_loan_data(base_path: Optional[Union[str, Path]] = None) -> DataFrame:
     """Load the loan data CSV file."""
-
     return _read_csv("Abaco - Loan Tape_Loan Data_Table.csv", base_path)
 
 
 def load_historic_real_payment(base_path: Optional[Union[str, Path]] = None) -> DataFrame:
     """Load the historic real payment CSV file."""
-
     return _read_csv("Abaco - Loan Tape_Historic Real Payment_Table.csv", base_path)
 
 
 def load_payment_schedule(base_path: Optional[Union[str, Path]] = None) -> DataFrame:
     """Load the payment schedule CSV file."""
-
     return _read_csv("Abaco - Loan Tape_Payment Schedule_Table.csv", base_path)
 
 
 def load_customer_data(base_path: Optional[Union[str, Path]] = None) -> DataFrame:
     """Load the customer data CSV file."""
-
     return _read_csv("Abaco - Loan Tape_Customer Data_Table.csv", base_path)
 
 
 def load_collateral(base_path: Optional[Union[str, Path]] = None) -> DataFrame:
     """Load the collateral CSV file."""
-
     return _read_csv("Abaco - Loan Tape_Collateral_Table.csv", base_path)
