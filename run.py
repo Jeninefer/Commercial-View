@@ -70,7 +70,10 @@ def get_customer_data():
         df = load_customer_data(DATA_BASE_PATH)
         return df.to_dict(orient="records")
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Customer data file not found. Please upload the CSV file to the data/pricing directory.")
+        raise HTTPException(
+            status_code=404,
+            detail=f"Customer data file not found. Please upload the CSV file to the directory: {DATA_BASE_PATH}"
+        )
 
 @app.get("/collateral", response_model=List[Collateral])
 def get_collateral():
