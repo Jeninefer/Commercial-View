@@ -1,9 +1,22 @@
 #!/bin/bash
+set -e
+set -u
 
 # Create a new branch for finalizing the system
 echo "Creating new branch for system finalization..."
 
-# Make sure we're on main and up to date
+# Verify prerequisites
+if ! git remote get-url origin &>/dev/null; then
+    echo "Error: 'origin' remote not configured"
+    exit 1
+fi
+
+if ! git show-ref --verify --quiet refs/heads/main; then
+    echo "Error: 'main' branch does not exist"
+    exit 1
+fi
+
+# Sync with main branch
 git checkout main
 git pull origin main
 
@@ -27,44 +40,36 @@ if [ -d ".github/workflows" ]; then
     git reset HEAD .github/workflows 2>/dev/null
 fi
 
-# Check if there are changes to commit
+# Check for staged changes
 if git diff --staged --quiet; then
-    echo "No changes to commit - system is already finalized"
+    echo "No changes to commit"
+    git checkout main
+    git branch -D "$BRANCH_NAME"
+    exit 0
 else
-    git commit -m "System ready for production
+    # Check if there are changes to commit
+    if git diff --staged --quiet; then
+        echo "No changes to commit - system is already finalized"
+    else
+        git commit -m "System ready for production
 
-    ✅ Core Features Working:
-    - Configuration validation: All tests pass
-    - Processing pipeline: Fully operational
-    - Export generation: Sample files created
-    - Directory structure: Properly organized
-    
-    ✅ Dependencies:
-    - Python virtual environment: Configured
-    - Required packages: Installed and working
-    - Development tools: Ready
-    
-    ✅ Ready for Production Use:
-    - Can process portfolio data
-    - Generates KPI reports
-    - Creates export files
-    - Validates configurations"
-fi
-
-# Try to push branch with upstream tracking
-echo "Pushing branch..."
-if git push --set-upstream origin "$BRANCH_NAME" 2>/dev/null; then
-    echo "✅ Branch pushed successfully!"
-    echo "🔗 Create PR at: https://github.com/Jeninefer/Commercial-View/pull/new/$BRANCH_NAME"
-    echo "Note: Tracking set up for future pushes"
-else
-    echo "❌ Push failed. Please check for errors above, resolve any issues (such as authentication or workflow file problems), and manually push your branch with: git push --set-upstream origin \"$BRANCH_NAME\""
-fi
-
-echo "Branch name: $BRANCH_NAME"
-    - Generates KPI reports
-    - Creates export files
-    - Validates configurations"
+        ✅ Core Features Working:
+        - Configuration validation: All tests pass
+        - Processing pipeline: Fully operational
+        - Export generation: Sample files created
+        - Directory structure: Properly organized
+        
+        ✅ Dependencies:
+        - Python virtual environment: Configured
+        - Required packages: Installed and working
+        - Development tools: Ready
+        
+        ✅ Ready for Production Use:
+        - Can process portfolio data
+        - Generates KPI reports
+        - Creates export files
+        - Validates configurations"
+    fi
 fi
 
 # Try to push branch
@@ -79,11 +84,6 @@ else
 fi
 
 echo "Branch name: $BRANCH_NAME"
-else
-    echo "⚠️  Push may have failed due to workflow files"
-    echo "Trying to push without workflow files..."
-    PUSH_FAIL_MSG="❌ Push failed. Please check for errors above, resolve any issues (such as authentication or workflow file problems), and manually push your branch with: git push origin \"$BRANCH_NAME\""
-    git push origin "$BRANCH_NAME" 2>&1 || echo "$PUSH_FAIL_MSG"
 fi
 
 echo "Branch name: $BRANCH_NAME"
