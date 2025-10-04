@@ -1,4 +1,5 @@
 # Commercial-View
+
 Principal KPI Analytics System for Commercial Lending
 
 ## Overview
@@ -391,60 +392,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 **Version**: 1.0.0  
 **Last Updated**: 2024-12-03  
 **Maintainer**: Jeninefer
-
-*Transformed from simple "Principal KPI" to sophisticated commercial lending analytics platform* 🚀
-- Update documentation as needed
-- Keep commits focused and atomic
-
-### Pre-commit Hooks
-
-The project uses pre-commit hooks to ensure code quality:
-
-```bash
-# Install pre-commit
-pip install pre-commit
-pre-commit install
-
-# Run manually
-pre-commit run --all-files
-```
-
-## Checklist for Production Deployment
-
-Before deploying to production, ensure you have:
-
-- [ ] **Column mappings** configured for your dataset (`config/column_maps.yml`)
-- [ ] **Pricing files** created and paths configured (`config/pricing_config.yml`, `data/pricing/`)
-- [ ] **DPD policy** reviewed and threshold set (90, 120, or 180 days in `config/dpd_policy.yml`)
-- [ ] **Export paths** configured (`config/export_config.yml`)
-- [ ] **Performance settings** tuned for your portfolio size (`docs/performance_slos.md`)
-- [ ] **Security controls** reviewed and PII masking enabled (`docs/security_constraints.md`)
-- [ ] **Versioning workflow** established (`docs/versioning.md`)
-- [ ] **CI/CD pipeline** configured (`.github/workflows/ci.yml`)
-- [ ] **Configuration validation** passes (`python validators/schema_validator.py`)
-- [ ] **Tests** pass (if implemented)
-
-## Support and Contact
-
-For issues, questions, or contributions:
-
-- **Issues**: [GitHub Issues](https://github.com/Jeninefer/Commercial-View/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Jeninefer/Commercial-View/discussions)
-- **Email**: Contact repository maintainer
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Built for commercial lending analytics
-- Designed for scalability and compliance
-- Community-driven development
-
----
-
-**Version**: 1.0.0  
-**Last Updated**: 2024-12-03  
-**Maintainer**: Jeninefer
->>>>>>> pr-50
