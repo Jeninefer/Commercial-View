@@ -87,3 +87,4 @@ data/temp/
 *.tar.gz
 *.tar
 *.rar
+data/pricing/*.csv
