@@ -59,7 +59,8 @@ def get_historic_real_payment():
 @app.get("/payment-schedule", response_model=List[PaymentSchedule])
 def get_payment_schedule():
     try:
-        return load_payment_schedule(DATA_BASE_PATH)
+        df = load_payment_schedule(DATA_BASE_PATH)
+        return df.to_dict(orient="records")
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Payment schedule data file not found. Please upload the CSV file to the data/pricing directory.")
 
