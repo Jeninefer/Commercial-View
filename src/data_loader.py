@@ -21,6 +21,12 @@ def _resolve_base_path(base_path: Optional[Union[str, Path]] = None) -> Path:
     1. Explicit base_path argument.
     2. COMMERCIAL_VIEW_DATA_PATH environment variable.
     3. Repository-relative default data/pricing directory.
+
+    Args:
+        base_path (Optional[Union[str, Path]], optional): The base directory to use. If None, uses environment variable or default path.
+
+    Returns:
+        Path: The resolved base directory containing the source CSV files.
     """
 
     if base_path is not None:
