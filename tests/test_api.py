@@ -65,11 +65,14 @@ def client(app):
     return TestClient(app)
 
 
+# Centralized function to get model fields for Pydantic v1/v2 compatibility
+def get_model_fields(model_cls):
+    if hasattr(model_cls, "model_fields"):
+        return set(model_cls.model_fields.keys())  # Pydantic v2
+    return set(model_cls.__fields__.keys())  # Pydantic v1
+
 def _loan_data_fields():
-    try:
-        return set(LoanData.model_fields.keys())  # Pydantic v2
-    except AttributeError:  # pragma: no cover - fallback for Pydantic v1
-        return set(LoanData.__fields__.keys())
+    return get_model_fields(LoanData)
 
 
 def test_get_loan_data_returns_serialisable_records(client):
