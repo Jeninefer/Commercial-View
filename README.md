@@ -94,8 +94,6 @@ python src/process_portfolio.py \
   --data-dir /mnt/shared/pricing-data
 ```
 
-Both approaches ensure that `src/data_loader.py` resolves the correct base path and will raise a descriptive error if any of the e
-xpected CSV files are missing.
 Both approaches ensure that `src/data_loader.py` resolves the correct base path and will raise a descriptive error if any of the expected CSV files are missing.
 
 ### Configuration Files
