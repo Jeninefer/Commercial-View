@@ -36,6 +36,12 @@ def _resolve_base_path(base_path: Optional[Union[str, Path]] = None) -> Path:
 def _read_csv(filename: str, base_path: Optional[Union[str, Path]] = None) -> DataFrame:
     """Read a CSV file from the configured base path.
 
+    Args:
+        filename (str): The name of the CSV file to read.
+        base_path (Optional[Union[str, Path]], optional): The base directory to look for the file. If None, uses environment variable or default path.
+
+    Returns:
+        DataFrame: The contents of the CSV file as a pandas DataFrame.
     Raises:
         FileNotFoundError: If the resolved CSV file does not exist.
     """
