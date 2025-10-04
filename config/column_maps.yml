@@ -4,41 +4,41 @@
 
 # Loan/Portfolio Dataset Column Mappings
 loan_data:
-  # Core Loan Identifiers
-  loan_id: "loan_id"              # Unique loan identifier
-  customer_id: "customer_id"      # Customer identifier
-  
-  # Loan Details
-  loan_amount: "amount"           # Original loan amount
-  outstanding_balance: "balance"  # Current outstanding balance
-  interest_rate: "rate"           # Interest rate
-  
-  # Dates
-  origination_date: "origination_date"
-  maturity_date: "maturity_date"
+  company: "Company"
+  customer_id: "Customer ID"
+  customer_name: "Cliente"
+  payer_name: "Pagador"
+  loan_id: "Loan ID"
+  application_id: "Application ID"
+  product_type: "Product Type"
+  loan_currency: "Loan Currency"
+  loan_amount: "Disbursement Amount"
+  outstanding_balance: "Outstanding Loan Value"
+  interest_rate: "Interest Rate APR"
+  origination_date: "Disbursement Date"
+  term_days: "Term"
+  term_unit: "Term Unit"
+  payment_frequency: "Payment Frequency"
+  days_past_due: "Days in Default"
+  loan_status: "Loan Status"
+  past_due_amount: "past_due_amount"
+  first_arrears_date: "first_arrears_date"
   last_payment_date: "last_payment_date"
   last_due_date: "last_due_date"
-  first_arrears_date: "first_arrears_date"
   reference_date: "reference_date"
-  
-  # Status Fields
-  loan_status: "status"
-  days_past_due: "dpd"
-  past_due_amount: "past_due_amount"
-  
-  # Tenor Information
-  tenor_months: "tenor_months"
-  tenor_days: "tenor_days"
 
 # Payment Dataset Column Mappings
 payment_data:
-  payment_id: "payment_id"
-  loan_id: "loan_id"
-  payment_date: "payment_date"
-  payment_amount: "payment_amount"
-  principal_paid: "principal_paid"
-  interest_paid: "interest_paid"
-  fees_paid: "fees_paid"
+  loan_id: "Loan ID"
+  payment_date: "Payment Date"
+  total_payment: "Total Payment"
+  principal_paid: "Principal Payment"
+  interest_paid: "Interest Payment"
+  fees_paid: "Fee Payment"
+  tax_paid: "Tax Payment"
+  outstanding_balance: "Outstanding Loan Value"
+  currency: "Currency"
+  tpv: "TPV"
 
 # DPD Frame Output Columns (Contract Output)
 dpd_frame_output:
@@ -59,8 +59,29 @@ buckets_output:
 
 # Customer/Entity Dataset Column Mappings
 customer_data:
-  customer_id: "customer_id"
-  customer_name: "customer_name"
-  customer_type: "customer_type"
-  registration_date: "registration_date"
-  credit_score: "credit_score"
+  business_year_founded: "Business Year Founded"
+  equifax_score: "Equifax Score"
+  category: "Category"
+  credit_line_category: "Credit Line Category"
+  subcategory: "Subcategory"
+  credit_line_subcategory: "Credit Line Subcategory"
+  industry: "Industry"
+  birth_year: "Birth Year"
+  occupation: "Occupation"
+  client_type: "Client Type"
+  location_city: "Location City"
+  location_state_province: "Location State/Province"
+  location_country: "Location Country"
+  customer_id: "Customer ID"
+  customer_name: "Customer Name"
+  kam_assigned: "KAM"
+  credit_line: "Credit Line"
+
+# Collateral Dataset Column Mappings
+collateral_data:
+  customer_id: "Customer ID"
+  customer_name: "Customer Name"
+  loan_id: "Loan ID"
+  collateral_id: "Collateral ID"
+  collateral_original_value: "Collateral Original"
+  collateral_current_value: "Collateral Current"
