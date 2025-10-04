@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 import pandas as pd
+import yaml
 from pandas import DataFrame
 
 PathLike = Union[str, os.PathLike[str]]
@@ -14,14 +15,40 @@ PathLike = Union[str, os.PathLike[str]]
 _ENV_VAR = "COMMERCIAL_VIEW_PRICING_PATH"
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _DEFAULT_DATA_PATH = _REPO_ROOT / "data" / "pricing"
+_CONFIG_PATH = _REPO_ROOT / "config" / "pricing_config.yml"
 
-PRICING_FILENAMES = {
-    "loan_data": "Abaco - Loan Tape_Loan Data_Table.csv",
-    "historic_real_payment": "Abaco - Loan Tape_Historic Real Payment_Table.csv",
-    "payment_schedule": "Abaco - Loan Tape_Payment Schedule_Table.csv",
-    "customer_data": "Abaco - Loan Tape_Customer Data_Table.csv",
-    "collateral": "Abaco - Loan Tape_Collateral_Table.csv",
+_DEFAULT_PRICING_FILENAMES: Dict[str, str] = {
+    "loan_data": "loan_data.csv",
+    "historic_real_payment": "historic_real_payment.csv",
+    "payment_schedule": "payment_schedule.csv",
+    "customer_data": "customer_data.csv",
+    "collateral": "collateral.csv",
 }
+
+
+def _load_filename_mapping() -> Dict[str, str]:
+    """Load pricing filenames, optionally overridden via configuration."""
+
+    if not _CONFIG_PATH.exists():
+        return dict(_DEFAULT_PRICING_FILENAMES)
+
+    with _CONFIG_PATH.open("r", encoding="utf-8") as stream:
+        config = yaml.safe_load(stream) or {}
+
+    configured_files = config.get("data_loader_files") or {}
+    resolved_mapping: Dict[str, str] = {}
+
+    for key, default_filename in _DEFAULT_PRICING_FILENAMES.items():
+        configured_value = configured_files.get(key)
+        if isinstance(configured_value, str) and configured_value.strip():
+            resolved_mapping[key] = configured_value.strip()
+        else:
+            resolved_mapping[key] = default_filename
+
+    return resolved_mapping
+
+
+PRICING_FILENAMES = _load_filename_mapping()
 
 
 def _resolve_base_path(base_path: Optional[PathLike] = None) -> Path:

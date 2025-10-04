@@ -88,3 +88,8 @@ data/temp/
 *.tar
 *.rar
 data/pricing/*.csv
+!data/pricing/loan_data.csv
+!data/pricing/historic_real_payment.csv
+!data/pricing/payment_schedule.csv
+!data/pricing/customer_data.csv
+!data/pricing/collateral.csv

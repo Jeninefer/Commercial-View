@@ -24,7 +24,9 @@ def sample_pricing_dir(tmp_path: Path) -> Path:
     )
 
     for filename in data_loader.PRICING_FILENAMES.values():
-        sample_df.to_csv(base_dir / filename, index=False)
+        file_path = base_dir / filename
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        sample_df.to_csv(file_path, index=False)
 
     return base_dir
 

@@ -8,13 +8,22 @@ pricing_data_path: "./data/pricing"
 pricing_files:
   # Main pricing CSV path
   main_pricing_csv: "./data/pricing/main_pricing.csv"
-  
+
   # Additional pricing files by product type
   commercial_loans: "./data/pricing/commercial_loans_pricing.csv"
   retail_loans: "./data/pricing/retail_loans_pricing.csv"
-  
+
   # Risk-based pricing
   risk_based_pricing: "./data/pricing/risk_based_pricing.csv"
+  risk_based_pricing_enhanced: "./data/pricing/risk_based_pricing_enhanced.csv"
+
+# File names used by :mod:`src.data_loader`
+data_loader_files:
+  loan_data: "loan_data.csv"
+  historic_real_payment: "historic_real_payment.csv"
+  payment_schedule: "payment_schedule.csv"
+  customer_data: "customer_data.csv"
+  collateral: "collateral.csv"
 
 # Interval bands for range-based features
 # Format: feature_name: [lower_bound_column, upper_bound_column]
