@@ -24,11 +24,11 @@ def _resolve_base_path(base_path: Optional[Union[str, Path]] = None) -> Path:
     """
 
     if base_path is not None:
-        return Path(base_path)
+        return Path(base_path).expanduser().resolve()
 
     env_value = os.getenv(ENV_VAR_NAME)
     if env_value:
-        return Path(env_value)
+        return Path(env_value).expanduser().resolve()
 
     return DEFAULT_BASE_PATH
 
