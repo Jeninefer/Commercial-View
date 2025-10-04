@@ -88,16 +88,9 @@ def dataframe_to_models(dataframe: DataFrame, model: Type[TModel]) -> List[TMode
     if dataframe.empty:
         return []
 
-    records = dataframe.to_dict(orient="records")
-    sanitised_records = [
-        {
-            key: (None if pd.isna(value) else value)
-            for key, value in record.items()
-        }
-        for record in records
-    ]
+    records = dataframe.fillna(value=None).to_dict(orient="records")
 
-    return [model(**record) for record in sanitised_records]
+    return [model(**record) for record in records]
 
 
 def load_loan_data(base_path: Optional[PathLike] = None) -> DataFrame:
