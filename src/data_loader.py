@@ -1,24 +1,51 @@
+from __future__ import annotations
+
+import os
+from pathlib import Path
+from typing import Dict
+
 import pandas as pd
 from pandas import DataFrame
 
-DATA_PATH = '/Users/jenineferderas/Documents/GitHub/Commercial-View/data/pricing/'
+DEFAULT_DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "pricing"
+DATA_PATH = Path(os.environ.get("COMMERCIAL_VIEW_DATA_PATH", DEFAULT_DATA_PATH))
+
+_FILE_MAP: Dict[str, str] = {
+    "loan_data": "Abaco - Loan Tape_Loan Data_Table.csv",
+    "historic_real_payment": "Abaco - Loan Tape_Historic Real Payment_Table.csv",
+    "payment_schedule": "Abaco - Loan Tape_Payment Schedule_Table.csv",
+    "customer_data": "Abaco - Loan Tape_Customer Data_Table.csv",
+    "collateral": "Abaco - Loan Tape_Collateral_Table.csv",
+}
+
+
+def _resolve_file_path(filename: str) -> Path:
+    file_path = DATA_PATH / filename
+    if not file_path.exists():
+        raise FileNotFoundError(f"Data file not found: {file_path}")
+    return file_path
+
+
+def _read_csv(filename: str) -> DataFrame:
+    file_path = _resolve_file_path(filename)
+    return pd.read_csv(file_path)
+
 
 def load_loan_data() -> DataFrame:
-    file_path = f'{DATA_PATH}Abaco - Loan Tape_Loan Data_Table.csv'
-    return pd.read_csv(file_path)
+    return _read_csv(_FILE_MAP["loan_data"])
+
 
 def load_historic_real_payment() -> DataFrame:
-    file_path = f'{DATA_PATH}Abaco - Loan Tape_Historic Real Payment_Table.csv'
-    return pd.read_csv(file_path)
+    return _read_csv(_FILE_MAP["historic_real_payment"])
+
 
 def load_payment_schedule() -> DataFrame:
-    file_path = f'{DATA_PATH}Abaco - Loan Tape_Payment Schedule_Table.csv'
-    return pd.read_csv(file_path)
+    return _read_csv(_FILE_MAP["payment_schedule"])
+
 
 def load_customer_data() -> DataFrame:
-    file_path = f'{DATA_PATH}Abaco - Loan Tape_Customer Data_Table.csv'
-    return pd.read_csv(file_path)
+    return _read_csv(_FILE_MAP["customer_data"])
+
 
 def load_collateral() -> DataFrame:
-    file_path = f'{DATA_PATH}Abaco - Loan Tape_Collateral_Table.csv'
-    return pd.read_csv(file_path)
+    return _read_csv(_FILE_MAP["collateral"])

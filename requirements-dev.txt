@@ -6,6 +6,7 @@ mypy>=1.0.0
 pytest>=7.0.0
 pytest-cov>=4.0.0
 pytest-xdist>=3.0.0
+httpx>=0.25.0
 bandit>=1.7.0
 safety>=2.3.0
 pre-commit>=3.0.0
