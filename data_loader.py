@@ -234,11 +234,11 @@ class DataLoader:
         try:
             # Find matching files
             matching_files = sorted(
-                [
+                (
                     path
                     for path in self.data_dir.glob("*.csv")
                     if pattern in path.name
-                ]
+                )
             )
 
             if not matching_files:
