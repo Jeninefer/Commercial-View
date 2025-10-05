@@ -350,7 +350,7 @@ def main():
     # Weighted metrics analysis
     print("\nRunning weighted metrics analysis...")
     # Use comprehensive_analysis to get weighted metrics as it already computes them
-    weighted_results = comprehensive_analysis(configs).get("weighted_metrics", {})
+    weighted_results = comp_results.get("weighted_metrics", {})
 
     # Save weighted metrics results
     weighted_path = f"{export_paths.get('base_path', './abaco_runtime/exports')}/weighted_metrics.json"
