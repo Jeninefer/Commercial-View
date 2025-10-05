@@ -106,13 +106,13 @@ def test_fastapi_app_startup_smoke(
     module = importlib.import_module(module_name)
     assert hasattr(module, "startup_event")
 
+    # Patch module-level attributes to ensure test isolation
+    monkeypatch.setattr(module, "datasets", {}, raising=False)
+    monkeypatch.setattr(module, "data_loader", None, raising=False)
+
     import asyncio
 
     asyncio.run(module.startup_event())
 
-    try:
-        assert "loan_data" in module.datasets
-        assert not module.datasets["loan_data"].empty
-    finally:
-        module.datasets = {}
-        module.data_loader = None
+    assert "loan_data" in module.datasets
+    assert not module.datasets["loan_data"].empty
