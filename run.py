@@ -74,7 +74,7 @@ def _safe(df: pd.DataFrame | None, stub_rows: list[dict]) -> pd.DataFrame:
         return pd.DataFrame(stub_rows)
     return df
 
-def _to_json_safe(df: pd.DataFrame) -> list[dict]:
+def _to_json_safe(df: pd.DataFrame) -> List[Dict[str, Any]]:
     """Convert DataFrame to JSON-safe list of dictionaries.
     
     Handles pandas/numpy types that are not JSON serializable:
