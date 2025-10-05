@@ -9,13 +9,6 @@ from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 import pandas as pd
-try:
-    import yaml
-except ImportError as e:
-    raise ImportError(
-        "PyYAML is required for this module but is not installed. "
-        "Please install it with 'pip install PyYAML'."
-    ) from e
 from pandas import DataFrame
 
 PathLike = Union[str, os.PathLike[str]]
