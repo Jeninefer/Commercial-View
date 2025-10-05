@@ -24,6 +24,7 @@ pip install -r requirements.txt
 **Important**: Always use the virtual environment's Python!
 
 ✅ Correct usage:
+
 ```bash
 source .venv/bin/activate
 python run.py
@@ -31,6 +32,7 @@ pytest -q
 ```
 
 ❌ Incorrect usage:
+
 ```bash
 python3 run.py         # ❌ Uses system Python (not virtual env)
 pip install pandas     # ❌ Installs globally, not in .venv
@@ -38,12 +40,54 @@ pip install pandas     # ❌ Installs globally, not in .venv
 
 ## Running the API
 
+### Quick Start
+
 ```bash
 source .venv/bin/activate
 uvicorn run:app --reload --port 8000
 # or
 python run.py
 ```
+
+### Advanced Server Control
+
+Use `server_control.py` for advanced server management:
+
+```bash
+# Start server on default port 8000
+python server_control.py
+
+# Start on custom port
+python server_control.py --port 8001
+
+# Kill existing processes and start fresh
+python server_control.py --port 8000 --kill-existing
+
+# Check what's using a port (without starting server)
+python server_control.py --check-only --port 8000
+
+# Start with custom host and logging
+python server_control.py --host 127.0.0.1 --log-level debug
+
+# Disable auto-reload for production
+python server_control.py --no-reload
+
+# Force kill stubborn processes
+python server_control.py --port 8000 --kill-existing --force-kill
+```
+
+#### Server Control Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--port` | Port to run server on | 8000 |
+| `--host` | Host interface to bind | 0.0.0.0 |
+| `--app` | Application import path | run:app |
+| `--no-reload` | Disable auto-reload | False |
+| `--kill-existing` | Kill processes using port | False |
+| `--force-kill` | Force kill with SIGKILL | False |
+| `--log-level` | Logging level | info |
+| `--check-only` | Only check port usage | False |
 
 ## Running Tests
 
@@ -79,6 +123,7 @@ docker run -p 8000:8000 -v "$(pwd)/data:/app/data" commercial-view
 - `src/data_loader.py` – data loading utilities
 - `src/pipeline.py` – processing pipeline
 - `run.py` – FastAPI app
+- `server_control.py` – advanced server management utility
 - `tests/` – test suite
 
 ## Configuration
@@ -123,7 +168,23 @@ npm start
 |-------|----------|
 | Import 'pandas' could not be resolved | Activate .venv and reinstall dependencies: `pip install -r requirements.txt` |
 | pytest: command not found | Run `pip install pytest` inside the virtual environment |
+| Port already in use | Use `python server_control.py --kill-existing` or try a different port |
+| Permission denied killing process | Use `--force-kill` flag or run with sudo (not recommended) |
+| Server won't start | Check environment with `python server_control.py --check-only` |
 | Frontend build errors | Run `npm audit fix --force` or delete node_modules and reinstall |
+
+### Server Control Troubleshooting
+
+```bash
+# Check if virtual environment is active
+python server_control.py --check-only
+
+# Find what's using port 8000
+python server_control.py --check-only --port 8000
+
+# Kill all processes on port and restart
+python server_control.py --kill-existing --force-kill
+```
 
 ## CI/CD & Versioning
 

@@ -1,151 +1,151 @@
 """
-Schema converter utility for Commercial View.
-
-This script converts the JSON schema definition into Pydantic models,
-making it easy to validate incoming data against the expected schema.
-
-Usage:
-    python schema_converter.py /path/to/schema.json --output models/
+Schema conversion utilities for Commercial-View data processing.
 """
 
 import json
-import os
-import sys
-from pathlib import Path
-import re
-from typing import Dict, Any, List, Optional, Union, Set
-from datetime import datetime
-
+from typing import Dict, Any, Optional, Union
+import pandas as pd
 
 class SchemaConverter:
-    """Utility for converting JSON schema to Pydantic models."""
+    """Convert between different schema formats for Commercial-View"""
     
-    def __init__(self, schema_path: Union[str, Path]):
-        """Initialize with path to schema JSON file."""
-        self.schema_path = Path(schema_path)
-        with open(self.schema_path, 'r') as f:
-            self.schema = json.load(f)
-        
-        # Dataset definitions
-        self.datasets = self.schema.get('datasets', {})
+    def __init__(self):
+        self.type_mapping = {
+            'int64': 'integer',
+            'float64': 'number',
+            'object': 'string',
+            'bool': 'boolean',
+            'datetime64[ns]': 'string'
+        }
     
-    def generate_pydantic_model(
-        self,
-        dataset_name: str,
-        output_dir: Optional[Union[str, Path]] = None
-    ) -> str:
-        """Generate a Pydantic model from a dataset schema."""
-        if dataset_name not in self.datasets:
-            raise ValueError(f"Dataset '{dataset_name}' not found in schema")
-            
-        dataset = self.datasets[dataset_name]
-        columns = dataset.get('columns', [])
+    def convert_pandas_schema(self, df: pd.DataFrame) -> Dict[str, Any]:
+        """
+        Convert pandas DataFrame schema to JSON schema format.
         
-        # Convert dataset name to CamelCase for class name
-        class_name = ''.join(word.capitalize() for word in dataset_name.split())
-        
-        # Start building the model code
-        code = [
-            "from pydantic import BaseModel, Field, validator",
-            "from typing import Optional",
-            "from datetime import date, datetime\n",
-            f"class {class_name}(BaseModel):",
-            f'    """Schema for validating {dataset_name} records."""\n'
-        ]
-        
-        # Process each column
-        for column in columns:
-            name = column.get('name', '')
-            dtype = column.get('dtype', 'string')
-            nulls = column.get('nulls', 0)
-            non_null = column.get('non_null', 0)
-            sample_values = column.get('sample_values', [])
+        Args:
+            df: Input DataFrame
             
-            # Skip empty columns
-            if not name:
-                continue
-                
-            # Convert column name to valid Python identifier (remove spaces)
-            field_name = self._to_field_name(name)
-            
-            # Determine Python type from schema dtype
-            python_type = self._get_python_type(dtype, column.get('coerced_dtype'))
-            
-            # Add Optional wrapper if nulls exist
-            if nulls > 0:
-                type_str = f"Optional[{python_type}]"
-                default = "None"
-            else:
-                type_str = python_type
-                default = "..."
-            
-            # Create Field with description and validators
-            desc = self._generate_description(name, sample_values)
-            
-            validators = []
-            if python_type == "float" and "amount" in name.lower():
-                validators.append("ge=0")  # Assume monetary amounts should be non-negative
-            
-            if validators:
-                validator_str = ", ".join(validators) + ", "
-            else:
-                validator_str = ""
-            
-            field_line = f'    {field_name}: {type_str} = Field({default}, {validator_str}description="{desc}")'
-            code.append(field_line)
-        
-        # Add Config class
-        code.extend([
-            "",
-            "    class Config:",
-            "        extra = \"ignore\"",  # Ignore extra fields when parsing
-            "        anystr_strip_whitespace = True"  # Strip whitespace from strings
-        ])
-        
-        # Convert to string
-        model_code = "\n".join(code)
-        
-        # Optionally write to file
-        if output_dir:
-            output_dir = Path(output_dir)
-            output_dir.mkdir(parents=True, exist_ok=True)
-            output_file = output_dir / f"{class_name.lower()}.py"
-            with open(output_file, 'w') as f:
-                f.write(model_code)
-            
-        return model_code
-    
-    def _to_field_name(self, column_name: str) -> str:
-        """Convert column name to valid Python identifier."""
-        # Replace spaces with nothing for camelCase
-        parts = column_name.split()
-        if not parts:
-            return "field"
-            
-        # CamelCase conversion (first word lowercase, rest capitalized)
-        field_name = parts[0].lower()
-        field_name += ''.join(word.capitalize() for word in parts[1:])
-        
-        return field_name
-    
-    def _get_python_type(self, dtype: str, coerced_dtype: Optional[str] = None) -> str:
-        """Get appropriate Python type for schema data type."""
-        if coerced_dtype == "datetime":
-            return "date"  # Use date for datetime fields
-        
-        type_mapping = {
-            "string": "str",
-            "float": "float",
-            "int": "int",
-            "boolean": "bool",
-            "object": "dict",
-            "array": "list"
+        Returns:
+            JSON schema dictionary
+        """
+        schema = {
+            "type": "object",
+            "properties": {},
+            "required": []
         }
         
-        return type_mapping.get(dtype.lower(), "str")
+        for column, dtype in df.dtypes.items():
+            dtype_str = str(dtype)
+            json_type = self.type_mapping.get(dtype_str, 'string')
+            
+            schema["properties"][column] = {
+                "type": json_type,
+                "description": f"Column {column} with type {dtype_str}"
+            }
+            
+            # Add to required fields if not nullable
+            if not df[column].isnull().any():
+                schema["required"].append(column)
+        
+        return schema
     
-    def _generate_description(self, name: str, sample_values: List[Any]) -> str:
-        """Generate field description with examples."""
+    def convert_schema_format(self, input_schema: Dict[str, Any], target_format: str = "jsonschema") -> Dict[str, Any]:
+        """
+        Convert schema between different formats.
+        
+        Args:
+            input_schema: Input schema dictionary
+            target_format: Target format ('jsonschema', 'openapi', etc.)
+            
+        Returns:
+            Converted schema dictionary
+        """
+        if target_format == "jsonschema":
+            return self._to_json_schema(input_schema)
+        elif target_format == "openapi":
+            return self._to_openapi_schema(input_schema)
+        else:
+            return input_schema
+    
+    def _to_json_schema(self, schema: Dict[str, Any]) -> Dict[str, Any]:
+        """Convert to JSON Schema format"""
+        return {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": schema.get("properties", {}),
+            "required": schema.get("required", [])
+        }
+    
+    def _to_openapi_schema(self, schema: Dict[str, Any]) -> Dict[str, Any]:
+        """Convert to OpenAPI schema format"""
+        return {
+            "type": "object",
+            "properties": schema.get("properties", {}),
+            "required": schema.get("required", [])
+        }
+
+def convert_dataframe_schema(df: pd.DataFrame) -> Dict[str, Any]:
+    """
+    Convert DataFrame to schema format.
+    
+    Args:
+        df: Input DataFrame
+        
+    Returns:
+        Schema dictionary
+    """
+    converter = SchemaConverter()
+    return converter.convert_pandas_schema(df)
+
+def validate_schema(data: Dict[str, Any], schema: Dict[str, Any]) -> bool:
+    """
+    Validate data against schema.
+    
+    Args:
+        data: Data to validate
+        schema: Schema to validate against
+        
+    Returns:
+        True if valid, False otherwise
+    """
+    try:
+        # Basic validation - check required fields
+        required_fields = schema.get("required", [])
+        for field in required_fields:
+            if field not in data:
+                return False
+        
+        # Check property types
+        properties = schema.get("properties", {})
+        for key, value in data.items():
+            if key in properties:
+                expected_type = properties[key].get("type")
+                if not _validate_type(value, expected_type):
+                    return False
+        
+        return True
+    except Exception:
+        return False
+
+def _validate_type(value: Any, expected_type: Optional[str]) -> bool:
+    """Validate value type against expected type"""
+    if expected_type is None:
+        return True
+    
+    type_map = {
+        'string': str,
+        'integer': int,
+        'number': (int, float),
+        'boolean': bool,
+        'array': list,
+        'object': dict
+    }
+    
+    expected_python_type = type_map.get(expected_type)
+    if expected_python_type is None:
+        return True
+    
+    return isinstance(value, expected_python_type)
         desc = name.replace('_', ' ')
         
         # Add sample values if available (limited to 2)
@@ -189,6 +189,20 @@ class SchemaConverter:
         return results
 
 
+def convert_schema(input_data: dict) -> dict:
+    """
+    Convert schema format for Commercial-View processing.
+    
+    Args:
+        input_data: Input data dictionary
+        
+    Returns:
+        Converted schema dictionary
+    """
+    # Implementation here
+    return input_data
+
+
 if __name__ == "__main__":
     import argparse
     
@@ -211,20 +225,6 @@ if __name__ == "__main__":
             if converter.datasets[dataset_name].get("exists", False):
                 print(f"\n# {dataset_name} Model\n")
                 print(converter.generate_pydantic_model(dataset_name))
-            
-        Returns:
-            Python type as a string
-        """
-        # Use coerced type if available
-        if coerced_dtype == "datetime":
-            return "date"
-        
-        type_mapping = {
-            "string": "str",
-            "float": "float",
-            "int": "int",
-            "boolean": "bool",
-            "object": "dict",
             "array": "list"
         }
         

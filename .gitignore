@@ -1,3 +1,8 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -19,76 +24,72 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
 
-# Virtual environments
-venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-
-# IDEs
-.vscode/
+# IDE
+.vscode/settings.json
 .idea/
 *.swp
 *.swo
-*~
+
+# OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Testing
-.pytest_cache/
-.coverage
-.coverage.*
-htmlcov/
-.tox/
-.hypothesis/
-*.cover
-
-# Runtime exports
-abaco_runtime/
+# Logs
 *.log
+logs/
 
-# Jupyter Notebook
-.ipynb_checkpoints
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# Environment
-.env
-.env.local
-.env.*.local
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+.nyc_output
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
 
 # Temporary files
 *.tmp
-*.bak
-*.backup
-tmp/
-temp/
+get-pip.py
 
-# Build artifacts
-node_modules/
-package-lock.json
+# Google Drive credentials
+credentials.json
+token.json
+drive_config.json
 
-# OS
-Thumbs.db
+# Export directories (if large)
+abaco_runtime/exports/*.csv
+abaco_runtime/exports/*.json
+abaco_runtime/exports/*.xlsx
 
-# Security
-.secrets.baseline
-*.key
-*.pem
-*.crt
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Data files (add specific patterns as needed)
-data/raw/
-data/processed/
-data/temp/
-
-# Archives
-*.zip
-*.tar.gz
-*.tar
-*.rar
-data/pricing/*.csv
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 .venv/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+.venv/
