@@ -48,7 +48,11 @@ def app(tmp_path_factory):
         OutstandingLoanValue=90000.0,
     )
 
-    loan_df = pd.DataFrame([loan_record.model_dump() if hasattr(loan_record, "model_dump") else loan_record.dict()])
+    if hasattr(loan_record, "model_dump"):
+        loan_dict = loan_record.model_dump()
+    else:
+        loan_dict = loan_record.dict()
+    loan_df = pd.DataFrame([loan_dict])
     loan_df.to_csv(pricing_dir / PRICING_FILENAMES["loan_data"], index=False)
 
     monkeypatch = pytest.MonkeyPatch()
