@@ -26,8 +26,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
-# Display a big warning if not in virtual environment
-if not hasattr(sys, 'real_prefix') and not (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
+# Display a big warning if not in virtual environment (skip check in CI/automated environments)
+is_ci = os.environ.get('CI') or os.environ.get('GITHUB_ACTIONS') or os.environ.get('CONTINUOUS_INTEGRATION')
+if not is_ci and not hasattr(sys, 'real_prefix') and not (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
     print("\n" + "="*80)
     print("\033[91m⚠️  ERROR: NOT USING VIRTUAL ENVIRONMENT ⚠️\033[0m")
     print("="*80)
