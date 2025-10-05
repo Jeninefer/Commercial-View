@@ -55,7 +55,7 @@ def _clear_directory(directory: Path) -> None:
 
 
 def _extract_archives(artifacts: Iterable[Path], destination: Path) -> list[Path]:
-    extracted: List[Path] = []
+    extracted: list[Path] = []
     for artifact in artifacts:
         if artifact.suffix.lower() == ".zip":
             LOGGER.info("Extracting archive %s", artifact)
