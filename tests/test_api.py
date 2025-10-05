@@ -93,10 +93,24 @@ def test_invalid_endpoint(client):
 
 def test_data_quality_endpoint(client):
     """Test data quality report endpoint."""
-    response = client.get("/data-quality")
+    import run
+
+    original_loader = run.data_loader
+
+    class FakeDataLoader:
+        @staticmethod
+        def get_data_quality_report():
+            return {"status": "not fully implemented"}
+
+    run.data_loader = FakeDataLoader()
+    try:
+        response = client.get("/data-quality")
+    finally:
+        run.data_loader = original_loader
+
     assert response.status_code == 200
     data = response.json()
-    assert data == {"status": "not implemented"}
+    assert data == {"status": "not fully implemented"}
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
