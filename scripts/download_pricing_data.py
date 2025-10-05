@@ -61,7 +61,7 @@ def _extract_archives(artifacts: Iterable[Path], destination: Path) -> list[Path
             LOGGER.info("Extracting archive %s", artifact)
             with ZipFile(artifact) as archive:
                 archive.extractall(destination)
-            extracted.extend(destination.glob("**/*"))
+            extracted.extend(path for path in destination.glob("**/*") if path.is_file())
     return extracted
 
 
