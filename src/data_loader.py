@@ -24,20 +24,20 @@ PRICING_FILENAMES: Dict[str, str] = {
 def _read_csv(path_or_dir: Union[str, Path], default_name: str | None = None) -> pd.DataFrame:
     p = Path(path_or_dir)
     if p.is_dir():
-        if not default_name:
-            raise ValueError("Directory provided without default_name.")
-        p = p / default_name
-    return pd.read_csv(p)
+def load_loan_data(base_path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(base_path, PRICING_FILENAMES["loan_data"])
 
+def load_historic_real_payment(base_path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(base_path, PRICING_FILENAMES["historic_real_payment"])
 
-def load_loan_data(path: Union[str, Path]) -> pd.DataFrame:
-    return _read_csv(path, PRICING_FILENAMES["loan_data"])
+def load_payment_schedule(base_path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(base_path, PRICING_FILENAMES["payment_schedule"])
 
+def load_customer_data(base_path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(base_path, PRICING_FILENAMES["customer_data"])
 
-def load_historic_real_payment(path: Union[str, Path]) -> pd.DataFrame:
-    return _read_csv(path, PRICING_FILENAMES["historic_real_payment"])
-
-
+def load_collateral(base_path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(base_path, PRICING_FILENAMES["collateral"])
 def load_payment_schedule(path: Union[str, Path]) -> pd.DataFrame:
     return _read_csv(path, PRICING_FILENAMES["payment_schedule"])
 
