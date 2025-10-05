@@ -196,9 +196,6 @@ def test_endpoints_return_serializable_payload(
 
 
 def test_missing_file_returns_not_found(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
-    pass
-
-def test_missing_file_returns_not_found(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
     def raise_fn():
         raise FileNotFoundError("missing file")
     monkeypatch.setattr(run_module, "load_collateral", raise_fn)
