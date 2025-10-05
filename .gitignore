@@ -88,3 +88,7 @@ data/temp/
 *.tar
 *.rar
 data/pricing/*.csv
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
