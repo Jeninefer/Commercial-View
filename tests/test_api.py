@@ -95,7 +95,7 @@ def test_health_endpoint(client, dataset_dict):
     data = response.json()
     assert data["status"] == "healthy"
     assert "datasets" in data
-    assert set(dataset_dict.keys()).issubset(data["datasets"].keys())
+    assert set(dataset_dict.keys()) == set(data["datasets"].keys())
 
 def test_loan_data_pagination(client):
     """Test loan data endpoint with pagination."""
