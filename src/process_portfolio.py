@@ -30,7 +30,7 @@ DEFAULT_PRICING_DATA_DIR = REPO_ROOT / "data" / "pricing"
 
 
 def _normalize_data_dir(path: Union[str, Path]) -> Path:
-    """Normalize a pricing data directory string to an absolute ``Path``."""
+    """Normalize a pricing data directory path to an absolute ``Path``."""
 
     candidate = Path(path).expanduser()
     if not candidate.is_absolute():
