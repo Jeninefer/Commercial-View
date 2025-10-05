@@ -40,7 +40,7 @@ def test_config_pricing_path_used_when_no_overrides(tmp_path: Path, monkeypatch:
     config_dir = tmp_path / "config"
     config_dir.mkdir()
 
-    relative_path = os.path.relpath(alt_pricing_dir, start=PROJECT_ROOT)
+    relative_path = str(alt_pricing_dir.relative_to(PROJECT_ROOT))
     (config_dir / "pricing_config.yml").write_text(
         f"pricing_data_path: {relative_path}\n",
         encoding="utf-8",
