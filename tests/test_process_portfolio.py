@@ -42,7 +42,6 @@ def test_main_uses_default_pricing_path_when_config_empty(monkeypatch):
     monkeypatch.setattr(process_portfolio, "load_loan_data", fake_load_loan_data)
     monkeypatch.setattr(process_portfolio, "load_customer_data", fake_load_customer_data)
 
-    monkeypatch.setenv("COMMERCIAL_VIEW_PRICING_PATH", "")
     monkeypatch.setattr(sys, "argv", ["process_portfolio.py", "--config", "dummy"], raising=False)
 
     process_portfolio.main()
