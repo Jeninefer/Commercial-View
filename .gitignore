@@ -88,3 +88,4 @@ data/temp/
 *.tar
 *.rar
 data/pricing/*.csv
+!data/pricing/Abaco - Loan Tape_*.csv

@@ -1,6 +1,8 @@
 import os
+from pathlib import Path
+from typing import Dict, List, Optional, Union
+
 import pandas as pd
-from typing import Dict, Optional, List
 import yaml
 import logging
 from datetime import datetime
@@ -13,21 +15,90 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+PathLike = Union[str, os.PathLike[str]]
+
+_ENV_VAR = "COMMERCIAL_VIEW_DATA_PATH"
+_REPO_ROOT = Path(__file__).resolve().parent
+_DEFAULT_DATA_SUBDIR = Path("data") / "pricing"
+_DEFAULT_CONFIG_SUBDIR = Path("config")
+
 class DataLoader:
     """Production-grade data loader with comprehensive error handling and validation."""
-    
-    def __init__(self, data_dir: str = "data", config_dir: str = "config"):
-        self.data_dir = data_dir
-        self.config_dir = config_dir
+
+    def __init__(
+        self,
+        data_dir: Optional[PathLike] = None,
+        config_dir: Optional[PathLike] = None,
+    ):
+        self.data_dir = self._resolve_data_dir(data_dir)
+        self.config_dir = self._resolve_config_dir(config_dir)
         self.column_maps = self._load_column_mappings()
         self.datasets = {}
         self.validation_errors = []
-        
+
+    def _resolve_data_dir(self, data_dir: Optional[PathLike]) -> Path:
+        """Resolve the directory that contains pricing data."""
+
+        if data_dir is not None:
+            candidate = Path(data_dir)
+        else:
+            env_override = os.getenv(_ENV_VAR)
+            if env_override:
+                candidate = Path(env_override)
+            else:
+                candidate = _REPO_ROOT / _DEFAULT_DATA_SUBDIR
+
+        candidate = candidate.expanduser()
+        if not candidate.is_absolute():
+            candidate = (_REPO_ROOT / candidate).resolve()
+        else:
+            candidate = candidate.resolve()
+
+        if not candidate.exists():
+            raise FileNotFoundError(
+                f"Pricing data directory not found at '{candidate}'. "
+                "Set the path explicitly when calling the loader, define the "
+                f"'{_ENV_VAR}' environment variable, or create the directory."
+            )
+
+        if not candidate.is_dir():
+            raise NotADirectoryError(
+                f"Expected a directory for pricing data but found '{candidate}'."
+            )
+
+        return candidate
+
+    def _resolve_config_dir(self, config_dir: Optional[PathLike]) -> Path:
+        """Resolve the configuration directory used for column mappings."""
+
+        if config_dir is not None:
+            candidate = Path(config_dir)
+        else:
+            candidate = _REPO_ROOT / _DEFAULT_CONFIG_SUBDIR
+
+        candidate = candidate.expanduser()
+        if not candidate.is_absolute():
+            candidate = (_REPO_ROOT / candidate).resolve()
+        else:
+            candidate = candidate.resolve()
+
+        if not candidate.exists():
+            raise FileNotFoundError(
+                f"Configuration directory not found at '{candidate}'."
+            )
+
+        if not candidate.is_dir():
+            raise NotADirectoryError(
+                f"Expected a directory for configuration but found '{candidate}'."
+            )
+
+        return candidate
+
     def _load_column_mappings(self) -> Dict:
         """Load column mappings with error handling."""
         try:
-            mapping_path = os.path.join(self.config_dir, "column_maps.yml")
-            with open(mapping_path, 'r') as f:
+            mapping_path = self.config_dir / "column_maps.yml"
+            with mapping_path.open('r') as f:
                 return yaml.safe_load(f)
         except FileNotFoundError:
             logger.error(f"Column mapping file not found at {mapping_path}")
@@ -162,15 +233,21 @@ class DataLoader:
         """Load CSV file matching pattern with robust error handling."""
         try:
             # Find matching files
-            matching_files = [f for f in os.listdir(self.data_dir) 
-                            if pattern in f and f.endswith('.csv')]
-            
+            base_dir = self.data_dir
+            matching_files = sorted(
+                [
+                    path
+                    for path in base_dir.glob("*.csv")
+                    if pattern in path.name
+                ]
+            )
+
             if not matching_files:
                 return None
-            
+
             # Use most recent file if multiple matches
-            file_path = os.path.join(self.data_dir, sorted(matching_files)[-1])
-            
+            file_path = matching_files[-1]
+
             # Read with proper encoding handling
             try:
                 df = pd.read_csv(file_path, encoding='utf-8')
