@@ -89,19 +89,18 @@ def load_payment_schedule(base_path: Optional[Union[str, Path]] = None) -> DataF
 
 def load_customer_data(base_path: Optional[Union[str, Path]] = None) -> DataFrame:
     """
-    Load the payment schedule CSV file.
+    Load the customer data CSV file.
 
     Args:
         base_path (Optional[Union[str, Path]], optional): The base directory to look for the file. If None, uses environment variable or default path.
 
     Returns:
-        DataFrame: The contents of the payment schedule CSV file as a pandas DataFrame.
+        DataFrame: The contents of the customer data CSV file as a pandas DataFrame.
 
     Raises:
         FileNotFoundError: If the resolved CSV file does not exist.
     """
-
-
+    return _read_csv("Abaco - Loan Tape_Customer Data_Table.csv", base_path)
 def load_collateral(base_path: Optional[Union[str, Path]] = None) -> DataFrame:
     """Load the collateral CSV file."""
     return _read_csv("Abaco - Loan Tape_Collateral_Table.csv", base_path)
