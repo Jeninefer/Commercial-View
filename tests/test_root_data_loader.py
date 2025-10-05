@@ -56,12 +56,10 @@ def sample_abaco_dataset(tmp_path: Path) -> Path:
         }
     )
 
-    historic_real_payment = payment_schedule.assign(
-        **{
-            "True Payment Date": ["2023-02-27"],
-            "True Payment Status": ["On Time"],
-        }
-    )
+    historic_real_payment = payment_schedule.assign({
+        "True Payment Date": ["2023-02-27"],
+        "True Payment Status": ["On Time"],
+    })
 
     customer_data = pd.DataFrame(
         {
