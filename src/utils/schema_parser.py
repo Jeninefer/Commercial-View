@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 
-def find_repo_root(start: Path = Path(__file__).resolve()) -> Path:
+def find_repo_root(start: Path = Path(__file__).resolve().parent) -> Path:
     """Walk up from the start path to find the repository root, identified by 'pyproject.toml' or '.git'."""
     for parent in [start] + list(start.parents):
         if (parent / "pyproject.toml").is_file() or (parent / ".git").is_dir():
