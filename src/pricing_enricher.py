@@ -72,3 +72,38 @@ class PricingEnricher:
         for col, default_rate in fallback_rules.items():
             result[col] = result[col].fillna(default_rate)
         return result
+    
+    def to_json_safe(self, df: pd.DataFrame) -> list[dict]:
+        """Convert DataFrame to JSON-safe list of dictionaries.
+        
+        Handles pandas/numpy types that are not JSON serializable:
+        - Timestamps -> ISO format strings
+        - NaT/NaN -> None
+        - numpy int64/float64 -> Python int/float
+        """
+        if df is None or df.empty:
+            return []
+        
+        # Convert to records, then handle special types
+        records = df.copy()
+        
+        # Convert datetime columns to ISO format strings
+        for col in records.columns:
+            if pd.api.types.is_datetime64_any_dtype(records[col]):
+                records[col] = records[col].dt.strftime('%Y-%m-%d %H:%M:%S').replace('NaT', None)
+            # Replace NaN with None for JSON null
+            elif pd.api.types.is_numeric_dtype(records[col]):
+                records[col] = records[col].where(pd.notna(records[col]), None)
+        
+        # Convert to records and ensure native Python types
+        result = records.to_dict(orient='records')
+        
+        # Convert numpy types to native Python types
+        for record in result:
+            for key, value in record.items():
+                if pd.isna(value):
+                    record[key] = None
+                elif hasattr(value, 'item'):  # numpy scalar
+                    record[key] = value.item()
+        
+        return result

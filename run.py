@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 import pandas as pd
 import logging
 import os
@@ -16,6 +17,13 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Request models for API endpoints
+class EnrichPricingRequest(BaseModel):
+    """Request model for pricing enrichment endpoint."""
+    loan_data: List[Dict[str, Any]]
+    pricing_type: str = "main"
+    join_keys: Optional[List[str]] = None
 
 # Define our fallback class first
 class CommercialViewPipeline:  # fallback stub
@@ -66,6 +74,41 @@ def _safe(df: pd.DataFrame | None, stub_rows: list[dict]) -> pd.DataFrame:
         return pd.DataFrame(stub_rows)
     return df
 
+def _to_json_safe(df: pd.DataFrame) -> list[dict]:
+    """Convert DataFrame to JSON-safe list of dictionaries.
+    
+    Handles pandas/numpy types that are not JSON serializable:
+    - Timestamps -> ISO format strings
+    - NaT/NaN -> None
+    - numpy int64/float64 -> Python int/float
+    """
+    if df is None or df.empty:
+        return []
+    
+    # Convert to records, then handle special types
+    records = df.copy()
+    
+    # Convert datetime columns to ISO format strings
+    for col in records.columns:
+        if pd.api.types.is_datetime64_any_dtype(records[col]):
+            records[col] = records[col].dt.strftime('%Y-%m-%d %H:%M:%S').replace('NaT', None)
+        # Replace NaN with None for JSON null
+        elif pd.api.types.is_numeric_dtype(records[col]):
+            records[col] = records[col].where(pd.notna(records[col]), None)
+    
+    # Convert to records and ensure native Python types
+    result = records.to_dict(orient='records')
+    
+    # Convert numpy types to native Python types
+    for record in result:
+        for key, value in record.items():
+            if pd.isna(value):
+                record[key] = None
+            elif hasattr(value, 'item'):  # numpy scalar
+                record[key] = value.item()
+    
+    return result
+
 # Global exception handler
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
@@ -90,7 +133,7 @@ def get_loan_data():
             {"Customer ID": "C001", "Amount": 1000, "Status": "Active"},
             {"Customer ID": "C002", "Amount": 2000, "Status": "Active"},
         ])
-        return df.to_dict(orient="records")
+        return _to_json_safe(df)
     except Exception as e:
         logger.error(f"Error loading loan data: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error loading loan data: {e}")
@@ -103,7 +146,7 @@ def get_payment_schedule():
         {"Customer ID": "C001", "Due Date": "2024-01-01", "Total Payment": 100},
         {"Customer ID": "C002", "Due Date": "2024-01-01", "Total Payment": 200},
     ])
-    return df.to_dict(orient="records")
+    return _to_json_safe(df)
 
 @app.get("/historic-real-payment", response_model=List[Dict[str, Any]])
 def get_historic_real_payment():
@@ -113,7 +156,7 @@ def get_historic_real_payment():
         {"Customer ID": "C001", "Payment Date": "2024-01-02", "True Principal Payment": 90},
         {"Customer ID": "C002", "Payment Date": "2024-01-02", "True Principal Payment": 180},
     ])
-    return df.to_dict(orient="records")
+    return _to_json_safe(df)
 
 @app.get("/schema/{name}", response_model=Dict[str, Any])
 def get_schema(name: str):
@@ -157,6 +200,124 @@ def collateral():
 def executive_summary():
     """Return portfolio executive summary (stub endpoint)."""
     return {"portfolio_overview": {}}
+
+@app.get("/pricing-grid", response_model=List[Dict[str, Any]])
+def get_pricing_grid(pricing_type: Optional[str] = "main"):
+    """Return pricing grid data.
+    
+    Args:
+        pricing_type: Type of pricing grid to return (main, commercial, retail, risk_based)
+    """
+    try:
+        import yaml
+        
+        # Load pricing config
+        config_path = "./config/pricing_config.yml"
+        if not os.path.exists(config_path):
+            logger.warning(f"Pricing config not found at {config_path}")
+            return []
+        
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        
+        # Map pricing type to file path
+        pricing_files = config.get('pricing_files', {})
+        file_map = {
+            'main': pricing_files.get('main_pricing_csv', './data/pricing/main_pricing.csv'),
+            'commercial': pricing_files.get('commercial_loans', './data/pricing/commercial_loans_pricing.csv'),
+            'retail': pricing_files.get('retail_loans', './data/pricing/retail_loans_pricing.csv'),
+            'risk_based': pricing_files.get('risk_based_pricing', './data/pricing/risk_based_pricing.csv'),
+        }
+        
+        pricing_file = file_map.get(pricing_type, file_map['main'])
+        
+        if not os.path.exists(pricing_file):
+            logger.warning(f"Pricing file not found: {pricing_file}")
+            return []
+        
+        # Load pricing data
+        df = pd.read_csv(pricing_file)
+        return _to_json_safe(df)
+        
+    except Exception as e:
+        logger.error(f"Error loading pricing grid: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error loading pricing grid: {e}")
+
+@app.get("/pricing-config", response_model=Dict[str, Any])
+def get_pricing_config():
+    """Return pricing configuration information."""
+    try:
+        import yaml
+        
+        config_path = "./config/pricing_config.yml"
+        if not os.path.exists(config_path):
+            logger.warning(f"Pricing config not found at {config_path}")
+            return {"error": "Configuration file not found"}
+        
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        
+        # Return the configuration
+        return {
+            "pricing_files": config.get('pricing_files', {}),
+            "band_keys": config.get('band_keys', {}),
+            "pricing_rules": config.get('pricing_rules', {}),
+            "available_types": ["main", "commercial", "retail", "risk_based"]
+        }
+        
+    except Exception as e:
+        logger.error(f"Error loading pricing config: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error loading pricing config: {e}")
+
+@app.post("/enrich-pricing", response_model=List[Dict[str, Any]])
+def enrich_with_pricing(request: EnrichPricingRequest):
+    """Enrich loan data with pricing information.
+    
+    Args:
+        request: Request containing loan_data, pricing_type, and optional join_keys
+    """
+    try:
+        from src.pricing_enricher import PricingEnricher
+        import yaml
+        
+        # Convert input to DataFrame
+        loans_df = pd.DataFrame(request.loan_data)
+        
+        if loans_df.empty:
+            return []
+        
+        # Load pricing config
+        config_path = "./config/pricing_config.yml"
+        with open(config_path, 'r') as f:
+            config = yaml.safe_load(f)
+        
+        # Get pricing file path
+        pricing_files = config.get('pricing_files', {})
+        file_map = {
+            'main': pricing_files.get('main_pricing_csv', './data/pricing/main_pricing.csv'),
+            'commercial': pricing_files.get('commercial_loans', './data/pricing/commercial_loans_pricing.csv'),
+            'retail': pricing_files.get('retail_loans', './data/pricing/retail_loans_pricing.csv'),
+            'risk_based': pricing_files.get('risk_based_pricing', './data/pricing/risk_based_pricing.csv'),
+        }
+        
+        pricing_file = file_map.get(request.pricing_type, file_map['main'])
+        
+        # Use default join keys if not provided
+        join_keys = request.join_keys if request.join_keys is not None else ['product_type', 'customer_segment']
+        
+        # Enrich with pricing
+        enricher = PricingEnricher()
+        enriched_df = enricher.enrich_with_pricing(
+            loans_df=loans_df,
+            pricing_file=pricing_file,
+            join_keys=join_keys
+        )
+        
+        return _to_json_safe(enriched_df)
+        
+    except Exception as e:
+        logger.error(f"Error enriching pricing: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error enriching pricing: {e}")
 
 @app.get("/portfolio-metrics", response_model=Dict[str, Any])
 def portfolio_metrics():

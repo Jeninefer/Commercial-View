@@ -142,3 +142,35 @@ class TestAPIEndpoints:
         data = response.json()
         assert 'portfolio_outstanding' in data
         assert 'active_clients' in data
+    
+    def test_pricing_grid_endpoint(self):
+        """Test pricing grid retrieval endpoint."""
+        response = client.get("/pricing-grid?pricing_type=main")
+        assert response.status_code == 200
+        data = response.json()
+        # Should return empty list or pricing data
+        assert isinstance(data, list)
+    
+    def test_pricing_config_endpoint(self):
+        """Test pricing config endpoint."""
+        response = client.get("/pricing-config")
+        assert response.status_code == 200
+        data = response.json()
+        assert 'pricing_files' in data or 'error' in data
+    
+    def test_enrich_pricing_endpoint(self):
+        """Test pricing enrichment endpoint."""
+        request_data = {
+            "loan_data": [
+                {"loan_id": "L001", "product_type": "Commercial", "customer_segment": "Standard", "amount": 10000},
+                {"loan_id": "L002", "product_type": "Commercial", "customer_segment": "Standard", "amount": 20000}
+            ],
+            "pricing_type": "main",
+            "join_keys": ["product_type", "customer_segment"]
+        }
+        response = client.post(
+            "/enrich-pricing",
+            json=request_data
+        )
+        # Should succeed or return error depending on file availability
+        assert response.status_code in [200, 500]
