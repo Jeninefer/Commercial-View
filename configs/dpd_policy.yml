@@ -1,0 +1,14 @@
+# DPD (Days Past Due) policy configuration
+dpd_buckets:
+  current: 0
+  early: 30
+  medium: 60
+  late: 90
+  default: 120
+
+risk_weights:
+  current: 0.0
+  early: 0.05
+  medium: 0.15
+  late: 0.35
+  default: 0.75

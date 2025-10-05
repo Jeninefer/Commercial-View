@@ -75,13 +75,13 @@ customer_data:
   customer_id: "Customer ID"
   customer_name: "Customer Name"
   kam_assigned: "KAM"
-  credit_line: "Credit Line"
+  credit_line: "LineaCredito"
 
 # Collateral Dataset Column Mappings
 collateral_data:
   customer_id: "Customer ID"
-  customer_name: "Customer Name"
+  customer_name: "Cliente"
   loan_id: "Loan ID"
   collateral_id: "Collateral ID"
-  collateral_original_value: "Collateral Original"
-  collateral_current_value: "Collateral Current"
+  collateral_original_value: "GarantÃ­a Original"
+  collateral_current_value: "GarantÃ­a Actual"

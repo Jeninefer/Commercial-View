@@ -11,8 +11,12 @@ normalized_sys_paths = {os.path.normcase(os.path.normpath(str(Path(p).resolve())
 if resolved_src_dir not in normalized_sys_paths:
     sys.path.insert(0, str(SRC_DIR.resolve()))
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 sys.modules.setdefault("requests", types.SimpleNamespace(get=None))
-import figma_client
+from src import figma_client
 
 
 def test_get_figma_file_success(monkeypatch):
