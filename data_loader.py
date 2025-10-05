@@ -233,11 +233,10 @@ class DataLoader:
         """Load CSV file matching pattern with robust error handling."""
         try:
             # Find matching files
-            base_dir = self.data_dir
             matching_files = sorted(
                 [
                     path
-                    for path in base_dir.glob("*.csv")
+                    for path in self.data_dir.glob("*.csv")
                     if pattern in path.name
                 ]
             )
