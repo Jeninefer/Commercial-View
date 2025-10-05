@@ -12,7 +12,7 @@ import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import numpy as np
 import pandas as pd
