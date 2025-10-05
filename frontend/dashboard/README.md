@@ -237,3 +237,16 @@ Export artifacts from:
 - `coverage/` (test coverage reports)
 
 Save to Google Drive or download manually when finished with development sessions.
+
+This comprehensive README includes:
+
+1. **Complete setup instructions** for local and cloud development
+2. **API integration details** with the Commercial-View backend
+3. **Google Colab support** for cloud development
+4. **Testing guidance** with environment considerations
+5. **Deployment options** including Docker
+6. **Troubleshooting section** with common issues and solutions
+7. **Integration context** within the larger Commercial-View ecosystem
+8. **Development workflow** that aligns with the project structure
+
+The documentation provides developers with everything they need to work with the Commercial-View dashboard effectively.
