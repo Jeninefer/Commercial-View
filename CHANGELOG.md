@@ -8,7 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Future features will be listed here
+- Comprehensive system verification report (`COMPREHENSIVE_VERIFICATION_REPORT.md`)
+- System health check quick reference guide (`SYSTEM_HEALTH_CHECK.md`)
+
+### Fixed
+- JSON serialization bug in `process_portfolio.py` for Timestamp objects in cohort retention matrix
+- Syntax error in `src/utils/schema_converter.py` (removed corrupted code section lines 214-232)
+- Duplicate code blocks in `process_portfolio.py` causing NameError
+
+### Changed
+- Applied code formatting with black (line-length=120)
+- Applied import sorting with isort (black profile)
+- Updated `SYSTEM_STATUS.md` with latest verification results (2025-10-05)
 
 ## [1.0.0] - 2024-12-03
 
