@@ -254,7 +254,8 @@ class DataLoader:
         if not mapping:
             return df
 
-        rename_dict = {old_name: new_name for new_name, old_name in mapping.items() if old_name in df.columns}
+        # mapping: {new_name: old_name}, so we want to rename old_name -> new_name
+        rename_dict = {old: new for new, old in mapping.items() if old in df.columns}
         if rename_dict:
             df = df.rename(columns=rename_dict)
         return df
