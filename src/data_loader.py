@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, Dict
 
 import pandas as pd
 from pandas import DataFrame
@@ -12,7 +12,7 @@ from pandas import DataFrame
 PathLike = Union[str, os.PathLike[str]]
 
 _ENV_VAR = "COMMERCIAL_VIEW_DATA_PATH"
-_REPO_ROOT = Path(__file__).resolve().parents[2]
+_REPO_ROOT = Path(__file__).resolve().parents[1]
 _DEFAULT_DATA_PATH = _REPO_ROOT / "data" / "pricing"
 
 PRICING_FILENAMES = {
@@ -23,92 +23,78 @@ PRICING_FILENAMES = {
     "collateral": "Abaco - Loan Tape_Collateral_Table.csv",
 }
 
+class DataLoader:
+    def __init__(self, base_path: Optional[PathLike] = None):
+        self.base_path = self._resolve_base_path(base_path)
 
-def _resolve_base_path(base_path: Optional[PathLike] = None) -> Path:
-    """Resolve the directory containing pricing data.
+    def _resolve_base_path(self, base_path: Optional[PathLike] = None) -> Path:
+        """Resolve the directory containing pricing data."""
+        if base_path is not None:
+            candidate = Path(base_path)
+        else:
+            env_override = os.getenv(_ENV_VAR)
+            candidate = Path(env_override) if env_override else _DEFAULT_DATA_PATH
 
-    The priority for resolving the base path is:
-      1. Explicit ``base_path`` argument provided to the loader.
-      2. The ``COMMERCIAL_VIEW_DATA_PATH`` environment variable.
-      3. The repository default ``data/pricing`` directory.
-    """
+        candidate = candidate.expanduser()
+        if not candidate.is_absolute():
+            candidate = (_REPO_ROOT / candidate).resolve()
+        else:
+            candidate = candidate.resolve()
 
-    if base_path is not None:
-        candidate = Path(base_path)
-    else:
-        env_override = os.getenv(_ENV_VAR)
-        candidate = Path(env_override) if env_override else _DEFAULT_DATA_PATH
+        if not candidate.exists():
+            raise FileNotFoundError(
+                f"Pricing data directory not found at '{candidate}'. "
+                f"Set the path explicitly when calling the loader, define the "
+                f"'{_ENV_VAR}' environment variable, or create the directory."
+            )
 
-    candidate = candidate.expanduser()
-    if not candidate.is_absolute():
-        candidate = (_REPO_ROOT / candidate).resolve()
-    else:
-        candidate = candidate.resolve()
+        if not candidate.is_dir():
+            raise NotADirectoryError(
+                f"Expected a directory for pricing data but found '{candidate}'."
+            )
 
-    if not candidate.exists():
-        raise FileNotFoundError(
-            f"Pricing data directory not found at '{candidate}'. "
-            "Set the path explicitly when calling the loader, define the "
-            f"'{_ENV_VAR}' environment variable, or create the directory."
-        )
+        return candidate
 
-    if not candidate.is_dir():
-        raise NotADirectoryError(
-            f"Expected a directory for pricing data but found '{candidate}'."
-        )
+    def _load_csv(self, filename: str) -> DataFrame:
+        file_path = self.base_path / filename
+        if not file_path.exists():
+            raise FileNotFoundError(
+                f"CSV file not found: {file_path}. "
+                f"Configure the data directory using the '{_ENV_VAR}' environment variable "
+                "or pass a 'base_path' argument."
+            )
+        return pd.read_csv(file_path)
 
-    return candidate
+    def load_loan_data(self) -> DataFrame:
+        """Load the loan data CSV."""
+        return self._load_csv(PRICING_FILENAMES["loan_data"])
 
+    def load_historic_real_payment(self) -> DataFrame:
+        """Load the historic real payment CSV."""
+        return self._load_csv(PRICING_FILENAMES["historic_real_payment"])
 
-def _load_csv(filename: str, base_path: Optional[PathLike] = None) -> DataFrame:
-    base_dir = _resolve_base_path(base_path)
-    file_path = base_dir / filename
+    def load_payment_schedule(self) -> DataFrame:
+        """Load the payment schedule CSV."""
+        return self._load_csv(PRICING_FILENAMES["payment_schedule"])
 
-    if not file_path.exists():
-        raise FileNotFoundError(
-            f"CSV file not found: {file_path}. "
-            f"Configure the data directory using the '{_ENV_VAR}' environment variable "
-            "or pass a 'base_path' argument."
-        )
+    def load_customer_data(self) -> DataFrame:
+        """Load the customer data CSV."""
+        return self._load_csv(PRICING_FILENAMES["customer_data"])
 
-    return pd.read_csv(file_path)
+    def load_collateral(self) -> DataFrame:
+        """Load the collateral CSV."""
+        return self._load_csv(PRICING_FILENAMES["collateral"])
 
+    def load_all_datasets(self) -> Dict[str, DataFrame]:
+        """Load all datasets and return them as a dictionary."""
+        return {
+            name: self._load_csv(filename)
+            for name, filename in PRICING_FILENAMES.items()
+        }
 
-def load_loan_data(base_path: Optional[PathLike] = None) -> DataFrame:
-    """Load the loan data CSV."""
+    def get_data_quality_report(self) -> dict:
+        """Get comprehensive data quality report."""
+        # Placeholder for data quality report logic
+        return {"status": "not implemented"}
 
-    return _load_csv(PRICING_FILENAMES["loan_data"], base_path)
-
-
-def load_historic_real_payment(base_path: Optional[PathLike] = None) -> DataFrame:
-    """Load the historic real payment CSV."""
-
-    return _load_csv(PRICING_FILENAMES["historic_real_payment"], base_path)
-
-
-def load_payment_schedule(base_path: Optional[PathLike] = None) -> DataFrame:
-    """Load the payment schedule CSV."""
-
-    return _load_csv(PRICING_FILENAMES["payment_schedule"], base_path)
-
-
-def load_customer_data(base_path: Optional[PathLike] = None) -> DataFrame:
-    """Load the customer data CSV."""
-
-    return _load_csv(PRICING_FILENAMES["customer_data"], base_path)
-
-
-def load_collateral(base_path: Optional[PathLike] = None) -> DataFrame:
-    """Load the collateral CSV."""
-
-    return _load_csv(PRICING_FILENAMES["collateral"], base_path)
-
-
-__all__ = [
-    "PRICING_FILENAMES",
-    "load_loan_data",
-    "load_historic_real_payment",
-    "load_payment_schedule",
-    "load_customer_data",
-    "load_collateral",
-]
+__all__ = ["DataLoader", "PRICING_FILENAMES"]
