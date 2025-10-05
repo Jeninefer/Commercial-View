@@ -147,7 +147,7 @@ class DataLoader:
         try:
             with mapping_path.open("r", encoding="utf-8") as handle:
                 return yaml.safe_load(handle) or {}
-        except yaml.YAMLError as exc:  # pragma: no cover - defensive guard
+        except yaml.YAMLError as exc:
             logger.error("Failed to parse column mapping YAML at %s: %s", mapping_path, exc)
             return {}
 
