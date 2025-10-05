@@ -211,25 +211,6 @@ if __name__ == "__main__":
             if converter.datasets[dataset_name].get("exists", False):
                 print(f"\n# {dataset_name} Model\n")
                 print(converter.generate_pydantic_model(dataset_name))
-            
-        Returns:
-            Python type as a string
-        """
-        # Use coerced type if available
-        if coerced_dtype == "datetime":
-            return "date"
-        
-        type_mapping = {
-            "string": "str",
-            "float": "float",
-            "int": "int",
-            "boolean": "bool",
-            "object": "dict",
-            "array": "list"
-        }
-        
-        return type_mapping.get(dtype.lower(), "str")
-    
     def _generate_description(self, name: str, dtype: str, sample_values: List[Any]) -> str:
         """Generate a description for a field based on available information.
         
