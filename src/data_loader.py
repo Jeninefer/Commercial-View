@@ -148,7 +148,7 @@ class DataLoader:
             with mapping_path.open("r", encoding="utf-8") as handle:
                 return yaml.safe_load(handle) or {}
         except yaml.YAMLError as exc:  # pragma: no cover - defensive guard
-            logger.error("Failed to parse column mapping YAML: %s", exc)
+            logger.error("Failed to parse column mapping YAML at %s: %s", mapping_path, exc)
             return {}
 
     def load_all_datasets(self) -> Dict[str, DataFrame]:
