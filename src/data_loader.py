@@ -19,8 +19,8 @@ PRICING_FILENAMES = {
     "loan_data": "main_pricing.csv",
     "historic_real_payment": "commercial_loans_pricing.csv",
     "payment_schedule": "retail_loans_pricing.csv",
-    "customer_data": "risk_based_pricing.csv",
-    "collateral": "risk_based_pricing_enhanced.csv",
+    "customer_data": "risk_based_pricing.csv",  # Base risk-based pricing data for customers
+    "collateral": "risk_based_pricing_enhanced.csv",  # Enhanced risk-based pricing data including collateral information
 }
 
 
