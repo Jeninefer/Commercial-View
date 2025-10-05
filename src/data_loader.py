@@ -1,15 +1,20 @@
-"""Utilities for loading pricing-related CSV data."""
+"""Utilities for loading pricing-related CSV data and orchestrating dataset ingestion."""
 
 from __future__ import annotations
 
+import logging
 import os
+from datetime import datetime
 from pathlib import Path
-from typing import Optional, Union
+from typing import Dict, List, Optional, Union
 
 import pandas as pd
+import yaml
 from pandas import DataFrame
 
 PathLike = Union[str, os.PathLike[str]]
+
+logger = logging.getLogger(__name__)
 
 _ENV_VAR = "COMMERCIAL_VIEW_DATA_PATH"
 _REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -111,4 +116,193 @@ __all__ = [
     "load_payment_schedule",
     "load_customer_data",
     "load_collateral",
+    "DataLoader",
 ]
+
+
+class DataLoader:
+    """Production-oriented loader that orchestrates all pricing datasets."""
+
+    def __init__(
+        self,
+        base_path: Optional[PathLike] = None,
+        config_dir: Optional[PathLike] = None,
+    ) -> None:
+        self.base_path = base_path
+        self.config_dir = (
+            Path(config_dir)
+            if config_dir is not None
+            else (_REPO_ROOT / "config")
+        )
+        self.column_maps = self._load_column_mappings()
+        self.datasets: Dict[str, DataFrame] = {}
+        self.validation_errors: List[Dict[str, Union[str, datetime]]] = []
+
+    def _load_column_mappings(self) -> Dict[str, Dict[str, str]]:
+        mapping_path = self.config_dir / "column_maps.yml"
+        if not mapping_path.exists():
+            logger.warning("Column mapping file not found at %s", mapping_path)
+            return {}
+
+        try:
+            with mapping_path.open("r", encoding="utf-8") as handle:
+                return yaml.safe_load(handle) or {}
+        except yaml.YAMLError as exc:  # pragma: no cover - defensive guard
+            logger.error("Failed to parse column mapping YAML: %s", exc)
+            return {}
+
+    def load_all_datasets(self) -> Dict[str, DataFrame]:
+        """Load all configured datasets, capturing validation issues."""
+
+        dataset_configs = {
+            "loan_data": {
+                "loader": load_loan_data,
+                "mapping": "loan_data",
+                "date_columns": ["origination_date"],
+                "numeric_columns": [
+                    "loan_amount",
+                    "interest_rate",
+                    "outstanding_balance",
+                    "days_past_due",
+                ],
+                "required_columns": ["loan_id", "customer_id", "loan_amount"],
+            },
+            "payment_schedule": {
+                "loader": load_payment_schedule,
+                "mapping": "payment_data",
+                "date_columns": ["payment_date"],
+                "numeric_columns": [
+                    "total_payment",
+                    "principal_paid",
+                    "interest_paid",
+                    "fees_paid",
+                    "tax_paid",
+                    "outstanding_balance",
+                ],
+                "required_columns": ["loan_id", "payment_date"],
+            },
+            "historic_real_payment": {
+                "loader": load_historic_real_payment,
+                "mapping": "payment_data",
+                "date_columns": ["payment_date"],
+                "numeric_columns": [
+                    "total_payment",
+                    "principal_paid",
+                    "interest_paid",
+                    "fees_paid",
+                    "tax_paid",
+                ],
+                "required_columns": ["loan_id"],
+            },
+            "customer_data": {
+                "loader": load_customer_data,
+                "mapping": "customer_data",
+                "required_columns": ["customer_id", "customer_name"],
+            },
+            "collateral": {
+                "loader": load_collateral,
+                "mapping": "collateral_data",
+                "required_columns": ["loan_id", "customer_id"],
+            },
+        }
+
+        self.datasets = {}
+        self.validation_errors = []
+
+        for dataset_name, config in dataset_configs.items():
+            loader = config["loader"]
+            try:
+                df = loader(self.base_path)
+            except (FileNotFoundError, NotADirectoryError) as exc:
+                logger.warning("%s not loaded: %s", dataset_name, exc)
+                self._record_error(dataset_name, str(exc))
+                continue
+            except Exception as exc:  # pragma: no cover - unexpected failures
+                logger.exception("Unexpected error loading %s", dataset_name)
+                self._record_error(dataset_name, str(exc))
+                continue
+
+            mapping_key = config.get("mapping")
+            if mapping_key:
+                df = self._apply_column_mappings(df, mapping_key)
+
+            for column in config.get("date_columns", []):
+                if column in df.columns:
+                    df[column] = pd.to_datetime(df[column], errors="coerce")
+
+            for column in config.get("numeric_columns", []):
+                if column in df.columns:
+                    df[column] = pd.to_numeric(df[column], errors="coerce")
+
+            self._validate_required_columns(
+                df,
+                dataset_name,
+                config.get("required_columns", []),
+            )
+
+            self.datasets[dataset_name] = df
+            logger.info("Loaded %s with %d rows", dataset_name, len(df))
+
+        return self.datasets
+
+    def _apply_column_mappings(
+        self,
+        df: DataFrame,
+        dataset_key: str,
+    ) -> DataFrame:
+        mapping = self.column_maps.get(dataset_key)
+        if not mapping:
+            return df
+
+        rename_dict = {source: target for target, source in mapping.items() if source in df.columns}
+        if rename_dict:
+            df = df.rename(columns=rename_dict)
+        return df
+
+    def _validate_required_columns(
+        self,
+        df: DataFrame,
+        dataset_name: str,
+        required_columns: List[str],
+    ) -> None:
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        if missing_columns:
+            message = f"Missing required columns: {missing_columns}"
+            logger.warning("%s validation issue: %s", dataset_name, message)
+            self._record_error(dataset_name, message)
+
+    def _record_error(self, dataset: str, error: str) -> None:
+        self.validation_errors.append(
+            {
+                "dataset": dataset,
+                "error": error,
+                "timestamp": datetime.now(),
+            }
+        )
+
+    def get_data_quality_report(self) -> Dict[str, object]:
+        """Generate a summary of the loaded datasets and validation issues."""
+
+        summary = {
+            "total_datasets_loaded": len(self.datasets),
+            "total_rows": sum(len(df) for df in self.datasets.values()),
+            "validation_errors": len(self.validation_errors),
+            "generated_at": datetime.now().isoformat(),
+        }
+
+        dataset_reports = {
+            name: {
+                "row_count": len(df),
+                "column_count": len(df.columns),
+                "null_counts": df.isnull().sum().to_dict(),
+                "dtypes": df.dtypes.astype(str).to_dict(),
+                "memory_usage_mb": df.memory_usage(deep=True).sum() / 1024 / 1024,
+            }
+            for name, df in self.datasets.items()
+        }
+
+        return {
+            "summary": summary,
+            "datasets": dataset_reports,
+            "validation_errors": self.validation_errors,
+        }
