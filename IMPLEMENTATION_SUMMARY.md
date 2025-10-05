@@ -230,6 +230,9 @@ Features:
 
 ## Project Structure
 
+$ python validators/schema_validator.py
+
+======================================================================
 ```
 Commercial-View/
 ├── config/                          # Configuration files

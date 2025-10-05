@@ -24,6 +24,7 @@ pip install -r requirements.txt
 **Important**: Always use the virtual environment's Python!
 
 ✅ Correct usage:
+
 ```bash
 source .venv/bin/activate
 python run.py
@@ -31,6 +32,7 @@ pytest -q
 ```
 
 ❌ Incorrect usage:
+
 ```bash
 python3 run.py         # ❌ Uses system Python (not virtual env)
 pip install pandas     # ❌ Installs globally, not in .venv
