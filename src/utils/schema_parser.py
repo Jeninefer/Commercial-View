@@ -6,7 +6,7 @@ schema JSON file::
     python -m src.utils.schema_parser path/to/schema.json
 
 If no path is provided, a schema file is expected at ``data/schema.json``
-relative to the repository root.
+relative to the repository root (detected via ``pyproject.toml`` or ``.git`` in parent directories).
 """
 
 from __future__ import annotations
