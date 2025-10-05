@@ -10,7 +10,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict, Optional, Union
 import yaml
 import json
 from datetime import datetime
@@ -21,8 +21,44 @@ from src.data_loader import (
     load_historic_real_payment,
     load_payment_schedule,
     load_customer_data,
-    load_collateral
+    load_collateral,
 )
+
+PRICING_DATA_ENV_VAR = "COMMERCIAL_VIEW_DATA_PATH"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_PRICING_DATA_DIR = REPO_ROOT / "data" / "pricing"
+
+
+def _normalize_data_dir(path: Union[str, Path]) -> Path:
+    """Normalize a pricing data directory string to an absolute ``Path``."""
+
+    candidate = Path(path).expanduser()
+    if not candidate.is_absolute():
+        candidate = (REPO_ROOT / candidate).resolve()
+    else:
+        candidate = candidate.resolve()
+
+    return candidate
+
+
+def resolve_pricing_data_dir(
+    cli_override: Optional[str],
+    env_override: Optional[str],
+    config_override: Optional[str],
+) -> Path:
+    """Determine the pricing data directory using the configured precedence.
+
+    The order of evaluation is ``--data-dir`` CLI argument, then the
+    ``COMMERCIAL_VIEW_DATA_PATH`` environment variable, followed by the
+    ``pricing_config.yml`` entry, and finally the repository default
+    ``data/pricing`` directory.
+    """
+
+    for candidate in (cli_override, env_override, config_override):
+        if candidate:
+            return _normalize_data_dir(candidate)
+
+    return DEFAULT_PRICING_DATA_DIR
 
 
 def load_config(config_dir: str) -> Dict[str, Any]:
@@ -69,7 +105,11 @@ def main():
     """Main processing function."""
     parser = argparse.ArgumentParser(description='Process commercial lending portfolio')
     parser.add_argument('--config', required=True, help='Configuration directory path')
-    parser.add_argument('--data', help='Input data file path (optional for demo)')
+    parser.add_argument(
+        '--data-dir',
+        dest='data_dir',
+        help='Directory containing pricing data CSV files',
+    )
     
     args = parser.parse_args()
     
@@ -79,22 +119,37 @@ def main():
     # Load configurations
     print(f"Loading configurations from: {args.config}")
     configs = load_config(args.config)
-    
+
     if not configs:
         print("Error: No valid configuration files found")
         sys.exit(1)
-    
+
+    pricing_config = configs.get("pricing_config") or {}
+    config_data_dir = pricing_config.get("pricing_data_path")
+
+    env_data_dir = os.getenv(PRICING_DATA_ENV_VAR)
+    pricing_base_path = resolve_pricing_data_dir(
+        args.data_dir,
+        env_data_dir,
+        config_data_dir,
+    )
+
+    if args.data_dir:
+        data_source = "CLI --data-dir override"
+    elif env_data_dir:
+        data_source = f"{PRICING_DATA_ENV_VAR} environment variable"
+    elif config_data_dir:
+        data_source = "pricing_config.yml"
+    else:
+        data_source = "repository default"
+
     # Create export directories
     print("\nCreating export directories...")
     create_export_directories(configs.get('export_config', {}))
-    
-    # Load data
-    pricing_config = configs.get('pricing_config', {})
-    pricing_base_path = pricing_config.get('pricing_data_path')
 
+    # Load data
     print("\nLoading data...")
-    if pricing_base_path:
-        print(f"Using pricing data directory: {pricing_base_path}")
+    print(f"Using pricing data directory from {data_source}: {pricing_base_path}")
 
     loan_data = load_loan_data(pricing_base_path)
     customer_data = load_customer_data(pricing_base_path)
