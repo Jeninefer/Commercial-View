@@ -1,3 +1,5 @@
+
+import json
 from pathlib import Path
 import sys
 
@@ -8,54 +10,73 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.data_loader import DataLoader, PRICING_FILENAMES
+from src.data_loader import DataLoader
 
 
 @pytest.fixture()
-def sample_pricing_dir(tmp_path: Path) -> Path:
-    base_dir = tmp_path / "pricing"
-    base_dir.mkdir()
+def sample_data_dir(tmp_path: Path) -> Path:
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    return data_dir
 
-    sample_df = pd.DataFrame(
-        {
-            "id": [1, 2],
-            "value": [100, 200],
+
+@pytest.fixture()
+def sample_manifest(tmp_path: Path, sample_data_dir: Path) -> Path:
+    manifest_path = tmp_path / "manifest.json"
+    manifest_data = {
+        "sources": {
+            "files": [
+                {
+                    "name": "loan_data",
+                    "glob": "data/loan_data.csv",
+                },
+                {
+                    "name": "customer_data",
+                    "glob": "data/customer_data.csv",
+                },
+            ]
         }
-    )
+    }
+    with open(manifest_path, "w") as f:
+        json.dump(manifest_data, f)
 
-    for filename in PRICING_FILENAMES.values():
-        sample_df.to_csv(base_dir / filename, index=False)
+    # Create dummy data files
+    sample_df_loan = pd.DataFrame({"loan_id": [1, 2], "loan_value": [100, 200]})
+    sample_df_loan.to_csv(sample_data_dir / "loan_data.csv", index=False)
 
-    return base_dir
+    sample_df_customer = pd.DataFrame({"customer_id": [1, 2], "customer_name": ["A", "B"]})
+    sample_df_customer.to_csv(sample_data_dir / "customer_data.csv", index=False)
 
-
-def test_loaders_respect_environment_override(sample_pricing_dir: Path, monkeypatch) -> None:
-    monkeypatch.setenv("COMMERCIAL_VIEW_DATA_PATH", str(sample_pricing_dir))
-    loader = DataLoader()
-
-    assert not loader.load_loan_data().empty
-    assert not loader.load_historic_real_payment().empty
-    assert not loader.load_payment_schedule().empty
-    assert not loader.load_customer_data().empty
-    assert not loader.load_collateral().empty
+    return manifest_path
 
 
-def test_loaders_use_overridden_base_path(sample_pricing_dir: Path) -> None:
-    loader = DataLoader(base_path=sample_pricing_dir)
-    loan_df = loader.load_loan_data()
-    customer_df = loader.load_customer_data()
+def test_load_all_datasets(sample_manifest: Path) -> None:
+    loader = DataLoader(manifest_path=str(sample_manifest))
+    datasets = loader.load_all_datasets()
 
-    assert loan_df.equals(customer_df)
-    assert loan_df.iloc[0]["id"] == 1
+    assert "loan_data" in datasets
+    assert "customer_data" in datasets
+    assert len(datasets) == 2
+
+    loan_df = datasets["loan_data"]
+    assert "loan_id" in loan_df.columns
+    assert len(loan_df) == 2
+
+    customer_df = datasets["customer_data"]
+    assert "customer_id" in customer_df.columns
+    assert len(customer_df) == 2
 
 
-def test_missing_file_raises_clear_error(sample_pricing_dir: Path) -> None:
-    missing_file = PRICING_FILENAMES["customer_data"]
-    (sample_pricing_dir / missing_file).unlink()
-    loader = DataLoader(base_path=sample_pricing_dir)
+def test_missing_manifest_raises_error() -> None:
+    with pytest.raises(FileNotFoundError):
+        DataLoader(manifest_path="non_existent_manifest.json")
 
-    with pytest.raises(FileNotFoundError) as exc:
-        loader.load_customer_data()
 
-    assert "CSV file not found" in str(exc.value)
-    assert missing_file in str(exc.value)
+def test_empty_manifest_loads_no_datasets(tmp_path: Path) -> None:
+    manifest_path = tmp_path / "manifest.json"
+    with open(manifest_path, "w") as f:
+        json.dump({}, f)
+
+    loader = DataLoader(manifest_path=str(manifest_path))
+    datasets = loader.load_all_datasets()
+    assert len(datasets) == 0
