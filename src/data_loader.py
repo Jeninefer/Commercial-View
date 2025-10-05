@@ -10,6 +10,8 @@ from pandas import DataFrame
 DEFAULT_DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "pricing"
 # Prefer COMMERCIAL_VIEW_DATA_PATH, but also support DATA_PATH for backward compatibility.
 env_path = os.getenv("COMMERCIAL_VIEW_DATA_PATH") or os.getenv("DATA_PATH")
+if env_path:
+    env_path = os.path.expandvars(os.path.expanduser(env_path))
 DATA_PATH = Path(env_path) if env_path else DEFAULT_DATA_PATH
 
 _FILE_MAP: Dict[str, str] = {
