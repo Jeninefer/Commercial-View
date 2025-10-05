@@ -46,7 +46,10 @@ def get_loan_data():
         df = load_loan_data(DATA_BASE_PATH)
         return df.to_dict(orient="records")
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Loan data file not found. Please upload the CSV file to the data/pricing directory.")
+        raise HTTPException(
+            status_code=404,
+            detail=f"Loan data file not found. Please upload the CSV file to the directory: {DATA_BASE_PATH}"
+        )
 
 @app.get("/historic-real-payment", response_model=List[HistoricRealPayment])
 def get_historic_real_payment():
