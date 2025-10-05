@@ -9,7 +9,7 @@ module.exports = function isNumber(value) {
 	if (typeof value === 'number') {
 		return true;
 	}
-	if (!value || typeof value !== 'object') {
+	if (value === null || typeof value !== 'object') {
 		return false;
 	}
 	// Check if it's a Number object
