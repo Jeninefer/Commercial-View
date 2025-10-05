@@ -6,7 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - Commercial-View API running on http://localhost:8000
 
@@ -66,6 +66,7 @@ Formats code using Prettier (if configured).
 ## API Integration
 
 The dashboard connects to the Commercial-View FastAPI backend:
+
 - **API Base URL**: http://localhost:8000
 - **Health Check**: GET /health
 - **Portfolio Data**: GET /executive-summary
@@ -87,9 +88,20 @@ REACT_APP_API_BASE_URL=https://your-api-domain.com
 REACT_APP_ENVIRONMENT=production
 ```
 
+### Additional Environment Variables
+
+For local development, you may also set up a `.env.local` file with the following content:
+
+```dotenv
+DATABASE_URL=postgresql://localhost/mydb
+API_KEY=your-api-key-here
+DEBUG=True
+```
+
 ## Testing
 
 ### Local Testing
+
 ```bash
 # Run test suite
 npm test
@@ -102,6 +114,7 @@ npm test -- --ci --coverage --watchAll=false
 ```
 
 ### Backend Integration Testing
+
 Ensure the Commercial-View API is running before testing API integrations:
 
 ```bash
@@ -121,6 +134,7 @@ npm test
 For cloud development and testing:
 
 ### Setup in Colab
+
 ```python
 # Install Node.js in Colab
 !curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
@@ -133,6 +147,7 @@ For cloud development and testing:
 ```
 
 ### Development in Colab
+
 ```python
 # Start development server (background process)
 import subprocess
@@ -150,6 +165,7 @@ print("Use Colab's port forwarding or ngrok for external access")
 ```
 
 ### Export and Persistence
+
 ```python
 # Build production assets
 !npm run build
@@ -163,6 +179,7 @@ files.download('dashboard-build.zip')
 ```
 
 ### Cleanup (Important for Colab)
+
 ```python
 # Terminate long-running servers to avoid idle sessions
 try:
