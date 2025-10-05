@@ -34,15 +34,16 @@ def test_main_uses_default_pricing_directory_for_empty_config(monkeypatch, tmp_p
 
     loan_call = {}
 
-    def _fake_load_loan_data(base_path=None):
-        loan_call["value"] = base_path
-        return pd.DataFrame({"loan_id": []})
-
-    def _fake_load_customer_data(base_path=None):
-        return pd.DataFrame({"customer_id": []})
-
-    monkeypatch.setattr(process_portfolio, "load_loan_data", _fake_load_loan_data)
-    monkeypatch.setattr(process_portfolio, "load_customer_data", _fake_load_customer_data)
+    monkeypatch.setattr(
+        process_portfolio,
+        "load_loan_data",
+        lambda base_path=None: loan_call.setdefault("value", base_path) or pd.DataFrame({"loan_id": []}),
+    )
+    monkeypatch.setattr(
+        process_portfolio,
+        "load_customer_data",
+        lambda base_path=None: pd.DataFrame({"customer_id": []}),
+    )
     monkeypatch.setattr(process_portfolio, "create_export_directories", lambda _: None)
 
     # ``main`` should complete without raising and fall back to the default path
