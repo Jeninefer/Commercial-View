@@ -102,10 +102,15 @@ def test_fastapi_app_startup_smoke(
     module = importlib.import_module(module_name)
     assert hasattr(module, "startup_event")
 
-    # Patch module-level attributes to ensure test isolation
-    monkeypatch.setattr(module, "datasets", {}, raising=False)
+    # Patch module-level attributes to ensure test isolation.
+    # The tested module is expected to define 'datasets' (dict-like) and optionally 'data_loader'.
+    if hasattr(module, "datasets"):
+        monkeypatch.setattr(module, "datasets", {}, raising=False)
+    else:
+        pytest.fail(f"Expected attribute 'datasets' not found in module '{module.__name__}'.")
     if hasattr(module, "data_loader"):
         monkeypatch.setattr(module, "data_loader", None)
+    # If 'data_loader' is not present, we skip patching it.
 
     import asyncio
 
