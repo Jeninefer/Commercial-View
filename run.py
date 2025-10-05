@@ -1,307 +1,254 @@
-import os
-from datetime import datetime
+"""Commercial View API - Enterprise Grade Implementation."""
+
 import logging
-from typing import Optional, Dict, Any, List
-
-from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Query
+import pandas as pd
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from typing import Dict, List, Any, Optional
+from pathlib import Path
+from datetime import datetime
+import os
+from fastapi.security import APIKeyHeader
+from starlette.status import HTTP_403_FORBIDDEN
+from pydantic import BaseModel
 
-from src.data_loader import DataLoader
-from src.figma_client import get_figma_file
-from src.models import (
-    LoanData, 
-    HistoricRealPayment, 
-    PaymentSchedule,
-    CustomerData,
-    Collateral
+from src.data_loader import (
+    load_loan_data,
+    load_historic_real_payment,
+    load_payment_schedule,
+    load_customer_data,
+    load_collateral,
 )
-
-load_dotenv()
+from src.pipeline import CommercialViewPipeline
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
-PRICING_BASE_PATH = os.getenv("COMMERCIAL_VIEW_PRICING_PATH")
-
-# Initialize FastAPI app
+# Create FastAPI instance
 app = FastAPI(
     title="Commercial View API",
-    description="Production-grade API for commercial loan portfolio analytics",
+    description="Enterprise grade portfolio analytics for Abaco Capital",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
 
-# Configure CORS for production use
+# Configure CORS with environment variables for production security
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001"],  # Add your frontend URL
+    allow_origins=os.environ.get("ALLOWED_ORIGINS", "*").split(","),
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "Accept"],
 )
 
-# Global data loader instance
-data_loader = None
-datasets = {}
+# Optional: Add API key security for production
+API_KEY_NAME = "X-API-Key"
+api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
+
+# Initialize pipeline
+pipeline = CommercialViewPipeline()
 
 @app.on_event("startup")
 async def startup_event():
-    """Load all datasets on application startup."""
-    global data_loader, datasets
+    """Load all datasets on startup."""
     try:
-        logger.info("Starting Commercial View API...")
-        data_loader = DataLoader()
-        datasets = data_loader.load_all_datasets()
-        logger.info(f"Successfully loaded {len(datasets)} datasets")
+        pipeline.load_all_datasets()
+        logger.info("Successfully loaded all available datasets")
     except Exception as e:
-        logger.error(f"Failed to initialize application: {str(e)}")
+        logger.error(f"Error during startup: {str(e)}")
 
-@app.get("/")
+@app.get("/", response_model=Dict[str, str])
 async def root():
-    """API health check and basic information."""
-    return {
-        "message": "Welcome to the Commercial View API",
-        "version": "1.0.0",
-        "status": "operational",
-        "datasets_loaded": len(datasets),
-        "endpoints": {
-            "documentation": "/docs",
-            "health": "/health",
-            "loan_data": "/loan-data",
-            "payments": "/payment-schedule",
-            "historic_payments": "/historic-real-payment",
-            "portfolio_summary": "/portfolio-summary",
-            "dpd_analysis": "/dpd-analysis",
-            "data_quality": "/data-quality"
-        }
-    }
+    """Welcome endpoint."""
+    return {"message": "Welcome to the Commercial View API"}
 
-@app.get("/health")
-async def health_check():
-    """Detailed health check endpoint."""
-    health_status = {
-        "status": "healthy",
-        "timestamp": datetime.now().isoformat(),
-        "datasets": {}
-    }
-    
-    for name, df in datasets.items():
-        health_status["datasets"][name] = {
-            "loaded": True,
-            "row_count": len(df),
-            "last_updated": datetime.now().isoformat()
-        }
-    
-    # Check for missing critical datasets
-    missing_datasets = ["customer_data", "collateral"]
-    for dataset in missing_datasets:
-        if dataset not in datasets:
-            health_status["datasets"][dataset] = {
-                "loaded": False,
-                "status": "missing"
-            }
-            health_status["status"] = "degraded"
-    
-    return health_status
+@app.get("/loan-data", response_model=List[Dict[str, Any]])
+async def get_loan_data(limit: Optional[int] = None):
+    """Get loan data with optional limit."""
+    try:
+        df = pipeline._datasets.get('loan_data', pd.DataFrame())
+        if df.empty:
+            return []
+        if limit:
+            df = df.head(limit)
+        return df.to_dict('records')
+    except Exception as e:
+        logger.error(f"Error fetching loan data: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/loan-data")
-async def get_loan_data(
-    skip: int = Query(0, ge=0, description="Number of records to skip"),
-    limit: int = Query(100, ge=1, le=1000, description="Number of records to return"),
-    customer_id: Optional[str] = Query(None, description="Filter by customer ID"),
-    status: Optional[str] = Query(None, description="Filter by loan status")
-):
-    """Get loan data with pagination and filtering."""
-    if "loan_data" not in datasets:
-        raise HTTPException(status_code=404, detail="Loan data not available")
-    
-    df = datasets["loan_data"].copy()
-    
-    # Apply filters
-    if customer_id:
-        df = df[df["customer_id"] == customer_id]
-    if status:
-        df = df[df["loan_status"] == status]
-    
-    # Apply pagination
-    total_records = len(df)
-    df_paginated = df.iloc[skip:skip + limit]
-    
-    return {
-        "data": df_paginated.fillna("").to_dict(orient="records"),
-        "pagination": {
-            "skip": skip,
-            "limit": limit,
-            "total": total_records,
-            "has_more": skip + limit < total_records
-        }
-    }
+@app.get("/payment-schedule", response_model=List[dict])
+async def get_payment_schedule(limit: Optional[int] = None):
+    """Get payment schedule data with optional limit."""
+    try:
+        df = pipeline._datasets.get('payment_schedule', pd.DataFrame())
+        if df.empty:
+            return []
+        if limit:
+            df = df.head(limit)
+        return df.to_dict('records')
+    except Exception as e:
+        logger.error(f"Error fetching payment schedule: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/portfolio-summary")
-async def get_portfolio_summary():
-    """Get comprehensive portfolio analytics."""
-    if "loan_data" not in datasets:
-        raise HTTPException(status_code=404, detail="Loan data not available")
-    
-    df = datasets["loan_data"]
-    
-    # Calculate key metrics
-    summary = {
-        "overview": {
-            "total_loans": len(df),
-            "active_loans": len(df[df["loan_status"] == "Current"]),
-            "completed_loans": len(df[df["loan_status"] == "Complete"]),
-            "defaulted_loans": len(df[df["loan_status"] == "Default"]),
-            "total_portfolio_value": float(df["outstanding_balance"].sum()),
-            "weighted_average_apr": float(
-                (df["interest_rate"] * df["outstanding_balance"]).sum() / 
-                df["outstanding_balance"].sum()
-            ) if df["outstanding_balance"].sum() > 0 else 0
-        },
-        "by_status": df.groupby("loan_status").agg({
-            "loan_id": "count",
-            "outstanding_balance": "sum"
-        }).to_dict(),
-        "top_customers": df.groupby("customer_id").agg({
-            "outstanding_balance": "sum"
-        }).nlargest(10, "outstanding_balance").to_dict(),
-        "concentration_metrics": {
-            "single_obligor_limit": 0.04,  # 4% as per manifest
-            "top_10_concentration": float(
-                df.groupby("customer_id")["outstanding_balance"].sum()
-                .nlargest(10).sum() / df["outstanding_balance"].sum()
-            ) if df["outstanding_balance"].sum() > 0 else 0
-        }
-    }
-    
-    return summary
+@app.get("/historic-real-payment", response_model=List[dict])
+async def get_historic_real_payment(limit: Optional[int] = None):
+    """Get historic real payment data with optional limit."""
+    try:
+        df = pipeline._datasets.get('historic_real_payment', pd.DataFrame())
+        if df.empty:
+            return []
+        if limit:
+            df = df.head(limit)
+        return df.to_dict('records')
+    except Exception as e:
+        logger.error(f"Error fetching historic payments: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/dpd-analysis")
+@app.get("/customer-data", response_model=List[dict])
+async def get_customer_data(limit: Optional[int] = None):
+    """Get customer data with optional limit."""
+    try:
+        df = pipeline._datasets.get('customer_data', pd.DataFrame())
+        if df.empty:
+            return []
+        if limit:
+            df = df.head(limit)
+        return df.to_dict('records')
+    except Exception as e:
+        logger.error(f"Error fetching customer data: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/collateral", response_model=List[dict])
+async def get_collateral(limit: Optional[int] = None):
+    """Get collateral data with optional limit."""
+    try:
+        df = pipeline._datasets.get('collateral', pd.DataFrame())
+        if df.empty:
+            return []
+        if limit:
+            df = df.head(limit)
+        return df.to_dict('records')
+    except Exception as e:
+        logger.error(f"Error fetching collateral data: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/executive-summary", response_model=dict)
+async def get_executive_summary():
+    """Get comprehensive executive summary with all KPIs."""
+    try:
+        summary = pipeline.generate_executive_summary()
+        return summary
+    except Exception as e:
+        logger.error(f"Error generating executive summary: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/portfolio-metrics", response_model=dict)
+async def get_portfolio_metrics():
+    """Get detailed portfolio metrics."""
+    try:
+        metrics = pipeline.compute_portfolio_metrics()
+        return metrics
+    except Exception as e:
+        logger.error(f"Error computing portfolio metrics: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/dpd-analysis", response_model=dict)
 async def get_dpd_analysis():
     """Get Days Past Due (DPD) analysis."""
-    if "loan_data" not in datasets:
-        raise HTTPException(status_code=404, detail="Loan data not available")
-    
-    df = datasets["loan_data"]
-    
-    # Define DPD buckets as per manifest
-    dpd_buckets = [0, 7, 15, 21, 30, 60, 75, 90, 120, 150, 180]
-    
-    # Create DPD bucket labels
-    def get_dpd_bucket(days):
-        for i, bucket in enumerate(dpd_buckets):
-            if days <= bucket:
-                return f"0-{bucket}" if i == 0 else f"{dpd_buckets[i-1]+1}-{bucket}"
-        return "180+"
-    
-    df["dpd_bucket"] = df["days_past_due"].apply(get_dpd_bucket)
-    
-    dpd_analysis = {
-        "buckets": df.groupby("dpd_bucket").agg({
-            "loan_id": "count",
-            "outstanding_balance": "sum"
-        }).to_dict(),
-        "metrics": {
-            "dpd_0": len(df[df["days_past_due"] == 0]),
-            "dpd_1_30": len(df[(df["days_past_due"] >= 1) & (df["days_past_due"] <= 30)]),
-            "dpd_31_60": len(df[(df["days_past_due"] >= 31) & (df["days_past_due"] <= 60)]),
-            "dpd_61_90": len(df[(df["days_past_due"] >= 61) & (df["days_past_due"] <= 90)]),
-            "dpd_over_90": len(df[df["days_past_due"] > 90]),
-            "npl_180": float(df[df["days_past_due"] >= 180]["outstanding_balance"].sum())
-        }
-    }
-    
-    return dpd_analysis
-
-@app.get("/data-quality")
-async def get_data_quality_report():
-    """Get comprehensive data quality report."""
-    if data_loader is None:
-        raise HTTPException(status_code=500, detail="Data loader not initialized")
-    
-    return data_loader.get_data_quality_report()
-
-@app.get("/payment-schedule")
-async def get_payment_schedule(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000),
-    loan_id: Optional[str] = Query(None)
-):
-    """Get payment schedule data."""
-    if "payment_schedule" not in datasets:
-        raise HTTPException(status_code=404, detail="Payment schedule data not available")
-    
-    df = datasets["payment_schedule"].copy()
-    
-    if loan_id:
-        df = df[df["loan_id"] == loan_id]
-    
-    total_records = len(df)
-    df_paginated = df.iloc[skip:skip + limit]
-    
-    return {
-        "data": df_paginated.fillna("").to_dict(orient="records"),
-        "pagination": {
-            "skip": skip,
-            "limit": limit,
-            "total": total_records
-        }
-    }
-
-@app.get("/historic-real-payment")
-async def get_historic_payments(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000),
-    payment_status: Optional[str] = Query(None)
-):
-    """Get historic payment data."""
-    if "historic_real_payment" not in datasets:
-        raise HTTPException(status_code=404, detail="Historic payment data not available")
-    
-    df = datasets["historic_real_payment"].copy()
-    
-    if payment_status:
-        df = df[df["True Payment Status"] == payment_status]
-    
-    total_records = len(df)
-    df_paginated = df.iloc[skip:skip + limit]
-    
-    return {
-        "data": df_paginated.fillna("").to_dict(orient="records"),
-        "pagination": {
-            "skip": skip,
-            "limit": limit,
-            "total": total_records
-        }
-    }
-
-@app.get("/figma-file/{file_key}", response_model=Dict[str, Any])
-def get_figma_file_endpoint(file_key: str):
     try:
-        return get_figma_file(file_key)
-    except ValueError as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=str(e))
-
-@app.exception_handler(Exception)
-async def global_exception_handler(request, exc):
-    """Global exception handler for production error handling."""
-    logger.error(f"Unhandled exception: {str(exc)}")
-    return JSONResponse(
-        status_code=500,
-        content={
-            "error": "Internal server error",
-            "message": "An unexpected error occurred. Please try again later.",
-            "timestamp": datetime.now().isoformat()
+        dpd_data = pipeline.compute_dpd_metrics()
+        if dpd_data.empty:
+            return {"message": "No DPD data available"}
+        
+        # Convert to JSON-serializable format
+        dpd_summary = dpd_data.groupby('dpd_bucket').agg({
+            'Outstanding Loan Value': 'sum',
+            'Loan ID': 'count'
+        }).rename(columns={'Loan ID': 'loan_count'})
+        
+        return {
+            "dpd_buckets": dpd_summary.to_dict('index'),
+            "total_past_due": float(dpd_data['past_due_amount'].sum()),
+            "default_count": int(dpd_data['is_default'].sum())
         }
-    )
+    except Exception as e:
+        logger.error(f"Error in DPD analysis: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
-# For running with uvicorn
+@app.get("/recovery-analysis", response_model=dict)
+async def get_recovery_analysis():
+    """Get recovery curve analysis by cohort."""
+    try:
+        recovery_data = pipeline.compute_recovery_metrics()
+        if recovery_data.empty:
+            return {"message": "No recovery data available"}
+        
+        # Format for API response
+        recovery_by_cohort = {}
+        for cohort in recovery_data['cohort'].unique():
+            cohort_data = recovery_data[recovery_data['cohort'] == cohort]
+            recovery_by_cohort[str(cohort)] = cohort_data[[
+                'months_since_disbursement', 'recovery_pct'
+            ]].to_dict('records')
+        
+        return {
+            "recovery_curves": recovery_by_cohort,
+            "generated_at": datetime.now().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Error in recovery analysis: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/schema/{dataset_name}", response_model=dict)
+async def get_schema(dataset_name: str):
+    """Get schema information for a specific dataset."""
+    try:
+        df = pipeline._datasets.get(dataset_name)
+        if df is None or df.empty:
+            raise HTTPException(status_code=404, detail=f"Dataset '{dataset_name}' not found")
+        
+        schema = {
+            "columns": df.columns.tolist(),
+            "dtypes": df.dtypes.astype(str).to_dict(),
+            "shape": df.shape,
+            "null_counts": df.isnull().sum().to_dict()
+        }
+        return schema
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error fetching schema: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/health", response_model=dict)
+async def health_check():
+    """Health check endpoint with detailed status."""
+    datasets_status = {}
+    for name, df in pipeline._datasets.items():
+        datasets_status[name] = {
+            "loaded": not df.empty,
+            "row_count": len(df) if not df.empty else 0
+        }
+    
+    return {
+        "status": "healthy",
+        "datasets": datasets_status,
+        "timestamp": datetime.now().isoformat()
+    }
+
+# Define your data models
+class LoanData(BaseModel):
+    loan_id: str
+    amount: float
+    term_months: int
+    interest_rate: float
+    # other fields...
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

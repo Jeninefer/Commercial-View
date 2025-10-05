@@ -1,11 +1,13 @@
 # Versioning Strategy
 
 ## Overview
+
 This document defines the versioning strategy, release workflow, and tagging conventions for the Commercial-View project.
 
 ## Version Numbering
 
 ### Semantic Versioning (SemVer)
+
 We follow [Semantic Versioning 2.0.0](https://semver.org/) with the format:
 
 ```
@@ -48,7 +50,9 @@ Increment when making backwards-compatible bug fixes:
 
 ### Git Tag Format
 ```
+
 v{MAJOR}.{MINOR}.{PATCH}[-{PRERELEASE}]
+
 ```
 
 ### Tag Examples
@@ -83,12 +87,14 @@ git push origin --tags
 ### Main Branches
 
 #### `main`
+
 - Always production-ready
 - Protected branch (requires PR and reviews)
 - Tagged with release versions
 - Only accepts merges from `release/*` or `hotfix/*` branches
 
 #### `develop`
+
 - Integration branch for features
 - Contains latest delivered development changes
 - Source for next release
@@ -96,6 +102,7 @@ git push origin --tags
 ### Supporting Branches
 
 #### Feature Branches
+
 - **Format**: `feature/{issue-number}-{short-description}`
 - **Example**: `feature/123-add-new-kpi-metrics`
 - Branch from: `develop`
@@ -103,6 +110,7 @@ git push origin --tags
 - Naming: lowercase with hyphens
 
 #### Release Branches
+
 - **Format**: `release/{version}`
 - **Example**: `release/1.2.0`
 - Branch from: `develop`
@@ -110,6 +118,7 @@ git push origin --tags
 - Purpose: Prepare new production release
 
 #### Hotfix Branches
+
 - **Format**: `hotfix/{version}`
 - **Example**: `hotfix/1.2.1`
 - Branch from: `main`
@@ -117,6 +126,7 @@ git push origin --tags
 - Purpose: Quick production fixes
 
 #### Bugfix Branches
+
 - **Format**: `bugfix/{issue-number}-{short-description}`
 - **Example**: `bugfix/456-fix-dpd-calculation`
 - Branch from: `develop`
@@ -127,6 +137,7 @@ git push origin --tags
 ### Regular Release Process
 
 #### 1. Prepare Release Branch
+
 ```bash
 # Create release branch from develop
 git checkout develop
@@ -135,14 +146,18 @@ git checkout -b release/1.2.0
 ```
 
 #### 2. Update Version Numbers
+
 Update version in:
+
 - `VERSION` file
 - `setup.py` or `pyproject.toml`
 - `package.json` (if applicable)
 - Documentation
 
 #### 3. Update Changelog
+
 Update `CHANGELOG.md` with:
+
 - Release version and date
 - New features
 - Bug fixes
@@ -150,12 +165,14 @@ Update `CHANGELOG.md` with:
 - Deprecations
 
 #### 4. Test Release Candidate
+
 - Run full test suite
 - Perform integration testing
 - Conduct security scan
 - Review documentation
 
 #### 5. Finalize Release
+
 ```bash
 # Merge to main
 git checkout main
@@ -175,6 +192,7 @@ git push origin --delete release/1.2.0
 ```
 
 #### 6. Publish Release
+
 - Create GitHub release from tag
 - Attach release artifacts
 - Publish release notes
@@ -183,6 +201,7 @@ git push origin --delete release/1.2.0
 ### Hotfix Release Process
 
 #### 1. Create Hotfix Branch
+
 ```bash
 git checkout main
 git pull origin main
@@ -190,6 +209,7 @@ git checkout -b hotfix/1.2.1
 ```
 
 #### 2. Apply Fix and Test
+
 ```bash
 # Make necessary changes
 # Run tests
@@ -197,6 +217,7 @@ git checkout -b hotfix/1.2.1
 ```
 
 #### 3. Finalize Hotfix
+
 ```bash
 # Merge to main
 git checkout main
@@ -218,22 +239,26 @@ git push origin --delete hotfix/1.2.1
 ### Automated Version Management
 
 #### On Feature Branch
+
 - Run tests
 - Check code quality
 - Build preview artifacts
 
 #### On Develop Branch
+
 - Run full test suite
 - Generate development builds
 - Tag with pre-release version: `v{next-version}-dev.{build-number}`
 
 #### On Release Branch
+
 - Run full test suite
 - Generate release candidate: `v{version}-rc.{number}`
 - Deploy to staging environment
 - Run integration tests
 
 #### On Main Branch (Tag Push)
+
 - Validate tag format
 - Run production tests
 - Build release artifacts
@@ -242,6 +267,7 @@ git push origin --delete hotfix/1.2.1
 - Publish documentation
 
 ### Version Validation in CI
+
 ```yaml
 # Example CI check for version consistency
 - name: Validate Version
@@ -257,6 +283,7 @@ git push origin --delete hotfix/1.2.1
 ## Changelog Management
 
 ### Changelog Format
+
 Follow [Keep a Changelog](https://keepachangelog.com/) format:
 
 ```markdown
@@ -292,16 +319,19 @@ Follow [Keep a Changelog](https://keepachangelog.com/) format:
 ## Version Support Policy
 
 ### Long-Term Support (LTS)
+
 - Major versions receive security updates for 2 years
 - LTS versions tagged with `-lts` suffix
 - Example: `v1.0.0-lts`
 
 ### Support Timeline
+
 - **Current Release**: Full support (features + bugfixes + security)
 - **Previous Major**: Security updates only
 - **Older Releases**: No longer supported
 
 ### End of Life (EOL)
+
 - Announced 6 months in advance
 - Security updates only during notice period
 - No updates after EOL date
@@ -309,12 +339,15 @@ Follow [Keep a Changelog](https://keepachangelog.com/) format:
 ## Version Documentation
 
 ### Documentation Versioning
+
 - Maintain docs for current and previous major versions
 - Use version switcher in documentation site
 - Archive old version docs
 
 ### Release Notes
+
 Include in each release:
+
 - Version number and date
 - Summary of changes
 - Upgrade instructions
@@ -325,13 +358,16 @@ Include in each release:
 ## Tools and Automation
 
 ### Recommended Tools
+
 - **bump2version**: Automate version bumping
 - **semantic-release**: Automated version management and changelog generation
 - **git-flow**: Git workflow automation
 - **GitHub Actions**: CI/CD automation
 
 ### Version File
+
 Maintain a `VERSION` file at repository root:
+
 ```
 1.2.3
 ```

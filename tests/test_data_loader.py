@@ -1,82 +1,116 @@
+"""Test suite for data loader module.
 
-import json
-from pathlib import Path
-import sys
+IMPORTANT: Before running tests, ensure you:
+1. Activate the virtual environment: source .venv/bin/activate
+2. Install pytest if not already installed: pip install pytest
 
-import pandas as pd
+Common Issues:
+- ModuleNotFoundError: No module named 'pytest' - This means pytest is not installed 
+  in your current Python environment. Run:
+  
+  source .venv/bin/activate && pip install pytest
+  
+- Always use the virtual environment Python, not system Python (/opt/homebrew/bin/python3)
+"""
+
 import pytest
+from pathlib import Path
+import pandas as pd
+import tempfile
+import os
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-from src.data_loader import DataLoader
-
-
-@pytest.fixture()
-def sample_data_dir(tmp_path: Path) -> Path:
-    data_dir = tmp_path / "data"
-    data_dir.mkdir()
-    return data_dir
-
-
-@pytest.fixture()
-def sample_manifest(tmp_path: Path, sample_data_dir: Path) -> Path:
-    manifest_path = tmp_path / "manifest.json"
-    manifest_data = {
-        "sources": {
-            "files": [
-                {
-                    "name": "loan_data",
-                    "glob": "data/loan_data.csv",
-                },
-                {
-                    "name": "customer_data",
-                    "glob": "data/customer_data.csv",
-                },
-            ]
-        }
-    }
-    with open(manifest_path, "w") as f:
-        json.dump(manifest_data, f)
-
-    # Create dummy data files
-    sample_df_loan = pd.DataFrame({"loan_id": [1, 2], "loan_value": [100, 200]})
-    sample_df_loan.to_csv(sample_data_dir / "loan_data.csv", index=False)
-
-    sample_df_customer = pd.DataFrame({"customer_id": [1, 2], "customer_name": ["A", "B"]})
-    sample_df_customer.to_csv(sample_data_dir / "customer_data.csv", index=False)
-
-    return manifest_path
+from src.data_loader import (
+    load_loan_data,
+    load_historic_real_payment,
+    load_payment_schedule,
+    load_customer_data,
+    load_collateral,
+    _resolve_base_path,
+    PRICING_FILENAMES
+)
 
 
-def test_load_all_datasets(sample_manifest: Path) -> None:
-    loader = DataLoader(manifest_path=str(sample_manifest))
-    datasets = loader.load_all_datasets()
-
-    assert "loan_data" in datasets
-    assert "customer_data" in datasets
-    assert len(datasets) == 2
-
-    loan_df = datasets["loan_data"]
-    assert "loan_id" in loan_df.columns
-    assert len(loan_df) == 2
-
-    customer_df = datasets["customer_data"]
-    assert "customer_id" in customer_df.columns
-    assert len(customer_df) == 2
-
-
-def test_missing_manifest_raises_error() -> None:
-    with pytest.raises(FileNotFoundError):
-        DataLoader(manifest_path="non_existent_manifest.json")
-
-
-def test_empty_manifest_loads_no_datasets(tmp_path: Path) -> None:
-    manifest_path = tmp_path / "manifest.json"
-    with open(manifest_path, "w") as f:
-        json.dump({}, f)
-
-    loader = DataLoader(manifest_path=str(manifest_path))
-    datasets = loader.load_all_datasets()
-    assert len(datasets) == 0
+class TestDataLoader:
+    """Test class for data loader functions."""
+    
+    @pytest.fixture
+    def temp_data_dir(self):
+        """Create temporary data directory with sample CSV files."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            data_path = Path(tmpdir)
+            
+            # Create sample CSV files
+            for key, filename in PRICING_FILENAMES.items():
+                df = pd.DataFrame({
+                    'Customer ID': ['C001', 'C002'],
+                    'Amount': [1000, 2000],
+                    'Date': ['2024-01-01', '2024-01-02']
+                })
+                df.to_csv(data_path / filename, index=False)
+            
+            yield data_path
+    
+    def test_load_loan_data(self, temp_data_dir):
+        """Test loading loan data."""
+        df = load_loan_data(temp_data_dir)  # Changed from base_path= to positional
+        assert not df.empty
+        assert len(df) == 2
+        assert 'Customer ID' in df.columns
+    
+    def test_load_historic_real_payment(self, temp_data_dir):
+        """Test loading historic real payment data."""
+        df = load_historic_real_payment(temp_data_dir)  # Changed from base_path= to positional
+        assert not df.empty
+        assert len(df) == 2
+    
+    def test_load_payment_schedule(self, temp_data_dir):
+        """Test loading payment schedule data."""
+        df = load_payment_schedule(temp_data_dir)  # Changed from base_path= to positional
+        assert not df.empty
+        assert len(df) == 2
+    
+    def test_load_customer_data(self, temp_data_dir):
+        """Test loading customer data."""
+        df = load_customer_data(temp_data_dir)  # Changed from base_path= to positional
+        assert not df.empty
+        assert len(df) == 2
+    
+    def test_load_collateral(self, temp_data_dir):
+        """Test loading collateral data."""
+        df = load_collateral(temp_data_dir)  # Changed from base_path= to positional
+        assert not df.empty
+        assert len(df) == 2
+    
+    def test_missing_file_error(self):
+        """Test error when file is missing."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            # Empty directory with no CSV files
+            with pytest.raises(FileNotFoundError):
+                load_loan_data(tmpdir)
+    
+    def test_resolve_base_path(self, temp_data_dir):
+        """Test resolving base path."""
+        # Testing with explicit path
+        resolved = _resolve_base_path(temp_data_dir)
+        assert resolved == temp_data_dir.resolve()
+        
+        # Testing default path resolution
+        default_path = _resolve_base_path()
+        expected_default = Path(__file__).resolve().parent.parent / "data"
+        assert default_path == expected_default
+    
+    def test_direct_file_path(self, temp_data_dir):
+        """Test providing direct file path instead of directory."""
+        # Create a separate CSV file
+        file_path = temp_data_dir / "direct_test.csv"
+        df = pd.DataFrame({
+            'Customer ID': ['C001', 'C002'],
+            'Amount': [1000, 2000]
+        })
+        df.to_csv(file_path, index=False)
+        
+        # Test with direct file path using _read_csv function (via monkeypatch)
+        from src.data_loader import _read_csv
+        result_df = _read_csv(file_path)
+        assert not result_df.empty
+        assert len(result_df) == 2
