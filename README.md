@@ -1,142 +1,157 @@
-# Commercial-View
+# Commercial View
 
-Principal KPI Analytics System for Commercial Lending
+Enterprise-grade portfolio analytics for Abaco Capital.
 
-## Overview
-
-Commercial-View is a comprehensive analytics platform that combines real-time KPI dashboards with sophisticated commercial lending analytics. The system provides:
-
-- **Interactive KPI Dashboards**: Real-time visualization and monitoring of business performance metrics
-- **DPD (Days Past Due) Analysis**: Calculate and track payment delinquency with 7-tier risk classification
-- **Risk Bucketing**: Enterprise-grade loan classification system (Current → 180+ Days Default)
-- **Portfolio Analytics**: Advanced metrics for commercial lending operations
-- **Pricing Management**: Configurable pricing grids with interval bands
-- **Data Export**: Multi-format export capabilities (JSON, CSV, Parquet)
-- **AI Integration**: Machine learning insights and predictive analytics
-
-## Features
-
-- 📊 **Real-time KPI monitoring** with interactive dashboards
-- 📈 **Data visualizations** with intuitive charts and analytics
-- 🎯 **7-tier risk classification** with sophisticated DPD analysis
-- 💼 **Commercial lending focus** with enterprise-grade business rules
-- 🔧 **Configurable thresholds** (90/120/180 day default options)
-- 📱 **Responsive design** with modern UI/UX
-- 🔍 **Advanced filtering and search** capabilities
-- 🔒 **PII masking and compliance** (GDPR, SOX, PCI DSS)
-- 🚀 **Multi-language support** (Python + TypeScript)
-
-## Table of Contents
-
-- [Quick Start](#quick-start)
-- [Configuration](#configuration)
-- [Pricing System](#pricing-system)
-- [Development](#development)
-- [CI/CD](#cicd)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Quick Start
+## Setup and Installation
 
 ### Prerequisites
 
-- **Python 3.8+** (for analytics backend)
-- **Node.js 18+** (for dashboard frontend, if applicable)
-- **pip** (Python package manager)
-- **Git** for version control
+- Python 3.11+
+- Virtual environment tool (venv)
 
 ### Installation
 
+1. Clone the repository
+
 ```bash
-# Clone the repository
 git clone https://github.com/Jeninefer/Commercial-View.git
 cd Commercial-View
-
-# Python Analytics Setup
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
-
-# TypeScript Dashboard Setup (if package.json exists)
-npm install
-
-# Install pre-commit hooks (optional, for contributors)
-pip install pre-commit
-pre-commit install
 ```
 
-### Running the System
+1. Create and activate a virtual environment
 
 ```bash
-# Validate configuration files
-python validators/schema_validator.py
+# Create virtual environment
+python -m venv .venv
 
-# View all pricing files
-ls -la data/pricing/
+# Activate on macOS/Linux
+source .venv/bin/activate
 
-# Start analytics processing
-# python src/process_portfolio.py --config config/
-
-# View exports
-ls -la abaco_runtime/exports/
+# Activate on Windows
+.venv\Scripts\activate
 ```
 
-## Configuration
+1. Install dependencies
 
-### Configuration Files
-
-The system uses YAML configuration files located in the `config/` directory:
-
-#### 1. Column Mappings (`config/column_maps.yml`)
-
-Maps your dataset field names to the system's expected field names.
-
-```yaml
-loan_data:
-  loan_id: "your_loan_id_field"
-  customer_id: "your_customer_id_field"
-  loan_amount: "your_amount_field"
-  # ... etc
+```bash
+pip install -r requirements.txt
 ```
 
-#### 2. DPD Policy (`config/dpd_policy.yml`)
+### Important Note About Python Environment
 
-Your sophisticated 7-tier DPD classification system:
+Always use the Python interpreter from the virtual environment (.venv), not the system Python.
 
-```yaml
-default_threshold:
-  days: 180  # Configurable: 90, 120, or 180 days
+✅ Correct:
 
-dpd_buckets:
-  - bucket: "Current" (0 days) → Low Risk
-  - bucket: "1-30 Days" → Low Risk
-  - bucket: "31-60 Days" → Medium Risk
-  - bucket: "61-90 Days" → Medium Risk
-  - bucket: "91-120 Days" → High Risk
-  - bucket: "121-180 Days" → High Risk
-  - bucket: "180+ Days" → Critical Risk (Default)
+```bash
+# Activate virtual environment first
+source .venv/bin/activate
+
+# Then run any commands
+python run.py
+pytest tests/
 ```
 
-#### 3. Pricing Configuration (`config/pricing_config.yml`)
+❌ Incorrect:
 
-```yaml
-band_keys:
-  tenor_days:
-    lower_bound: "tenor_min"
-    upper_bound: "tenor_max"
-  amount:
-    lower_bound: "amount_min"
-    upper_bound: "amount_max"
+```bash
+# Don't use system Python directly
+/opt/homebrew/bin/python3 run.py
 ```
 
-#### 4. Export Configuration (`config/export_config.yml`)
+## Running the Application
 
-```yaml
-export_paths:
-  base_path: "./abaco_runtime/exports"
+```bash
+# Activate virtual environment
+source .venv/bin/activate
+
+# Start the API server
+uvicorn run:app --reload
+
+# Or use the Python file directly
+python run.py
+```
+
+## Running Tests
+
+```bash
+# Activate virtual environment
+source .venv/bin/activate
+
+# Run all tests
+pytest
+
+# Run specific tests
+pytest tests/test_api.py -v
+
+# Run tests with coverage
+pytest --cov=src tests/
+```
+
+## API Documentation
+
+- Swagger UI: <http://localhost:8000/docs>
+- ReDoc: <http://localhost:8000/redoc>
+
+### Test Coverage
+
+```bash
+pytest tests/ -v --cov=src
+```
+
+### Code Formatting
+
+```bash
+black src/ tests/
+```
+
+### Type Checking
+
+```bash
+mypy src/
+```
+
+## Deployment
+
+### Docker
+
+```bash
+docker build -t commercial-view .
+docker run -p 8000:8000 -v $(pwd)/data:/app/data commercial-view
+```
+
+### Production
+
+For production deployment, use environment variables for configuration and ensure proper security measures are in place.
+
+## Architecture
+
+The application follows a modular architecture:
+
+- `src/data_loader.py` - Data loading utilities
+- `src/pipeline.py` - Data processing pipeline
+- `run.py` - FastAPI application
+- `tests/` - Comprehensive test suite
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is proprietary to Abaco Capital.
+
+## Support
+
+For issues or questions, please contact the development team.
   kpi_json: "./abaco_runtime/exports/kpi/json"
   kpi_csv: "./abaco_runtime/exports/kpi/csv"
-```
+
+```yaml
 
 ### Dataset Status
 
@@ -243,7 +258,7 @@ npm run build
 npm test
 ```
 
-### Running Tests
+### Testing and Validation
 
 ```bash
 # Python: Validate configuration
@@ -331,7 +346,7 @@ The system supports compliance with:
 - PCI DSS (Payment Card Industry Data Security Standard)
 - Local data protection regulations
 
-## Contributing
+## Contributing Guidelines
 
 ### Development Setup
 
