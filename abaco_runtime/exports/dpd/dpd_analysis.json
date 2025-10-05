@@ -1,0 +1,30 @@
+{
+  "analysis_date": "2025-10-03T23:47:40.516252",
+  "portfolio_summary": {
+    "total_loans": 1000,
+    "total_exposure": 50000000,
+    "default_rate": 0.05
+  },
+  "dpd_analysis": {
+    "current": {
+      "count": 850,
+      "amount": 42500000
+    },
+    "1_30_days": {
+      "count": 100,
+      "amount": 5000000
+    },
+    "31_60_days": {
+      "count": 30,
+      "amount": 1500000
+    },
+    "61_90_days": {
+      "count": 15,
+      "amount": 750000
+    },
+    "90_plus_days": {
+      "count": 5,
+      "amount": 250000
+    }
+  }
+}

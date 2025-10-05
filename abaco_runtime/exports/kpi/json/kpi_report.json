@@ -1,0 +1,10 @@
+{
+  "generated_at": "2025-10-03T23:47:40.516259",
+  "kpis": {
+    "portfolio_at_risk": 0.15,
+    "default_rate": 0.05,
+    "recovery_rate": 0.75,
+    "provision_coverage": 0.12,
+    "net_charge_off_rate": 0.03
+  }
+}

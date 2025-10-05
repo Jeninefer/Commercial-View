@@ -1,22 +1,42 @@
-# Getting Started with Create React App
+# Commercial-View Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Enterprise-grade portfolio analytics dashboard for Abaco Capital.
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and provides a web interface for the Commercial-View API.
+
+## Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Commercial-View API running on http://localhost:8000
+
+## Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+
+# Open http://localhost:3000 in your browser
+```
 
 ## Available Scripts
 
-In the project directory, you can run:
-
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Runs the app in development mode.\
+Opens [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
+**Note**: Ensure the Commercial-View API is running on port 8000 before starting the dashboard.
+
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
+Launches the test runner in interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
@@ -27,44 +47,193 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `npm run lint`
 
-### `npm run eject`
+Runs ESLint to check code quality and style consistency.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### `npm run format`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Formats code using Prettier (if configured).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Dashboard Features
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Portfolio Overview**: Real-time portfolio metrics and KPIs
+- **Risk Analytics**: Risk assessment and scoring visualizations
+- **Data Export**: Download reports and analysis results
+- **Interactive Charts**: Dynamic data visualization with filtering
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
 
-## Learn More
+## API Integration
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The dashboard connects to the Commercial-View FastAPI backend:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **API Base URL**: http://localhost:8000
+- **Health Check**: GET /health
+- **Portfolio Data**: GET /executive-summary
+- **Documentation**: http://localhost:8000/docs
 
-### Code Splitting
+## Environment Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Create a `.env` file in this directory:
 
-### Analyzing the Bundle Size
+```env
+REACT_APP_API_BASE_URL=http://localhost:8000
+REACT_APP_ENVIRONMENT=development
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+For production:
 
-### Making a Progressive Web App
+```env
+REACT_APP_API_BASE_URL=https://your-api-domain.com
+REACT_APP_ENVIRONMENT=production
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Additional Environment Variables
 
-### Advanced Configuration
+For local development, you may also set up a `.env.local` file with the following content:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```dotenv
+DATABASE_URL=postgresql://localhost/mydb
+API_KEY=your-api-key-here
+DEBUG=True
+```
 
-### Deployment
+## Testing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Local Testing
 
-### `npm run build` fails to minify
+```bash
+# Run test suite
+npm test
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Run tests with coverage
+npm test -- --coverage
+
+# Run tests in CI mode (single run)
+npm test -- --ci --coverage --watchAll=false
+```
+
+### Backend Integration Testing
+
+Ensure the Commercial-View API is running before testing API integrations:
+
+```bash
+# Start the backend API first
+cd ..  # Navigate to project root
+python server_control.py --port 8000
+
+# Then run frontend tests
+cd frontend/dashboard
+npm test
+```
+
+⚠️ **Note**: `pytest -q` (backend tests) should not be run in read-only QA environments. Use dedicated development or testing environments for full test suite execution.
+
+## Google Colab Integration
+
+For cloud development and testing:
+
+### Setup in Colab
+
+```python
+# Install Node.js in Colab
+!curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+!sudo apt-get install -y nodejs
+
+# Clone and setup
+!git clone https://github.com/Jeninefer/Commercial-View.git
+%cd Commercial-View/frontend/dashboard
+!npm install
+```
+
+### Development in Colab
+
+```python
+# Start development server (background process)
+import subprocess
+import time
+
+# Start the React development server
+react_server = subprocess.Popen(['npm', 'start'], 
+                               stdout=subprocess.PIPE, 
+                               stderr=subprocess.PIPE)
+time.sleep(10)  # Wait for startup
+
+# Use ngrok or Colab's built-in tunneling to expose port 3000
+print("Dashboard server starting on port 3000")
+print("Use Colab's port forwarding or ngrok for external access")
+```
+
+### Export and Persistence
+
+```python
+# Build production assets
+!npm run build
+
+# Export build artifacts
+!zip -r dashboard-build.zip build/
+
+# Download or save to Google Drive
+from google.colab import files
+files.download('dashboard-build.zip')
+```
+
+### Cleanup (Important for Colab)
+
+```python
+# Terminate long-running servers to avoid idle sessions
+try:
+    react_server.terminate()
+    print("React server stopped")
+except:
+    print("Server was not running")
+```
+
+## Project Structure
+
+```text
+/public
+  /favicon.ico
+  /index.html
+/src
+  /api
+  /assets
+  /components
+  /hooks
+  /pages
+  /styles
+  /utils
+  App.js
+  index.js
+.gitignore
+package.json
+README.md
+```
+
+## Development Workflow
+
+### With Commercial-View Backend
+
+1. **Start Backend**: Use `python server_control.py` in project root
+2. **Start Frontend**: Run `npm start` in this directory
+3. **Development**: Make changes with hot-reload enabled
+4. **Testing**: Run `npm test` for frontend, coordinate with backend team for integration tests
+5. **Export**: Use `abaco_runtime/exports/` integration for data persistence
+
+### Data Export Integration
+
+The dashboard integrates with the Commercial-View export system:
+
+- **Export Location**: `../../abaco_runtime/exports/`
+- **Google Drive Sync**: Uses `scripts/upload_to_drive.py`
+- **Manual Export**: Download artifacts directly from dashboard UI
+
+### Persist Outputs
+
+Export artifacts from:
+
+- `abaco_runtime/exports/` (backend generated)
+- `build/` (frontend production build)
+- `coverage/` (test coverage reports)
+
+Save to Google Drive or download manually when finished with development sessions.
