@@ -56,8 +56,11 @@ def get_historic_real_payment():
     try:
         df = load_historic_real_payment(DATA_BASE_PATH)
         return df.to_dict(orient="records")
-    except FileNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
+    except FileNotFoundError:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Historic real payment data file not found. Please upload the CSV file to the directory: {DATA_BASE_PATH}"
+        )
 
 @app.get("/payment-schedule", response_model=List[PaymentSchedule])
 def get_payment_schedule():
