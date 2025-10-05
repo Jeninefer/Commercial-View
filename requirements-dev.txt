@@ -10,3 +10,4 @@ bandit>=1.7.0
 safety>=2.3.0
 pre-commit>=3.0.0
 types-PyYAML~=6.0.0
+httpx>=0.28.1
