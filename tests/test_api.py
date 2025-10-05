@@ -10,11 +10,8 @@ from fastapi.testclient import TestClient
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 SRC_DIR = ROOT_DIR / "src"
-if str(ROOT_DIR) not in sys.path:
-    sys.path.insert(0, str(ROOT_DIR))
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
-
 sys.modules.setdefault("requests", types.SimpleNamespace(get=None))
 
 from src.data_loader import PRICING_FILENAMES
