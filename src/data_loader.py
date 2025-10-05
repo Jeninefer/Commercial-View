@@ -24,6 +24,12 @@ PRICING_FILENAMES: Dict[str, str] = {
 def _read_csv(path_or_dir: Union[str, Path], default_name: str | None = None) -> pd.DataFrame:
     p = Path(path_or_dir)
     if p.is_dir():
+        if default_name is None:
+            raise ValueError("default_name must be provided when path_or_dir is a directory")
+        file_path = p / default_name
+    else:
+        file_path = p
+    return pd.read_csv(file_path)
         if not default_name:
             raise ValueError("Directory provided without default_name.")
         p = p / default_name
