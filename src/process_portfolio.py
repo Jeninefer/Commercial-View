@@ -199,8 +199,16 @@ def comprehensive_analysis(configs: Dict[str, Any]) -> Dict[str, Any]:
         weight_col='outstanding_balance'
     )
     
+    # Convert cohort retention matrix to JSON-serializable format
+    cohort_dict = {}
+    if not cohort_retention.empty:
+        cohort_retention_copy = cohort_retention.copy()
+        cohort_retention_copy.index = cohort_retention_copy.index.astype(str)
+        cohort_retention_copy.columns = cohort_retention_copy.columns.astype(str)
+        cohort_dict = cohort_retention_copy.to_dict()
+    
     results.update({
-        'cohort_retention_matrix': cohort_retention.to_dict() if not cohort_retention.empty else {},
+        'cohort_retention_matrix': cohort_dict,
         'reactivation_count': int(reactivation_analysis['reactivated'].sum()),
         'customer_type_distribution': classified_customers['customer_type'].value_counts().to_dict(),
         'weighted_portfolio_stats': weighted_stats.to_dict('records')[0] if not weighted_stats.empty else {},
@@ -258,8 +266,16 @@ def enhanced_analysis(configs: Dict[str, Any]) -> Dict[str, Any]:
         weight_col='outstanding_balance'
     )
     
+    # Convert cohort retention matrix to JSON-serializable format
+    cohort_dict = {}
+    if not cohort_retention.empty:
+        cohort_retention_copy = cohort_retention.copy()
+        cohort_retention_copy.index = cohort_retention_copy.index.astype(str)
+        cohort_retention_copy.columns = cohort_retention_copy.columns.astype(str)
+        cohort_dict = cohort_retention_copy.to_dict()
+    
     results.update({
-        'cohort_retention_matrix': cohort_retention.to_dict() if not cohort_retention.empty else {},
+        'cohort_retention_matrix': cohort_dict,
         'reactivation_count': int(reactivation_analysis['reactivated'].sum()),
         'customer_type_distribution': classified_customers['customer_type'].value_counts().to_dict(),
         'weighted_portfolio_stats': weighted_stats.to_dict('records')[0] if not weighted_stats.empty else {},
@@ -332,49 +348,6 @@ def main():
     print(f"📤 Export files ready for Google Drive: {len(export_files)} files")
     print(f"📋 Export manifest: {manifest_path}")
     print(f"🔗 Target folder: https://drive.google.com/drive/folders/1qIg_BnIf_IWYcWqCuvLaYU_Gu4C2-Dj8")
-    
-    # Enhanced analysis with cohort and classification features
-    print("\nRunning cohort and classification analysis...")
-    enhanced_results = enhanced_analysis(configs)
-    
-    # Save enhanced results
-    enhanced_path = f"{export_paths.get('base_path', './abaco_runtime/exports')}/cohort_analysis.json"
-    with open(enhanced_path, 'w') as f:
-        json.dump(enhanced_results, f, indent=2, default=str)
-    
-    print(f"Cohort analysis saved to: {enhanced_path}")
-    
-    # Weighted metrics analysis
-    print("\nRunning weighted metrics analysis...")
-    # Use comprehensive_analysis to get weighted metrics as it already computes them
-    weighted_results = comprehensive_analysis(configs).get('weighted_metrics', {})
-    
-    # Save weighted metrics results
-    weighted_path = f"{export_paths.get('base_path', './abaco_runtime/exports')}/weighted_metrics.json"
-    with open(weighted_path, 'w') as f:
-        json.dump(weighted_results, f, indent=2, default=str)
-    
-    print(f"Weighted metrics saved to: {weighted_path}")
-    
-    print("\n✅ Processing completed successfully!")
-    print("\nNext steps:")
-    print("1. Check the generated files in ./abaco_runtime/exports/")
-    print("2. Customize the configuration files for your data")
-    print("3. Implement actual data processing logic in this script")
-
-
-if __name__ == '__main__':
-    main()
-    comprehensive_results = comprehensive_analysis(configs)
-    
-    # Save comprehensive results  
-    comprehensive_path = f"{export_paths.get('base_path', './abaco_runtime/exports')}/comprehensive_analytics.json"
-    with open(comprehensive_path, 'w') as f:
-        json.dump(comprehensive_results, f, indent=2, default=str)
-    
-    print(f"Comprehensive analytics saved to: {comprehensive_path}")
-    print(f"✅ Found {comprehensive_results['reactivation_count']} reactivated customers")
-    print(f"✅ Customer types: {comprehensive_results['customer_type_distribution']}")
     
     # Enhanced analysis with cohort and classification features
     print("\nRunning cohort and classification analysis...")
