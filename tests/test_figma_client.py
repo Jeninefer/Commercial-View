@@ -7,7 +7,7 @@ import os
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SRC_DIR = PROJECT_ROOT / "src"
 resolved_src_dir = os.path.normcase(os.path.normpath(str(SRC_DIR.resolve())))
-normalized_sys_paths = {os.path.normcase(os.path.normpath(str(Path(p).resolve()))) for p in sys.path}
+normalized_sys_paths = {os.path.normcase(os.path.normpath(os.path.abspath(p))) for p in sys.path}
 if resolved_src_dir not in normalized_sys_paths:
     sys.path.insert(0, resolved_src_dir)
 if str(PROJECT_ROOT) not in sys.path:
