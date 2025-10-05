@@ -1,0 +1,14 @@
+# Pricing configuration for Commercial-View
+default_apr: 15.5
+min_apr: 8.0
+max_apr: 35.0
+
+tenor_ranges:
+  short: [3, 12]
+  medium: [13, 36]
+  long: [37, 60]
+
+risk_premiums:
+  low: 0.0
+  medium: 2.5
+  high: 5.0

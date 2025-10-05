@@ -1,11 +1,13 @@
 # Security Constraints and Data Protection
 
 ## Overview
+
 This document outlines security constraints, data protection measures, and PII (Personally Identifiable Information) handling requirements for the Commercial-View system.
 
 ## PII Identification
 
 ### Sensitive Data Fields
+
 The following fields are considered PII and must be handled according to security policies:
 
 1. **Customer Identifiers**
@@ -32,6 +34,7 @@ The following fields are considered PII and must be handled according to securit
 ### Before Export - Data Masking Rules
 
 #### 1. Customer Names
+
 ```yaml
 masking_strategy: "partial"
 method: "first_and_last_initial"
@@ -41,6 +44,7 @@ example:
 ```
 
 #### 2. Customer IDs
+
 ```yaml
 masking_strategy: "hash"
 method: "sha256_truncated"
@@ -51,6 +55,7 @@ example:
 ```
 
 #### 3. Email Addresses
+
 ```yaml
 masking_strategy: "partial"
 method: "preserve_domain"
@@ -60,6 +65,7 @@ example:
 ```
 
 #### 4. Phone Numbers
+
 ```yaml
 masking_strategy: "partial"
 method: "mask_middle_digits"
@@ -69,6 +75,7 @@ example:
 ```
 
 #### 5. Account Numbers
+
 ```yaml
 masking_strategy: "partial"
 method: "last_four_digits"
@@ -80,24 +87,28 @@ example:
 ## Data Classification Levels
 
 ### Level 1: Public
+
 - Aggregated statistics
 - Portfolio-level KPIs
 - Bucket summaries
 - No individual loan details
 
 ### Level 2: Internal
+
 - Anonymized loan-level data
 - Masked customer identifiers
 - Aggregated risk metrics
 - Department-level reports
 
 ### Level 3: Confidential
+
 - Full loan details with PII masking
 - Customer segments with anonymization
 - Detailed risk assessments
 - Restricted to authorized personnel
 
 ### Level 4: Highly Confidential
+
 - Complete unmasked data
 - Individual customer details
 - Sensitive financial information
@@ -108,6 +119,7 @@ example:
 ### By Export Type
 
 #### KPI JSON/CSV Exports (Public/Internal)
+
 ```yaml
 security_level: "internal"
 pii_masking_required: true
@@ -123,6 +135,7 @@ encryption_in_transit: true
 ```
 
 #### DPD Frame Exports (Internal/Confidential)
+
 ```yaml
 security_level: "confidential"
 pii_masking_required: true
@@ -135,6 +148,7 @@ retention_period_days: 90
 ```
 
 #### Buckets Exports (Internal)
+
 ```yaml
 security_level: "internal"
 pii_masking_required: true
@@ -149,6 +163,7 @@ access_control: "role_based"
 ### Role-Based Access Control (RBAC)
 
 #### Roles and Permissions
+
 1. **Data Analyst**
    - Read access to masked exports
    - Generate KPI reports
@@ -170,6 +185,7 @@ access_control: "role_based"
    - Access audit logs
 
 ### Authentication Requirements
+
 - Multi-factor authentication (MFA) for production access
 - API key rotation every 90 days
 - Session timeout: 30 minutes of inactivity
@@ -178,11 +194,13 @@ access_control: "role_based"
 ## Encryption Standards
 
 ### Data at Rest
+
 - **Algorithm**: AES-256
 - **Key management**: External key management service (KMS)
 - **Scope**: All exports, databases, and file storage
 
 ### Data in Transit
+
 - **Protocol**: TLS 1.3 minimum
 - **Certificate validation**: Required
 - **Scope**: All API calls, data transfers, and exports
@@ -190,7 +208,9 @@ access_control: "role_based"
 ## Audit and Compliance
 
 ### Audit Logging Requirements
+
 Log the following for all data access and export operations:
+
 - Timestamp
 - User identity
 - Action performed
@@ -200,13 +220,16 @@ Log the following for all data access and export operations:
 - Amount of data accessed
 
 ### Retention Policies
+
 - Audit logs: 7 years
 - Export files: 90 days (configurable)
 - Archived exports: 1 year
 - Security logs: 3 years
 
 ### Compliance Frameworks
+
 The system should comply with:
+
 - **GDPR**: Right to erasure, data portability, consent management
 - **SOX**: Financial data integrity and access controls
 - **PCI DSS**: If handling payment card data
@@ -215,6 +238,7 @@ The system should comply with:
 ## Data Anonymization for Non-Production
 
 ### Development and Testing Environments
+
 - Use synthetic data generation
 - Never use production data in development
 - If production data is required, apply full anonymization:
@@ -224,6 +248,7 @@ The system should comply with:
   - Shuffle linkable attributes
 
 ### Data Sharing with Third Parties
+
 - Sign Data Processing Agreement (DPA)
 - Apply maximum masking level
 - Limit data to minimum required
@@ -233,12 +258,14 @@ The system should comply with:
 ## Incident Response
 
 ### Security Incident Categories
+
 1. **Data Breach**: Unauthorized access to PII
 2. **Data Loss**: Accidental deletion or corruption
 3. **Unauthorized Export**: Data exported by unauthorized user
 4. **Masking Failure**: PII exposed due to masking error
 
 ### Response Procedures
+
 1. Immediate containment
 2. Impact assessment
 3. Notification (compliance officer, affected parties)
@@ -248,12 +275,14 @@ The system should comply with:
 ## Security Review and Updates
 
 ### Regular Reviews
+
 - Quarterly security audit
 - Annual penetration testing
 - Bi-annual access control review
 - Continuous vulnerability scanning
 
 ### Security Training
+
 - Annual security awareness training for all users
 - Quarterly data protection training for data handlers
 - Specialized training for privileged users

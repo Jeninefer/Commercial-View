@@ -15,8 +15,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "node ./node_modules/tape/bin/tape \"test/**/*.js\"",
+    "eject": "react-scripts eject",
+    "update-deps": "npm install",
+    "git-pull": "git pull origin main",
+    "git-status": "git status",
+    "pull-and-update": "npm run git-pull && npm run update-deps"
   },
   "eslintConfig": {
     "extends": [
@@ -35,5 +39,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@ljharb/tsconfig": "^0.3.2",
+    "@types/node": "^18.19.129",
+    "@types/react": "^18.3.25",
+    "@types/react-dom": "^18.3.7",
+    "@types/tape": "^4.13.4",
+    "tape": "^5.6.3"
   }
 }
