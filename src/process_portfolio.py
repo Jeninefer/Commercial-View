@@ -107,7 +107,6 @@ def main():
     parser.add_argument('--config', required=True, help='Configuration directory path')
     parser.add_argument(
         '--data-dir',
-        dest='data_dir',
         help='Directory containing pricing data CSV files. If specified, this overrides the environment variable ({}) and the config file setting.'.format(PRICING_DATA_ENV_VAR),
     )
     
