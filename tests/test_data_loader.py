@@ -37,10 +37,12 @@ def test_loaders_use_overridden_base_path(
 ) -> None:
     base_dir, expected_frames = sample_pricing_dir
 
-    loaders = {
-        key: getattr(data_loader, f"load_{key}")
-        for key in data_loader.PRICING_FILENAMES
-    }
+    loaders = {}
+    for key in data_loader.PRICING_FILENAMES:
+        loader = getattr(data_loader, f"load_{key}", None)
+        if loader is None:
+            raise AttributeError(f"Loader function 'load_{key}' not found in data_loader module.")
+        loaders[key] = loader
 
     for key, loader in loaders.items():
         loaded = loader(base_dir)
