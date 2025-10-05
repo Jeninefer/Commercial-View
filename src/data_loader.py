@@ -11,8 +11,8 @@ from pandas import DataFrame
 
 PathLike = Union[str, os.PathLike[str]]
 
-_ENV_VAR = "COMMERCIAL_VIEW_PRICING_PATH"
-_REPO_ROOT = Path(__file__).resolve().parents[1]
+_ENV_VAR = "COMMERCIAL_VIEW_DATA_PATH"
+_REPO_ROOT = Path(__file__).resolve().parents[2]
 _DEFAULT_DATA_PATH = _REPO_ROOT / "data" / "pricing"
 
 PRICING_FILENAMES = {
@@ -29,7 +29,7 @@ def _resolve_base_path(base_path: Optional[PathLike] = None) -> Path:
 
     The priority for resolving the base path is:
       1. Explicit ``base_path`` argument provided to the loader.
-      2. The ``COMMERCIAL_VIEW_PRICING_PATH`` environment variable.
+      2. The ``COMMERCIAL_VIEW_DATA_PATH`` environment variable.
       3. The repository default ``data/pricing`` directory.
     """
 
@@ -66,7 +66,9 @@ def _load_csv(filename: str, base_path: Optional[PathLike] = None) -> DataFrame:
 
     if not file_path.exists():
         raise FileNotFoundError(
-            f"Required pricing file '{filename}' was not found in '{base_dir}'."
+            f"CSV file not found: {file_path}. "
+            f"Configure the data directory using the '{_ENV_VAR}' environment variable "
+            "or pass a 'base_path' argument."
         )
 
     return pd.read_csv(file_path)
