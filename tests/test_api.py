@@ -1,46 +1,83 @@
+import os
+import sys
+
+import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
-import sys
-import os
-import pandas as pd
-from pathlib import Path
 
 # Add project root to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.data_loader import PRICING_FILENAMES
+import run
 
-@pytest.fixture(scope="module")
-def test_data_path(tmp_path_factory):
-    """Create a temporary directory with dummy data files."""
-    base_dir = tmp_path_factory.mktemp("data") / "pricing"
-    base_dir.mkdir()
 
-    sample_df = pd.DataFrame(
+def build_sample_dataframe() -> pd.DataFrame:
+    """Create a reusable dataframe used across dataset fixtures."""
+    return pd.DataFrame(
         {
-            "id": [1, 2],
-            "value": [100, 200],
-            "loan_id": ["L001", "L002"],
-            "customer_id": ["C001", "C002"],
-            "loan_status": ["Current", "Complete"],
-            "outstanding_balance": [1000, 0],
-            "interest_rate": [0.05, 0.06],
-            "days_past_due": [0, 0],
+            "loan_id": ["L001", "L002", "L003"],
+            "customer_id": ["C001", "C002", "C003"],
+            "loan_status": ["Current", "Complete", "Default"],
+            "outstanding_balance": [1000.0, 0.0, 500.0],
+            "interest_rate": [0.05, 0.06, 0.07],
+            "days_past_due": [0, 15, 45],
+            "payment_amount": [100.0, 150.0, 200.0],
+            "due_date": ["2024-01-01", "2024-02-01", "2024-03-01"],
+            "True Payment Status": ["Paid", "Pending", "Late"],
         }
     )
 
-    for filename in PRICING_FILENAMES.values():
-        sample_df.to_csv(base_dir / filename, index=False)
-
-    return str(base_dir)
 
 @pytest.fixture(scope="module")
-def client(test_data_path):
-    """A TestClient instance that uses a temporary data directory."""
-    os.environ["COMMERCIAL_VIEW_DATA_PATH"] = test_data_path
-    from run import app
-    with TestClient(app) as c:
-        yield c
+def dataset_dict() -> dict:
+    base_df = build_sample_dataframe()
+    return {
+        "loan_data": base_df[
+            [
+                "loan_id",
+                "customer_id",
+                "loan_status",
+                "outstanding_balance",
+                "interest_rate",
+                "days_past_due",
+            ]
+        ].copy(),
+        "payment_schedule": base_df[["loan_id", "payment_amount", "due_date"]].copy(),
+        "historic_real_payment": base_df[
+            ["loan_id", "True Payment Status", "payment_amount"]
+        ].copy(),
+    }
+
+
+@pytest.fixture(scope="module")
+def client(dataset_dict):
+    """Create a TestClient that uses a stubbed data loader."""
+
+    class StubDataLoader:
+        def __init__(self, *_args, **_kwargs):
+            self._datasets = dataset_dict
+
+        def load_all_datasets(self):
+            return self._datasets
+
+        def get_data_quality_report(self):
+            return {"status": "not implemented"}
+
+    original_loader = run.DataLoader
+    original_datasets = run.datasets
+    original_data_loader_instance = getattr(run, "data_loader", None)
+
+    run.datasets = dataset_dict
+    run.DataLoader = StubDataLoader
+    run.data_loader = None
+
+    try:
+        with TestClient(run.app) as test_client:
+            yield test_client
+    finally:
+        run.DataLoader = original_loader
+        run.datasets = original_datasets
+        run.data_loader = original_data_loader_instance
 
 def test_root_endpoint(client):
     """Test the root endpoint returns expected structure."""
@@ -51,14 +88,14 @@ def test_root_endpoint(client):
     assert "version" in data
     assert "endpoints" in data
 
-def test_health_endpoint(client):
+def test_health_endpoint(client, dataset_dict):
     """Test health check endpoint."""
     response = client.get("/health")
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "healthy"
     assert "datasets" in data
-    assert len(data["datasets"]) == len(PRICING_FILENAMES)
+    assert set(dataset_dict.keys()).issubset(data["datasets"].keys())
 
 def test_loan_data_pagination(client):
     """Test loan data endpoint with pagination."""
