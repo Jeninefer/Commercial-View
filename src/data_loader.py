@@ -51,7 +51,7 @@ def _load_pricing_filenames() -> Dict[str, str]:
     for key, default_filename in _DEFAULT_PRICING_FILENAMES.items():
         config_key = _CONFIG_KEY_MAP.get(key)
         candidate = None
-        if config_key and isinstance(pricing_files, dict):
+        if config_key:
             candidate = pricing_files.get(config_key)
 
         if candidate and isinstance(candidate, (str, os.PathLike)):
