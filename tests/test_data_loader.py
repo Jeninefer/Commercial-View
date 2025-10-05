@@ -34,8 +34,14 @@ def test_loaders_use_overridden_base_path(sample_pricing_dir: Path) -> None:
 
     assert loan_df.iloc[0]["id"] == 1
     assert loan_df.iloc[-1]["value"] == 200
-    assert customer_df.iloc[0]["id"] == 4
-    assert customer_df.iloc[-1]["value"] == 500
+    # Compute expected values for customer_df based on fixture logic
+    customer_index = list(data_loader.PRICING_FILENAMES.values()).index(
+        data_loader.PRICING_FILENAMES["customer_data"]
+    ) + 1  # enumerate starts at 1
+    expected_first_id = customer_index
+    expected_last_value = (customer_index + 1) * 100
+    assert customer_df.iloc[0]["id"] == expected_first_id
+    assert customer_df.iloc[-1]["value"] == expected_last_value
 
 
 def test_missing_file_raises_clear_error(sample_pricing_dir: Path) -> None:
