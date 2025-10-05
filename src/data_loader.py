@@ -45,7 +45,6 @@ def load_payment_schedule(path: Union[str, Path]) -> pd.DataFrame:
 def load_customer_data(path: Union[str, Path]) -> pd.DataFrame:
     return _read_csv(path, PRICING_FILENAMES["customer_data"])
 
-
 def load_collateral(path: Union[str, Path]) -> pd.DataFrame:
     return _read_csv(path, PRICING_FILENAMES["collateral"])
 
