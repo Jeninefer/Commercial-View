@@ -30,10 +30,6 @@ def _read_csv(path_or_dir: Union[str, Path], default_name: str | None = None) ->
     else:
         file_path = p
     return pd.read_csv(file_path)
-        if not default_name:
-            raise ValueError("Directory provided without default_name.")
-        p = p / default_name
-    return pd.read_csv(p)
 
 
 def load_loan_data(path: Union[str, Path]) -> pd.DataFrame:
