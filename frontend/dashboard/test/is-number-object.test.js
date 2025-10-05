@@ -1,9 +1,15 @@
+/* eslint strict: 0 */
 'use strict';
 
+/** @type {import('tape')} */
 var test = require('tape');
-var isNumber = require('is-number-object'); // Using the installed package
+var isNumber = require('is-number-object');
 var hasToStringTag = require('has-tostringtag/shams')();
 
+/**
+ * Tests for non-number values
+ * @param {import('tape').Test} t - The test object
+ */
 test('not Numbers', function (t) {
     // @ts-expect-error
     t.notOk(isNumber(), 'undefined is not Number');
@@ -20,6 +26,10 @@ test('not Numbers', function (t) {
     t.end();
 });
 
+/**
+ * Tests for Symbol.toStringTag behavior
+ * @param {import('tape').Test} t - The test object
+ */
 test('@@toStringTag', { skip: !hasToStringTag }, function (t) {
     /** @type {{ toString(): string; valueOf(): number; [Symbol.toStringTag]?: string; }} */
     var fakeNumber = {
@@ -31,9 +41,13 @@ test('@@toStringTag', { skip: !hasToStringTag }, function (t) {
     t.end();
 });
 
+/**
+ * Tests for actual number values
+ * @param {import('tape').Test} t - The test object
+ */
 test('Numbers', function (t) {
-    t.ok(isNumber(42), 'number is Number');
-    t.ok(isNumber(Object(42)), 'number object is Number');
+    t.ok(isNumber(42), 'number literal is Number');
+    t.ok(isNumber(Object(42)), 'Number object is Number');
     t.ok(isNumber(NaN), 'NaN is Number');
     t.ok(isNumber(Infinity), 'Infinity is Number');
     t.end();

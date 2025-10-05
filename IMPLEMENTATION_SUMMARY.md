@@ -269,7 +269,7 @@ Commercial-View/
 
 All configuration files have been validated:
 
-```
+```shell
 $ python validators/schema_validator.py
 
 ======================================================================
@@ -332,7 +332,7 @@ Validation Summary
 
 ### Commands
 
-```bash
+```shell
 # Install dependencies
 pip install -r requirements.txt
 

@@ -8,7 +8,7 @@ Enterprise-grade portfolio analytics for Abaco Capital.
 
 - Python 3.11+
 - Virtual environment tool (venv)
-- (Optional) Node 18+ for the dashboard
+- (Optional) Node 18+ for the dashboard frontend
 
 ### Install
 
@@ -18,24 +18,22 @@ cd Commercial-View
 
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
-
 pip install -r requirements.txt
 ```
 
-**Important**: Use the venv Python
+**Important**: Always use the virtual environment's Python!
 
-✅ Correct:
-
+✅ Correct usage:
 ```bash
 source .venv/bin/activate
 python run.py
 pytest -q
 ```
 
-❌ Incorrect:
-
+❌ Incorrect usage:
 ```bash
-/opt/homebrew/bin/python3 run.py
+python3 run.py         # ❌ Uses system Python (not virtual env)
+pip install pandas     # ❌ Installs globally, not in .venv
 ```
 
 ## Running the API
@@ -51,7 +49,8 @@ python run.py
 
 ```bash
 source .venv/bin/activate
-pytest
+pytest -q                        # Run the full test suite
+pytest tests/test_data_loader.py -v  # Run a specific test file
 # with coverage
 pytest --cov=src tests/
 ```
@@ -117,6 +116,14 @@ cd frontend/dashboard
 npm install
 npm start
 ```
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Import 'pandas' could not be resolved | Activate .venv and reinstall dependencies: `pip install -r requirements.txt` |
+| pytest: command not found | Run `pip install pytest` inside the virtual environment |
+| Frontend build errors | Run `npm audit fix --force` or delete node_modules and reinstall |
 
 ## CI/CD & Versioning
 
