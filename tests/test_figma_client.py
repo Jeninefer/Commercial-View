@@ -4,14 +4,12 @@ from pathlib import Path
 from unittest.mock import Mock
 import os
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
-SRC_DIR = ROOT_DIR / "src"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+SRC_DIR = PROJECT_ROOT / "src"
 resolved_src_dir = os.path.normcase(os.path.normpath(str(SRC_DIR.resolve())))
 normalized_sys_paths = {os.path.normcase(os.path.normpath(str(Path(p).resolve()))) for p in sys.path}
 if resolved_src_dir not in normalized_sys_paths:
     sys.path.insert(0, str(SRC_DIR.resolve()))
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
