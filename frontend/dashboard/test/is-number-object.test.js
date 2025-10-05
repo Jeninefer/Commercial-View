@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var isNumber = require('../');
+var isNumber = require('../index');
 var hasToStringTag = require('has-tostringtag/shams')();
 
 /**
