@@ -2,12 +2,14 @@ import sys
 import types
 from pathlib import Path
 from unittest.mock import Mock
+import os
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT_DIR / "src"
-resolved_src_dir = str(SRC_DIR.resolve())
-if resolved_src_dir not in [str(Path(p).resolve()) for p in sys.path]:
-    sys.path.insert(0, resolved_src_dir)
+resolved_src_dir = os.path.normcase(os.path.normpath(str(SRC_DIR.resolve())))
+normalized_sys_paths = {os.path.normcase(os.path.normpath(str(Path(p).resolve()))) for p in sys.path}
+if resolved_src_dir not in normalized_sys_paths:
+    sys.path.insert(0, str(SRC_DIR.resolve()))
 
 sys.modules.setdefault("requests", types.SimpleNamespace(get=None))
 import figma_client
