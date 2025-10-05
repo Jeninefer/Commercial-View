@@ -14,7 +14,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 
 def test_main_uses_default_pricing_path_when_config_empty(monkeypatch):
-    """Ensure ``load_loan_data`` is invoked with the default directory."""
+    """Ensure data loading functions are invoked with None when pricing config is empty."""
 
     # Import inside the test to ensure patches apply to the runtime module.
     from src import process_portfolio
