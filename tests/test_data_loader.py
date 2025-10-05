@@ -29,6 +29,16 @@ def sample_pricing_dir(tmp_path: Path) -> Path:
     return base_dir
 
 
+def test_loaders_respect_environment_override(sample_pricing_dir: Path, monkeypatch) -> None:
+    monkeypatch.setenv("COMMERCIAL_VIEW_DATA_PATH", str(sample_pricing_dir))
+
+    assert not data_loader.load_loan_data().empty
+    assert not data_loader.load_historic_real_payment().empty
+    assert not data_loader.load_payment_schedule().empty
+    assert not data_loader.load_customer_data().empty
+    assert not data_loader.load_collateral().empty
+
+
 def test_loaders_use_overridden_base_path(sample_pricing_dir: Path) -> None:
     loan_df = data_loader.load_loan_data(sample_pricing_dir)
     customer_df = data_loader.load_customer_data(sample_pricing_dir)
@@ -44,4 +54,5 @@ def test_missing_file_raises_clear_error(sample_pricing_dir: Path) -> None:
     with pytest.raises(FileNotFoundError) as exc:
         data_loader.load_customer_data(sample_pricing_dir)
 
+    assert "CSV file not found" in str(exc.value)
     assert missing_file in str(exc.value)
