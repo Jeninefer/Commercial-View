@@ -91,7 +91,8 @@ def _to_json_safe(df: pd.DataFrame) -> list[dict]:
     # Convert datetime columns to ISO format strings
     for col in records.columns:
         if pd.api.types.is_datetime64_any_dtype(records[col]):
-            records[col] = records[col].dt.strftime('%Y-%m-%d %H:%M:%S').replace('NaT', None)
+            records[col] = records[col].dt.strftime('%Y-%m-%d %H:%M:%S')
+            records[col] = records[col].where(pd.notna(records[col]), None)
         # Replace NaN with None for JSON null
         elif pd.api.types.is_numeric_dtype(records[col]):
             records[col] = records[col].where(pd.notna(records[col]), None)
