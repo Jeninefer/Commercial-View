@@ -38,11 +38,8 @@ def test_loaders_use_overridden_base_path(
     base_dir, expected_frames = sample_pricing_dir
 
     loaders = {
-        "loan_data": data_loader.load_loan_data,
-        "historic_real_payment": data_loader.load_historic_real_payment,
-        "payment_schedule": data_loader.load_payment_schedule,
-        "customer_data": data_loader.load_customer_data,
-        "collateral": data_loader.load_collateral,
+        key: getattr(data_loader, f"load_{key}")
+        for key in data_loader.PRICING_FILENAMES
     }
 
     for key, loader in loaders.items():
