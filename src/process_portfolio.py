@@ -128,9 +128,9 @@ def main():
 
     env_data_dir = os.getenv(PRICING_DATA_ENV_VAR)
     pricing_base_path = resolve_pricing_data_dir(
-        args.data_dir,
-        env_data_dir,
-        config_data_dir,
+        cli_data_dir=args.data_dir,
+        env_data_dir=env_data_dir,
+        config_data_dir=config_data_dir,
     )
 
     if args.data_dir:
