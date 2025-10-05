@@ -19,10 +19,7 @@ import pandas as pd
 
 from src.data_loader import (
     load_loan_data,
-    load_historic_real_payment,
-    load_payment_schedule,
     load_customer_data,
-    load_collateral
 )
 
 
@@ -104,21 +101,24 @@ def main():
         print(f"Using pricing data directory: {args.data_dir}")
         loan_data = load_loan_data(args.data_dir)
         customer_data = load_customer_data(args.data_dir)
-        # historic_real_payment = load_historic_real_payment(args.data_dir)
-        # payment_schedule = load_payment_schedule(args.data_dir)
-        # collateral = load_collateral(args.data_dir)
     else:
         loan_data = load_loan_data()
         customer_data = load_customer_data()
-        # historic_real_payment = load_historic_real_payment()
-        # payment_schedule = load_payment_schedule()
-        # collateral = load_collateral()
 
     print(f"Loaded {loan_data.shape[0]} rows and {loan_data.shape[1]} columns from loan_data.")
     print(f"Loaded {customer_data.shape[0]} rows and {customer_data.shape[1]} columns from customer_data.")
 
     # TODO: Implement the rest of the processing logic
 
+    print("\n✅ Processing completed successfully!")
+    print("\nNext steps:")
+    print("1. Check the generated files in ./abaco_runtime/exports/")
+    print("2. Customize the configuration files for your data")
+    print("3. Implement actual data processing logic in this script")
+
+
+if __name__ == '__main__':
+    main()
     print("\n✅ Processing completed successfully!")
     print("\nNext steps:")
     print("1. Check the generated files in ./abaco_runtime/exports/")
