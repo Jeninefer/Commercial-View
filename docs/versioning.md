@@ -53,6 +53,8 @@ Increment when making backwards-compatible bug fixes:
 
 v{MAJOR}.{MINOR}.{PATCH}[-{PRERELEASE}]
 
+MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD-METADATA]
+
 ```
 
 ### Tag Examples
@@ -373,3 +375,5 @@ Maintain a `VERSION` file at repository root:
 ```
 
 This file is the single source of truth for the current version.
+
+[build-metadata]: https://semver.org/spec/v2.0.0.html#spec-item-10

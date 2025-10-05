@@ -6,6 +6,27 @@ LOOKER_CLIENT_ID = os.getenv("LOOKER_CLIENT_ID")
 LOOKER_CLIENT_SECRET = os.getenv("LOOKER_CLIENT_SECRET")
 
 class LookerClient:
+    """Looker API Client for dashboard and look data integration.
+
+    This module provides a client for interacting with the Looker API
+    to fetch dashboards, looks, and query results.
+
+    Configuration
+    ------------
+    Required environment variables:
+    - LOOKER_BASE_URL: Base URL of your Looker instance (e.g., https://company.looker.com)
+    - LOOKER_CLIENT_ID: API client ID from Looker admin
+    - LOOKER_CLIENT_SECRET: API client secret from Looker admin
+
+    Quick checks
+    ------------
+    - Verify you're on the venv's Python:
+      ```bash
+      which python
+      python -c "import sys; print(sys.executable)"
+      ```
+    """
+
     def __init__(self):
         self.session = requests.Session()
         self._authenticate()

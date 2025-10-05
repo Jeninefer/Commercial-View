@@ -48,3 +48,8 @@ __all__ = [
     "_resolve_base_path",
     "PRICING_FILENAMES",
 ]
+__all__ = ["load_loan_data", "DataLoader"]
+
+def load_loan_data(path):
+    import pandas as pd
+    return pd.read_csv(path)
