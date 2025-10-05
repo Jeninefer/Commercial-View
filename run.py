@@ -92,7 +92,7 @@ def get_collateral():
     except FileNotFoundError:
         raise HTTPException(
             status_code=404,
-            detail="Collateral data file not found. Please upload the CSV file to the directory configured by the COMMERCIAL_VIEW_DATA_PATH environment variable or the default data/pricing directory."
+            detail=f"Collateral data file not found. Please upload the CSV file to the directory: {DATA_BASE_PATH}"
         )
 
 # Figma endpoint
