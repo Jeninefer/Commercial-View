@@ -15,8 +15,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "node ./node_modules/tape/bin/tape \"test/**/*.js\"",
+    "eject": "react-scripts eject",
+    "update-deps": "npm install",
+    "git-pull": "git pull origin main",
+    "git-status": "git status",
+    "pull-and-update": "npm run git-pull && npm run update-deps"
   },
   "eslintConfig": {
     "extends": [
@@ -37,9 +41,14 @@
     ]
   },
   "devDependencies": {
+    "@ljharb/tsconfig": "^0.3.2",
     "@types/node": "^18.19.129",
     "@types/react": "^18.3.25",
     "@types/react-dom": "^18.3.7",
-    "typescript": "4.9"
+    "@types/tape": "^4.13.4",
+    "has-tostringtag": "^1.0.0",
+    "is-number-object": "^1.0.7",
+    "typescript": "4.9",
+    "tape": "^5.6.3"
   }
 }
