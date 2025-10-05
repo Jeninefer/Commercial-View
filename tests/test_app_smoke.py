@@ -108,7 +108,8 @@ def test_fastapi_app_startup_smoke(
 
     # Patch module-level attributes to ensure test isolation
     monkeypatch.setattr(module, "datasets", {}, raising=False)
-    monkeypatch.setattr(module, "data_loader", None, raising=False)
+    if hasattr(module, "data_loader"):
+        monkeypatch.setattr(module, "data_loader", None)
 
     import asyncio
 
