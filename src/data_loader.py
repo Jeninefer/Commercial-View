@@ -217,8 +217,8 @@ class DataLoader:
                 logger.warning("%s not loaded: %s", dataset_name, exc)
                 self._record_error(dataset_name, str(exc))
                 continue
-            except Exception as exc:  # pragma: no cover - unexpected failures
-                logger.exception("Unexpected error loading %s", dataset_name)
+            except (pd.errors.ParserError, OSError) as exc:
+                logger.exception("Error loading %s: %s", dataset_name, exc)
                 self._record_error(dataset_name, str(exc))
                 continue
 
