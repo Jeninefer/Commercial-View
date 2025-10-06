@@ -9,12 +9,12 @@ capabilities to downstream consumers.
 
 The `src/ai` package introduces typed clients for the following providers:
 
-| Provider   | Environment variables                                                 | Purpose |
-| ---------- | --------------------------------------------------------------------- | ------- |
-| OpenAI     | `OPENAI_API_KEY`, optional `OPENAI_MODEL`, optional `OPENAI_BASE_URL`  | Primary LLM narrative generation |
-| Gemini     | `GEMINI_API_KEY`, optional `GEMINI_MODEL`, optional `GEMINI_API_BASE`  | Backup LLM with strong reasoning |
-| Anthropic  | `ANTHROPIC_API_KEY`, optional `ANTHROPIC_MODEL`, optional `ANTHROPIC_API_BASE` | Safety-first LLM for governance |
-| HubSpot    | `HUBSPOT_PRIVATE_APP_TOKEN`, optional `HUBSPOT_API_BASE`               | CRM enrichment / context injection |
+Provider   | Environment variables                                                 | Purpose |
+---------- | --------------------------------------------------------------------- | ------- |
+OpenAI     | `OPENAI_API_KEY`, optional `OPENAI_MODEL`, optional `OPENAI_BASE_URL`  | Primary LLM narrative generation |
+Gemini     | `GEMINI_API_KEY`, optional `GEMINI_MODEL`, optional `GEMINI_API_BASE`  | Backup LLM with strong reasoning |
+Anthropic  | `ANTHROPIC_API_KEY`, optional `ANTHROPIC_MODEL`, optional `ANTHROPIC_API_BASE` | Safety-first LLM for governance |
+HubSpot    | `HUBSPOT_PRIVATE_APP_TOKEN`, optional `HUBSPOT_API_BASE`               | CRM enrichment / context injection |
 
 Each client validates its credentials at instantiation time. Missing credentials
 result in a `ProviderAuthenticationError`, ensuring issues surface early during
