@@ -31,7 +31,7 @@ class DataProcessor:
 
         if 'payment_amount' in processed_df.columns:
             processed_df['payment_amount'] = pd.to_numeric(
-                processed_df['payment_amount'].replace({',': ''}, regex=True),
+                processed_df['payment_amount'].astype(str).str.replace(',', '', regex=False),
                 errors='coerce'
             )
 
