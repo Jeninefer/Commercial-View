@@ -63,30 +63,32 @@ def test_executive_summary_provides_highlights(stub_container: AIServiceContaine
     assert result.sentiment == "positive"
 
 
-def test_api_endpoints_use_ai_services(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_api_endpoints_use_ai_services() -> None:
     client = StubClient()
     container = AIServiceContainer(clients={client.metadata.name: client})
-    monkeypatch.setattr(get_ai_container, "_instance", container, raising=False)
+    app.dependency_overrides[get_ai_container] = lambda: container
+    try:
+        test_client = TestClient(app)
 
-    test_client = TestClient(app)
+        forecast_response = test_client.post(
+            "/analytics/predictions",
+            json={"history": [1, 2, 3], "horizon": 2},
+        )
+        assert forecast_response.status_code == 200
+        assert forecast_response.json()["provider"] == "stub-provider"
 
-    forecast_response = test_client.post(
-        "/analytics/predictions",
-        json={"history": [1, 2, 3], "horizon": 2},
-    )
-    assert forecast_response.status_code == 200
-    assert forecast_response.json()["provider"] == "stub-provider"
+        anomaly_response = test_client.post(
+            "/analytics/anomalies",
+            json={"series": [1, 2, 10, 2, 1]},
+        )
+        assert anomaly_response.status_code == 200
+        assert anomaly_response.json()["provider"] == "stub-provider"
 
-    anomaly_response = test_client.post(
-        "/analytics/anomalies",
-        json={"series": [1, 2, 10, 2, 1]},
-    )
-    assert anomaly_response.status_code == 200
-    assert anomaly_response.json()["provider"] == "stub-provider"
-
-    summary_response = test_client.post(
-        "/analytics/executive-summary",
-        json={"metrics": {"roi": 0.12}},
-    )
-    assert summary_response.status_code == 200
-    assert summary_response.json()["provider"] == "stub-provider"
+        summary_response = test_client.post(
+            "/analytics/executive-summary",
+            json={"metrics": {"roi": 0.12}},
+        )
+        assert summary_response.status_code == 200
+        assert summary_response.json()["provider"] == "stub-provider"
+    finally:
+        app.dependency_overrides.pop(get_ai_container, None)
