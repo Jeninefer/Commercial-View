@@ -5,6 +5,7 @@ LOOKER_BASE_URL = os.getenv("LOOKER_BASE_URL")
 LOOKER_CLIENT_ID = os.getenv("LOOKER_CLIENT_ID")
 LOOKER_CLIENT_SECRET = os.getenv("LOOKER_CLIENT_SECRET")
 
+
 class LookerClient:
     """Looker API Client for dashboard and look data integration.
 
@@ -33,13 +34,12 @@ class LookerClient:
 
     def _authenticate(self):
         if not all([LOOKER_BASE_URL, LOOKER_CLIENT_ID, LOOKER_CLIENT_SECRET]):
-            raise ValueError("Looker API credentials are not fully set in the environment variables.")
-        
+            raise ValueError(
+                "Looker API credentials are not fully set in the environment variables."
+            )
+
         auth_url = f"{LOOKER_BASE_URL}/api/4.0/login"
-        payload = {
-            "client_id": LOOKER_CLIENT_ID,
-            "client_secret": LOOKER_CLIENT_SECRET
-        }
+        payload = {"client_id": LOOKER_CLIENT_ID, "client_secret": LOOKER_CLIENT_SECRET}
         response = self.session.post(auth_url, data=payload)
         response.raise_for_status()
         access_token = response.json().get("access_token")

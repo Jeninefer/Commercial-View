@@ -12,38 +12,42 @@ from pathlib import Path
 from typing import Dict, List, Optional
 from datetime import datetime
 
+
 def load_commercial_view_configs() -> Dict:
     """Load Commercial-View configuration files for Jupyter integration"""
-    project_root = Path(os.environ.get("COMMERCIAL_VIEW_ROOT", Path(__file__).parent.parent))
+    project_root = Path(
+        os.environ.get("COMMERCIAL_VIEW_ROOT", Path(__file__).parent.parent)
+    )
     configs = {}
-    
+
     config_files = {
-        'pricing': project_root / 'configs' / 'pricing_config.yml',
-        'dpd': project_root / 'configs' / 'dpd_policy.yml',
-        'columns': project_root / 'configs' / 'column_maps.yml',
-        'figma': project_root / 'configs' / 'figma_config.json'
+        "pricing": project_root / "configs" / "pricing_config.yml",
+        "dpd": project_root / "configs" / "dpd_policy.yml",
+        "columns": project_root / "configs" / "column_maps.yml",
+        "figma": project_root / "configs" / "figma_config.json",
     }
-    
+
     for name, path in config_files.items():
         if path.exists():
             try:
-                if path.suffix == '.json':
-                    with open(path, 'r') as f:
+                if path.suffix == ".json":
+                    with open(path, "r") as f:
                         configs[name] = json.load(f)
                 else:
-                    with open(path, 'r') as f:
+                    with open(path, "r") as f:
                         configs[name] = yaml.safe_load(f)
                 print(f"✅ Loaded {name} configuration for Jupyter")
             except Exception as e:
                 print(f"⚠️  Failed to load {name} config: {e}")
                 configs[name] = None
-    
+
     return configs
+
 
 def setup_jupyter_environment():
     """Setup Commercial-View environment for Jupyter"""
     project_root = Path(__file__).parent.parent
-    
+
     # Set comprehensive environment variables
     env_vars = {
         "COMMERCIAL_VIEW_ROOT": str(project_root),
@@ -55,45 +59,46 @@ def setup_jupyter_environment():
         "COLUMN_MAPS_PATH": str(project_root / "configs" / "column_maps.yml"),
         "DATA_DIR": str(project_root / "data"),
         "EXPORT_DIR": str(project_root / "abaco_runtime" / "exports"),
-        "PYTHONPATH": f"{project_root}/src:{project_root}/scripts:{os.environ.get('PYTHONPATH', '')}"
+        "PYTHONPATH": f"{project_root}/src:{project_root}/scripts:{os.environ.get('PYTHONPATH', '')}",
     }
-    
+
     for key, value in env_vars.items():
         os.environ[key] = value
-    
+
     # Load multiple .env files with priority
     env_files = [".env", ".env.local", ".env.development"]
-    
+
     for env_file_name in env_files:
         env_file = project_root / env_file_name
         if env_file.exists():
             print(f"📝 Loading {env_file_name} for Jupyter")
-            with open(env_file, encoding='utf-8') as f:
+            with open(env_file, encoding="utf-8") as f:
                 for line in f:
-                    if line.strip() and not line.startswith('#') and '=' in line:
+                    if line.strip() and not line.startswith("#") and "=" in line:
                         try:
-                            key, value = line.strip().split('=', 1)
+                            key, value = line.strip().split("=", 1)
                             # Remove quotes if present
                             value = value.strip().strip('"').strip("'")
                             os.environ[key] = value
                         except ValueError:
                             continue
-    
+
     # Load Commercial-View configurations
     configs = load_commercial_view_configs()
-    
+
     print("🏦 Commercial-View Jupyter environment configured")
     print(f"📁 Project root: {project_root}")
     print(f"🐍 Python path includes: {project_root}/src, {project_root}/scripts")
-    
+
     return configs
+
 
 def create_jupyter_config() -> Path:
     """Create Jupyter configuration optimized for Commercial-View"""
     project_root = Path(os.environ["COMMERCIAL_VIEW_ROOT"])
     jupyter_config_dir = project_root / ".jupyter"
     jupyter_config_dir.mkdir(exist_ok=True)
-    
+
     config_content = '''# Commercial-View Jupyter Configuration
 c = get_config()
 
@@ -133,19 +138,20 @@ def commercial_view_pre_save_hook(model, path, contents_manager):
 
 c.FileContentsManager.pre_save_hook = commercial_view_pre_save_hook
 '''
-    
+
     config_file = jupyter_config_dir / "jupyter_lab_config.py"
-    with open(config_file, 'w') as f:
+    with open(config_file, "w") as f:
         f.write(config_content)
-    
+
     print(f"📄 Created Jupyter config: {config_file}")
     return config_file
+
 
 def create_startup_notebooks() -> List[Path]:
     """Create Commercial-View startup notebooks"""
     notebooks_dir = Path("notebooks")
     notebooks_dir.mkdir(exist_ok=True)
-    
+
     # Commercial-View Getting Started notebook
     getting_started_notebook = {
         "cells": [
@@ -165,8 +171,8 @@ def create_startup_notebooks() -> List[Path]:
                     "- Data export and visualization\n",
                     "\n",
                     "## 🚀 Quick Start\n",
-                    "Run the cells below to set up your Commercial-View environment."
-                ]
+                    "Run the cells below to set up your Commercial-View environment.",
+                ],
             },
             {
                 "cell_type": "code",
@@ -179,14 +185,14 @@ def create_startup_notebooks() -> List[Path]:
                     "from pathlib import Path\n",
                     "\n",
                     "# Verify Commercial-View setup\n",
-                    "print(\"🏦 Commercial-View Environment Status\")\n",
-                    "print(\"=\" * 40)\n",
+                    'print("🏦 Commercial-View Environment Status")\n',
+                    'print("=" * 40)\n',
                     "print(f\"📁 Project Root: {os.environ.get('COMMERCIAL_VIEW_ROOT', 'Not set')}\")\n",
                     "print(f\"🔧 Environment: {os.environ.get('ENVIRONMENT', 'Not set')}\")\n",
                     "print(f\"🏦 CV Mode: {os.environ.get('COMMERCIAL_VIEW_MODE', 'Not set')}\")\n",
                     "print(f\"📊 Data Directory: {os.environ.get('DATA_DIR', 'Not set')}\")\n",
-                    "print(f\"📤 Export Directory: {os.environ.get('EXPORT_DIR', 'Not set')}\")"
-                ]
+                    "print(f\"📤 Export Directory: {os.environ.get('EXPORT_DIR', 'Not set')}\")",
+                ],
             },
             {
                 "cell_type": "code",
@@ -205,10 +211,10 @@ def create_startup_notebooks() -> List[Path]:
                     "sns.set_palette('Set2')\n",
                     "plt.rcParams['figure.figsize'] = (12, 8)\n",
                     "\n",
-                    "print(\"📊 Data science libraries loaded for commercial lending\")\n",
-                    "print(f\"🐼 Pandas: {pd.__version__}\")\n",
-                    "print(f\"🔢 NumPy: {np.__version__}\")"
-                ]
+                    'print("📊 Data science libraries loaded for commercial lending")\n',
+                    'print(f"🐼 Pandas: {pd.__version__}")\n',
+                    'print(f"🔢 NumPy: {np.__version__}")',
+                ],
             },
             {
                 "cell_type": "code",
@@ -220,7 +226,7 @@ def create_startup_notebooks() -> List[Path]:
                     "import json\n",
                     "\n",
                     "def load_config(config_path):\n",
-                    "    \"\"\"Load Commercial-View configuration file\"\"\"\n",
+                    '    """Load Commercial-View configuration file"""\n',
                     "    try:\n",
                     "        with open(config_path, 'r') as f:\n",
                     "            if config_path.endswith('.json'):\n",
@@ -237,11 +243,11 @@ def create_startup_notebooks() -> List[Path]:
                     "    'columns': load_config(os.environ.get('COLUMN_MAPS_PATH'))\n",
                     "}\n",
                     "\n",
-                    "print(\"⚙️  Configuration Status:\")\n",
+                    'print("⚙️  Configuration Status:")\n',
                     "for name, config in configs.items():\n",
-                    "    status = \"✅ Loaded\" if config else \"❌ Not found\"\n",
-                    "    print(f\"   {name.title()}: {status}\")"
-                ]
+                    '    status = "✅ Loaded" if config else "❌ Not found"\n',
+                    '    print(f"   {name.title()}: {status}")',
+                ],
             },
             {
                 "cell_type": "markdown",
@@ -249,42 +255,42 @@ def create_startup_notebooks() -> List[Path]:
                 "source": [
                     "## 📊 Sample Commercial Lending Analysis\n",
                     "\n",
-                    "The cells below demonstrate basic commercial lending analytics using Commercial-View."
-                ]
-            }
+                    "The cells below demonstrate basic commercial lending analytics using Commercial-View.",
+                ],
+            },
         ],
         "metadata": {
             "kernelspec": {
                 "display_name": "Commercial-View (Commercial Lending)",
                 "language": "python",
-                "name": "commercial-view"
+                "name": "commercial-view",
             },
-            "language_info": {
-                "name": "python",
-                "version": "3.8.0"
-            },
+            "language_info": {"name": "python", "version": "3.8.0"},
             "commercial_view": {
                 "platform": "commercial_lending",
                 "notebook_type": "getting_started",
-                "created": str(datetime.now())
-            }
+                "created": str(datetime.now()),
+            },
         },
         "nbformat": 4,
-        "nbformat_minor": 4
+        "nbformat_minor": 4,
     }
-    
+
     getting_started_file = notebooks_dir / "commercial_view_getting_started.ipynb"
-    with open(getting_started_file, 'w') as f:
+    with open(getting_started_file, "w") as f:
         json.dump(getting_started_notebook, f, indent=2)
-    
+
     print(f"📓 Created getting started notebook: {getting_started_file}")
-    
+
     return [getting_started_file]
+
 
 def check_jupyter_installation() -> bool:
     """Check if Jupyter Lab is installed and available"""
     try:
-        result = subprocess.run(["jupyter", "--version"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["jupyter", "--version"], capture_output=True, text=True
+        )
         if result.returncode == 0:
             print(f"✅ Jupyter available: {result.stdout.strip()}")
             return True
@@ -295,66 +301,76 @@ def check_jupyter_installation() -> bool:
         print("❌ Jupyter not found")
         return False
 
+
 def install_jupyter_extensions() -> None:
     """Install useful Jupyter extensions for Commercial-View"""
     extensions = [
         "jupyterlab-git",
         "@jupyter-widgets/jupyterlab-manager",
-        "jupyterlab_code_formatter"
+        "jupyterlab_code_formatter",
     ]
-    
+
     print("🔧 Installing Jupyter Lab extensions...")
     for extension in extensions:
         try:
-            subprocess.run(["jupyter", "labextension", "install", extension], 
-                         capture_output=True, check=True)
+            subprocess.run(
+                ["jupyter", "labextension", "install", extension],
+                capture_output=True,
+                check=True,
+            )
             print(f"✅ Installed extension: {extension}")
         except subprocess.CalledProcessError:
             print(f"⚠️  Failed to install extension: {extension}")
+
 
 def start_jupyter_lab():
     """Start Jupyter Lab with Commercial-View configuration"""
     # Setup environment and configurations
     configs = setup_jupyter_environment()
-    
+
     # Check installation
     if not check_jupyter_installation():
         print("💡 Install Jupyter Lab: pip install jupyterlab")
         return
-    
+
     # Create Jupyter configuration
     config_file = create_jupyter_config()
-    
+
     # Create startup notebooks
     startup_notebooks = create_startup_notebooks()
-    
+
     # Install extensions (optional)
     try:
         install_jupyter_extensions()
     except Exception as e:
         print(f"⚠️  Extension installation failed: {e}")
-    
+
     try:
         # Enhanced Jupyter Lab command
         cmd = [
-            "jupyter", "lab",
-            "--notebook-dir", ".",
-            "--ip", "0.0.0.0",
-            "--port", "8888",
+            "jupyter",
+            "lab",
+            "--notebook-dir",
+            ".",
+            "--ip",
+            "0.0.0.0",
+            "--port",
+            "8888",
             "--no-browser",
             "--allow-root",
-            "--config", str(config_file)
+            "--config",
+            str(config_file),
         ]
-        
+
         print("🔬 Starting Jupyter Lab for Commercial-View...")
         print("🏦 Commercial lending analytics environment ready")
         print(f"📊 Available configurations: {len([c for c in configs.values() if c])}")
         print(f"📓 Startup notebooks: {len(startup_notebooks)}")
         print("🌐 Access Jupyter Lab at: http://localhost:8888")
         print("💡 Open 'commercial_view_getting_started.ipynb' to begin")
-        
+
         subprocess.run(cmd)
-        
+
     except KeyboardInterrupt:
         print("\n🛑 Commercial-View Jupyter Lab stopped")
     except FileNotFoundError:
@@ -362,11 +378,12 @@ def start_jupyter_lab():
     except Exception as e:
         print(f"❌ Error starting Jupyter Lab: {e}")
 
+
 def main():
     """Main function with command line options"""
     if len(sys.argv) > 1:
         command = sys.argv[1]
-        
+
         if command == "--check":
             setup_jupyter_environment()
             check_jupyter_installation()
@@ -390,6 +407,7 @@ def main():
             print("Unknown option. Use --help for available commands.")
     else:
         start_jupyter_lab()
+
 
 if __name__ == "__main__":
     main()
