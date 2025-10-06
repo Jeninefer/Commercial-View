@@ -65,8 +65,9 @@ def _bootstrap_pipeline(monkeypatch: pytest.MonkeyPatch) -> Tuple[object, Dict[s
         make_loader("collateral", pd.DataFrame(), error=FileNotFoundError("missing collateral")),
     )
 
-    sys.modules.pop("src.pipeline", None)
-    pipeline = importlib.import_module("src.pipeline")
+    import src.pipeline
+    importlib.reload(src.pipeline)
+    pipeline = src.pipeline
 
     return pipeline, calls, loan_df, payment_df
 
