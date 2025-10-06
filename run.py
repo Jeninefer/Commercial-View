@@ -17,11 +17,11 @@ try:
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.responses import JSONResponse
     import uvicorn
-    
+
     # Import application modules
     from pipeline import CommercialViewPipeline
     from data_loader import DataLoader
-    
+
 except ImportError as e:
     print(f"❌ Import error: {e}")
     print("Please ensure all dependencies are installed: pip install -r requirements.txt")
@@ -53,15 +53,34 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize data components
-try:
-    data_loader = DataLoader()
-    pipeline = CommercialViewPipeline()
-    logger.info("✅ Commercial-View application initialized successfully")
-except Exception as e:
-    logger.error(f"❌ Failed to initialize application components: {e}")
-    data_loader = None
-    pipeline = None
+data_loader: Optional[DataLoader] = None
+pipeline: Optional[CommercialViewPipeline] = None
+
+
+def _ensure_data_loader() -> Optional[DataLoader]:
+    """Initialise the shared data loader on demand."""
+    global data_loader
+    if data_loader is None:
+        try:
+            data_loader = DataLoader()
+            logger.info("✅ DataLoader initialised successfully")
+        except Exception as exc:  # pragma: no cover - logged for observability
+            logger.error(f"❌ Failed to initialise DataLoader: {exc}")
+            data_loader = None
+    return data_loader
+
+
+def _ensure_pipeline() -> Optional[CommercialViewPipeline]:
+    """Initialise the analytics pipeline on demand."""
+    global pipeline
+    if pipeline is None:
+        try:
+            pipeline = CommercialViewPipeline()
+            logger.info("✅ CommercialViewPipeline initialised successfully")
+        except Exception as exc:  # pragma: no cover - logged for observability
+            logger.error(f"❌ Failed to initialise CommercialViewPipeline: {exc}")
+            pipeline = None
+    return pipeline
 
 # Global exception handler
 @app.exception_handler(Exception)
@@ -83,14 +102,15 @@ async def health_check() -> Dict[str, Any]:
     try:
         # Check data availability
         datasets_status = {}
-        
-        if data_loader:
+
+        loader = _ensure_data_loader()
+        if loader:
             # Check core datasets
             core_datasets = ["loan_data", "payment_schedule", "historic_payments"]
-            
+
             for dataset in core_datasets:
                 try:
-                    df = getattr(data_loader, f"load_{dataset}")()
+                    df = getattr(loader, f"load_{dataset}")()
                     datasets_status[dataset] = {
                         "available": df is not None and not df.empty,
                         "records": len(df) if df is not None else 0
@@ -100,7 +120,9 @@ async def health_check() -> Dict[str, Any]:
                         "available": False,
                         "error": str(e)
                     }
-        
+
+        pipeline_instance = _ensure_pipeline()
+
         return {
             "status": "healthy",
             "version": "1.0.0",
@@ -108,7 +130,9 @@ async def health_check() -> Dict[str, Any]:
             "environment": os.getenv("ENVIRONMENT", "production"),
             "datasets_available": datasets_status,
             "data_source": "Production Google Drive",
-            "timestamp": pipeline.get_current_timestamp() if pipeline else None
+            "timestamp": (
+                pipeline_instance.get_current_timestamp() if pipeline_instance else None
+            )
         }
         
     except Exception as e:
@@ -130,22 +154,24 @@ async def get_portfolio_metrics() -> Dict[str, Any]:
     Returns real-time commercial lending analytics
     """
     try:
-        if not pipeline:
+        pipeline_instance = _ensure_pipeline()
+
+        if not pipeline_instance:
             raise HTTPException(status_code=503, detail="Analytics pipeline not available")
-        
+
         # Load and process data
-        pipeline.load_all_datasets()
-        
+        pipeline_instance.load_all_datasets()
+
         # Calculate portfolio metrics
         metrics = {
-            "portfolio_outstanding": pipeline.compute_portfolio_outstanding(),
-            "active_clients": pipeline.compute_active_clients(),
-            "weighted_apr": pipeline.compute_weighted_apr(),
-            "npl_rate": pipeline.compute_npl_rate(),
-            "concentration_risk": pipeline.compute_concentration_risk(),
-            "collection_rate": pipeline.compute_collection_rate(),
+            "portfolio_outstanding": pipeline_instance.compute_portfolio_outstanding(),
+            "active_clients": pipeline_instance.compute_active_clients(),
+            "weighted_apr": pipeline_instance.compute_weighted_apr(),
+            "npl_rate": pipeline_instance.compute_npl_rate(),
+            "concentration_risk": pipeline_instance.compute_concentration_risk(),
+            "collection_rate": pipeline_instance.compute_collection_rate(),
             "status": "success",
-            "calculation_timestamp": pipeline.get_current_timestamp()
+            "calculation_timestamp": pipeline_instance.get_current_timestamp()
         }
         
         logger.info("✅ Portfolio metrics calculated successfully")
@@ -174,11 +200,30 @@ async def get_loan_data() -> List[Dict[str, Any]]:
     Returns real loan records from production sources
     """
     try:
-        if not data_loader:
+        loader = _ensure_data_loader()
+
+        if not loader:
             raise HTTPException(status_code=503, detail="Data loader not available")
-        
+
         # Load real loan data
-        loan_df = data_loader.load_loan_data()
+        pipeline_instance = _ensure_pipeline()
+        if pipeline_instance:
+            try:
+                pipeline_instance.load_all_datasets()
+            except Exception as exc:
+                logger.debug(f"Pipeline load_all_datasets failed: {exc}")
+
+            dataset = getattr(pipeline_instance, "_datasets", {}).get("loan_data")
+            if dataset is not None:
+                records = dataset.to_dict("records") if hasattr(dataset, "to_dict") else list(dataset)
+                if records:
+                    return records
+
+        try:
+            loan_df = loader.load_loan_data()
+        except FileNotFoundError:
+            logger.warning("Loan data file not found")
+            return []
         
         if loan_df is not None and not loan_df.empty:
             # Convert to records format for API response
@@ -201,11 +246,30 @@ async def get_payment_schedule() -> List[Dict[str, Any]]:
     Returns scheduled payments from production sources
     """
     try:
-        if not data_loader:
+        loader = _ensure_data_loader()
+
+        if not loader:
             raise HTTPException(status_code=503, detail="Data loader not available")
-        
+
         # Load payment schedule data
-        payment_df = data_loader.load_payment_schedule()
+        pipeline_instance = _ensure_pipeline()
+        if pipeline_instance:
+            try:
+                pipeline_instance.load_all_datasets()
+            except Exception as exc:
+                logger.debug(f"Pipeline load_all_datasets failed: {exc}")
+
+            dataset = getattr(pipeline_instance, "_datasets", {}).get("payment_schedule")
+            if dataset is not None:
+                records = dataset.to_dict("records") if hasattr(dataset, "to_dict") else list(dataset)
+                if records:
+                    return records
+
+        try:
+            payment_df = loader.load_payment_schedule()
+        except FileNotFoundError:
+            logger.warning("Payment schedule file not found")
+            return []
         
         if payment_df is not None and not payment_df.empty:
             records = payment_df.to_dict('records')
@@ -227,12 +291,31 @@ async def get_historic_payments() -> List[Dict[str, Any]]:
     Returns actual payment history for performance analysis
     """
     try:
-        if not data_loader:
+        loader = _ensure_data_loader()
+
+        if not loader:
             raise HTTPException(status_code=503, detail="Data loader not available")
-        
+
         # Load historic payment data
-        historic_df = data_loader.load_historic_real_payment()
-        
+        pipeline_instance = _ensure_pipeline()
+        if pipeline_instance:
+            try:
+                pipeline_instance.load_all_datasets()
+            except Exception as exc:
+                logger.debug(f"Pipeline load_all_datasets failed: {exc}")
+
+            dataset = getattr(pipeline_instance, "_datasets", {}).get("historic_real_payment")
+            if dataset is not None:
+                records = dataset.to_dict("records") if hasattr(dataset, "to_dict") else list(dataset)
+                if records:
+                    return records
+
+        try:
+            historic_df = loader.load_historic_real_payment()
+        except FileNotFoundError:
+            logger.warning("Historic payment file not found")
+            return []
+
         if historic_df is not None and not historic_df.empty:
             records = historic_df.to_dict('records')
             logger.info(f"✅ Loaded {len(records)} historic payment records")
@@ -240,10 +323,86 @@ async def get_historic_payments() -> List[Dict[str, Any]]:
         else:
             logger.warning("No historic payment data available")
             return []
-            
+
     except Exception as e:
         logger.error(f"Failed to load historic payments: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to load historic payments: {str(e)}")
+
+
+@app.get("/customer-data")
+async def get_customer_data() -> List[Dict[str, Any]]:
+    """Return customer dataset when available, otherwise an empty list."""
+    try:
+        loader = _ensure_data_loader()
+
+        if not loader:
+            return []
+
+        try:
+            customer_df = loader.load_customer_data()
+        except FileNotFoundError:
+            logger.warning("Customer data file not found")
+            return []
+
+        if customer_df is None or customer_df.empty:
+            return []
+
+        return customer_df.to_dict("records")
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to load customer data: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load customer data")
+
+
+@app.get("/collateral")
+async def get_collateral_data() -> List[Dict[str, Any]]:
+    """Return collateral dataset when available, otherwise an empty list."""
+    try:
+        loader = _ensure_data_loader()
+
+        if not loader:
+            return []
+
+        try:
+            collateral_df = loader.load_collateral()
+        except FileNotFoundError:
+            logger.warning("Collateral data file not found")
+            return []
+
+        if collateral_df is None or collateral_df.empty:
+            return []
+
+        return collateral_df.to_dict("records")
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to load collateral data: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load collateral data")
+
+
+@app.get("/executive-summary")
+async def get_executive_summary() -> Dict[str, Any]:
+    """Return an executive summary of portfolio performance."""
+    pipeline_instance = _ensure_pipeline()
+
+    if not pipeline_instance:
+        raise HTTPException(status_code=503, detail="Analytics pipeline not available")
+
+    try:
+        summary = pipeline_instance.generate_executive_summary()
+    except Exception as e:
+        logger.error(f"Failed to generate executive summary: {e}")
+        raise HTTPException(status_code=500, detail="Failed to generate executive summary")
+
+    if not isinstance(summary, dict):
+        return {"portfolio_overview": {}, "risk_indicators": {}}
+
+    summary.setdefault("portfolio_overview", {})
+    summary.setdefault("risk_indicators", {})
+    return summary
 
 # Schema metadata endpoint
 @app.get("/schema/{dataset_name}")
@@ -286,12 +445,7 @@ async def get_dataset_schema(dataset_name: str) -> Dict[str, Any]:
 @app.get("/")
 async def root() -> Dict[str, str]:
     """Welcome message for Commercial-View API"""
-    return {
-        "message": "Welcome to Commercial-View API",
-        "description": "Enterprise commercial lending analytics platform",
-        "version": "1.0.0",
-        "documentation": "/docs"
-    }
+    return {"message": "Welcome to the Commercial View API"}
 
 # Application startup
 @app.on_event("startup")

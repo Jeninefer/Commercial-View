@@ -57,15 +57,9 @@ except ImportError as e:
     raise
 
 try:
-    from src.data_loader import (
-        load_loan_data,
-        load_historic_real_payment,
-        load_payment_schedule,
-        load_customer_data,
-        load_collateral,
-    )
+    from src.data_loader import DataLoader
 except ImportError as e:
-    print(f"\033[91mError importing from src.data_loader: {e}\033[0m")
+    print(f"\033[91mError importing DataLoader: {e}\033[0m")
     print("\033[93mMake sure you're running from the project root directory\033[0m")
     raise
 
@@ -78,17 +72,18 @@ class CommercialViewPipeline:
     def __init__(self, base_path: Optional[Path] = None):
         """Initialize the pipeline with optional base path."""
         self.base_path = base_path
+        self.data_loader = DataLoader(base_path=base_path)
         self._datasets: Dict[str, DataFrame] = {}
         self._computed_metrics: Dict[str, Any] = {}
 
     def load_all_datasets(self) -> Dict[str, DataFrame]:
         """Load all available datasets with comprehensive error handling."""
         dataset_loaders = {
-            "loan_data": load_loan_data,
-            "historic_real_payment": load_historic_real_payment,
-            "payment_schedule": load_payment_schedule,
-            "customer_data": load_customer_data,
-            "collateral": load_collateral,
+            "loan_data": self.data_loader.load_loan_data,
+            "historic_real_payment": self.data_loader.load_historic_real_payment,
+            "payment_schedule": self.data_loader.load_payment_schedule,
+            "customer_data": self.data_loader.load_customer_data,
+            "collateral": self.data_loader.load_collateral,
         }
 
         for name, loader in dataset_loaders.items():

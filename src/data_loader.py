@@ -194,6 +194,37 @@ class DataLoader:
             logger.error(f"Failed to load customer data from {file_path}: {e}")
             raise
 
+    def load_collateral(
+        self, base_path: Optional[Union[str, Path]] = None
+    ) -> Optional[pd.DataFrame]:
+        """Load collateral dataset if available."""
+        file_path = self._get_file_path("collateral.csv", base_path)
+
+        try:
+            if not file_path.exists():
+                raise FileNotFoundError(
+                    f"Collateral data file not found: {file_path}\n"
+                    f"Expected location: {file_path.absolute()}\n"
+                    f"Please ensure the file exists or set COMMERCIAL_VIEW_DATA_PATH environment variable.\n"
+                    f"Production data source: {self.google_drive_url}"
+                )
+
+            df = pd.read_csv(file_path)
+
+            if df.empty:
+                logger.warning(f"Collateral data file is empty: {file_path}")
+                return pd.DataFrame()
+
+            logger.info(f"✅ Loaded {len(df)} collateral records from {file_path}")
+            return df
+
+        except FileNotFoundError as e:
+            logger.error(str(e))
+            raise
+        except Exception as e:
+            logger.error(f"Failed to load collateral data from {file_path}: {e}")
+            raise
+
     def _get_file_path(
         self, filename: str, base_path: Optional[Union[str, Path]]
     ) -> Path:
@@ -232,6 +263,7 @@ class DataLoader:
             "payment_schedule": "payment_schedule.csv",
             "historic_real_payment": "historic_real_payment.csv",
             "customer_data": "customer_data.csv",
+            "collateral": "collateral.csv",
         }
 
         status = {
