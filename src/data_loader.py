@@ -1,190 +1,247 @@
 """
 Production data loader for Commercial-View
-Loads real CSV data from Google Drive folder
+Implements the sequence diagram for proper data path resolution
 """
 
 import os
 import pandas as pd
-import gdown
-from pathlib import Path
-from typing import Dict, Optional, List
 import logging
+from pathlib import Path
+from typing import Optional, Dict, Any, Union
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-class ProductionDataLoader:
-    """Production data loader for real Commercial-View CSV files"""
+class DataLoader:
+    """
+    Production data loader implementing proper path resolution sequence
+    Handles CLI --data-dir, COMMERCIAL_VIEW_DATA_PATH env var, and defaults
+    """
     
-    def __init__(self):
-        self.drive_folder_url = "https://drive.google.com/drive/folders/1qIg_BnIf_IWYcWqCuvLaYU_Gu4C2-Dj8"
-        self.local_data_dir = Path("data")
-        self.local_data_dir.mkdir(exist_ok=True)
+    DEFAULT_BASE_PATH = Path("data")
+    
+    def __init__(self, base_path: Optional[Union[str, Path]] = None):
+        """
+        Initialize data loader with proper path resolution
+        Follows sequence: CLI arg -> ENV var -> DEFAULT_BASE_PATH
+        """
+        self.base_path = self._resolve_data_path(base_path)
+        self.google_drive_url = "https://drive.google.com/drive/folders/1qIg_BnIf_IWYcWqCuvLaYU_Gu4C2-Dj8"
         
-        # Expected real CSV files (no demo data)
-        self.expected_files = {
-            "loan_data": "loan_data.csv",
-            "payment_schedule": "payment_schedule.csv", 
-            "historic_payments": "historic_real_payment.csv",
-            "customer_data": "customer_data.csv",
-            "collateral_data": "collateral_data.csv"
-        }
+        logger.info(f"DataLoader initialized with path: {self.base_path}")
+    
+    def _resolve_data_path(self, base_path: Optional[Union[str, Path]]) -> Path:
+        """
+        Resolve data path following the sequence diagram logic
+        1. Use CLI provided path if given
+        2. Check COMMERCIAL_VIEW_DATA_PATH environment variable
+        3. Fall back to DEFAULT_BASE_PATH
+        """
+        # Step 1: Use CLI provided path if available
+        if base_path is not None:
+            resolved_path = Path(base_path)
+            logger.info(f"Using CLI provided data path: {resolved_path}")
+            return resolved_path
         
-    def download_production_data(self) -> Dict[str, bool]:
-        """Download real CSV files from Google Drive"""
-        results = {}
+        # Step 2: Check environment variable
+        env_path = os.getenv("COMMERCIAL_VIEW_DATA_PATH")
+        if env_path:
+            resolved_path = Path(env_path)
+            logger.info(f"Using environment variable data path: {resolved_path}")
+            return resolved_path
         
-        logger.info(f"Downloading production data from: {self.drive_folder_url}")
+        # Step 3: Use default path
+        logger.info(f"Using default data path: {self.DEFAULT_BASE_PATH}")
+        return self.DEFAULT_BASE_PATH
+    
+    def load_loan_data(self, base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
+        """
+        Load loan data with proper path resolution
+        Implements sequence diagram step: DL->>FS: open `loan_data.csv`
+        """
+        file_path = self._get_file_path("loan_data.csv", base_path)
         
         try:
-            # Download entire folder
-            gdown.download_folder(
-                self.drive_folder_url,
-                output=str(self.local_data_dir),
-                quiet=False,
-                use_cookies=False
-            )
+            if not file_path.exists():
+                raise FileNotFoundError(
+                    f"Loan data file not found: {file_path}\n"
+                    f"Expected location: {file_path.absolute()}\n"
+                    f"Please ensure the file exists or set COMMERCIAL_VIEW_DATA_PATH environment variable.\n"
+                    f"Production data source: {self.google_drive_url}"
+                )
             
-            # Verify downloaded files
-            for file_key, filename in self.expected_files.items():
-                file_path = self.local_data_dir / filename
-                results[file_key] = file_path.exists()
-                
-                if results[file_key]:
-                    logger.info(f"✅ Downloaded: {filename}")
-                else:
-                    logger.warning(f"❌ Missing: {filename}")
+            df = pd.read_csv(file_path)
             
+            # Validate commercial lending data structure
+            required_columns = ["Customer ID", "Loan Amount", "Interest Rate", "Status"]
+            self._validate_dataframe_structure(df, required_columns, "loan_data")
+            
+            logger.info(f"✅ Loaded {len(df)} loan records from {file_path}")
+            return df
+            
+        except FileNotFoundError as e:
+            logger.error(str(e))
+            raise
         except Exception as e:
-            logger.error(f"Failed to download production data: {e}")
-            for file_key in self.expected_files:
-                results[file_key] = False
-        
-        return results
+            logger.error(f"Failed to load loan data from {file_path}: {e}")
+            raise
     
-    def load_production_datasets(self) -> Dict[str, pd.DataFrame]:
-        """Load all production CSV files into DataFrames"""
-        datasets = {}
+    def load_payment_schedule(self, base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
+        """
+        Load payment schedule data with proper path resolution
+        """
+        file_path = self._get_file_path("payment_schedule.csv", base_path)
         
-        for file_key, filename in self.expected_files.items():
-            file_path = self.local_data_dir / filename
+        try:
+            if not file_path.exists():
+                raise FileNotFoundError(
+                    f"Payment schedule file not found: {file_path}\n"
+                    f"Expected location: {file_path.absolute()}\n"
+                    f"Please ensure the file exists or set COMMERCIAL_VIEW_DATA_PATH environment variable.\n"
+                    f"Production data source: {self.google_drive_url}"
+                )
+            
+            df = pd.read_csv(file_path)
+            
+            required_columns = ["Customer ID", "Due Date", "Total Payment"]
+            self._validate_dataframe_structure(df, required_columns, "payment_schedule")
+            
+            logger.info(f"✅ Loaded {len(df)} payment schedule records from {file_path}")
+            return df
+            
+        except FileNotFoundError as e:
+            logger.error(str(e))
+            raise
+        except Exception as e:
+            logger.error(f"Failed to load payment schedule from {file_path}: {e}")
+            raise
+    
+    def load_historic_real_payment(self, base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
+        """
+        Load historic payment data with proper path resolution
+        """
+        file_path = self._get_file_path("historic_real_payment.csv", base_path)
+        
+        try:
+            if not file_path.exists():
+                raise FileNotFoundError(
+                    f"Historic payment file not found: {file_path}\n"
+                    f"Expected location: {file_path.absolute()}\n"
+                    f"Please ensure the file exists or set COMMERCIAL_VIEW_DATA_PATH environment variable.\n"
+                    f"Production data source: {self.google_drive_url}"
+                )
+            
+            df = pd.read_csv(file_path)
+            
+            required_columns = ["Payment Date", "Amount Paid", "Days Past Due"]
+            self._validate_dataframe_structure(df, required_columns, "historic_real_payment")
+            
+            logger.info(f"✅ Loaded {len(df)} historic payment records from {file_path}")
+            return df
+            
+        except FileNotFoundError as e:
+            logger.error(str(e))
+            raise
+        except Exception as e:
+            logger.error(f"Failed to load historic payments from {file_path}: {e}")
+            raise
+    
+    def load_customer_data(self, base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
+        """
+        Load customer data with proper path resolution
+        """
+        file_path = self._get_file_path("customer_data.csv", base_path)
+        
+        try:
+            if not file_path.exists():
+                raise FileNotFoundError(
+                    f"Customer data file not found: {file_path}\n"
+                    f"Expected location: {file_path.absolute()}\n"
+                    f"Please ensure the file exists or set COMMERCIAL_VIEW_DATA_PATH environment variable.\n"
+                    f"Production data source: {self.google_drive_url}"
+                )
+            
+            df = pd.read_csv(file_path)
+            
+            if df.empty:
+                logger.warning(f"Customer data file is empty: {file_path}")
+                return pd.DataFrame()
+            
+            logger.info(f"✅ Loaded {len(df)} customer records from {file_path}")
+            return df
+            
+        except FileNotFoundError as e:
+            logger.error(str(e))
+            raise
+        except Exception as e:
+            logger.error(f"Failed to load customer data from {file_path}: {e}")
+            raise
+    
+    def _get_file_path(self, filename: str, base_path: Optional[Union[str, Path]]) -> Path:
+        """
+        Get file path with proper resolution logic
+        Implements the path resolution from sequence diagram
+        """
+        if base_path is not None:
+            # CLI provided base_path takes precedence
+            resolved_base = Path(base_path)
+        else:
+            # Use instance base_path (already resolved in __init__)
+            resolved_base = self.base_path
+        
+        return resolved_base / filename
+    
+    def _validate_dataframe_structure(self, df: pd.DataFrame, required_columns: list, dataset_name: str):
+        """Validate DataFrame has required commercial lending structure"""
+        if df.empty:
+            raise ValueError(f"{dataset_name} file is empty")
+        
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        if missing_columns:
+            raise ValueError(
+                f"Missing required columns in {dataset_name}: {missing_columns}\n"
+                f"Available columns: {list(df.columns)}\n"
+                f"Required columns: {required_columns}"
+            )
+    
+    def get_data_status(self) -> Dict[str, Any]:
+        """Get comprehensive data availability status"""
+        data_files = {
+            "loan_data": "loan_data.csv",
+            "payment_schedule": "payment_schedule.csv",
+            "historic_real_payment": "historic_real_payment.csv",
+            "customer_data": "customer_data.csv"
+        }
+        
+        status = {
+            "data_source": "Production Google Drive",
+            "resolved_path": str(self.base_path.absolute()),
+            "google_drive_url": self.google_drive_url,
+            "datasets": {}
+        }
+        
+        for dataset_name, filename in data_files.items():
+            file_path = self.base_path / filename
             
             if file_path.exists():
                 try:
                     df = pd.read_csv(file_path)
-                    datasets[file_key] = df
-                    logger.info(f"✅ Loaded {filename}: {len(df)} rows, {len(df.columns)} columns")
+                    status["datasets"][dataset_name] = {
+                        "available": True,
+                        "records": len(df),
+                        "file_size_mb": round(file_path.stat().st_size / (1024 * 1024), 2),
+                        "last_modified": datetime.fromtimestamp(file_path.stat().st_mtime).isoformat()
+                    }
                 except Exception as e:
-                    logger.error(f"❌ Failed to load {filename}: {e}")
+                    status["datasets"][dataset_name] = {
+                        "available": False,
+                        "error": str(e)
+                    }
             else:
-                logger.warning(f"⚠️  File not found: {filename}")
+                status["datasets"][dataset_name] = {
+                    "available": False,
+                    "file_path": str(file_path.absolute()),
+                    "error": "File not found"
+                }
         
-        return datasets
-    
-    def validate_production_data(self, datasets: Dict[str, pd.DataFrame]) -> Dict[str, Any]:
-        """Validate production data quality"""
-        validation_results = {
-            "timestamp": datetime.now().isoformat(),
-            "total_datasets": len(datasets),
-            "validation_passed": True,
-            "issues": []
-        }
-        
-        for name, df in datasets.items():
-            if df.empty:
-                validation_results["issues"].append(f"{name}: Dataset is empty")
-                validation_results["validation_passed"] = False
-            
-            # Check for required columns based on dataset type
-            required_columns = self.get_required_columns(name)
-            missing_columns = [col for col in required_columns if col not in df.columns]
-            
-            if missing_columns:
-                validation_results["issues"].append(
-                    f"{name}: Missing required columns: {missing_columns}"
-                )
-                validation_results["validation_passed"] = False
-        
-        return validation_results
-    
-    def get_required_columns(self, dataset_name: str) -> List[str]:
-        """Get required columns for each dataset type"""
-        column_requirements = {
-            "loan_data": ["loan_id", "customer_id", "principal_amount", "interest_rate"],
-            "payment_schedule": ["payment_id", "loan_id", "due_date", "amount"],
-            "historic_payments": ["loan_id", "payment_date", "amount_paid", "days_past_due"],
-            "customer_data": ["customer_id", "name", "credit_score"],
-            "collateral_data": ["collateral_id", "loan_id", "type", "value"]
-        }
-        
-        return column_requirements.get(dataset_name, [])
-
-# Remove any demo/example data functions
-class DataLoader:
-    """Main data loader class for production use"""
-    
-    def __init__(self):
-        self.production_loader = ProductionDataLoader()
-    
-    def load_all_data(self, force_download: bool = False) -> Dict[str, pd.DataFrame]:
-        """Load all production data with optional force download"""
-        
-        # Check if we need to download fresh data
-        if force_download or not self.has_local_data():
-            logger.info("Downloading fresh production data...")
-            download_results = self.production_loader.download_production_data()
-            
-            if not any(download_results.values()):
-                logger.error("No production data could be downloaded")
-                return {}
-        
-        # Load datasets
-        datasets = self.production_loader.load_production_datasets()
-        
-        # Validate data quality
-        validation = self.production_loader.validate_production_data(datasets)
-        
-        if not validation["validation_passed"]:
-            logger.warning("Data validation issues found:")
-            for issue in validation["issues"]:
-                logger.warning(f"  - {issue}")
-        
-        return datasets
-    
-    def has_local_data(self) -> bool:
-        """Check if we have local data files"""
-        return any(
-            (self.production_loader.local_data_dir / filename).exists()
-            for filename in self.production_loader.expected_files.values()
-        )
-    
-    def get_data_summary(self) -> Dict[str, Any]:
-        """Get summary of available production data"""
-        datasets = self.load_all_data()
-        
-        summary = {
-            "total_datasets": len(datasets),
-            "datasets": {}
-        }
-        
-        for name, df in datasets.items():
-            summary["datasets"][name] = {
-                "rows": len(df),
-                "columns": len(df.columns),
-                "memory_mb": df.memory_usage(deep=True).sum() / 1024 / 1024,
-                "last_modified": datetime.now().isoformat()
-            }
-        
-        return summary
-
-# Remove any sample data generators or demo functions
-def get_production_data() -> Dict[str, pd.DataFrame]:
-    """Get production data - no demo/example data"""
-    loader = DataLoader()
-    return loader.load_all_data()
-
-def refresh_production_data() -> bool:
-    """Refresh production data from Google Drive"""
-    loader = DataLoader()
-    datasets = loader.load_all_data(force_download=True)
-    return len(datasets) > 0
+        return status
