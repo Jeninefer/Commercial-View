@@ -25,9 +25,7 @@ describe('App component smoke and UX tests', () => {
   it('displays the instructional source file hint', async () => {
     const App = await loadApp();
     render(<App />);
-    const matches = screen.getAllByText((_, element) =>
-      /Edit src\/App\.jsx?/.test(element?.textContent ?? ''),
-    );
+    const matches = screen.getAllByText(/Edit src\/App\.jsx?/i);
     expect(matches[0]).toBeVisible();
   });
 
