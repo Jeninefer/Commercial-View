@@ -196,7 +196,7 @@ class DataLoader:
 
     def load_collateral(
         self, base_path: Optional[Union[str, Path]] = None
-    ) -> Optional[pd.DataFrame]:
+    ) -> pd.DataFrame:
         """Load collateral dataset if available."""
         file_path = self._get_file_path("collateral.csv", base_path)
 
