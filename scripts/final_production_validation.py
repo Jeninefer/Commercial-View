@@ -7,7 +7,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Any
 import json
 from datetime import datetime
 
@@ -17,7 +17,7 @@ class CommercialViewProductionValidator:
 
     def __init__(self):
         self.repo_root = Path.cwd()
-        self.validation_results = {
+        self.validation_results: Dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "english_compliance": {"status": False, "issues": []},
             "demo_data_check": {"status": False, "issues": []},
@@ -325,14 +325,24 @@ class CommercialViewProductionValidator:
 
 def main():
     """Main execution function"""
-    validator = CommercialViewProductionValidator()
-    results = validator.run_complete_validation()
-    validator.save_validation_report()
+    try:
+        validator = CommercialViewProductionValidator()
+        results = validator.run_complete_validation()
+        validator.save_validation_report()
 
-    # Exit with appropriate code
-    if results["overall_status"] == "PRODUCTION_READY":
-        sys.exit(0)
-    else:
+        # Exit with appropriate code
+        if results["overall_status"] == "PRODUCTION_READY":
+            print("\n✅ Validation completed successfully!")
+            sys.exit(0)
+        else:
+            print("\n⚠️  Validation found issues that need attention.")
+            sys.exit(1)
+
+    except KeyboardInterrupt:
+        print("\n\n⚠️  Validation interrupted by user")
+        sys.exit(130)
+    except Exception as e:
+        print(f"\n\n❌ Validation failed with error: {e}")
         sys.exit(1)
 
 

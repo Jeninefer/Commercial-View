@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-06T05:07:25.073940",
+  "timestamp": "2025-10-06T05:12:04.914453",
   "english_compliance": {
     "status": false,
     "issues": [
@@ -2444,6 +2444,11 @@
         "file": "execute_complete_resolution.py",
         "issue": "Demo data reference",
         "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "execute_complete_resolution.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
       },
       {
         "file": "QUICKSTART.md",
