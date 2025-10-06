@@ -147,7 +147,7 @@ class TestRiskFeatureEngineering:
             'score_component_scaled',
             'dpd_component_scaled',
             'ltv_component_scaled',
-            'utilisation_component_scaled',
+            'utilization_component_scaled',
             'pd_component_scaled',
             'lgd_component_scaled',
         ]:
