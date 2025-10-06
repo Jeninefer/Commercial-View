@@ -97,3 +97,230 @@ calculation_settings:
   
   # Timezone for date calculations
   timezone: "UTC"
+
+# Risk-Based Provisioning Rules
+provisioning_policy:
+  stage_1_performing:
+    max_dpd: 30
+    provision_rate: 0.0125
+    description: "Performing loans with 12-month expected loss"
+  
+  stage_2_underperforming:
+    min_dpd: 31
+    max_dpd: 89
+    provision_rate: 0.0350
+    description: "Significant increase in credit risk - lifetime expected loss"
+  
+  stage_3_impaired:
+    min_dpd: 90
+    provision_rate: 1.0000
+    description: "Credit impaired - full lifetime expected loss"
+
+# Regulatory Classifications
+regulatory_buckets:
+  pass: 
+    max_dpd: 30
+    risk_weight: 1.0
+    capital_requirement: 0.08
+    
+  special_mention:
+    min_dpd: 31
+    max_dpd: 89
+    risk_weight: 1.0
+    capital_requirement: 0.08
+    
+  substandard:
+    min_dpd: 90
+    max_dpd: 179
+    risk_weight: 1.5
+    capital_requirement: 0.15
+    
+  doubtful:
+    min_dpd: 180
+    max_dpd: 269
+    risk_weight: 1.5
+    capital_requirement: 0.50
+    
+  loss:
+    min_dpd: 270
+    risk_weight: 0.0
+    capital_requirement: 1.0
+    charge_off_required: true
+
+# Industry-Specific Rules
+industry_adjustments:
+  real_estate:
+    extended_grace_period: 15
+    seasonal_adjustment: true
+    default_threshold_override: 210
+    
+  agriculture:
+    seasonal_adjustment: true
+    harvest_season_grace: 45
+    default_threshold_override: 270
+    
+  manufacturing:
+    working_capital_adjustment: true
+    inventory_cycle_grace: 30
+    
+  retail:
+    seasonal_peaks: ["nov", "dec", "jan"]
+    peak_grace_period: 20
+    
+  services:
+    standard_treatment: true
+    
+  hospitality:
+    seasonal_adjustment: true
+    peak_seasons: ["jun", "jul", "aug", "dec"]
+    off_season_grace: 30
+
+# Geographic Risk Adjustments
+geographic_policy:
+  high_risk_states:
+    - "PR"  # Puerto Rico
+    - "VI"  # Virgin Islands
+  
+  natural_disaster_zones:
+    hurricane_prone:
+      states: ["FL", "TX", "LA", "NC", "SC"]
+      disaster_grace_period: 90
+      automatic_forbearance: true
+      
+    earthquake_zones:
+      states: ["CA", "AK", "NV"]
+      disaster_grace_period: 60
+      
+    flood_zones:
+      fema_designation_required: true
+      grace_period: 45
+
+# Loan Size Stratification
+loan_size_tiers:
+  small_balance:
+    max_amount: 100000
+    accelerated_charge_off: 120
+    simplified_workout: true
+    
+  standard:
+    min_amount: 100001
+    max_amount: 1000000
+    standard_treatment: true
+    
+  large_exposure:
+    min_amount: 1000001
+    extended_workout_period: 270
+    board_approval_required: true
+    regulatory_notification: true
+
+# Collateral-Based Adjustments
+collateral_policy:
+  secured_loans:
+    real_estate_secured:
+      extended_default_threshold: 360
+      foreclosure_timeline: 18
+      
+    equipment_secured:
+      depreciation_adjustment: true
+      repossession_timeline: 12
+      
+    inventory_secured:
+      seasonal_valuation: true
+      liquidation_discount: 0.40
+      
+    cash_secured:
+      minimal_risk_treatment: true
+      provision_override: 0.01
+      
+  unsecured_loans:
+    accelerated_provisioning: true
+    early_intervention: 60
+    charge_off_threshold: 120
+
+# Workout and Recovery Settings
+workout_policy:
+  trigger_points:
+    - dpd_threshold: 31
+      action: "early_intervention"
+      contact_required: true
+      
+    - dpd_threshold: 61
+      action: "formal_workout"
+      workout_plan_required: true
+      
+    - dpd_threshold: 91
+      action: "legal_review"
+      attorney_consultation: true
+      
+    - dpd_threshold: 181
+      action: "charge_off_review"
+      committee_approval: true
+
+  recovery_timeframes:
+    pre_legal: 180
+    legal_phase: 360
+    post_judgment: 720
+    final_resolution: 1080
+
+# Regulatory Reporting Thresholds
+reporting_requirements:
+  call_report_buckets:
+    current: 0
+    past_due_30_89: [30, 89]
+    past_due_90_plus: [90, null]
+    
+  charge_off_reporting:
+    consumer_loans: 180
+    commercial_loans: 180
+    real_estate_loans: 360
+    
+  npl_classification:
+    non_accrual_threshold: 90
+    impaired_loan_threshold: 90
+    
+  stress_testing:
+    baseline_loss_rates:
+      performing: 0.0125
+      stage_2: 0.0350
+      stage_3: 0.6500
+      
+    adverse_scenario_multiplier: 2.5
+    severely_adverse_multiplier: 4.0
+
+# Automation and Alert Settings
+automation_rules:
+  auto_charge_off:
+    enabled: true
+    unsecured_threshold: 180
+    secured_threshold: 360
+    manual_review_required: true
+    
+  early_warning_alerts:
+    - trigger: "dpd_15"
+      recipients: ["loan_officer", "portfolio_manager"]
+      
+    - trigger: "dpd_30" 
+      recipients: ["loan_officer", "portfolio_manager", "credit_admin"]
+      
+    - trigger: "dpd_60"
+      recipients: ["all_credit_staff", "senior_management"]
+      
+    - trigger: "dpd_90"
+      recipients: ["all_credit_staff", "senior_management", "board"]
+
+# Performance Monitoring
+monitoring_metrics:
+  portfolio_quality:
+    target_current_ratio: 0.95
+    max_30dpd_ratio: 0.03
+    max_90dpd_ratio: 0.01
+    
+  early_warning_indicators:
+    migration_rates: true
+    vintage_analysis: true
+    cohort_tracking: true
+    
+  benchmark_comparisons:
+    peer_group_analysis: true
+    regulatory_averages: true
+    historical_performance: true
