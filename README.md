@@ -120,30 +120,59 @@ docker run -p 8000:8000 -v "$(pwd)/data:/app/data" commercial-view
 
 ## Architecture
 
-- `src/data_loader.py` – data loading utilities
+- `src/data_loader.py` – data loading utilities with schema validation
 - `src/pipeline.py` – processing pipeline
 - `run.py` – FastAPI app
 - `server_control.py` – advanced server management utility
+- `docs/DATA_SOURCES.md` – canonical data definitions and refresh guide
 - `tests/` – test suite
+
+## Data sources & refresh workflow
+
+Commercial View ships with sanitized starter datasets in `data/` so the ETL
+pipeline and dashboards work out-of-the-box. The loaders validate both the
+presence and schema of the following files:
+
+| Dataset | Filename | Key fields |
+|---------|----------|------------|
+| Loan tape | `loan_data.csv` | Loan ID, customer, disbursement + exposure metrics |
+| Historic payments | `historic_real_payment.csv` | Loan ID, payment date, principal + interest |
+| Payment schedule | `payment_schedule.csv` | Loan ID, scheduled principal/interest and due dates |
+| Quarterly targets | `Q4_Targets.csv` | Metric, target, owner, due date |
+
+Refer to [`docs/DATA_SOURCES.md`](docs/DATA_SOURCES.md) for full column
+definitions, data quality rules, and field-level notes.
+
+### Refreshing data safely
+
+1. Replace the CSV in `data/` (or point `COMMERCIAL_VIEW_DATA_PATH` to a new
+   directory) with sanitized exports that match the documented schemas.
+2. Run `pytest tests/test_data_loader.py -v` to confirm schema validation
+   passes.
+3. Commit refreshed datasets alongside an updated changelog entry if the data
+   contract evolves.
 
 ## Configuration
 
 ### Data directory
 
-By default, loaders read from `data/pricing/`. To override:
+Loaders default to the repository's `data/` folder. Set
+`COMMERCIAL_VIEW_DATA_PATH` to point at an alternate directory (or a specific
+CSV file for ad-hoc ingestion) when working with refreshed extracts:
 
 ```bash
-export COMMERCIAL_VIEW_DATA_PATH=/mnt/shared/pricing-data
+export COMMERCIAL_VIEW_DATA_PATH=/mnt/shared/commercial-view-data
 # or per-run in your own CLI wrapper
 ```
 
 ### Dataset status
 
-- ✅ Loan Data — present
-- ✅ Historic Real Payment — present
-- ✅ Payment Schedule — present
-- ⚠️ Customer Data — missing (add `Abaco - Loan Tape_Customer Data_Table.csv`)
-- ⚠️ Collateral — missing (add `Abaco - Loan Tape_Collateral_Table.csv`)
+- ✅ Loan Data — sample dataset included (`data/loan_data.csv`)
+- ✅ Historic Real Payment — sample dataset included (`data/historic_real_payment.csv`)
+- ✅ Payment Schedule — sample dataset included (`data/payment_schedule.csv`)
+- ✅ Quarterly Targets — sample dataset included (`data/Q4_Targets.csv`)
+- ⚠️ Customer Data — optional, provide `customer_data.csv` when available
+- ⚠️ Collateral — optional, provide `collateral.csv` when available
 
 ### Pricing
 
