@@ -272,9 +272,7 @@ All configuration files have been validated:
 ```shell
 $ python validators/schema_validator.py
 
-======================================================================
 Configuration Validation Report
-======================================================================
 
 [1/4] Validating: config/column_maps.yml
   Status: ✓ PASSED
@@ -288,12 +286,9 @@ Configuration Validation Report
 [4/4] Validating: config/export_config.yml
   Status: ✓ PASSED
 
-======================================================================
 Validation Summary
-======================================================================
 
 ✅ All validations passed!
-======================================================================
 ```
 
 ---
