@@ -18,406 +18,406 @@ class ProjectBuilder:
     def __init__(self):
         self.project_root = Path.cwd()
         self.dist_dir = self.project_root / "dist"
-        self.build_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.build_log: List[str] = []
+        self.build_timestamp = datetime.now().isoformat()
+        self.version = self._get_version()
+        
+    def _get_version(self) -> str:
+        """Get project version from VERSION file or package.json"""
+        version_file = self.project_root / "VERSION"
+        if version_file.exists():
+            return version_file.read_text().strip()
+        
+        # Fallback to package.json if exists
+        package_json = self.project_root / "frontend" / "package.json"
+        if package_json.exists():
+            try:
+                with open(package_json) as f:
+                    data = json.load(f)
+                return data.get("version", "1.0.0")
+            except:
+                pass
+        
+        return "1.0.0"
     
-    def log(self, message: str) -> None:
-        """Log a build message"""
-        self.build_log.append(f"[{datetime.now().strftime('%H:%M:%S')}] {message}")
-        print(message)
-    
-    def run_command(self, command: str, cwd: Optional[Path] = None) -> Tuple[bool, str]:
-        """Run command and return success status"""
-        try:
-            result = subprocess.run(
-                command, 
-                shell=True, 
-                check=True, 
-                capture_output=True, 
-                text=True,
-                cwd=cwd or self.project_root
-            )
-            self.log(f"✅ {command}")
-            return True, result.stdout
-        except subprocess.CalledProcessError as e:
-            self.log(f"❌ {command}: {e.stderr}")
-            return False, e.stderr
-    
-    def validate_environment(self) -> bool:
-        """Validate build environment requirements"""
-        self.log("🔍 Validating build environment...")
-        
-        # Check if we're in the correct directory
-        if not (self.project_root / "package.json").exists():
-            self.log("❌ package.json not found - not in project root?")
-            return False
-        
-        # Check for Python
-        success, version = self.run_command("python --version")
-        if not success:
-            self.log("❌ Python not found")
-            return False
-        else:
-            self.log(f"✅ Python found: {version.strip()}")
-        
-        # Check for Node.js
-        success, version = self.run_command("node --version")
-        if not success:
-            self.log("❌ Node.js not found")
-            return False
-        else:
-            self.log(f"✅ Node.js found: {version.strip()}")
-        
-        # Check for npm
-        success, version = self.run_command("npm --version")
-        if success:
-            self.log(f"✅ npm found: {version.strip()}")
-        
-        self.log("✅ Environment validation passed")
-        return True
-
     def clean_build(self) -> bool:
         """Clean previous build artifacts"""
-        self.log("🧹 Cleaning build artifacts...")
+        print("🧹 Cleaning build artifacts...")
         
-        try:
-            # Remove dist directory
-            if self.dist_dir.exists():
-                shutil.rmtree(self.dist_dir)
-                self.log("✅ Removed dist/ directory")
-            
-            # Remove zip files
-            zip_count = 0
-            for zip_file in self.project_root.glob("*.zip"):
-                zip_file.unlink()
-                zip_count += 1
-            
-            if zip_count > 0:
-                self.log(f"✅ Removed {zip_count} zip files")
-            
-            # Remove node_modules for fresh install
-            node_modules = self.project_root / "node_modules"
-            if node_modules.exists():
-                shutil.rmtree(node_modules)
-                self.log("✅ Removed node_modules for fresh install")
-            
-            self.log("✅ Build artifacts cleaned")
-            return True
-        except Exception as e:
-            self.log(f"❌ Error cleaning build artifacts: {e}")
-            return False
+        # Remove dist directory
+        if self.dist_dir.exists():
+            shutil.rmtree(self.dist_dir)
+        
+        # Remove Python cache
+        for cache_dir in self.project_root.rglob("__pycache__"):
+            if cache_dir.is_dir():
+                shutil.rmtree(cache_dir)
+        
+        # Remove pytest cache
+        pytest_cache = self.project_root / ".pytest_cache"
+        if pytest_cache.exists():
+            shutil.rmtree(pytest_cache)
+        
+        # Remove frontend build artifacts
+        frontend_build = self.project_root / "frontend" / "build"
+        if frontend_build.exists():
+            shutil.rmtree(frontend_build)
+        
+        frontend_dist = self.project_root / "frontend" / "dist"
+        if frontend_dist.exists():
+            shutil.rmtree(frontend_dist)
+        
+        node_modules = self.project_root / "frontend" / "node_modules"
+        if node_modules.exists():
+            print("   Removing node_modules...")
+            shutil.rmtree(node_modules)
+        
+        print("✅ Build artifacts cleaned")
+        return True
     
-    def compile_typescript(self) -> bool:
-        """Compile TypeScript files"""
-        self.log("🔧 Compiling TypeScript...")
+    def validate_environment(self) -> bool:
+        """Validate build environment"""
+        print("🔍 Validating build environment...")
         
-        # Check if TypeScript files exist
-        ts_dir = self.project_root / "src" / "typescript"
-        if not ts_dir.exists():
-            self.log("ℹ️  No TypeScript files found, skipping compilation")
-            return True
+        # Check Python version
+        if sys.version_info < (3, 8):
+            print("❌ Python 3.8+ required")
+            return False
+        print(f"✅ Python {sys.version_info.major}.{sys.version_info.minor}")
         
-        # Install TypeScript if not available
-        success, _ = self.run_command("npx tsc --version")
-        if not success:
-            self.log("📦 Installing TypeScript...")
-            success, _ = self.run_command("npm install -g typescript")
-            if not success:
-                self.log("❌ Failed to install TypeScript")
-                return False
+        # Check virtual environment
+        if not hasattr(sys, 'real_prefix') and not sys.base_prefix != sys.prefix:
+            print("⚠️  Virtual environment not detected")
+        else:
+            print("✅ Virtual environment active")
         
-        success, _ = self.run_command("npx tsc")
-        if success:
-            self.log("✅ TypeScript compilation completed")
-        return success
+        # Check Node.js for frontend
+        try:
+            result = subprocess.run(['node', '--version'], capture_output=True, text=True)
+            if result.returncode == 0:
+                print(f"✅ Node.js {result.stdout.strip()}")
+            else:
+                print("⚠️  Node.js not available (frontend builds will be skipped)")
+        except FileNotFoundError:
+            print("⚠️  Node.js not found (frontend builds will be skipped)")
+        
+        return True
     
     def install_dependencies(self) -> bool:
-        """Install all project dependencies"""
-        self.log("📦 Installing dependencies...")
+        """Install Python and Node.js dependencies"""
+        print("📦 Installing dependencies...")
         
-        # Install root dependencies
-        success, _ = self.run_command("npm install")
-        if not success:
-            self.log("❌ Failed to install root dependencies")
+        # Install Python dependencies
+        try:
+            subprocess.run([
+                sys.executable, "-m", "pip", "install", "-r", "requirements.txt"
+            ], check=True, cwd=self.project_root)
+            print("✅ Python dependencies installed")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Failed to install Python dependencies: {e}")
             return False
         
-        self.log("✅ Root dependencies installed")
-        
-        # Install frontend dependencies
-        frontend_dir = self.project_root / "frontend" / "dashboard"
-        if frontend_dir.exists():
-            self.log("📦 Installing frontend dependencies...")
-            success, _ = self.run_command("npm install", cwd=frontend_dir)
-            if not success:
-                self.log("❌ Failed to install frontend dependencies")
+        # Install Node.js dependencies if frontend exists
+        frontend_dir = self.project_root / "frontend"
+        if frontend_dir.exists() and (frontend_dir / "package.json").exists():
+            try:
+                subprocess.run([
+                    "npm", "install"
+                ], check=True, cwd=frontend_dir)
+                print("✅ Node.js dependencies installed")
+            except subprocess.CalledProcessError as e:
+                print(f"❌ Failed to install Node.js dependencies: {e}")
                 return False
-            self.log("✅ Frontend dependencies installed")
-        
-        # Install Python dependencies if requirements.txt exists
-        requirements_file = self.project_root / "requirements.txt"
-        if requirements_file.exists():
-            self.log("🐍 Installing Python dependencies...")
-            success, _ = self.run_command("pip install -r requirements.txt")
-            if success:
-                self.log("✅ Python dependencies installed")
-            else:
-                self.log("⚠️  Python dependencies installation failed (continuing anyway)")
         
         return True
     
-    def build_frontend(self):
-        """Build React frontend"""
-        print("⚛️  Building React frontend...")
+    def run_tests(self) -> bool:
+        """Run comprehensive test suite"""
+        print("🧪 Running test suite...")
         
-        frontend_dir = self.project_root / "frontend" / "dashboard"
-        if not frontend_dir.exists():
-            print("ℹ️  No frontend directory found, skipping")
-            return True
-        
-        success, _ = self.run_command("npm run build", cwd=frontend_dir)
-        return success
-    
-    def package_project(self):
-        """Package the entire project"""
-        print("📦 Packaging project...")
-        
-        # Create dist directory
-        self.dist_dir.mkdir(exist_ok=True)
-        
-        # Package backend
-        backend_files = [
-            "src/", "scripts/", "*.py", "requirements.txt", 
-            "README.md", "setup_guide.ipynb"
-        ]
-        
-        backend_zip = f"commercial-view-backend-{self.build_timestamp}.zip"
-        zip_command = f"zip -r {backend_zip} {' '.join(backend_files)} -x '*.pyc' '__pycache__/*' '.venv/*'"
-        self.run_command(zip_command)
-        
-        # Package frontend if exists
-        frontend_build = self.project_root / "frontend" / "dashboard" / "build"
-        if frontend_build.exists():
-            frontend_zip = f"commercial-view-frontend-{self.build_timestamp}.zip"
-            self.run_command(f"zip -r {frontend_zip} frontend/dashboard/build/")
-        
-        # Move zip files to dist
-        for zip_file in self.project_root.glob("*.zip"):
-            shutil.move(str(zip_file), self.dist_dir / zip_file.name)
-        
-        print("✅ Project packaged in dist/ directory")
-        return True
-    
-    def setup_mcp_servers(self):
-        """Setup MCP (Model Context Protocol) servers configuration"""
-        print("🔗 Setting up MCP servers configuration...")
-        
-        # Create MCP configuration
-        mcp_config = {
-            "mcpServers": {
-                "figma": {
-                    "command": "npx",
-                    "args": ["@figma/mcp-server-figma"],
-                    "env": {
-                        "FIGMA_PERSONAL_ACCESS_TOKEN": "${FIGMA_PERSONAL_ACCESS_TOKEN}"
-                    }
-                },
-                "commercial-view-api": {
-                    "command": "python",
-                    "args": ["-m", "commercial_view.mcp_server"],
-                    "env": {
-                        "API_BASE_URL": "http://localhost:8000",
-                        "API_TOKEN": "${COMMERCIAL_VIEW_API_TOKEN}"
-                    }
-                },
-                "github": {
-                    "command": "npx",
-                    "args": ["@modelcontextprotocol/server-github"],
-                    "env": {
-                        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
-                    }
-                }
-            }
-        }
-        
-        # Write MCP configuration
-        mcp_config_path = self.project_root / "mcp-config.json"
-        with open(mcp_config_path, 'w', encoding='utf-8') as f:
-            json.dump(mcp_config, f, indent=2)
-        
-        print("✅ MCP configuration created at mcp-config.json")
-        
-        # Create environment template
-        env_template = """
-# MCP Server Configuration
-FIGMA_PERSONAL_ACCESS_TOKEN=your_figma_token_here
-COMMERCIAL_VIEW_API_TOKEN=your_api_token_here
-GITHUB_PERSONAL_ACCESS_TOKEN=your_github_token_here
-
-# Figma MCP Server URLs
-FIGMA_MCP_SERVER_URL=npx @figma/mcp-server-figma
-FIGMA_API_BASE_URL=https://api.figma.com/v1
-
-# Commercial View API
-COMMERCIAL_VIEW_MCP_URL=http://localhost:8000/mcp
-COMMERCIAL_VIEW_API_URL=http://localhost:8000
-"""
-        
-        env_file = self.project_root / ".env.mcp"
-        with open(env_file, 'w', encoding='utf-8') as f:
-            f.write(env_template.strip())
-        
-        print("✅ MCP environment template created at .env.mcp")
-        
-        return True
-    
-    def create_mcp_server_script(self):
-        """Create MCP server integration script"""
-        print("🖥️  Creating MCP server integration...")
-        
-        mcp_server_content = '''#!/usr/bin/env python3
-"""
-MCP Server integration for Commercial-View
-Provides Model Context Protocol server functionality
-"""
-
-import json
-import sys
-from pathlib import Path
-from typing import Dict, Any
-
-class CommercialViewMCPServer:
-    """MCP Server for Commercial-View integration"""
-    
-    def __init__(self):
-        self.config = self.load_config()
-    
-    def load_config(self) -> Dict[str, Any]:
-        """Load MCP configuration"""
-        config_path = Path("mcp-config.json")
-        if config_path.exists():
-            with open(config_path, encoding='utf-8') as f:
-                return json.load(f)
-        return {}
-    
-    def get_figma_server_info(self) -> Dict[str, str]:
-        """Get Figma MCP server information"""
-        return {
-            "server_url": "npx @figma/mcp-server-figma",
-            "api_base": "https://api.figma.com/v1",
-            "documentation": "https://github.com/figma/mcp-server-figma",
-            "setup_command": "npm install @figma/mcp-server-figma",
-            "usage": "Configure FIGMA_PERSONAL_ACCESS_TOKEN in environment"
-        }
-    
-    def start_figma_server(self):
-        """Start Figma MCP server"""
-        import subprocess
-        
-        print("🎨 Starting Figma MCP Server...")
-        print("📝 Server URL: npx @figma/mcp-server-figma")
-        print("🔗 API Base: https://api.figma.com/v1")
-        
+        # Run Python tests
         try:
-            # Check if Figma MCP server is installed
-            result = subprocess.run(
-                ["npm", "list", "@figma/mcp-server-figma"],
-                capture_output=True,
-                text=True,
-                check=False
-            )
+            result = subprocess.run([
+                sys.executable, "-m", "pytest", "tests/", "-v", "--tb=short"
+            ], cwd=self.project_root)
             
             if result.returncode != 0:
-                print("📦 Installing Figma MCP server...")
-                subprocess.run(["npm", "install", "@figma/mcp-server-figma"], check=True)
+                print("❌ Python tests failed")
+                return False
+            print("✅ Python tests passed")
+        except FileNotFoundError:
+            print("⚠️  pytest not found, skipping Python tests")
+        
+        # Run frontend tests if available
+        frontend_dir = self.project_root / "frontend"
+        if frontend_dir.exists() and (frontend_dir / "package.json").exists():
+            try:
+                result = subprocess.run([
+                    "npm", "test", "--", "--watchAll=false", "--coverage"
+                ], cwd=frontend_dir)
+                
+                if result.returncode != 0:
+                    print("❌ Frontend tests failed")
+                    return False
+                print("✅ Frontend tests passed")
+            except FileNotFoundError:
+                print("⚠️  npm not found, skipping frontend tests")
+        
+        return True
+    
+    def lint_code(self) -> bool:
+        """Run code linting and formatting checks"""
+        print("🎨 Running code quality checks...")
+        
+        # Python linting
+        try:
+            # Black formatting check
+            result = subprocess.run([
+                sys.executable, "-m", "black", "--check", "--diff", "src/", "tests/", "scripts/"
+            ], cwd=self.project_root)
             
-            print("✅ Figma MCP server ready")
-            print("💡 Use: npx @figma/mcp-server-figma")
+            if result.returncode != 0:
+                print("❌ Python code formatting issues found")
+                return False
+            print("✅ Python code formatting check passed")
+            
+            # MyPy type checking
+            subprocess.run([
+                sys.executable, "-m", "mypy", "src/", "--ignore-missing-imports"
+            ], cwd=self.project_root, check=True)
+            print("✅ Python type checking passed")
+            
+        except (subprocess.CalledProcessError, FileNotFoundError) as e:
+            print(f"⚠️  Python linting tools not available: {e}")
+        
+        # Frontend linting
+        frontend_dir = self.project_root / "frontend"
+        if frontend_dir.exists():
+            try:
+                result = subprocess.run([
+                    "npm", "run", "lint"
+                ], cwd=frontend_dir)
+                
+                if result.returncode != 0:
+                    print("❌ Frontend linting issues found")
+                    return False
+                print("✅ Frontend linting passed")
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                print("⚠️  Frontend linting not available")
+        
+        return True
+    
+    def build_backend(self) -> bool:
+        """Build Python backend components"""
+        print("🐍 Building Python backend...")
+        
+        # Create dist directory structure
+        backend_dist = self.dist_dir / "backend"
+        backend_dist.mkdir(parents=True, exist_ok=True)
+        
+        # Copy source code
+        src_dist = backend_dist / "src"
+        if (self.project_root / "src").exists():
+            shutil.copytree(self.project_root / "src", src_dist)
+        
+        # Copy configuration files
+        config_files = ["requirements.txt", "run.py", "server_control.py"]
+        for config_file in config_files:
+            src_file = self.project_root / config_file
+            if src_file.exists():
+                shutil.copy2(src_file, backend_dist)
+        
+        # Copy configs directory
+        configs_dir = self.project_root / "configs"
+        if configs_dir.exists():
+            shutil.copytree(configs_dir, backend_dist / "configs")
+        
+        # Copy scripts
+        scripts_dir = self.project_root / "scripts"
+        if scripts_dir.exists():
+            shutil.copytree(scripts_dir, backend_dist / "scripts")
+        
+        print("✅ Backend build completed")
+        return True
+    
+    def build_frontend(self) -> bool:
+        """Build frontend components"""
+        print("🎨 Building frontend...")
+        
+        frontend_dir = self.project_root / "frontend"
+        if not frontend_dir.exists():
+            print("⚠️  Frontend directory not found, skipping")
+            return True
+        
+        # Build frontend
+        try:
+            subprocess.run([
+                "npm", "run", "build"
+            ], check=True, cwd=frontend_dir)
+            
+            # Copy build artifacts to dist
+            frontend_build = frontend_dir / "build"
+            if frontend_build.exists():
+                frontend_dist = self.dist_dir / "frontend"
+                shutil.copytree(frontend_build, frontend_dist)
+            
+            print("✅ Frontend build completed")
+            return True
             
         except subprocess.CalledProcessError as e:
-            print(f"❌ Error setting up Figma MCP server: {e}")
+            print(f"❌ Frontend build failed: {e}")
+            return False
     
-    def print_mcp_urls(self):
-        """Print all MCP server URLs"""
-        print("🌐 MCP Server URLs:")
-        print("=" * 40)
+    def build_documentation(self) -> bool:
+        """Build documentation"""
+        print("📚 Building documentation...")
         
-        servers = {
-            "Figma MCP Server": {
-                "command": "npx @figma/mcp-server-figma",
-                "url": "https://github.com/figma/mcp-server-figma",
-                "install": "npm install @figma/mcp-server-figma"
+        docs_dist = self.dist_dir / "docs"
+        docs_dist.mkdir(parents=True, exist_ok=True)
+        
+        # Copy documentation
+        docs_dir = self.project_root / "docs"
+        if docs_dir.exists():
+            for doc_file in docs_dir.rglob("*.md"):
+                rel_path = doc_file.relative_to(docs_dir)
+                dest_path = docs_dist / rel_path
+                dest_path.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(doc_file, dest_path)
+        
+        # Copy README
+        readme = self.project_root / "README.md"
+        if readme.exists():
+            shutil.copy2(readme, docs_dist)
+        
+        print("✅ Documentation build completed")
+        return True
+    
+    def create_build_manifest(self) -> bool:
+        """Create build manifest file"""
+        print("📋 Creating build manifest...")
+        
+        manifest = {
+            "build_info": {
+                "version": self.version,
+                "timestamp": self.build_timestamp,
+                "builder": "Commercial-View Build System v1.0.0",
+                "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
             },
-            "Commercial-View API": {
-                "command": "python run.py",
-                "url": "http://localhost:8000",
-                "mcp_endpoint": "http://localhost:8000/mcp"
+            "components": {
+                "backend": (self.dist_dir / "backend").exists(),
+                "frontend": (self.dist_dir / "frontend").exists(), 
+                "documentation": (self.dist_dir / "docs").exists()
             },
-            "GitHub MCP Server": {
-                "command": "npx @modelcontextprotocol/server-github",
-                "url": "https://github.com/modelcontextprotocol/servers",
-                "install": "npm install @modelcontextprotocol/server-github"
-            }
+            "files": []
         }
         
-        for name, info in servers.items():
-            print(f"\\n📍 {name}:")
-            for key, value in info.items():
-                print(f"   {key}: {value}")
+        # List all files in distribution
+        for file_path in self.dist_dir.rglob("*"):
+            if file_path.is_file():
+                rel_path = file_path.relative_to(self.dist_dir)
+                manifest["files"].append({
+                    "path": str(rel_path),
+                    "size": file_path.stat().st_size
+                })
+        
+        # Write manifest
+        manifest_file = self.dist_dir / "build_manifest.json"
+        with open(manifest_file, 'w') as f:
+            json.dump(manifest, f, indent=2)
+        
+        print(f"✅ Build manifest created: {len(manifest['files'])} files")
+        return True
+    
+    def create_deployment_package(self) -> Optional[Path]:
+        """Create deployment package"""
+        print("📦 Creating deployment package...")
+        
+        package_name = f"commercial-view-{self.version}-{datetime.now().strftime('%Y%m%d')}"
+        package_path = self.project_root / f"{package_name}.zip"
+        
+        try:
+            # Create zip archive
+            shutil.make_archive(
+                str(self.project_root / package_name),
+                'zip',
+                self.dist_dir
+            )
+            
+            print(f"✅ Deployment package created: {package_path}")
+            return package_path
+            
+        except Exception as e:
+            print(f"❌ Failed to create deployment package: {e}")
+            return None
+    
+    def build_all(self, skip_tests: bool = False, skip_lint: bool = False) -> bool:
+        """Run complete build process"""
+        print(f"🚀 Starting Commercial-View build v{self.version}")
+        print("=" * 60)
+        
+        build_steps = [
+            ("Validate Environment", self.validate_environment),
+            ("Clean Build", self.clean_build),
+            ("Install Dependencies", self.install_dependencies),
+        ]
+        
+        if not skip_lint:
+            build_steps.append(("Lint Code", self.lint_code))
+        
+        if not skip_tests:
+            build_steps.append(("Run Tests", self.run_tests))
+        
+        build_steps.extend([
+            ("Build Backend", self.build_backend),
+            ("Build Frontend", self.build_frontend),
+            ("Build Documentation", self.build_documentation),
+            ("Create Manifest", self.create_build_manifest),
+        ])
+        
+        # Execute build steps
+        for step_name, step_func in build_steps:
+            print(f"\n{step_name}...")
+            if not step_func():
+                print(f"❌ Build failed at step: {step_name}")
+                return False
+        
+        # Create deployment package
+        package_path = self.create_deployment_package()
+        
+        print(f"\n🎉 Build completed successfully!")
+        print(f"Version: {self.version}")
+        print(f"Build time: {self.build_timestamp}")
+        print(f"Distribution: {self.dist_dir}")
+        if package_path:
+            print(f"Package: {package_path}")
+        
+        return True
 
 def main():
-    """Main MCP server function"""
-    if len(sys.argv) > 1:
-        command = sys.argv[1]
-        
-        server = CommercialViewMCPServer()
-        
-        if command == "figma":
-            server.start_figma_server()
-        elif command == "urls":
-            server.print_mcp_urls()
-        elif command == "info":
-            info = server.get_figma_server_info()
-            print("🎨 Figma MCP Server Information:")
-            for key, value in info.items():
-                print(f"   {key}: {value}")
-        else:
-            print("Available commands: figma, urls, info")
+    """Main build script entry point"""
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="Commercial-View Build System")
+    parser.add_argument("--skip-tests", action="store_true", help="Skip test execution")
+    parser.add_argument("--skip-lint", action="store_true", help="Skip code linting")
+    parser.add_argument("--clean-only", action="store_true", help="Only clean build artifacts")
+    parser.add_argument("--version", action="version", version="Commercial-View Build System v1.0.0")
+    
+    args = parser.parse_args()
+    
+    builder = ProjectBuilder()
+    
+    if args.clean_only:
+        success = builder.clean_build()
     else:
-        server = CommercialViewMCPServer()
-        server.print_mcp_urls()
+        success = builder.build_all(
+            skip_tests=args.skip_tests,
+            skip_lint=args.skip_lint
+        )
+    
+    sys.exit(0 if success else 1)
 
 if __name__ == "__main__":
     main()
-'''
-        
-        mcp_script_path = self.project_root / "scripts" / "mcp_server.py"
-        with open(mcp_script_path, 'w', encoding='utf-8') as f:
-            f.write(mcp_server_content)
-        
-        # Make executable
-        os.chmod(mcp_script_path, 0o755)
-        
-        print("✅ MCP server script created at scripts/mcp_server.py")
-        return True
-
-    def create_package_json_if_missing(self) -> None:
-        """Create package.json if it doesn't exist"""
-        package_json_path = self.project_root / "package.json"
-        if not package_json_path.exists():
-            print("📦 Creating package.json...")
-            
-            package_config = {
-                "name": "commercial-view",
-                "version": "1.0.0",
-                "description": "Enterprise-grade portfolio analytics for Abaco Capital",
-                "main": "dist/index.js",
-                "scripts": {
-                    "compile": "tsc",
-                    "watch": "tsc --watch",
-                    "build": "python scripts/build.py",
-                    "start": "python run.py",
-                    "test": "python -m pytest -q",
-                    "lint": "python -m black src/ scripts/",
                     "sync": "python scripts/sync_github.py"
                 },
                 "devDependencies": {
