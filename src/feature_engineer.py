@@ -191,7 +191,8 @@ class FeatureEngineer:
         cust_aliases = ['customer_id', 'client_id', 'borrower_id']
         customer_col = next((c for c in cust_aliases if c in df.columns), None)
         if not customer_col:
-            df[customer_col := 'customer_id'] = np.arange(len(df))
+            customer_col = 'customer_id'
+            df[customer_col] = np.arange(len(df))
 
         dpd_values = pd.to_numeric(df[dpd_col], errors='coerce').fillna(0)
         dpd_values = dpd_values.clip(lower=0)
