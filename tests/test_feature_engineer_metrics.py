@@ -31,6 +31,8 @@ class TestWeightedStatistics:
 
         stats = self.engineer.calculate_weighted_stats(portfolio)
 
+        # Only positive outstanding balances are included in the expected calculation.
+        # The negative balance (-1000) is excluded to match the implementation, which ignores negative balances.
         total_balance = 50000 + 100000 + 25000
         expected_weighted_apr = (0.10 * 50000 + 0.12 * 100000 + 0.08 * 25000) / total_balance
         expected_weighted_tenor = (180 * 50000 + 360 * 100000 + 90 * 25000) / total_balance
