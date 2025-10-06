@@ -22,11 +22,11 @@
         "ignoreDeprecations": "6.0"
     },
     "include": [
-        "src"
+        "src",
+        "test"
     ],
     "exclude": [
         "node_modules",
-        "**/*.test.js",
-        "test"
+        "**/*.test.js"
     ]
 }
