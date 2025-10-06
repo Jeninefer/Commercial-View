@@ -9,7 +9,7 @@ import subprocess
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Tuple, Any
+from typing import Dict, List, Any, Tuple
 
 class CompleteResolutionOrchestrator:
     """
@@ -733,6 +733,23 @@ Repository achieves market-leading excellence"""
         print(f"Repository is now market-ready for commercial lending deployment")
         print(f"{'='*70}\n")
 
+    def _run_tests(self) -> Tuple[bool, str]:
+        """Run tests and return success status with message"""
+        try:
+            # Run tests
+            success = self._run_python_tests()
+            message = "Tests passed" if success else "Tests failed"
+            return success, message
+        except Exception as e:
+            return False, f"Error: {e}"
+
+    def _get_issue_stats(self) -> Tuple[int, int, int]:
+        """Return counts: (total, resolved, pending)"""
+        total = len(self.issues)
+        resolved = sum(1 for issue in self.issues if issue.get('resolved'))
+        pending = total - resolved
+        return total, resolved, pending
+    
 def main():
     """Main execution entry point"""
     orchestrator = CompleteResolutionOrchestrator()

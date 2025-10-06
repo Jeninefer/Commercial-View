@@ -11,56 +11,60 @@ import subprocess
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 
+
 def validate_environment() -> Tuple[bool, list]:
     """Validate Commercial-View environment before kernel installation"""
     project_root = Path(__file__).parent.parent
     issues = []
-    
+
     # Check virtual environment
     venv_path = project_root / ".venv"
     if not venv_path.exists():
         issues.append("Virtual environment not found at .venv")
-    
+
     # Check Python executable
     python_exe = venv_path / "bin" / "python"
     if not python_exe.exists():
         issues.append("Python executable not found in virtual environment")
-    
+
     # Check required packages
     required_packages = ["ipykernel", "jupyter"]
     for package in required_packages:
         try:
-            subprocess.run([
-                str(python_exe), "-c", f"import {package}"
-            ], capture_output=True, check=True)
+            subprocess.run(
+                [str(python_exe), "-c", f"import {package}"],
+                capture_output=True,
+                check=True,
+            )
         except subprocess.CalledProcessError:
             issues.append(f"Required package '{package}' not installed")
-    
+
     # Check Commercial-View structure
     critical_paths = [
         "src/main.py",
         "configs/pricing_config.yml",
-        "configs/dpd_policy.yml"
+        "configs/dpd_policy.yml",
     ]
-    
+
     for path in critical_paths:
         if not (project_root / path).exists():
             issues.append(f"Critical file missing: {path}")
-    
+
     return len(issues) == 0, issues
+
 
 def create_enhanced_kernel_spec() -> Dict:
     """Create enhanced kernel specification for Commercial-View"""
     project_root = Path(__file__).parent.parent
     python_exe = project_root / ".venv" / "bin" / "python"
-    
+
     return {
         "argv": [
             str(python_exe),
             "-m",
             "ipykernel_launcher",
             "-f",
-            "{connection_file}"
+            "{connection_file}",
         ],
         "display_name": "Commercial-View (Commercial Lending)",
         "language": "python",
@@ -72,11 +76,11 @@ def create_enhanced_kernel_spec() -> Dict:
                 "features": [
                     "pricing_models",
                     "dpd_analysis",
-                    "kpi_generation", 
+                    "kpi_generation",
                     "risk_assessment",
-                    "portfolio_analytics"
-                ]
-            }
+                    "portfolio_analytics",
+                ],
+            },
         },
         "env": {
             "COMMERCIAL_VIEW_ROOT": str(project_root),
@@ -88,52 +92,54 @@ def create_enhanced_kernel_spec() -> Dict:
             "DPD_POLICY_PATH": str(project_root / "configs" / "dpd_policy.yml"),
             "COLUMN_MAPS_PATH": str(project_root / "configs" / "column_maps.yml"),
             "DATA_DIR": str(project_root / "data"),
-            "EXPORT_DIR": str(project_root / "abaco_runtime" / "exports")
-        }
+            "EXPORT_DIR": str(project_root / "abaco_runtime" / "exports"),
+        },
     }
+
 
 def install_ipykernel_if_needed() -> bool:
     """Install ipykernel if not already installed"""
     project_root = Path(__file__).parent.parent
     python_exe = project_root / ".venv" / "bin" / "python"
-    
+
     try:
         # Check if ipykernel is installed
-        subprocess.run([
-            str(python_exe), "-c", "import ipykernel"
-        ], capture_output=True, check=True)
+        subprocess.run(
+            [str(python_exe), "-c", "import ipykernel"], capture_output=True, check=True
+        )
         print("✅ ipykernel already installed")
         return True
     except subprocess.CalledProcessError:
         print("📦 Installing ipykernel...")
         try:
-            subprocess.run([
-                str(python_exe), "-m", "pip", "install", "ipykernel"
-            ], check=True)
+            subprocess.run(
+                [str(python_exe), "-m", "pip", "install", "ipykernel"], check=True
+            )
             print("✅ ipykernel installed successfully")
             return True
         except subprocess.CalledProcessError as e:
             print(f"❌ Failed to install ipykernel: {e}")
             return False
 
+
 def create_kernel_directory() -> Optional[Path]:
     """Create temporary kernel directory with all necessary files"""
     project_root = Path(__file__).parent.parent
     kernel_dir = project_root / "temp_commercial_view_kernel"
-    
+
     try:
         # Clean up existing directory
         if kernel_dir.exists():
             shutil.rmtree(kernel_dir)
-        
+
         kernel_dir.mkdir(exist_ok=True)
-        
+
         # Create kernel.json
         kernel_spec = create_enhanced_kernel_spec()
         kernel_json = kernel_dir / "kernel.json"
-        with open(kernel_json, 'w', encoding='utf-8') as f:
+        with open(kernel_json, "w", encoding="utf-8") as f:
             json.dump(kernel_spec, f, indent=2)
-        
+
         # Create kernel logo (text-based for now)
         logo_content = """
 🏦 Commercial-View
@@ -141,19 +147,20 @@ Commercial Lending Analytics Platform
         """
         (kernel_dir / "logo-64x64.txt").write_text(logo_content)
         (kernel_dir / "logo-32x32.txt").write_text("🏦 CV")
-        
+
         print(f"📁 Created kernel directory: {kernel_dir}")
         return kernel_dir
-        
+
     except Exception as e:
         print(f"❌ Failed to create kernel directory: {e}")
         return None
+
 
 def install_commercial_view_kernel() -> bool:
     """Enhanced Commercial-View kernel installation"""
     print("🏦 Installing Commercial-View Commercial Lending Jupyter Kernel")
     print("=" * 60)
-    
+
     # Validate environment
     is_valid, issues = validate_environment()
     if not is_valid:
@@ -162,31 +169,38 @@ def install_commercial_view_kernel() -> bool:
             print(f"   - {issue}")
         print("\n💡 Please fix these issues before installing the kernel")
         return False
-    
+
     print("✅ Environment validation passed")
-    
+
     # Install ipykernel if needed
     if not install_ipykernel_if_needed():
         return False
-    
+
     # Create kernel directory
     kernel_dir = create_kernel_directory()
     if not kernel_dir:
         return False
-    
+
     try:
         # Install the kernel
         cmd = [
-            sys.executable, "-m", "jupyter", "kernelspec", "install",
-            str(kernel_dir), "--user", "--name", "commercial-view"
+            sys.executable,
+            "-m",
+            "jupyter",
+            "kernelspec",
+            "install",
+            str(kernel_dir),
+            "--user",
+            "--name",
+            "commercial-view",
         ]
-        
+
         print("🔧 Installing Commercial-View Jupyter kernel...")
         subprocess.run(cmd, check=True, capture_output=True)
-        
+
         # Clean up temporary directory
         shutil.rmtree(kernel_dir)
-        
+
         print("✅ Commercial-View kernel installed successfully!")
         print("\n🏦 Kernel Features:")
         print("   - Commercial loan pricing models")
@@ -194,23 +208,23 @@ def install_commercial_view_kernel() -> bool:
         print("   - KPI generation and reporting")
         print("   - Portfolio risk assessment")
         print("   - Regulatory compliance tools")
-        
+
         print("\n📝 Kernel Details:")
         print("   - Name: commercial-view")
         print("   - Display: Commercial-View (Commercial Lending)")
         print("   - Environment: Development with debugging enabled")
-        
+
         print("\n🚀 Next Steps:")
         print("   1. Start Jupyter Lab: jupyter lab")
         print("   2. Create new notebook")
         print("   3. Select 'Commercial-View (Commercial Lending)' kernel")
         print("   4. Try sample code from notebooks/commercial_view_startup.ipynb")
-        
+
         # Create sample notebook
         create_sample_notebook()
-        
+
         return True
-        
+
     except subprocess.CalledProcessError as e:
         print(f"❌ Failed to install kernel: {e}")
         if kernel_dir.exists():
@@ -222,14 +236,15 @@ def install_commercial_view_kernel() -> bool:
             shutil.rmtree(kernel_dir)
         return False
 
+
 def create_sample_notebook() -> None:
     """Create a sample notebook demonstrating Commercial-View features"""
     project_root = Path(__file__).parent.parent
     notebooks_dir = project_root / "notebooks"
     notebooks_dir.mkdir(exist_ok=True)
-    
+
     sample_notebook = notebooks_dir / "commercial_view_getting_started.ipynb"
-    
+
     notebook_content = {
         "cells": [
             {
@@ -245,8 +260,8 @@ def create_sample_notebook() -> None:
                     "- Generate pricing models\n",
                     "- Calculate Days Past Due (DPD)\n",
                     "- Create KPI reports\n",
-                    "- Assess portfolio risk"
-                ]
+                    "- Assess portfolio risk",
+                ],
             },
             {
                 "cell_type": "code",
@@ -258,14 +273,14 @@ def create_sample_notebook() -> None:
                     "import sys\n",
                     "from pathlib import Path\n",
                     "\n",
-                    "print(\"🏦 Commercial-View Environment Status\")\n",
-                    "print(\"=\" * 40)\n",
+                    'print("🏦 Commercial-View Environment Status")\n',
+                    'print("=" * 40)\n',
                     "print(f\"📁 Project Root: {os.environ.get('COMMERCIAL_VIEW_ROOT', 'Not set')}\")\n",
                     "print(f\"🐍 Python Path: {os.environ.get('PYTHONPATH', 'Not set')}\")\n",
                     "print(f\"🔧 Environment: {os.environ.get('ENVIRONMENT', 'Not set')}\")\n",
                     "print(f\"🐛 Debug Mode: {os.environ.get('DEBUG', 'Not set')}\")\n",
-                    "print(f\"🏦 CV Mode: {os.environ.get('COMMERCIAL_VIEW_MODE', 'Not set')}\")"
-                ]
+                    "print(f\"🏦 CV Mode: {os.environ.get('COMMERCIAL_VIEW_MODE', 'Not set')}\")",
+                ],
             },
             {
                 "cell_type": "code",
@@ -282,10 +297,10 @@ def create_sample_notebook() -> None:
                     "plt.style.use('default')\n",
                     "sns.set_palette('Set2')\n",
                     "\n",
-                    "print(\"📊 Data science libraries loaded successfully!\")\n",
-                    "print(f\"🐼 Pandas: {pd.__version__}\")\n",
-                    "print(f\"🔢 NumPy: {np.__version__}\")"
-                ]
+                    'print("📊 Data science libraries loaded successfully!")\n',
+                    'print(f"🐼 Pandas: {pd.__version__}")\n',
+                    'print(f"🔢 NumPy: {np.__version__}")',
+                ],
             },
             {
                 "cell_type": "code",
@@ -296,7 +311,7 @@ def create_sample_notebook() -> None:
                     "import yaml\n",
                     "\n",
                     "def load_config(config_path):\n",
-                    "    \"\"\"Load Commercial-View configuration file\"\"\"\n",
+                    '    """Load Commercial-View configuration file"""\n',
                     "    try:\n",
                     "        with open(config_path, 'r') as f:\n",
                     "            return yaml.safe_load(f)\n",
@@ -308,11 +323,11 @@ def create_sample_notebook() -> None:
                     "dpd_config = load_config(os.environ.get('DPD_POLICY_PATH'))\n",
                     "column_config = load_config(os.environ.get('COLUMN_MAPS_PATH'))\n",
                     "\n",
-                    "print(\"⚙️  Configuration Status:\")\n",
+                    'print("⚙️  Configuration Status:")\n',
                     "print(f\"   Pricing Config: {'✅ Loaded' if pricing_config else '❌ Not found'}\")\n",
                     "print(f\"   DPD Config: {'✅ Loaded' if dpd_config else '❌ Not found'}\")\n",
-                    "print(f\"   Column Config: {'✅ Loaded' if column_config else '❌ Not found'}\")"
-                ]
+                    "print(f\"   Column Config: {'✅ Loaded' if column_config else '❌ Not found'}\")",
+                ],
             },
             {
                 "cell_type": "markdown",
@@ -329,29 +344,27 @@ def create_sample_notebook() -> None:
                     "- Configuration files: `/configs/`\n",
                     "- Sample data: `/data/`\n",
                     "- Documentation: `/docs/`\n",
-                    "- Scripts: `/scripts/`"
-                ]
-            }
+                    "- Scripts: `/scripts/`",
+                ],
+            },
         ],
         "metadata": {
             "kernelspec": {
                 "display_name": "Commercial-View (Commercial Lending)",
                 "language": "python",
-                "name": "commercial-view"
+                "name": "commercial-view",
             },
-            "language_info": {
-                "name": "python",
-                "version": "3.8.0"
-            }
+            "language_info": {"name": "python", "version": "3.8.0"},
         },
         "nbformat": 4,
-        "nbformat_minor": 4
+        "nbformat_minor": 4,
     }
-    
-    with open(sample_notebook, 'w') as f:
+
+    with open(sample_notebook, "w") as f:
         json.dump(notebook_content, f, indent=2)
-    
+
     print(f"📓 Created sample notebook: {sample_notebook}")
+
 
 def main():
     """Main installation function with enhanced error handling"""
@@ -367,6 +380,7 @@ def main():
     except Exception as e:
         print(f"\n❌ Unexpected error: {e}")
         return 1
+
 
 if __name__ == "__main__":
     sys.exit(main())
