@@ -1,4 +1,4 @@
-"""Shared pytest fixtures and runtime guards for the Commercial-View test suite."""
+"""Shared pytest fixtures and runtime guards for the CommercialView test suite."""
 
 from __future__ import annotations
 
