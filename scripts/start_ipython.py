@@ -273,7 +273,6 @@ def start_enhanced_ipython():
         # Enhanced IPython startup banner
         banner = f"""
 🏦 Commercial-View Development Shell
-=====================================
 📁 Project: {project_root.name}
 🐍 Python: {sys.version.split()[0]}
 🔧 Environment: {os.environ.get('ENVIRONMENT', 'unknown')}

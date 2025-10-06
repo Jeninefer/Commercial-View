@@ -3,10 +3,37 @@
  * Enterprise-grade TypeScript React implementation
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { Card, Grid, Typography, Box, CircularProgress, Alert } from '@mui/material';
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, AccountBalance, Assessment, Warning } from '@mui/icons-material';
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  Card,
+  Grid,
+  Typography,
+  Box,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  TrendingUp,
+  TrendingDown,
+  AccountBalance,
+  Assessment,
+  Warning,
+} from "@mui/icons-material";
 
 interface KPIMetric {
   id: string;
@@ -15,8 +42,8 @@ interface KPIMetric {
   target: number;
   unit: string;
   description: string;
-  trend: 'up' | 'down' | 'stable';
-  status: 'excellent' | 'good' | 'warning' | 'critical';
+  trend: "up" | "down" | "stable";
+  status: "excellent" | "good" | "warning" | "critical";
 }
 
 interface PortfolioData {
@@ -35,25 +62,27 @@ interface DashboardProps {
 }
 
 const ABACO_COLORS = {
-  primary: '#030E19',
-  secondary: '#221248',
+  primary: "#030E19",
+  secondary: "#221248",
   neutral: {
-    light: '#CED4D9',
-    medium: '#9EA9B3',
-    dark: '#6D7D8E'
+    light: "#CED4D9",
+    medium: "#9EA9B3",
+    dark: "#6D7D8E",
   },
   status: {
-    excellent: '#10B981',
-    good: '#059669',
-    warning: '#F59E0B',
-    critical: '#EF4444'
-  }
+    excellent: "#10B981",
+    good: "#059669",
+    warning: "#F59E0B",
+    critical: "#EF4444",
+  },
 };
 
-export const CommercialViewDashboard: React.FC<DashboardProps> = ({ 
-  refreshInterval = 300000 // 5 minutes
+export const CommercialViewDashboard: React.FC<DashboardProps> = ({
+  refreshInterval = 300000, // 5 minutes
 }) => {
-  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null);
+  const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(
+    null,
+  );
   const [kpiMetrics, setKpiMetrics] = useState<KPIMetric[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,12 +95,12 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
       setError(null);
 
       const [portfolioResponse, kpiResponse] = await Promise.all([
-        fetch('/api/v1/portfolio-metrics'),
-        fetch('/api/v1/kpi-metrics')
+        fetch("/api/v1/portfolio-metrics"),
+        fetch("/api/v1/kpi-metrics"),
       ]);
 
       if (!portfolioResponse.ok || !kpiResponse.ok) {
-        throw new Error('Failed to fetch dashboard data');
+        throw new Error("Failed to fetch dashboard data");
       }
 
       const portfolioResult = await portfolioResponse.json();
@@ -81,7 +110,7 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
       setKpiMetrics(kpiResult.data.metrics);
       setLastUpdated(new Date());
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error occurred');
+      setError(err instanceof Error ? err.message : "Unknown error occurred");
     } finally {
       setLoading(false);
     }
@@ -101,7 +130,10 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
 
   // Get status color
   const getStatusColor = (status: string): string => {
-    return ABACO_COLORS.status[status as keyof typeof ABACO_COLORS.status] || ABACO_COLORS.neutral.medium;
+    return (
+      ABACO_COLORS.status[status as keyof typeof ABACO_COLORS.status] ||
+      ABACO_COLORS.neutral.medium
+    );
   };
 
   // Render KPI card
@@ -110,37 +142,51 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
     const statusColor = getStatusColor(metric.status);
 
     return (
-      <Card 
+      <Card
         key={metric.id}
-        sx={{ 
-          p: 3, 
-          height: '100%',
+        sx={{
+          p: 3,
+          height: "100%",
           borderLeft: `4px solid ${statusColor}`,
-          '&:hover': { boxShadow: 3 }
+          "&:hover": { boxShadow: 3 },
         }}
       >
-        <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="flex-start"
+        >
           <Box flex={1}>
             <Typography variant="h6" color={ABACO_COLORS.primary} gutterBottom>
               {metric.name}
             </Typography>
             <Typography variant="h4" color={statusColor} fontWeight="bold">
-              {metric.value.toLocaleString()}{metric.unit}
+              {metric.value.toLocaleString()}
+              {metric.unit}
             </Typography>
             <Typography variant="body2" color={ABACO_COLORS.neutral.dark}>
-              Target: {metric.target.toLocaleString()}{metric.unit}
+              Target: {metric.target.toLocaleString()}
+              {metric.unit}
             </Typography>
-            <Typography variant="body2" color={ABACO_COLORS.neutral.medium} mt={1}>
+            <Typography
+              variant="body2"
+              color={ABACO_COLORS.neutral.medium}
+              mt={1}
+            >
               Progress: {progress}%
             </Typography>
           </Box>
           <Box display="flex" alignItems="center">
-            {metric.trend === 'up' && <TrendingUp color="success" />}
-            {metric.trend === 'down' && <TrendingDown color="error" />}
-            {metric.status === 'critical' && <Warning color="error" />}
+            {metric.trend === "up" && <TrendingUp color="success" />}
+            {metric.trend === "down" && <TrendingDown color="error" />}
+            {metric.status === "critical" && <Warning color="error" />}
           </Box>
         </Box>
-        <Typography variant="caption" color={ABACO_COLORS.neutral.medium} mt={2}>
+        <Typography
+          variant="caption"
+          color={ABACO_COLORS.neutral.medium}
+          mt={2}
+        >
           {metric.description}
         </Typography>
       </Card>
@@ -149,7 +195,12 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="400px">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="400px"
+      >
         <CircularProgress size={60} sx={{ color: ABACO_COLORS.primary }} />
         <Typography variant="h6" ml={2} color={ABACO_COLORS.primary}>
           Loading Commercial-View Dashboard...
@@ -168,14 +219,20 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
   }
 
   return (
-    <Box sx={{ p: 3, bgcolor: '#F8FAFC', minHeight: '100vh' }}>
+    <Box sx={{ p: 3, bgcolor: "#F8FAFC", minHeight: "100vh" }}>
       {/* Header */}
       <Box mb={4}>
-        <Typography variant="h3" color={ABACO_COLORS.primary} fontWeight="bold" gutterBottom>
+        <Typography
+          variant="h3"
+          color={ABACO_COLORS.primary}
+          fontWeight="bold"
+          gutterBottom
+        >
           🏦 Commercial-View Dashboard
         </Typography>
         <Typography variant="subtitle1" color={ABACO_COLORS.neutral.dark}>
-          Real-time Commercial Lending Analytics • Last updated: {lastUpdated.toLocaleTimeString()}
+          Real-time Commercial Lending Analytics • Last updated:{" "}
+          {lastUpdated.toLocaleTimeString()}
         </Typography>
       </Box>
 
@@ -190,19 +247,32 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
           {/* Monthly Disbursements */}
           <Grid item xs={12} md={6}>
             <Card sx={{ p: 3, height: 400 }}>
-              <Typography variant="h6" color={ABACO_COLORS.primary} gutterBottom>
+              <Typography
+                variant="h6"
+                color={ABACO_COLORS.primary}
+                gutterBottom
+              >
                 📈 Monthly Disbursements
               </Typography>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={portfolioData.disbursements}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
-                  <YAxis tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`} />
-                  <Tooltip formatter={(value: number) => [`$${value.toLocaleString()}`, 'Amount']} />
-                  <Line 
-                    type="monotone" 
-                    dataKey="amount" 
-                    stroke={ABACO_COLORS.primary} 
+                  <YAxis
+                    tickFormatter={(value) =>
+                      `$${(value / 1000000).toFixed(1)}M`
+                    }
+                  />
+                  <Tooltip
+                    formatter={(value: number) => [
+                      `$${value.toLocaleString()}`,
+                      "Amount",
+                    ]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="amount"
+                    stroke={ABACO_COLORS.primary}
                     strokeWidth={3}
                     dot={{ fill: ABACO_COLORS.secondary }}
                   />
@@ -214,7 +284,11 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
           {/* Tenor Mix Distribution */}
           <Grid item xs={12} md={6}>
             <Card sx={{ p: 3, height: 400 }}>
-              <Typography variant="h6" color={ABACO_COLORS.primary} gutterBottom>
+              <Typography
+                variant="h6"
+                color={ABACO_COLORS.primary}
+                gutterBottom
+              >
                 ⏱️ Tenor Mix Distribution
               </Typography>
               <ResponsiveContainer width="100%" height={300}>
@@ -224,13 +298,18 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ tenor, percentage }) => `${tenor}: ${percentage}%`}
+                    label={({ tenor, percentage }) =>
+                      `${tenor}: ${percentage}%`
+                    }
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="percentage"
                   >
                     {portfolioData.tenorMix.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={Object.values(ABACO_COLORS.status)[index % 4]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={Object.values(ABACO_COLORS.status)[index % 4]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip />
@@ -242,15 +321,33 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
           {/* Industry Breakdown */}
           <Grid item xs={12}>
             <Card sx={{ p: 3, height: 400 }}>
-              <Typography variant="h6" color={ABACO_COLORS.primary} gutterBottom>
+              <Typography
+                variant="h6"
+                color={ABACO_COLORS.primary}
+                gutterBottom
+              >
                 🏭 Industry Exposure Breakdown
               </Typography>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={portfolioData.industryBreakdown}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="industry" angle={-45} textAnchor="end" height={100} />
-                  <YAxis tickFormatter={(value) => `$${(value / 1000000).toFixed(1)}M`} />
-                  <Tooltip formatter={(value: number) => [`$${value.toLocaleString()}`, 'Exposure']} />
+                  <XAxis
+                    dataKey="industry"
+                    angle={-45}
+                    textAnchor="end"
+                    height={100}
+                  />
+                  <YAxis
+                    tickFormatter={(value) =>
+                      `$${(value / 1000000).toFixed(1)}M`
+                    }
+                  />
+                  <Tooltip
+                    formatter={(value: number) => [
+                      `$${value.toLocaleString()}`,
+                      "Exposure",
+                    ]}
+                  />
                   <Bar dataKey="exposure" fill={ABACO_COLORS.secondary} />
                 </BarChart>
               </ResponsiveContainer>
@@ -267,8 +364,14 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <Box textAlign="center">
-              <Typography variant="h4" color={ABACO_COLORS.status.excellent} fontWeight="bold">
-                {portfolioData?.nplRate ? `${(portfolioData.nplRate * 100).toFixed(2)}%` : 'N/A'}
+              <Typography
+                variant="h4"
+                color={ABACO_COLORS.status.excellent}
+                fontWeight="bold"
+              >
+                {portfolioData?.nplRate
+                  ? `${(portfolioData.nplRate * 100).toFixed(2)}%`
+                  : "N/A"}
               </Typography>
               <Typography variant="body1" color={ABACO_COLORS.neutral.dark}>
                 NPL Rate (≥180 days)
@@ -277,8 +380,14 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
           </Grid>
           <Grid item xs={12} md={4}>
             <Box textAlign="center">
-              <Typography variant="h4" color={ABACO_COLORS.status.good} fontWeight="bold">
-                {portfolioData?.concentrationRisk ? `${(portfolioData.concentrationRisk * 100).toFixed(1)}%` : 'N/A'}
+              <Typography
+                variant="h4"
+                color={ABACO_COLORS.status.good}
+                fontWeight="bold"
+              >
+                {portfolioData?.concentrationRisk
+                  ? `${(portfolioData.concentrationRisk * 100).toFixed(1)}%`
+                  : "N/A"}
               </Typography>
               <Typography variant="body1" color={ABACO_COLORS.neutral.dark}>
                 Top Client Concentration
@@ -287,8 +396,14 @@ export const CommercialViewDashboard: React.FC<DashboardProps> = ({
           </Grid>
           <Grid item xs={12} md={4}>
             <Box textAlign="center">
-              <Typography variant="h4" color={ABACO_COLORS.status.warning} fontWeight="bold">
-                {portfolioData?.weightedAPR ? `${(portfolioData.weightedAPR * 100).toFixed(2)}%` : 'N/A'}
+              <Typography
+                variant="h4"
+                color={ABACO_COLORS.status.warning}
+                fontWeight="bold"
+              >
+                {portfolioData?.weightedAPR
+                  ? `${(portfolioData.weightedAPR * 100).toFixed(2)}%`
+                  : "N/A"}
               </Typography>
               <Typography variant="body1" color={ABACO_COLORS.neutral.dark}>
                 Weighted Average APR

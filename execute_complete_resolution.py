@@ -104,7 +104,7 @@ class CompleteResolutionOrchestrator:
             try:
                 subprocess.run(["npm", "--version"], check=True, capture_output=True)
                 self._log_success("Node.js environment verified")
-            except:
+            except (subprocess.CalledProcessError, FileNotFoundError):
                 self._log_warning("Node.js not available - frontend builds will be skipped")
         
         self._log_phase_complete("Phase 1")
@@ -447,7 +447,7 @@ class CompleteResolutionOrchestrator:
                 try:
                     file_path.unlink()
                     self._log_info(f"Removed conflict artifact: {file_path.name}")
-                except:
+                except Exception:
                     pass
     
     def _standardize_package_manager(self):
