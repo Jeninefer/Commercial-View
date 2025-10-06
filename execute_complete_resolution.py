@@ -9,7 +9,7 @@ import subprocess
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any, Tuple
+from typing import Dict, List
 
 class CompleteResolutionOrchestrator:
     """
@@ -17,10 +17,16 @@ class CompleteResolutionOrchestrator:
     Ensures no interruption until excellence is achieved
     """
     
+    # Class constants
+    TESTS_DIR = "tests/"
+    SRC_DIR = "src/"
+    SCRIPTS_DIR = "scripts/"
+    
     def __init__(self):
         self.repo_root = Path("/Users/jenineferderas/Commercial-View")
-        self.execution_log = []
+        self.execution_log: List[Dict] = []
         self.start_time = datetime.now()
+        self.detected_issues: Dict[str, List] = {}
         
     def execute_complete_resolution(self) -> bool:
         """
@@ -95,7 +101,7 @@ class CompleteResolutionOrchestrator:
         try:
             subprocess.run(["git", "--version"], check=True, capture_output=True)
             self._log_success("Git verified")
-        except:
+        except (subprocess.CalledProcessError, FileNotFoundError):
             raise RuntimeError("Git not available")
         
         # Check Node.js for frontend (if exists)
@@ -354,7 +360,7 @@ class CompleteResolutionOrchestrator:
                         "message": "Using 'any' type"
                     })
                 
-            except Exception:
+            except (OSError, UnicodeDecodeError):
                 pass
         
         return issues
@@ -506,13 +512,13 @@ class CompleteResolutionOrchestrator:
         # Python: Black
         try:
             subprocess.run(
-                ["black", "src/", "tests/", "scripts/", "--quiet"],
+                ["black", self.SRC_DIR, self.TESTS_DIR, self.SCRIPTS_DIR, "--quiet"],
                 cwd=self.repo_root,
                 check=False,
                 capture_output=True
             )
             self._log_success("Applied Black formatting")
-        except:
+        except FileNotFoundError:
             self._log_warning("Black not available")
         
         # TypeScript: Prettier
@@ -526,7 +532,7 @@ class CompleteResolutionOrchestrator:
                     capture_output=True
                 )
                 self._log_success("Applied Prettier formatting")
-            except:
+            except FileNotFoundError:
                 self._log_warning("Prettier not available")
     
     def _enhance_type_hints(self):
@@ -538,26 +544,26 @@ class CompleteResolutionOrchestrator:
         """Optimize import statements"""
         try:
             subprocess.run(
-                ["isort", "src/", "tests/", "scripts/", "--quiet"],
+                ["isort", self.SRC_DIR, self.TESTS_DIR, self.SCRIPTS_DIR, "--quiet"],
                 cwd=self.repo_root,
                 check=False,
                 capture_output=True
             )
             self._log_success("Optimized imports")
-        except:
+        except FileNotFoundError:
             self._log_warning("isort not available")
     
     def _run_python_tests(self) -> bool:
         """Run Python test suite"""
         try:
             result = subprocess.run(
-                ["pytest", "tests/", "-q"],
+                ["pytest", self.TESTS_DIR, "-q"],
                 cwd=self.repo_root,
                 capture_output=True,
                 text=True
             )
             return result.returncode == 0
-        except:
+        except FileNotFoundError:
             return False
     
     def _run_frontend_tests(self) -> bool:
@@ -570,7 +576,7 @@ class CompleteResolutionOrchestrator:
                 capture_output=True
             )
             return result.returncode == 0
-        except:
+        except (FileNotFoundError, subprocess.CalledProcessError):
             return False
     
     def _validate_production_readiness(self):
@@ -690,13 +696,7 @@ Repository achieves market-leading excellence"""
     def _log_info(self, message: str):
         """Log info message"""
         print(f"  ℹ️  {message}")
-        self.execution_log.append({"info": message})
-    
-    def _log_warning(self, message: str):
-        """Log warning message"""
-        print(f"  ⚠️  {message}")
-        self.execution_log.append({"warning": message})
-    
+        self.execution_log
     def _handle_critical_error(self, error: Exception):
         """Handle critical error"""
         print(f"\n{'='*70}")
