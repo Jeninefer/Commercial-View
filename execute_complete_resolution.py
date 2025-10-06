@@ -815,3 +815,11 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
+Commercial-View/
+├── package.json          (1,444 bytes) - Defines dependencies
+├── package-lock.json     (20,924 bytes) - Locks exact versions
+├── node_modules/         (63 packages installed)
+├── frontend/             (React dashboard)
+├── src/                  (Python backend)
+└── scripts/              (Including upload_to_drive.py)
