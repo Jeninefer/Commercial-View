@@ -18,6 +18,7 @@ from pathlib import Path
 import pandas as pd
 import tempfile
 import os
+from unittest.mock import patch, MagicMock
 
 from src.data_loader import (
     load_loan_data,

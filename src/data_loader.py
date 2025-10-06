@@ -270,3 +270,64 @@ class DataLoader:
                 }
 
         return status
+
+
+# Module-level convenience functions for backward compatibility
+# These create a default DataLoader instance and call the appropriate methods
+
+_default_loader: Optional[DataLoader] = None
+
+
+def _get_default_loader(base_path: Optional[Union[str, Path]] = None) -> DataLoader:
+    """Get or create default DataLoader instance"""
+    global _default_loader
+    if _default_loader is None or base_path is not None:
+        _default_loader = DataLoader(base_path)
+    return _default_loader
+
+
+def load_loan_data(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
+    """Load loan data using default DataLoader instance"""
+    loader = _get_default_loader(base_path)
+    return loader.load_loan_data(base_path)
+
+
+def load_historic_real_payment(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
+    """Load historic real payment data using default DataLoader instance"""
+    loader = _get_default_loader(base_path)
+    return loader.load_historic_real_payment(base_path)
+
+
+def load_payment_schedule(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
+    """Load payment schedule data using default DataLoader instance"""
+    loader = _get_default_loader(base_path)
+    return loader.load_payment_schedule(base_path)
+
+
+def load_customer_data(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
+    """Load customer data using default DataLoader instance"""
+    loader = _get_default_loader(base_path)
+    return loader.load_customer_data(base_path)
+
+
+def load_collateral(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
+    """Load collateral data using default DataLoader instance"""
+    loader = _get_default_loader(base_path)
+    return loader.load_collateral(base_path)
+
+
+def _resolve_base_path(base_path: Optional[Union[str, Path]] = None) -> Path:
+    """Resolve base path using DataLoader logic"""
+    loader = _get_default_loader(base_path)
+    return loader.base_path
+
+
+# Pricing filenames constant for backward compatibility
+PRICING_FILENAMES = {
+    "loan_data": "loan_data.csv",
+    "payment_schedule": "payment_schedule.csv",
+    "historic_real_payment": "historic_real_payment.csv",
+    "customer_data": "customer_data.csv",
+    "collateral": "collateral.csv"
+}
+
