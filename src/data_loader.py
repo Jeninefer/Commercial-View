@@ -25,7 +25,9 @@ def _read_csv(path_or_dir: Union[str, Path], default_name: str | None = None) ->
     p = Path(path_or_dir)
     if p.is_dir():
         if default_name is None:
-            raise ValueError("default_name must be provided when path_or_dir is a directory")
+            raise ValueError(
+                "When 'path_or_dir' is a directory, you must provide the 'default_name' parameter (the filename to load within the directory)."
+            )
         file_path = p / default_name
     else:
         file_path = p
