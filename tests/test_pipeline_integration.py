@@ -6,12 +6,13 @@ import importlib
 import sys
 from pathlib import Path
 from typing import Dict, Tuple
+from types import ModuleType
 
 import pandas as pd
 import pytest
 
 
-def _bootstrap_pipeline(monkeypatch: pytest.MonkeyPatch) -> Tuple[object, Dict[str, int], pd.DataFrame, pd.DataFrame]:
+def _bootstrap_pipeline(monkeypatch: pytest.MonkeyPatch) -> Tuple[ModuleType, Dict[str, int], pd.DataFrame, pd.DataFrame]:
     """Prepare the pipeline module with patched data loaders for deterministic runs."""
 
     import src.data_loader as data_loader
