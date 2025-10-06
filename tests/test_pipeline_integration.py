@@ -72,10 +72,10 @@ def _bootstrap_pipeline(monkeypatch: pytest.MonkeyPatch) -> Tuple[object, Dict[s
     return pipeline, calls, loan_df, payment_df
 
 
-def test_pipeline_load_all_datasets_handles_missing_sources(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_pipeline_load_all_datasets_handles_missing_sources(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     pipeline, calls, _, _ = _bootstrap_pipeline(monkeypatch)
 
-    instance = pipeline.CommercialViewPipeline(base_path=Path("/tmp"))
+    instance = pipeline.CommercialViewPipeline(base_path=tmp_path)
     datasets = instance.load_all_datasets()
 
     assert {"loan_data", "historic_real_payment", "payment_schedule", "customer_data", "collateral"} == set(
