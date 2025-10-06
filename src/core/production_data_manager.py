@@ -5,7 +5,12 @@ Ensures only real commercial lending data is processed with market-leading quali
 
 import os
 import pandas as pd
-import gdown
+try:
+    import gdown
+    GDOWN_AVAILABLE = True
+except ImportError:
+    GDOWN_AVAILABLE = False
+    gdown = None
 import hashlib
 import json
 from pathlib import Path
