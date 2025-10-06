@@ -5,7 +5,7 @@ const CsvUploader: React.FC<CsvUploaderProps> = ({ onUpload, state, onDismissErr
   const [replaceExisting, setReplaceExisting] = useState(false);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const [file] = Array.from(event.target.files ?? []);
+    const file = event.target.files?.[0];
     if (!file) {
       return;
     }
