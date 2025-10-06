@@ -259,7 +259,12 @@ async def get_payment_schedule() -> List[Dict[str, Any]]:
             except Exception as exc:
                 logger.debug(f"Pipeline load_all_datasets failed: {exc}")
 
-            dataset = getattr(pipeline_instance, "_datasets", {}).get("payment_schedule")
+            # Use public interface to access datasets if available
+            if hasattr(pipeline_instance, "get_dataset"):
+                dataset = pipeline_instance.get_dataset("payment_schedule")
+            else:
+                logger.warning("Accessing private _datasets attribute directly; consider updating CommercialViewPipeline to provide a public interface.")
+                dataset = getattr(pipeline_instance, "_datasets", {}).get("payment_schedule")
             if dataset is not None:
                 records = dataset.to_dict("records") if hasattr(dataset, "to_dict") else list(dataset)
                 if records:
