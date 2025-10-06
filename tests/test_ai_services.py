@@ -42,7 +42,7 @@ def test_prediction_service_returns_forecast(stub_container: AIServiceContainer)
     result = service.forecast(history=[10, 12, 15, 14], horizon=2)
     assert isinstance(result, PredictionResult)
     assert result.predictions == [13.0, 12.0]
-    assert math.isclose(result.confidence, 0.95, rel_tol=1e-6) is False
+    assert not math.isclose(result.confidence, 0.95, rel_tol=1e-6)
     assert result.provider == "stub-provider"
 
 
