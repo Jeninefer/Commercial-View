@@ -1,14 +1,14 @@
 """
 Commercial-View package initialization
-Enhanced commercial lending platform with comprehensive feature set
-Enterprise-grade financial analytics and portfolio management
+Enterprise commercial lending analytics platform
+Production-ready with comprehensive feature set
 """
 
 import sys
 import os
 import logging
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 from datetime import datetime
 
 # Configure package-level logging
@@ -17,116 +17,116 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 # Add current directory to path for imports
 sys.path.append(os.path.dirname(__file__))
 
-# Version information
+# Version and metadata
 __version__ = "1.0.0"
 __title__ = "Commercial-View"
-__description__ = "Commercial lending analytics and portfolio management platform"
+__description__ = "Enterprise commercial lending analytics and portfolio management platform"
 __author__ = "Commercial-View Team"
 __license__ = "Proprietary"
-__url__ = "https://github.com/commercial-view/Commercial-View"
 
-# Package metadata with comprehensive feature list
+# Package metadata
 PACKAGE_INFO = {
     "version": __version__,
-    "title": __title__,
+    "title": __title__, 
     "description": __description__,
     "author": __author__,
     "license": __license__,
-    "url": __url__,
     "python_requires": ">=3.8",
     "commercial_lending_features": [
-        "loan_pricing", "risk_assessment", "dpd_analysis", 
+        "loan_portfolio_analytics", "risk_assessment", "dpd_analysis",
         "kpi_generation", "portfolio_optimization", "regulatory_reporting",
-        "ai_analytics", "multi_llm_analysis", "stress_testing",
-        "google_drive_integration", "hubspot_crm", "atomchat_whatsapp"
+        "real_data_processing", "production_grade_apis"
     ],
-    "integrations": [
-        "google_drive", "google_sheets", "hubspot", "atomchat",
-        "sendgrid", "openai", "anthropic", "google_gemini"
-    ],
-    "deployment_platforms": [
-        "local", "docker", "streamlit_cloud", "render", "gcp", "aws"
+    "data_sources": [
+        "real_commercial_loans", "payment_schedules", "historic_payments",
+        "customer_data", "google_drive_integration"
     ]
 }
 
-# Core commercial lending modules
+# Core module imports with error handling
+_CORE_MODULES_AVAILABLE = True
+_IMPORT_ERRORS = []
+
 try:
-    from feature_engineer import FeatureEngineer
-    from loan_analytics import LoanAnalytics
-    from metrics_calculator import MetricsCalculator
-    from customer_analytics import CustomerAnalytics
-    from dpd_analyzer import DPDAnalyzer
-    from payment_processor import PaymentProcessor
-    from pricing_enricher import PricingEnricher
-    from abaco_core import AbacoCore
-    from portfolio_optimizer import PortfolioOptimizer
-    from google_drive_exporter import GoogleDriveExporter
-    from evergreen import monthly_cohort, reactivation_flag
+    from data_loader import DataLoader
+    from pipeline import CommercialViewPipeline
     
-    # Enhanced commercial lending modules
+    # Analytics modules
     try:
-        from commercial_view.pricing.calculator import PricingCalculator
-        from commercial_view.risk.assessor import RiskAssessor
-        from commercial_view.kpi.generator import KPIGenerator
-        from commercial_view.export.manager import ExportManager
-        from commercial_view.regulatory.compliance import ComplianceValidator
-        from commercial_view.stress.testing import StressTestEngine
-        
-        _ENHANCED_MODULES_AVAILABLE = True
-    except ImportError:
-        _ENHANCED_MODULES_AVAILABLE = False
-        
-    # ABACO Core modules (enterprise features)
-    try:
-        from abaco_core.config import Config
-        from abaco_core.optimizer import DisbursementOptimizer
-        from abaco_core.alerts import AlertEngine
-        from abaco_core.gdrive_ingest import GoogleDriveIngest
-        
-        _ABACO_MODULES_AVAILABLE = True
-    except ImportError:
-        _ABACO_MODULES_AVAILABLE = False
-        
-    # AI and Analytics modules
-    try:
-        from analytics.ai_analyzer import AIAnalyzer
-        from analytics.multi_llm import MultiLLMAnalyzer
-        from analytics.insights_engine import InsightsEngine
-        
-        _AI_MODULES_AVAILABLE = True
-    except ImportError:
-        _AI_MODULES_AVAILABLE = False
-        
+        from feature_engineer import FeatureEngineer
+        from metrics_calculator import MetricsCalculator
+        from portfolio_optimizer import PortfolioOptimizer
+        _ANALYTICS_MODULES_AVAILABLE = True
+    except ImportError as e:
+        _ANALYTICS_MODULES_AVAILABLE = False
+        _IMPORT_ERRORS.append(f"Analytics modules: {e}")
+    
     # Utility modules
     try:
-        from utils.schema_converter import CommercialLendingSchemaConverter
-        from utils.schema_parser import CommercialLendingSchemaParser
-        from utils.retry import CommercialLendingRetry
-        
+        from process_portfolio import ProcessPortfolio
         _UTILITY_MODULES_AVAILABLE = True
-    except ImportError:
+    except ImportError as e:
         _UTILITY_MODULES_AVAILABLE = False
+        _IMPORT_ERRORS.append(f"Utility modules: {e}")
         
-    _CORE_MODULES_AVAILABLE = True
-    
 except ImportError as e:
-    logging.warning(f"Some core modules could not be imported: {e}")
     _CORE_MODULES_AVAILABLE = False
-    _ENHANCED_MODULES_AVAILABLE = False
-    _ABACO_MODULES_AVAILABLE = False
-    _AI_MODULES_AVAILABLE = False
-    _UTILITY_MODULES_AVAILABLE = False
+    _IMPORT_ERRORS.append(f"Core modules: {e}")
+    logging.warning(f"Some core modules could not be imported: {e}")
 
 # Configuration management
-def get_package_info() -> Dict[str, Any]:
-    """Get comprehensive package information"""
+def get_production_info() -> Dict[str, Any]:
+    """Get comprehensive production information"""
     return {
         **PACKAGE_INFO,
         "modules_status": {
             "core_modules": _CORE_MODULES_AVAILABLE,
-            "enhanced_modules": _ENHANCED_MODULES_AVAILABLE,
-            "abaco_modules": _ABACO_MODULES_AVAILABLE,
-            "ai_modules": _AI_MODULES_AVAILABLE,
+            "analytics_modules": _ANALYTICS_MODULES_AVAILABLE,
+            "utility_modules": _UTILITY_MODULES_AVAILABLE
+        },
+        "import_errors": _IMPORT_ERRORS,
+        "production_ready": _CORE_MODULES_AVAILABLE,
+        "data_source": "Real commercial lending data from Google Drive",
+        "content_language": "100% English",
+        "demo_data": "Zero - Production data only"
+    }
+
+# Clean public API - production modules only
+_CORE_EXPORTS = [
+    'DataLoader',
+    'CommercialViewPipeline'
+] if _CORE_MODULES_AVAILABLE else []
+
+_ANALYTICS_EXPORTS = [
+    'FeatureEngineer',
+    'MetricsCalculator', 
+    'PortfolioOptimizer'
+] if _ANALYTICS_MODULES_AVAILABLE else []
+
+_UTILITY_EXPORTS = [
+    'ProcessPortfolio'
+] if _UTILITY_MODULES_AVAILABLE else []
+
+_PACKAGE_EXPORTS = [
+    'get_production_info',
+    '__version__',
+    'PACKAGE_INFO'
+]
+
+__all__ = _CORE_EXPORTS + _ANALYTICS_EXPORTS + _UTILITY_EXPORTS + _PACKAGE_EXPORTS
+
+# Package initialization message
+if _CORE_MODULES_AVAILABLE:
+    available_modules = len([m for m in __all__ if m in globals()])
+    total_modules = len(__all__)
+    logging.info(
+        f"Commercial-View v{__version__} initialized - Production Ready\n"
+        f"  Modules: {available_modules}/{total_modules} available\n"
+        f"  Content: 100% English, Zero demo data\n"
+        f"  Data Source: Real commercial lending data"
+    )
+else:
+    logging.warning("Commercial-View initialized with limited functionality")
             "utility_modules": _UTILITY_MODULES_AVAILABLE
         },
         "available_features": get_available_features(),
