@@ -761,6 +761,51 @@ Repository achieves market-leading excellence"""
         pending = total - resolved
         return total, resolved, pending
     
+    def __str__(self) -> str:
+        """Return human-readable string representation of orchestrator state"""
+        total_issues, resolved_issues, pending_issues = self._get_issue_stats()
+        return (
+            f"CompleteResolutionOrchestrator("
+            f"repo_root={self.repo_root}, "
+            f"total_issues={total_issues}, "
+            f"resolved={resolved_issues}, "
+            f"pending={pending_issues}"
+            f")"
+        )
+    
+    def __repr__(self) -> str:
+        """Return technical string representation for debugging"""
+        return (
+            f"CompleteResolutionOrchestrator("
+            f"repo_root='{self.repo_root}', "
+            f"start_time='{self.start_time.isoformat() if hasattr(self, 'start_time') else 'not started'}'"
+            f")"
+        )
+    
+def main():
+    """Main execution entry point"""
+    orchestrator = CompleteResolutionOrchestrator()
+    success = orchestrator.execute_complete_resolution()
+    
+    return 0 if success else 1
+
+if __name__ == "__main__":
+    sys.exit(main())
+    
+    def __str__(self) -> str:
+        """User-friendly representation"""
+        return f"Project '{self.name}' - Status: {self.status}"
+    
+    def __repr__(self) -> str:
+        """Developer-friendly representation"""
+        return f"Project(name='{self.name}', status='{self.status}')"
+
+# Usage:
+project = Project("Commercial-View", "active")
+print(project)           # Output: Project 'Commercial-View' - Status: active
+print(repr(project))     # Output: Project(name='Commercial-View', status='active')
+print(str(project))      # Output: Project 'Commercial-View' - Status: active
+    
 def main():
     """Main execution entry point"""
     orchestrator = CompleteResolutionOrchestrator()
