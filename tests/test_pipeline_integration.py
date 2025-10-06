@@ -57,14 +57,12 @@ def _bootstrap_pipeline(monkeypatch: pytest.MonkeyPatch) -> Tuple[object, Dict[s
         data_loader,
         "load_payment_schedule",
         make_loader("payment_schedule", pd.DataFrame(), error=FileNotFoundError("missing schedule")),
-        raising=False,
     )
-    monkeypatch.setattr(data_loader, "load_customer_data", make_loader("customer_data", customer_df), raising=False)
+    monkeypatch.setattr(data_loader, "load_customer_data", make_loader("customer_data", customer_df))
     monkeypatch.setattr(
         data_loader,
         "load_collateral",
         make_loader("collateral", pd.DataFrame(), error=FileNotFoundError("missing collateral")),
-        raising=False,
     )
 
     sys.modules.pop("src.pipeline", None)
