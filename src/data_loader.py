@@ -1,55 +1,50 @@
+from __future__ import annotations
 from pathlib import Path
+from typing import Union, Dict
 import pandas as pd
-import os
-from typing import Optional
 
-def load_loan_data(base_path) -> pd.DataFrame:
-    base = Path(base_path)
+_DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
-    if base.is_file():
-        return pd.read_csv(base)
+def _resolve_base_path(base: Union[str, Path, None] = None) -> Path:
+    return Path(base).resolve() if base else _DEFAULT_DATA_DIR
 
-    if not base.exists() or not base.is_dir():
-        raise FileNotFoundError(f"{base} not found")
+PRICING_FILENAMES: Dict[str, str] = {
+    "loan_data": "loan_data.csv",
+    "historic_real_payment": "historic_real_payment.csv",
+    "payment_schedule": "payment_schedule.csv",
+    "customer_data": "customer_data.csv",
+    "collateral": "collateral.csv",
+}
 
-    # Prefer loan-like names, then any CSV (recursive, deterministic)
-    candidates = sorted(base.rglob("*loan*.csv")) or sorted(base.rglob("*.csv"))
-    if not candidates:
-        raise FileNotFoundError(f"No CSV files found under {base}")
+def _read_csv(path_or_dir: Union[str, Path], default_name: str | None = None) -> pd.DataFrame:
+    p = Path(path_or_dir)
+    if p.is_dir():
+        if not default_name:
+            raise ValueError("Directory provided without default_name.")
+        p = p / default_name
+    return pd.read_csv(p)
 
-    return pd.read_csv(candidates[0])
+def load_loan_data(path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(path, PRICING_FILENAMES["loan_data"])
 
-def load_historic_real_payment(file_path: Optional[str] = None) -> pd.DataFrame:
-    """
-    Load historic real payment data for portfolio analysis.
-    
-    Args:
-        file_path: Optional path to historic payment CSV file
-        
-    Returns:
-        DataFrame with historic payment data
-    """
-    if file_path is None:
-        # Default path for historic payment data
-        file_path = "data/historic_real_payment.csv"
-    
-    try:
-        if not os.path.exists(file_path):
-            print(f"⚠️  Historic payment file not found: {file_path}")
-            # Return empty DataFrame with expected columns
-            return pd.DataFrame({
-                'loan_id': [],
-                'payment_date': [],
-                'payment_amount': [],
-                'principal_amount': [],
-                'interest_amount': [],
-                'payment_type': []
-            })
-        
-        df = pd.read_csv(file_path)
-        print(f"✅ Loaded {len(df)} historic payment records")
-        return df
-        
-    except Exception as e:
-        print(f"❌ Error loading historic payment data: {e}")
-        return pd.DataFrame()
+def load_historic_real_payment(path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(path, PRICING_FILENAMES["historic_real_payment"])
+
+def load_payment_schedule(path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(path, PRICING_FILENAMES["payment_schedule"])
+
+def load_customer_data(path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(path, PRICING_FILENAMES["customer_data"])
+
+def load_collateral(path: Union[str, Path]) -> pd.DataFrame:
+    return _read_csv(path, PRICING_FILENAMES["collateral"])
+
+__all__ = [
+    "load_loan_data",
+    "load_historic_real_payment",
+    "load_payment_schedule",
+    "load_customer_data",
+    "load_collateral",
+    "_resolve_base_path",
+    "PRICING_FILENAMES",
+]
