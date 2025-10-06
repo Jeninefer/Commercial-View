@@ -751,8 +751,13 @@ Repository achieves market-leading excellence"""
 
     def _get_issue_stats(self) -> Tuple[int, int, int]:
         """Return counts: (total, resolved, pending)"""
-        total = len(self.issues)
-        resolved = sum(1 for issue in self.issues if issue.get('resolved'))
+        if not hasattr(self, 'detected_issues'):
+            return 0, 0, 0
+            
+        total = sum(len(issues) for issues in self.detected_issues.values())
+        # Note: This implementation assumes issues don't have a 'resolved' flag
+        # If you want to track resolved issues, add that functionality
+        resolved = 0  # Placeholder - implement resolution tracking if needed
         pending = total - resolved
         return total, resolved, pending
     
