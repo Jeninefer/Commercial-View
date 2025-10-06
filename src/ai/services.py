@@ -82,12 +82,16 @@ class PredictionService:
         trailing = history[-min(len(history), 6):]
         mean = statistics.mean(trailing)
         if len(trailing) > 1:
-            deltas = [b - a for a, b in zip(trailing[:-1], trailing[1:])]
-            avg_delta = statistics.mean(deltas)
+            last_delta = trailing[-1] - trailing[-2]
         else:
-            avg_delta = 0.0
+            last_delta = 0.0
 
-        predictions = [round(trailing[-1] + avg_delta * (idx + 1), 2) for idx in range(horizon)]
+        predictions = []
+        last_value = trailing[-1]
+        for _ in range(horizon):
+            next_value = last_value + last_delta
+            predictions.append(round(next_value, 2))
+            last_value = next_value
         variance = statistics.pvariance(trailing) if len(trailing) > 1 else 0.0
         volatility = math.sqrt(max(variance, 0))
         confidence = max(0.1, min(0.95, 1.0 - volatility / (abs(mean) + 1e-6)))
