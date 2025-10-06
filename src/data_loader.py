@@ -147,9 +147,21 @@ def load_collateral(base_path: Optional[PathLike] = None) -> pd.DataFrame:
 
 
 def load_targets(base_path: Optional[PathLike] = None) -> pd.DataFrame:
+    """
+    Load the targets dataset as a pandas DataFrame.
+
+    Parameters
+    ----------
+    base_path : Optional[PathLike], default None
+        The base directory or file path to load the targets dataset from. If None,
+        uses the COMMERCIAL_VIEW_DATA_PATH environment variable or the default data directory.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the targets data.
+    """
     return _load_dataset("targets", base_path)
-
-
 __all__ = [
     "load_loan_data",
     "load_historic_real_payment",
