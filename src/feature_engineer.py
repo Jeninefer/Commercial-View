@@ -304,7 +304,7 @@ class FeatureEngineer:
             ],
             axis=1
         )
-        score_components.columns = ['bureau_component', 'behaviour_component', 'financial_component']
+        score_components.columns = ['bureau_component', 'behavior_component', 'financial_component']
         score_component = score_components.mean(axis=1, skipna=True)
 
         component_series = {
