@@ -1,4 +1,45 @@
 {
+  "name": "commercial-view",
+  "version": "1.0.0",
+  "description": "Enterprise commercial lending analytics platform",
+  "main": "run.py",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "packageManager": "npm@10.2.4",
+  "scripts": {
+    "install": "npm install",
+    "clean": "npm run clean:lockfiles && npm run clean:deps",
+    "clean:lockfiles": "find . -name 'yarn.lock' -delete && find . -name 'pnpm-lock.yaml' -delete && find . -name 'bun.lockb' -delete",
+    "clean:deps": "rm -rf node_modules && rm -rf frontend/node_modules",
+    "setup": "npm install && cd frontend && npm install && cd ..",
+    "dev:frontend": "cd frontend && npm start",
+    "build:frontend": "cd frontend && npm run build",
+    "test:frontend": "cd frontend && npm test",
+    "lint:frontend": "cd frontend && npm run lint",
+    "dev:backend": "python run.py",
+    "test:backend": "pytest tests/ -v",
+    "validate": "python scripts/validate_production.py",
+    "preinstall": "npx only-allow npm"
+  },
+  "devDependencies": {
+    "only-allow": "^1.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jeninefer/Commercial-View.git"
+  },
+  "keywords": [
+    "commercial-lending",
+    "analytics",
+    "fastapi",
+    "react",
+    "typescript",
+    "portfolio-management"
+  ],
+  "author": "Commercial-View Team",
+  "license": "Proprietary",
   "dependencies": {
     "@modelcontextprotocol/server-github": "^2025.4.8"
   }
