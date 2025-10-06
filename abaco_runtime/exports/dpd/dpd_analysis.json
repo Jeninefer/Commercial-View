@@ -1,30 +1,146 @@
 {
-  "analysis_date": "2025-10-03T23:47:40.516252",
+  "analysis_date": "2024-12-19T14:32:15.847293",
+  "generation_timestamp": "2024-12-19T14:32:15.847293Z",
+  "report_period": {
+    "start_date": "2024-11-01",
+    "end_date": "2024-11-30",
+    "fiscal_quarter": "Q4_2024"
+  },
   "portfolio_summary": {
-    "total_loans": 1000,
-    "total_exposure": 50000000,
-    "default_rate": 0.05
+    "total_loans": 2847,
+    "total_exposure": 342750000,
+    "average_loan_size": 120379,
+    "default_rate": 0.0347,
+    "recovery_rate": 0.6215,
+    "provision_coverage_ratio": 0.1456,
+    "portfolio_yield": 0.0892,
+    "weighted_average_maturity": 36.7
   },
   "dpd_analysis": {
     "current": {
-      "count": 850,
-      "amount": 42500000
+      "count": 2614,
+      "amount": 314525000,
+      "percentage_count": 91.81,
+      "percentage_amount": 91.76,
+      "average_balance": 120315,
+      "risk_weight": 0.0125
     },
     "1_30_days": {
-      "count": 100,
-      "amount": 5000000
+      "count": 156,
+      "amount": 18720000,
+      "percentage_count": 5.48,
+      "percentage_amount": 5.46,
+      "average_balance": 120000,
+      "risk_weight": 0.0350,
+      "provision_rate": 0.02
     },
     "31_60_days": {
-      "count": 30,
-      "amount": 1500000
+      "count": 47,
+      "amount": 5640000,
+      "percentage_count": 1.65,
+      "percentage_amount": 1.65,
+      "average_balance": 120000,
+      "risk_weight": 0.0850,
+      "provision_rate": 0.05
     },
     "61_90_days": {
-      "count": 15,
-      "amount": 750000
+      "count": 19,
+      "amount": 2280000,
+      "percentage_count": 0.67,
+      "percentage_amount": 0.67,
+      "average_balance": 120000,
+      "risk_weight": 0.1500,
+      "provision_rate": 0.15
     },
     "90_plus_days": {
-      "count": 5,
-      "amount": 250000
+      "count": 11,
+      "amount": 1585000,
+      "percentage_count": 0.39,
+      "percentage_amount": 0.46,
+      "average_balance": 144091,
+      "risk_weight": 1.0000,
+      "provision_rate": 1.00
     }
+  },
+  "trend_analysis": {
+    "month_over_month": {
+      "total_loans": 0.0234,
+      "current_ratio": -0.0089,
+      "30dpd_migration": 0.0156,
+      "60dpd_migration": -0.0023,
+      "90dpd_stabilization": 0.0012
+    },
+    "quarterly_comparison": {
+      "q3_2024_current_ratio": 92.45,
+      "q4_2024_current_ratio": 91.81,
+      "deterioration": 0.64
+    }
+  },
+  "risk_metrics": {
+    "expected_loss": 11879250,
+    "provision_required": 49869750,
+    "capital_allocation": 34275000,
+    "stress_test_losses": {
+      "base_scenario": 15127000,
+      "adverse_scenario": 24548000,
+      "severely_adverse_scenario": 41982000
+    }
+  },
+  "sector_breakdown": {
+    "real_estate": {
+      "exposure": 137100000,
+      "current_ratio": 0.9356,
+      "30dpd_ratio": 0.0412
+    },
+    "manufacturing": {
+      "exposure": 102825000,
+      "current_ratio": 0.8967,
+      "30dpd_ratio": 0.0678
+    },
+    "services": {
+      "exposure": 68550000,
+      "current_ratio": 0.9123,
+      "30dpd_ratio": 0.0534
+    },
+    "retail_trade": {
+      "exposure": 34275000,
+      "current_ratio": 0.8745,
+      "30dpd_ratio": 0.0789
+    }
+  },
+  "geographic_distribution": {
+    "northeast": {
+      "exposure": 85687500,
+      "dpd_30_plus_ratio": 0.0734
+    },
+    "southeast": {
+      "exposure": 102825000,
+      "dpd_30_plus_ratio": 0.0823
+    },
+    "midwest": {
+      "exposure": 75412500,
+      "dpd_30_plus_ratio": 0.0689
+    },
+    "southwest": {
+      "exposure": 51275000,
+      "dpd_30_plus_ratio": 0.0912
+    },
+    "west": {
+      "exposure": 27550000,
+      "dpd_30_plus_ratio": 0.0567
+    }
+  },
+  "compliance_metrics": {
+    "regulatory_capital_ratio": 0.1425,
+    "tier_1_capital_ratio": 0.1289,
+    "leverage_ratio": 0.0945,
+    "liquidity_coverage_ratio": 1.34,
+    "alll_adequacy": 0.0456
+  },
+  "data_quality": {
+    "completeness_score": 0.9876,
+    "accuracy_confidence": 0.9945,
+    "last_validation": "2024-12-19T08:15:00Z",
+    "source_systems": ["LoanIQ", "Moody's", "FICO", "Internal_Risk"]
   }
 }
