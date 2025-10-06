@@ -142,7 +142,7 @@ class TestRiskFeatureEngineering:
 
         for column in [
             'bureau_component_scaled',
-            'behaviour_component_scaled',
+            'behavior_component_scaled',
             'financial_component_scaled',
             'score_component_scaled',
             'dpd_component_scaled',
