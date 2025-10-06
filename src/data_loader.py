@@ -5,13 +5,6 @@ from typing import Dict, Union
 
 import pandas as pd
 
-_DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-
-
-def _resolve_base_path(base: Union[str, Path, None] = None) -> Path:
-    return Path(base).resolve() if base else _DEFAULT_DATA_DIR
-
-
 PRICING_FILENAMES: Dict[str, str] = {
     "loan_data": "loan_data.csv",
     "historic_real_payment": "historic_real_payment.csv",
