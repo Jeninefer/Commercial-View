@@ -26,7 +26,7 @@ describe('App component smoke and UX tests', () => {
     const App = await loadApp();
     render(<App />);
     const matches = screen.getAllByText((_, element) =>
-      element?.textContent?.includes('Edit src/App.js') ?? false,
+      /Edit src\/App\.jsx?/.test(element?.textContent ?? ''),
     );
     expect(matches[0]).toBeVisible();
   });
