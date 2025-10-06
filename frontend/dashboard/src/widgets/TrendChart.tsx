@@ -58,7 +58,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ series, loading, error }) => {
         <LineChart data={chartData} margin={{ top: 16, right: 24, left: 8, bottom: 8 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#d5dce5" />
           <XAxis dataKey="period" stroke="#3a4b68" />
-          <YAxis stroke="#3a4b68" tickFormatter={(value) => `${value}`.toString()} />
+          <YAxis stroke="#3a4b68" tickFormatter={(value) => `${value}`} />
           <Tooltip contentStyle={{ borderRadius: 8, borderColor: '#1c7c7d' }} />
           <Legend />
           {series.map((metric, index) => {
