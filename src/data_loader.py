@@ -127,22 +127,62 @@ def _load_dataset(dataset: str, base_path: Optional[PathLike] = None) -> pd.Data
 
 
 def load_loan_data(base_path: Optional[PathLike] = None) -> pd.DataFrame:
+    """Load the loan data dataset.
+
+    Args:
+        base_path: Optional path to the directory or file containing the dataset.
+
+    Returns:
+        pd.DataFrame: DataFrame containing loan data.
+    """
     return _load_dataset("loan_data", base_path)
 
 
 def load_historic_real_payment(base_path: Optional[PathLike] = None) -> pd.DataFrame:
+    """Load the historic real payment dataset.
+
+    Args:
+        base_path: Optional path to the directory or file containing the dataset.
+
+    Returns:
+        pd.DataFrame: DataFrame containing historic real payment data.
+    """
     return _load_dataset("historic_real_payment", base_path)
 
 
 def load_payment_schedule(base_path: Optional[PathLike] = None) -> pd.DataFrame:
+    """Load the payment schedule dataset.
+
+    Args:
+        base_path: Optional path to the directory or file containing the dataset.
+
+    Returns:
+        pd.DataFrame: DataFrame containing payment schedule data.
+    """
     return _load_dataset("payment_schedule", base_path)
 
 
 def load_customer_data(base_path: Optional[PathLike] = None) -> pd.DataFrame:
+    """Load the customer data dataset.
+
+    Args:
+        base_path: Optional path to the directory or file containing the dataset.
+
+    Returns:
+        pd.DataFrame: DataFrame containing customer data.
+    """
     return _load_dataset("customer_data", base_path)
 
 
 def load_collateral(base_path: Optional[PathLike] = None) -> pd.DataFrame:
+    """Load the collateral dataset.
+
+    Args:
+        base_path: Optional path to the directory or file containing the dataset.
+
+    Returns:
+        pd.DataFrame: DataFrame containing collateral data.
+    """
     return _load_dataset("collateral", base_path)
 
 
