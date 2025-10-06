@@ -73,7 +73,7 @@ class PricingEnricher:
             result[col] = result[col].fillna(default_rate)
         return result
     
-    def to_json_safe(self, df: pd.DataFrame) -> list[dict]:
+    def to_json_safe(self, df: pd.DataFrame) -> List[Dict[str, Any]]:
         """Convert DataFrame to JSON-safe list of dictionaries.
         
         Handles pandas/numpy types that are not JSON serializable:
