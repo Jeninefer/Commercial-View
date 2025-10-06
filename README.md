@@ -49,6 +49,31 @@ uvicorn run:app --reload --port 8000
 python run.py
 ```
 
+### AI analytics endpoints
+
+The FastAPI application now includes AI-backed analytics surfaces exposed via
+`src/api.py`. Configure at least one provider by exporting the corresponding API
+keys before starting the server:
+
+```bash
+export OPENAI_API_KEY=...         # Optional but recommended
+export GEMINI_API_KEY=...
+export ANTHROPIC_API_KEY=...
+export HUBSPOT_PRIVATE_APP_TOKEN=...
+```
+
+If no keys are provided the platform gracefully falls back to an offline
+`LocalEchoClient`, enabling local development without external dependencies. Key
+routes:
+
+- `POST /analytics/predictions` – Forecast metrics with AI narration
+- `POST /analytics/anomalies` – Detect and explain KPI anomalies
+- `POST /analytics/executive-summary` – Generate leadership-ready briefings
+- `GET /executive-summary` – Quick default summary using baseline metrics
+
+See [`docs/AI_INTEGRATIONS.md`](docs/AI_INTEGRATIONS.md) for full integration and
+security guidance.
+
 ### Advanced Server Control
 
 Use `server_control.py` for advanced server management:
