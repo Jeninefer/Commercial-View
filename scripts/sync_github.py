@@ -59,7 +59,7 @@ class GitHubSync:
         
         return modified, staged, untracked
     
-    def add_files(self, files: List[str] = None) -> bool:
+    def add_files(self, files: Optional[List[str]] = None) -> bool:
         """Add files to staging area"""
         if files is None:
             # Add all files
@@ -194,6 +194,107 @@ dmypy.json
             with open(gitignore_path, 'w') as f:
                 f.write(gitignore_content)
             print("✅ Created .gitignore file")
+    
+    def validate_git_repository(self) -> Optional[str]:
+        """Validate git repository and return current branch"""
+        current_branch = self.get_current_branch()
+        if not current_branch:
+            print("❌ Not in a git repository or error getting branch")
+            return None
+        return current_branch
+    
+    def display_repository_status(self, modified: List[str], staged: List[str], untracked: List[str]) -> None:
+        """Display current repository status"""
+        print("📊 Repository Status:")
+        print(f"  📝 Modified files: {len(modified)}")
+        print(f"  ✅ Staged files: {len(staged)}")
+        print(f"  ❓ Untracked files: {len(untracked)}")
+        
+        if modified:
+            print("📝 Modified files:")
+            for file in modified:
+                print(f"    - {file}")
+        
+        if untracked:
+            print("❓ Untracked files:")
+            for file in untracked:
+                print(f"    - {file}")
+    
+    def has_changes_to_sync(self, modified: List[str], staged: List[str], untracked: List[str]) -> bool:
+        """Check if there are any changes to sync"""
+        return bool(modified or untracked or staged)
+    
+    def sync_with_remote(self, branch: str) -> bool:
+        """Pull latest changes from remote"""
+        print(f"⬇️  Pulling latest changes from origin/{branch}...")
+        if self.pull_latest(branch):
+            print("✅ Successfully pulled latest changes")
+            return True
+        else:
+            print("⚠️  Failed to pull changes (continuing anyway)")
+            return False
+    
+    def stage_all_changes(self) -> bool:
+        """Stage all changes for commit"""
+        print("➕ Adding changes to staging area...")
+        if self.add_files():
+            print("✅ Successfully staged all changes")
+            return True
+        else:
+            print("❌ Failed to stage changes")
+            return False
+    
+    def commit_and_push_changes(self, branch: str) -> bool:
+        """Commit and push changes to remote"""
+        # Commit changes
+        print("💾 Committing changes...")
+        commit_message = "Update Commercial-View: sync project files"
+        if not self.commit_changes(commit_message):
+            print("❌ Failed to commit changes")
+            return False
+        
+        print(f"✅ Successfully committed with message: '{commit_message}'")
+        
+        # Push changes
+        print(f"⬆️  Pushing changes to origin/{branch}...")
+        if not self.push_changes(branch):
+            print("❌ Failed to push changes")
+            return False
+        
+        print("✅ Successfully pushed changes to GitHub")
+        return True
+    
+    def perform_sync(self) -> int:
+        """Perform the complete sync operation"""
+        # Validate repository
+        current_branch = self.validate_git_repository()
+        if not current_branch:
+            return 1
+        
+        print(f"📍 Current branch: {current_branch}")
+        
+        # Get repository status
+        modified, staged, untracked = self.get_git_status()
+        self.display_repository_status(modified, staged, untracked)
+        
+        # Check if there are changes to sync
+        if not self.has_changes_to_sync(modified, staged, untracked):
+            print("✅ No changes to sync")
+            return 0
+        
+        # Sync with remote
+        self.sync_with_remote(current_branch)
+        
+        # Stage changes
+        if not self.stage_all_changes():
+            return 1
+        
+        # Commit and push changes
+        if not self.commit_and_push_changes(current_branch):
+            return 1
+        
+        print("🎉 Sync complete! All changes have been pushed to GitHub.")
+        return 0
 
 def main():
     """Main sync function"""
@@ -206,71 +307,8 @@ def main():
     # Create .gitignore if missing
     sync.create_gitignore_if_missing()
     
-    # Get current branch
-    current_branch = sync.get_current_branch()
-    if not current_branch:
-        print("❌ Not in a git repository or error getting branch")
-        return 1
-    
-    print(f"📍 Current branch: {current_branch}")
-    
-    # Check git status
-    modified, staged, untracked = sync.get_git_status()
-    
-    print(f"\n📊 Repository Status:")
-    print(f"  📝 Modified files: {len(modified)}")
-    print(f"  ✅ Staged files: {len(staged)}")
-    print(f"  ❓ Untracked files: {len(untracked)}")
-    
-    # Show file details
-    if modified:
-        print(f"\n📝 Modified files:")
-        for file in modified:
-            print(f"    - {file}")
-    
-    if untracked:
-        print(f"\n❓ Untracked files:")
-        for file in untracked:
-            print(f"    - {file}")
-    
-    if not modified and not untracked and not staged:
-        print("\n✅ No changes to sync")
-        return 0
-    
-    # Pull latest changes first
-    print(f"\n⬇️  Pulling latest changes from origin/{current_branch}...")
-    if sync.pull_latest(current_branch):
-        print("✅ Successfully pulled latest changes")
-    else:
-        print("⚠️  Failed to pull changes (continuing anyway)")
-    
-    # Add all changes
-    print(f"\n➕ Adding changes to staging area...")
-    if sync.add_files():
-        print("✅ Successfully staged all changes")
-    else:
-        print("❌ Failed to stage changes")
-        return 1
-    
-    # Commit changes
-    print(f"\n💾 Committing changes...")
-    commit_message = f"Update Commercial-View: sync project files"
-    if sync.commit_changes(commit_message):
-        print(f"✅ Successfully committed with message: '{commit_message}'")
-    else:
-        print("❌ Failed to commit changes")
-        return 1
-    
-    # Push changes
-    print(f"\n⬆️  Pushing changes to origin/{current_branch}...")
-    if sync.push_changes(current_branch):
-        print("✅ Successfully pushed changes to GitHub")
-    else:
-        print("❌ Failed to push changes")
-        return 1
-    
-    print(f"\n🎉 Sync complete! All changes have been pushed to GitHub.")
-    return 0
+    # Perform sync operation
+    return sync.perform_sync()
 
 if __name__ == "__main__":
     sys.exit(main())
