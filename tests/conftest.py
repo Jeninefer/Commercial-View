@@ -1,62 +1,48 @@
-"""Test configuration for Commercial View application.
+"""Shared pytest fixtures and runtime guards for the Commercial-View test suite."""
 
-⚠️ ENVIRONMENT SETUP INSTRUCTIONS ⚠️
------------------------------------
-You're seeing this error because you're using system Python (/opt/homebrew/bin/python3)
-instead of the project's virtual environment Python.
-
-TO FIX THIS, COPY-PASTE THESE EXACT COMMANDS:
-
-cd /Users/jenineferderas/Documents/GitHub/Commercial-View
-source .venv/bin/activate
-pytest tests/
-"""
+from __future__ import annotations
 
 import os
 import sys
+import warnings
 from pathlib import Path
 
-# Check if running in virtual environment
-if not hasattr(sys, 'real_prefix') and not (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
-    print("\n" + "="*80)
-    print("\033[91m⚠️  ERROR: NOT USING VIRTUAL ENVIRONMENT ⚠️\033[0m")
-    print("="*80)
-    print("\033[93mYou must activate the virtual environment before running tests.\033[0m")
-    print("\033[93mCopy and paste these commands:\033[0m")
-    print("\033[92m  cd /Users/jenineferderas/Documents/GitHub/Commercial-View\033[0m")
-    print("\033[92m  source .venv/bin/activate\033[0m")
-    print("\033[92m  pytest tests/\033[0m")
-    print("="*80 + "\n")
-    sys.exit(1)  # Exit with error code to prevent further execution with wrong Python
+import pytest
 
-# Try importing pytest with helpful error message
-try:
-    import pytest
-except ImportError:
-    print("\n" + "="*80)
-    print("\033[91m⚠️  ERROR: PYTEST NOT INSTALLED ⚠️\033[0m")
-    print("="*80)
-    print("\033[93mYou need to install pytest in your virtual environment.\033[0m")
-    print("\033[93mCopy and paste these commands:\033[0m")
-    print("\033[92m  cd /Users/jenineferderas/Documents/GitHub/Commercial-View\033[0m")
-    print("\033[92m  source .venv/bin/activate\033[0m") 
-    print("\033[92m  pip install pytest\033[0m")
-    print("\033[92m  pytest tests/\033[0m")
-    print("="*80 + "\n")
-    sys.exit(1)
 
-# Add the project root to the path so imports work properly
 project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
 
-# Configure test environment
+
+def _warn_if_outside_virtualenv() -> None:
+    """Emit a helpful warning when tests are executed outside a virtualenv."""
+    in_virtualenv = hasattr(sys, "real_prefix") or (
+        hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
+    )
+    if not in_virtualenv:
+        warnings.warn(
+            "Tests are running outside a Python virtual environment. "
+            "For reproducible results prefer activating the project venv.",
+            RuntimeWarning,
+            stacklevel=2,
+        )
+
+
+# Add the project root to the path so imports work properly for all tests
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+
 @pytest.fixture(scope="session", autouse=True)
-def configure_env():
-    """Configure environment variables for testing."""
-    os.environ["COMMERCIAL_VIEW_DATA_PATH"] = str(project_root / "tests" / "data")
-    
-    # Create test data directory if it doesn't exist
+def configure_env() -> None:
+    """Configure deterministic environment defaults for the test suite."""
+    _warn_if_outside_virtualenv()
+
+    os.environ.setdefault(
+        "COMMERCIAL_VIEW_DATA_PATH", str(project_root / "tests" / "data")
+    )
+
+    # Ensure the shared test data directory exists for fixtures that rely on it
     test_data_dir = project_root / "tests" / "data"
     test_data_dir.mkdir(exist_ok=True)
-    
+
     yield

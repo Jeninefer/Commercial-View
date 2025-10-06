@@ -28,8 +28,15 @@ class DataProcessor:
         """Process loan payment schedules with date validation"""
         # ...existing code...
         processed_df = self.convert_dates_safely(schedule_df, ['payment_date', 'due_date'])
-        
+
         if 'payment_amount' in processed_df.columns:
-            processed_df['payment_amount'] = pd.to_numeric(processed_df['payment_amount'], errors='coerce')
-        
+            processed_df['payment_amount'] = (
+                processed_df['payment_amount']
+                .astype(str)
+                .str.replace(',', '', regex=False)
+            )
+            processed_df['payment_amount'] = pd.to_numeric(
+                processed_df['payment_amount'], errors='coerce'
+            )
+
         return processed_df

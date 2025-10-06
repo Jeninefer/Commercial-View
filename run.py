@@ -156,7 +156,7 @@ def collateral():
 @app.get("/executive-summary", response_model=Dict[str, Any])
 def executive_summary():
     """Return portfolio executive summary (stub endpoint)."""
-    return {"portfolio_overview": {}}
+    return {"portfolio_overview": {}, "risk_indicators": {}}
 
 @app.get("/portfolio-metrics", response_model=Dict[str, Any])
 def portfolio_metrics():
