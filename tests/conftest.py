@@ -19,9 +19,14 @@ def _warn_if_outside_virtualenv() -> None:
         hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
     )
     if not in_virtualenv:
+        venv_path = project_root / "venv"
+        activation_instructions = (
+            f"source {venv_path}/bin/activate" if os.name != "nt"
+            else f"{venv_path}\\Scripts\\activate"
+        )
         warnings.warn(
             "Tests are running outside a Python virtual environment. "
-            "For reproducible results prefer activating the project venv.",
+            f"For reproducible results, activate the project venv:\n    {activation_instructions}",
             RuntimeWarning,
             stacklevel=2,
         )
