@@ -28,8 +28,7 @@ def _resolve_base_path(base_path: Optional[Path] = None) -> Path:
     if base_path is not None:
         return Path(base_path).resolve()
     
-    # Don't use COMMERCIAL_VIEW_DATA_PATH if we're in a test - let tests control the path
-    # Check environment variable only if not in test mode
+    # Skip environment variable in test mode to allow test control of paths
     env_path = os.environ.get('COMMERCIAL_VIEW_DATA_PATH')
     if env_path and not os.environ.get('PYTEST_CURRENT_TEST'):
         return Path(env_path).resolve()
