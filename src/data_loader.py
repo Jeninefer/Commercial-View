@@ -58,6 +58,5 @@ __all__ = [
     "load_payment_schedule",
     "load_customer_data",
     "load_collateral",
-    "_resolve_base_path",
     "PRICING_FILENAMES",
 ]
