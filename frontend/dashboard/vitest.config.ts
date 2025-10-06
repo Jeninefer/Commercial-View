@@ -8,8 +8,6 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./test/setup.ts'],
     include: ['test/**/*.test.{js,jsx,ts,tsx}'],
-    // Exclude this test due to known flakiness/issues. See https://github.com/org/repo/issues/123 for details.
-    exclude: ['test/is-number-object.test.js'],
   },
   esbuild: {
     loader: 'jsx',
