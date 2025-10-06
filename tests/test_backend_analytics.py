@@ -146,9 +146,11 @@ def test_loan_analytics_resolves_metric_aliases_for_weighted_calculation() -> No
         "weighted_eir",
         "weighted_term",
     }
-    # The expected weighted_eir is calculated as:
-    # (0.09*100 + 0.18*200 + 0.27*700) / (100 + 200 + 700) = (9 + 36 + 189) / 1000 = 234 / 1000 = 0.234
-    expected_weighted_eir = 0.234
+    # Calculate expected weighted_eir based on the test data
+    expected_weighted_eir = (
+        (loan_df["effective_interest_rate"] * loan_df["outstanding_balance"]).sum()
+        / loan_df["outstanding_balance"].sum()
+    )
     assert result.iloc[0]["weighted_eir"] == pytest.approx(expected_weighted_eir, rel=1e-9)
 
 
