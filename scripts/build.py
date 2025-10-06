@@ -60,7 +60,7 @@ class ProjectBuilder:
             print("ℹ️  No TypeScript files found, skipping compilation")
             return True
         
-        success, output = self.run_command("npx tsc")
+        success, _ = self.run_command("npx tsc")
         return success
     
     def install_dependencies(self):
@@ -120,7 +120,7 @@ class ProjectBuilder:
         for zip_file in self.project_root.glob("*.zip"):
             shutil.move(str(zip_file), self.dist_dir / zip_file.name)
         
-        print(f"✅ Project packaged in dist/ directory")
+        print("✅ Project packaged in dist/ directory")
         return True
     
     def setup_mcp_servers(self):
@@ -157,7 +157,7 @@ class ProjectBuilder:
         
         # Write MCP configuration
         mcp_config_path = self.project_root / "mcp-config.json"
-        with open(mcp_config_path, 'w') as f:
+        with open(mcp_config_path, 'w', encoding='utf-8') as f:
             json.dump(mcp_config, f, indent=2)
         
         print("✅ MCP configuration created at mcp-config.json")
@@ -179,7 +179,7 @@ COMMERCIAL_VIEW_API_URL=http://localhost:8000
 """
         
         env_file = self.project_root / ".env.mcp"
-        with open(env_file, 'w') as f:
+        with open(env_file, 'w', encoding='utf-8') as f:
             f.write(env_template.strip())
         
         print("✅ MCP environment template created at .env.mcp")
@@ -211,7 +211,7 @@ class CommercialViewMCPServer:
         """Load MCP configuration"""
         config_path = Path("mcp-config.json")
         if config_path.exists():
-            with open(config_path) as f:
+            with open(config_path, encoding='utf-8') as f:
                 return json.load(f)
         return {}
     
@@ -238,7 +238,8 @@ class CommercialViewMCPServer:
             result = subprocess.run(
                 ["npm", "list", "@figma/mcp-server-figma"],
                 capture_output=True,
-                text=True
+                text=True,
+                check=False
             )
             
             if result.returncode != 0:
@@ -306,7 +307,7 @@ if __name__ == "__main__":
 '''
         
         mcp_script_path = self.project_root / "scripts" / "mcp_server.py"
-        with open(mcp_script_path, 'w') as f:
+        with open(mcp_script_path, 'w', encoding='utf-8') as f:
             f.write(mcp_server_content)
         
         # Make executable
@@ -424,7 +425,7 @@ if __name__ == "__main__":
     "rootDir": "./src/typescript",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true, 
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "declarationMap": true,
