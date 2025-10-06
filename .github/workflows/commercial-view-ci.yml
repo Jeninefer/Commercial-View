@@ -1,0 +1,349 @@
+name: Commercial-View CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '18'
+
+jobs:
+  # Data Quality Validation
+  data-validation:
+    name: 📊 Data Quality Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pandas-profiling
+          
+      - name: Generate test datasets
+        run: |
+          python scripts/generate_complete_datasets.py
+          
+      - name: Validate data quality
+        run: |
+          python -m pytest tests/test_data_quality.py -v
+          
+      - name: Generate data profiling report
+        run: |
+          python scripts/generate_data_profile.py --output reports/data_profile.html
+          
+      - name: Upload data quality reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: data-quality-reports
+          path: reports/
+
+  # Python Backend Testing
+  backend-tests:
+    name: 🐍 Backend Testing Suite
+    runs-on: ubuntu-latest
+    needs: data-validation
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-mock black mypy flake8
+          
+      - name: Code formatting check
+        run: |
+          black --check --diff src/ tests/ scripts/
+          
+      - name: Type checking
+        run: |
+          mypy src/ --ignore-missing-imports
+          
+      - name: Lint checking
+        run: |
+          flake8 src/ tests/ scripts/ --max-line-length=100
+          
+      - name: Run comprehensive test suite
+        run: |
+          pytest tests/ -v --cov=src --cov-report=xml --cov-report=html
+          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: true
+
+  # TypeScript Frontend Testing  
+  frontend-tests:
+    name: 🎨 Frontend Testing Suite
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+          
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+          
+      - name: TypeScript type checking
+        run: |
+          cd frontend
+          npm run type-check
+          
+      - name: ESLint checking
+        run: |
+          cd frontend
+          npm run lint
+          
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm run test -- --coverage --watchAll=false
+          
+      - name: Build production frontend
+        run: |
+          cd frontend
+          npm run build
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-build
+          path: frontend/build/
+
+  # KPI Analytics Validation
+  kpi-validation:
+    name: 📈 KPI Analytics Validation
+    runs-on: ubuntu-latest
+    needs: [data-validation, backend-tests]
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Generate test datasets
+        run: |
+          python scripts/generate_complete_datasets.py
+          
+      - name: Validate KPI calculations
+        run: |
+          python -m pytest tests/test_kpi_engine.py -v --tb=short
+          
+      - name: Generate KPI benchmark report
+        run: |
+          python scripts/benchmark_kpi_performance.py --output reports/kpi_benchmark.json
+          
+      - name: Validate KPI accuracy
+        run: |
+          python tests/validate_kpi_accuracy.py
+
+  # AI Integration Testing
+  ai-integration-tests:
+    name: 🤖 AI Integration Testing
+    runs-on: ubuntu-latest
+    needs: backend-tests
+    if: github.event_name != 'pull_request'  # Skip AI tests on PRs to save API costs
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install AI dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install openai anthropic google-generativeai
+          
+      - name: Test OpenAI integration
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python -m pytest tests/test_ai_integrations.py::test_openai_integration -v
+          
+      - name: Test Anthropic integration
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python -m pytest tests/test_ai_integrations.py::test_anthropic_integration -v
+          
+      - name: Test Google Gemini integration
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        run: |
+          python -m pytest tests/test_ai_integrations.py::test_gemini_integration -v
+
+  # Security and Compliance
+  security-scan:
+    name: 🔒 Security & Compliance Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Bandit security scan
+        run: |
+          pip install bandit
+          bandit -r src/ -f json -o reports/security-report.json
+          
+      - name: Run safety check for vulnerabilities
+        run: |
+          pip install safety
+          safety check --json --output reports/vulnerability-report.json
+          
+      - name: Upload security reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-reports
+          path: reports/
+
+  # Performance Testing
+  performance-tests:
+    name: ⚡ Performance Testing
+    runs-on: ubuntu-latest
+    needs: [backend-tests, kpi-validation]
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install locust pytest-benchmark
+          
+      - name: Run performance benchmarks
+        run: |
+          python -m pytest tests/test_performance.py --benchmark-only
+          
+      - name: Load testing
+        run: |
+          locust -f tests/load_test.py --headless -u 10 -r 2 -t 60s --host=http://localhost:8000
+
+  # Documentation Validation
+  docs-validation:
+    name: 📚 Documentation Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install documentation tools
+        run: |
+          pip install mkdocs mkdocs-material mkdocs-mermaid2-plugin
+          pip install sphinx sphinx-rtd-theme
+          
+      - name: Validate documentation links
+        run: |
+          python scripts/validate_documentation.py
+          
+      - name: Count documentation words
+        run: |
+          python scripts/count_documentation_words.py
+          
+      - name: Build documentation
+        run: |
+          mkdocs build --strict
+          
+      - name: Upload documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation
+          path: site/
+
+  # Deployment
+  deploy:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [frontend-tests, backend-tests, kpi-validation, security-scan, performance-tests]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    environment:
+      name: production
+      url: https://commercial-view.herokuapp.com
+      
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-build
+          path: frontend/build/
+          
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.14
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "commercial-view-prod"
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          
+      - name: Run post-deployment tests
+        run: |
+          python scripts/post_deployment_tests.py --url https://commercial-view.herokuapp.com
+          
+      - name: Notify deployment success
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"✅ Commercial-View deployed successfully to production!"}' \
+            $SLACK_WEBHOOK
