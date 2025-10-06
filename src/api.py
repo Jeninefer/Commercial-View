@@ -95,9 +95,10 @@ def detect_anomalies(
     """Detect anomalies in KPI series and narrate results."""
 
     service = AnomalyDetectionService(container)
-    return service.detect(series=payload.series)
-
-
+    try:
+        return service.detect(series=payload.series)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 @app.post("/analytics/executive-summary", response_model=ExecutiveSummary)
 def create_executive_summary(
     payload: ExecutiveSummaryRequest,
