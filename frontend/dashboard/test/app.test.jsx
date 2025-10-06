@@ -1,11 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import path from 'path';
 
-// Dynamically resolve the path to logo.svg to avoid brittle test dependencies
-const logoSvgPath = path.resolve(__dirname, '../src/logo.svg');
-vi.mock(logoSvgPath, () => ({ default: 'logo.svg' }));
 
+// Mock logo.svg directly using the module import specifier for maintainability
+vi.mock('../src/logo.svg', () => ({ default: 'logo.svg' }));
 const loadApp = async () => (await import('../src/App.jsx')).default;
 
 describe('App component smoke and UX tests', () => {
