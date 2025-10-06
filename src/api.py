@@ -83,9 +83,10 @@ def generate_predictions(
     """Return AI narrated forecast results."""
 
     service = PredictionService(container)
-    return service.forecast(history=payload.history, horizon=payload.horizon)
-
-
+    try:
+        return service.forecast(history=payload.history, horizon=payload.horizon)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 @app.post("/analytics/anomalies", response_model=AnomalyDetectionResult)
 def detect_anomalies(
     payload: AnomalyRequest,
