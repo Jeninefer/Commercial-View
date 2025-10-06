@@ -1,199 +1,331 @@
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-import pandas as pd
-import logging
+"""
+Commercial-View FastAPI Application
+Production-ready commercial lending analytics platform
+"""
+
 import os
 import sys
-from typing import List, Dict, Any, Optional
+import logging
+from pathlib import Path
+from typing import Dict, Any, List, Optional
 
-# Detect testing environment to adjust logging
-is_testing = 'pytest' in sys.modules or any('pytest' in arg for arg in sys.argv)
+# Add src to Python path for imports
+sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-# Configure logging with appropriate level for environment
+try:
+    from fastapi import FastAPI, HTTPException, Request
+    from fastapi.middleware.cors import CORSMiddleware
+    from fastapi.responses import JSONResponse
+    import uvicorn
+    
+    # Import application modules
+    from pipeline import CommercialViewPipeline
+    from data_loader import DataLoader
+    
+except ImportError as e:
+    print(f"❌ Import error: {e}")
+    print("Please ensure all dependencies are installed: pip install -r requirements.txt")
+    sys.exit(1)
+
+# Configure logging
 logging.basicConfig(
-    level=logging.WARNING if is_testing else logging.INFO,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
-# Define our fallback class first
-class CommercialViewPipeline:  # fallback stub
-    """Fallback stub implementation when the real pipeline can't be imported."""
-    def __init__(self):
-        self.loan_data = pd.DataFrame()
-        self.payment_schedule = pd.DataFrame()
-        self.historic_real_payment = pd.DataFrame()
-        if not is_testing:
-            logger.info("Initialized fallback CommercialViewPipeline stub")
-
-# Export symbol so tests can patch: patch('run.CommercialViewPipeline')
-try:
-    from src.pipeline import CommercialViewPipeline as _RealCVP  # real class if present
-    CommercialViewPipeline = _RealCVP  # type: ignore[assignment]
-    if not is_testing:
-        logger.info("Successfully imported CommercialViewPipeline")
-except Exception as e:
-    if not is_testing:
-        logger.warning(f"Failed to import CommercialViewPipeline: {e!s}. Using fallback stub.")
-
-# Global instance used by endpoints (works with real or fallback)
-pipeline = CommercialViewPipeline()
-
-# Create FastAPI app with metadata
+# Initialize FastAPI application
 app = FastAPI(
-    title="Commercial View API",
-    description="Enterprise-grade portfolio analytics API",
+    title="Commercial-View API",
+    description="Enterprise commercial lending analytics platform",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
 
-# Add CORS middleware
+# Configure CORS for production
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.environ.get("ALLOWED_ORIGINS", "*").split(","),
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
 
-def _safe(df: pd.DataFrame | None, stub_rows: list[dict]) -> pd.DataFrame:
-    """Safely handle potentially missing or empty dataframes."""
-    if df is None or getattr(df, "empty", True):
-        if not is_testing:
-            logger.debug(f"Using stub data with {len(stub_rows)} rows")
-        return pd.DataFrame(stub_rows)
-    return df
+# Initialize data components
+try:
+    data_loader = DataLoader()
+    pipeline = CommercialViewPipeline()
+    logger.info("✅ Commercial-View application initialized successfully")
+except Exception as e:
+    logger.error(f"❌ Failed to initialize application components: {e}")
+    data_loader = None
+    pipeline = None
 
 # Global exception handler
 @app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled exception: {str(exc)}")
+async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Handle all unhandled exceptions"""
+    logger.error(f"Unhandled exception for {request.url}: {exc}")
     return JSONResponse(
         status_code=500,
-        content={"detail": "Internal server error occurred."}
+        content={"detail": "Internal server error occurred", "path": str(request.url.path)}
     )
 
-@app.get("/", response_model=Dict[str, str])
-def root():
-    """API welcome endpoint."""
-    # tests expect this exact payload
-    return {"message": "Welcome to the Commercial View API"}
-
-@app.get("/loan-data", response_model=List[Dict[str, Any]])
-def get_loan_data():
-    """Return loan data records."""
+# Health endpoint
+@app.get("/health")
+async def health_check() -> Dict[str, Any]:
+    """
+    System health check with data availability status
+    Returns comprehensive health information for monitoring
+    """
     try:
-        df = getattr(pipeline, "loan_data", None)
-        df = _safe(df, [
-            {"Customer ID": "C001", "Amount": 1000, "Status": "Active"},
-            {"Customer ID": "C002", "Amount": 2000, "Status": "Active"},
-        ])
-        return df.to_dict(orient="records")
+        # Check data availability
+        datasets_status = {}
+        
+        if data_loader:
+            # Check core datasets
+            core_datasets = ["loan_data", "payment_schedule", "historic_payments"]
+            
+            for dataset in core_datasets:
+                try:
+                    df = getattr(data_loader, f"load_{dataset}")()
+                    datasets_status[dataset] = {
+                        "available": df is not None and not df.empty,
+                        "records": len(df) if df is not None else 0
+                    }
+                except Exception as e:
+                    datasets_status[dataset] = {
+                        "available": False,
+                        "error": str(e)
+                    }
+        
+        return {
+            "status": "healthy",
+            "version": "1.0.0",
+            "application": "Commercial-View",
+            "environment": os.getenv("ENVIRONMENT", "production"),
+            "datasets_available": datasets_status,
+            "data_source": "Production Google Drive",
+            "timestamp": pipeline.get_current_timestamp() if pipeline else None
+        }
+        
     except Exception as e:
-        logger.error(f"Error loading loan data: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Error loading loan data: {e}")
+        logger.error(f"Health check failed: {e}")
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "unhealthy", 
+                "error": str(e),
+                "application": "Commercial-View"
+            }
+        )
 
-@app.get("/payment-schedule", response_model=List[Dict[str, Any]])
-def get_payment_schedule():
-    """Return payment schedule records."""
-    df = getattr(pipeline, "payment_schedule", None)
-    df = _safe(df, [
-        {"Customer ID": "C001", "Due Date": "2024-01-01", "Total Payment": 100},
-        {"Customer ID": "C002", "Due Date": "2024-01-01", "Total Payment": 200},
-    ])
-    return df.to_dict(orient="records")
-
-@app.get("/historic-real-payment", response_model=List[Dict[str, Any]])
-def get_historic_real_payment():
-    """Return historic payment records."""
-    df = getattr(pipeline, "historic_real_payment", None)
-    df = _safe(df, [
-        {"Customer ID": "C001", "Payment Date": "2024-01-02", "True Principal Payment": 90},
-        {"Customer ID": "C002", "Payment Date": "2024-01-02", "True Principal Payment": 180},
-    ])
-    return df.to_dict(orient="records")
-
-@app.get("/schema/{name}", response_model=Dict[str, Any])
-def get_schema(name: str):
-    """Return schema information for the specified dataset."""
-    mapping = {
-        "loan_data": getattr(pipeline, "loan_data", pd.DataFrame()),
-        "payment_schedule": getattr(pipeline, "payment_schedule", pd.DataFrame()),
-        "historic_real_payment": getattr(pipeline, "historic_real_payment", pd.DataFrame()),
-    }
-    if name not in mapping:
-        logger.warning(f"Schema not found: {name}")
-        raise HTTPException(status_code=404, detail="schema not found")
-    
-    df = mapping[name]
-    if df is None or df.empty:
-        fallback = {
-            "loan_data": ["Customer ID", "Amount", "Status"],
-            "payment_schedule": ["Customer ID", "Due Date", "Total Payment"],
-            "historic_real_payment": ["Customer ID", "Payment Date", "True Principal Payment"],
+# Portfolio metrics endpoint
+@app.get("/portfolio-metrics")
+async def get_portfolio_metrics() -> Dict[str, Any]:
+    """
+    Get comprehensive portfolio metrics and KPIs
+    Returns real-time commercial lending analytics
+    """
+    try:
+        if not pipeline:
+            raise HTTPException(status_code=503, detail="Analytics pipeline not available")
+        
+        # Load and process data
+        pipeline.load_all_datasets()
+        
+        # Calculate portfolio metrics
+        metrics = {
+            "portfolio_outstanding": pipeline.compute_portfolio_outstanding(),
+            "active_clients": pipeline.compute_active_clients(),
+            "weighted_apr": pipeline.compute_weighted_apr(),
+            "npl_rate": pipeline.compute_npl_rate(),
+            "concentration_risk": pipeline.compute_concentration_risk(),
+            "collection_rate": pipeline.compute_collection_rate(),
+            "status": "success",
+            "calculation_timestamp": pipeline.get_current_timestamp()
         }
-        cols = fallback[name]
-        logger.debug(f"Using fallback schema for {name}")
-    else:
-        cols = list(df.columns)
-    return {"name": name, "columns": cols}
-
-# Tests only check that these exist and return 200
-@app.get("/customer-data", response_model=List[Dict[str, Any]])
-def customer_data():
-    """Return customer data (stub endpoint)."""
-    logger.debug("Returning empty customer data (stub)")
-    return []
-
-@app.get("/collateral", response_model=List[Dict[str, Any]])
-def collateral():
-    """Return collateral data (stub endpoint)."""
-    logger.debug("Returning empty collateral data (stub)")
-    return []
-
-@app.get("/executive-summary", response_model=Dict[str, Any])
-def executive_summary():
-    """Return portfolio executive summary (stub endpoint)."""
-    return {"portfolio_overview": {}}
-
-@app.get("/portfolio-metrics", response_model=Dict[str, Any])
-def portfolio_metrics():
-    """Return portfolio metrics summary."""
-    df = getattr(pipeline, "loan_data", pd.DataFrame())
-    if df is None or df.empty:
-        total = 1000 + 2000
-        active = 2
-        logger.debug("Using stub data for portfolio metrics")
-    else:
-        amt_col = "Amount" if "Amount" in df.columns else "amount"
-        total = float(pd.to_numeric(df.get(amt_col, pd.Series(dtype=float)), errors="coerce").fillna(0).sum())
-        active = int(len(df))
-    
-    return {
-        "portfolio_outstanding": total, 
-        "active_clients": active,
-        "status": "success"
-    }
-
-@app.get("/health", response_model=Dict[str, Any])
-def health():
-    """Health check endpoint for monitoring."""
-    return {
-        "status": "healthy",
-        "version": app.version,
-        "datasets_available": {
-            "loan_data": not getattr(pipeline, "loan_data", pd.DataFrame()).empty,
-            "payment_schedule": not getattr(pipeline, "payment_schedule", pd.DataFrame()).empty,
-            "historic_real_payment": not getattr(pipeline, "historic_real_payment", pd.DataFrame()).empty
+        
+        logger.info("✅ Portfolio metrics calculated successfully")
+        return metrics
+        
+    except Exception as e:
+        logger.error(f"Portfolio metrics calculation failed: {e}")
+        # Return fallback metrics to maintain API stability
+        return {
+            "portfolio_outstanding": 0.0,
+            "active_clients": 0,
+            "weighted_apr": 0.0,
+            "npl_rate": 0.0,
+            "concentration_risk": 0.0,
+            "collection_rate": 0.0,
+            "status": "error",
+            "error": str(e),
+            "fallback": True
         }
+
+# Loan data endpoint
+@app.get("/loan-data")
+async def get_loan_data() -> List[Dict[str, Any]]:
+    """
+    Get active commercial loan portfolio data
+    Returns real loan records from production sources
+    """
+    try:
+        if not data_loader:
+            raise HTTPException(status_code=503, detail="Data loader not available")
+        
+        # Load real loan data
+        loan_df = data_loader.load_loan_data()
+        
+        if loan_df is not None and not loan_df.empty:
+            # Convert to records format for API response
+            records = loan_df.to_dict('records')
+            logger.info(f"✅ Loaded {len(records)} loan records")
+            return records
+        else:
+            logger.warning("No loan data available")
+            return []
+            
+    except Exception as e:
+        logger.error(f"Failed to load loan data: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to load loan data: {str(e)}")
+
+# Payment schedule endpoint  
+@app.get("/payment-schedule")
+async def get_payment_schedule() -> List[Dict[str, Any]]:
+    """
+    Get payment schedule data for cash flow analysis
+    Returns scheduled payments from production sources
+    """
+    try:
+        if not data_loader:
+            raise HTTPException(status_code=503, detail="Data loader not available")
+        
+        # Load payment schedule data
+        payment_df = data_loader.load_payment_schedule()
+        
+        if payment_df is not None and not payment_df.empty:
+            records = payment_df.to_dict('records')
+            logger.info(f"✅ Loaded {len(records)} payment schedule records")
+            return records
+        else:
+            logger.warning("No payment schedule data available")
+            return []
+            
+    except Exception as e:
+        logger.error(f"Failed to load payment schedule: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to load payment schedule: {str(e)}")
+
+# Historic payments endpoint
+@app.get("/historic-real-payment")
+async def get_historic_payments() -> List[Dict[str, Any]]:
+    """
+    Get historic payment performance data
+    Returns actual payment history for performance analysis
+    """
+    try:
+        if not data_loader:
+            raise HTTPException(status_code=503, detail="Data loader not available")
+        
+        # Load historic payment data
+        historic_df = data_loader.load_historic_real_payment()
+        
+        if historic_df is not None and not historic_df.empty:
+            records = historic_df.to_dict('records')
+            logger.info(f"✅ Loaded {len(records)} historic payment records")
+            return records
+        else:
+            logger.warning("No historic payment data available")
+            return []
+            
+    except Exception as e:
+        logger.error(f"Failed to load historic payments: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to load historic payments: {str(e)}")
+
+# Schema metadata endpoint
+@app.get("/schema/{dataset_name}")
+async def get_dataset_schema(dataset_name: str) -> Dict[str, Any]:
+    """
+    Get dataset schema information
+    Returns column metadata for supported datasets
+    """
+    try:
+        schemas = {
+            "loan_data": {
+                "name": "loan_data",
+                "description": "Commercial loan portfolio data",
+                "columns": ["Customer ID", "Loan Amount", "Interest Rate", "Term", "Status", "Origination Date"]
+            },
+            "payment_schedule": {
+                "name": "payment_schedule", 
+                "description": "Scheduled loan payments",
+                "columns": ["Customer ID", "Due Date", "Principal Payment", "Interest Payment", "Total Payment"]
+            },
+            "historic_real_payment": {
+                "name": "historic_real_payment",
+                "description": "Historical payment performance",
+                "columns": ["Customer ID", "Payment Date", "Amount Paid", "Days Past Due", "Payment Status"]
+            }
+        }
+        
+        if dataset_name not in schemas:
+            raise HTTPException(status_code=404, detail="Dataset schema not found")
+        
+        return schemas[dataset_name]
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Schema retrieval failed for {dataset_name}: {e}")
+        raise HTTPException(status_code=500, detail=f"Schema retrieval failed: {str(e)}")
+
+# Root endpoint
+@app.get("/")
+async def root() -> Dict[str, str]:
+    """Welcome message for Commercial-View API"""
+    return {
+        "message": "Welcome to Commercial-View API",
+        "description": "Enterprise commercial lending analytics platform",
+        "version": "1.0.0",
+        "documentation": "/docs"
     }
 
-# For local development
+# Application startup
+@app.on_event("startup")
+async def startup_event():
+    """Application startup initialization"""
+    logger.info("🚀 Starting Commercial-View application...")
+    logger.info(f"Environment: {os.getenv('ENVIRONMENT', 'production')}")
+    logger.info(f"CORS Origins: {ALLOWED_ORIGINS}")
+
+# Application shutdown
+@app.on_event("shutdown") 
+async def shutdown_event():
+    """Application shutdown cleanup"""
+    logger.info("🛑 Shutting down Commercial-View application...")
+
+# Development server runner
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+    # Development configuration
+    port = int(os.getenv("PORT", 8000))
+    host = os.getenv("HOST", "0.0.0.0")
+    reload = os.getenv("ENVIRONMENT", "production") == "development"
+    
+    logger.info(f"Starting server on {host}:{port}")
+    
+    try:
+        uvicorn.run(
+            "run:app",
+            host=host,
+            port=port, 
+            reload=reload,
+            log_level="info"
+        )
+    except KeyboardInterrupt:
+        logger.info("Server stopped by user")
+    except Exception as e:
+        logger.error(f"Server failed to start: {e}")
+        sys.exit(1)
