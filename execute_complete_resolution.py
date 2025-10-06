@@ -9,7 +9,7 @@ import subprocess
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, List, Tuple, Optional, Any
 
 class CompleteResolutionOrchestrator:
     """
@@ -696,7 +696,13 @@ Repository achieves market-leading excellence"""
     def _log_info(self, message: str):
         """Log info message"""
         print(f"  ℹ️  {message}")
-        self.execution_log
+        self.execution_log.append({"info": message})
+    
+    def _log_warning(self, message: str):
+        """Log warning message"""
+        print(f"  ⚠️  {message}")
+        self.execution_log.append({"warning": message})
+    
     def _handle_critical_error(self, error: Exception):
         """Handle critical error"""
         print(f"\n{'='*70}")
@@ -707,7 +713,7 @@ Repository achieves market-leading excellence"""
         
         # Save execution log
         log_file = self.repo_root / "execution_log.json"
-        with open(log_file, 'w') as f:
+        with open(log_file, 'w', encoding='utf-8') as f:
             json.dump(self.execution_log, f, indent=2, default=str)
     
     def _generate_success_report(self):
