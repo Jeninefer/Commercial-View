@@ -1,5 +1,7 @@
 # Security Constraints and Data Protection
 
+[⬅ Documentation Hub](index.md)
+
 ## Overview
 
 This document outlines security constraints, data protection measures, and PII (Personally Identifiable Information) handling requirements for the Commercial-View commercial lending system.

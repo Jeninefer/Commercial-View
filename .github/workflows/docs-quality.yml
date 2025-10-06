@@ -1,0 +1,40 @@
+name: Documentation Quality
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  markdownlint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install markdownlint
+        run: npm install --no-save markdownlint-cli2@0.13.0
+
+      - name: Run markdownlint
+        run: >-
+          npx markdownlint-cli2 \
+          README.md \
+          docs/index.md \
+          docs/architecture-overview.md \
+          docs/implementation-guide.md \
+          docs/quickstart.md \
+          docs/secrets-management.md \
+          docs/ai-integrations.md \
+          docs/api-reference.md \
+          docs/operations-runbook.md \
+          docs/testing-and-quality.md \
+          docs/data-governance.md
