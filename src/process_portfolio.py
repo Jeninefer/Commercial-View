@@ -15,6 +15,7 @@ import json
 from datetime import datetime
 import pandas as pd
 import numpy as np
+import logging
 
 from kpi_calculator import compute_arr, calculate_progress_percentage, update_snapshot
 import kpi_calculator
@@ -32,6 +33,8 @@ from data_processor import DataProcessor
 from field_detector import FieldDetector
 from google_drive_exporter import GoogleDriveExporter
 from typing import Any, Dict, Optional
+
+logger = logging.getLogger(__name__)
 
 def load_config(config_dir: str) -> Dict[str, Any]:
     """Load all configuration files from the config directory."""
@@ -272,6 +275,157 @@ def enhanced_analysis(configs: Dict[str, Any]) -> Dict[str, Any]:
     })
     
     return results
+
+class ProcessPortfolio:
+    """
+    Portfolio processing CLI that implements proper data path resolution
+    Follows sequence diagram: User/CLI -> process_portfolio -> data_loader
+    """
+    
+    def __init__(self):
+        self.data_loader = None
+        self.processing_timestamp = datetime.now()
+    
+    def process_with_cli_args(self, data_dir: Optional[str] = None) -> dict:
+        """
+        Process portfolio with optional CLI data directory
+        Implements sequence diagram flow for path resolution
+        """
+        logger.info("🚀 Starting Commercial-View portfolio processing...")
+        
+        # Initialize DataLoader with proper path resolution
+        # This follows the sequence diagram logic:
+        # - If --data-dir provided: use CLI path
+        # - If no --data-dir: DataLoader checks ENV var then uses default
+        self.data_loader = DataLoader(base_path=data_dir)
+        
+        results = {
+            "processing_timestamp": self.processing_timestamp.isoformat(),
+            "data_path_used": str(self.data_loader.base_path.absolute()),
+            "datasets_processed": {},
+            "portfolio_metrics": {},
+            "processing_status": "in_progress"
+        }
+        
+        try:
+            # Process each dataset following sequence diagram
+            results["datasets_processed"] = self._process_all_datasets()
+            results["portfolio_metrics"] = self._calculate_portfolio_metrics()
+            results["processing_status"] = "completed"
+            
+            logger.info("✅ Portfolio processing completed successfully")
+            
+        except Exception as e:
+            logger.error(f"❌ Portfolio processing failed: {e}")
+            results["processing_status"] = "failed"
+            results["error"] = str(e)
+            raise
+        
+        return results
+    
+    def _process_all_datasets(self) -> dict:
+        """
+        Process all datasets with proper error handling
+        Implements the file existence checks from sequence diagram
+        """
+        datasets_results = {}
+        
+        # Process loan data
+        try:
+            loan_df = self.data_loader.load_loan_data()
+            datasets_results["loan_data"] = {
+                "status": "success",
+                "records": len(loan_df) if loan_df is not None else 0,
+                "columns": list(loan_df.columns) if loan_df is not None else []
+            }
+        except FileNotFoundError as e:
+            logger.error(f"Loan data not found: {e}")
+            datasets_results["loan_data"] = {
+                "status": "file_not_found",
+                "error": str(e)
+            }
+        except Exception as e:
+            logger.error(f"Error processing loan data: {e}")
+            datasets_results["loan_data"] = {
+                "status": "error",
+                "error": str(e)
+            }
+        
+        # Process payment schedule
+        try:
+            payment_df = self.data_loader.load_payment_schedule()
+            datasets_results["payment_schedule"] = {
+                "status": "success",
+                "records": len(payment_df) if payment_df is not None else 0,
+                "columns": list(payment_df.columns) if payment_df is not None else []
+            }
+        except FileNotFoundError as e:
+            logger.error(f"Payment schedule not found: {e}")
+            datasets_results["payment_schedule"] = {
+                "status": "file_not_found",
+                "error": str(e)
+            }
+        except Exception as e:
+            logger.error(f"Error processing payment schedule: {e}")
+            datasets_results["payment_schedule"] = {
+                "status": "error",
+                "error": str(e)
+            }
+        
+        # Process historic payments
+        try:
+            historic_df = self.data_loader.load_historic_real_payment()
+            datasets_results["historic_real_payment"] = {
+                "status": "success",
+                "records": len(historic_df) if historic_df is not None else 0,
+                "columns": list(historic_df.columns) if historic_df is not None else []
+            }
+        except FileNotFoundError as e:
+            logger.error(f"Historic payment data not found: {e}")
+            datasets_results["historic_real_payment"] = {
+                "status": "file_not_found",
+                "error": str(e)
+            }
+        except Exception as e:
+            logger.error(f"Error processing historic payments: {e}")
+            datasets_results["historic_real_payment"] = {
+                "status": "error",
+                "error": str(e)
+            }
+        
+        return datasets_results
+    
+    def _calculate_portfolio_metrics(self) -> dict:
+        """Calculate basic portfolio metrics from loaded data"""
+        metrics = {
+            "total_loans": 0,
+            "total_outstanding": 0.0,
+            "average_loan_size": 0.0,
+            "active_customers": 0
+        }
+        
+        try:
+            # Get loan data for metrics
+            loan_df = self.data_loader.load_loan_data()
+            if loan_df is not None and not loan_df.empty:
+                # Filter active loans
+                active_loans = loan_df[loan_df["Status"] == "Active"] if "Status" in loan_df.columns else loan_df
+                
+                metrics["total_loans"] = len(active_loans)
+                
+                if "Loan Amount" in active_loans.columns:
+                    loan_amounts = pd.to_numeric(active_loans["Loan Amount"], errors='coerce')
+                    metrics["total_outstanding"] = float(loan_amounts.sum())
+                    metrics["average_loan_size"] = float(loan_amounts.mean()) if len(loan_amounts) > 0 else 0.0
+                
+                if "Customer ID" in active_loans.columns:
+                    metrics["active_customers"] = active_loans["Customer ID"].nunique()
+            
+        except Exception as e:
+            logger.error(f"Error calculating portfolio metrics: {e}")
+            metrics["calculation_error"] = str(e)
+        
+        return metrics
 
 def main():
     """Main processing function."""
