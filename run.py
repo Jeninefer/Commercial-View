@@ -213,12 +213,6 @@ async def get_loan_data() -> List[Dict[str, Any]]:
             except Exception as exc:
                 logger.debug(f"Pipeline load_all_datasets failed: {exc}")
 
-            dataset = pipeline_instance.get_dataset("loan_data")
-            if dataset is not None:
-                records = dataset.to_dict("records") if hasattr(dataset, "to_dict") else list(dataset)
-                if records:
-                    return records
-
         try:
             loan_df = loader.load_loan_data()
         except FileNotFoundError:
