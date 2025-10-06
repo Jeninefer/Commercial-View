@@ -240,3 +240,21 @@ else
     echo "❌ Push failed. Please check git status and try again."
     exit 1
 fi
+
+# Initialize
+core = AbacoCore()
+
+# Validate portfolio
+is_valid, issues = core.validate_loan_portfolio(portfolio_df)
+
+# Calculate metrics
+metrics = core.calculate_portfolio_metrics(portfolio_df)
+
+# Create and compare snapshots
+snapshot1 = core.create_data_snapshot(df1, "before_cleanup")
+snapshot2 = core.create_data_snapshot(df2, "after_cleanup")
+comparison = core.compare_snapshots("before_cleanup", "after_cleanup")
+
+# Export quality report
+quality_report = core.validate_data_quality(portfolio_df)
+core.export_quality_report(quality_report, Path("reports/quality.json"))
