@@ -4,10 +4,10 @@ Script to check Git synchronization status and identify missing files
 
 import os
 import subprocess
-import glob
 from pathlib import Path
+from typing import List
 
-def run_git_command(command):
+def run_git_command(command: List[str]) -> str:
     """Run git command and return output"""
     try:
         result = subprocess.run(command, capture_output=True, text=True, check=True)
@@ -15,7 +15,7 @@ def run_git_command(command):
     except subprocess.CalledProcessError as e:
         return f"Error: {e.stderr.strip()}"
 
-def check_project_files():
+def check_project_files() -> List[str]:
     """Check all important project files"""
     important_files = [
         "README.md",
@@ -45,34 +45,55 @@ def check_project_files():
     
     return missing_files
 
-def main():
-    print("🔍 Commercial-View Sync Status Check")
-    print("=" * 50)
-    
-    # Check git status
+def display_git_status() -> None:
+    """Display current git status"""
     print("\n📊 Git Status:")
     status = run_git_command(["git", "status", "--porcelain"])
-    if status:
+    if status and not status.startswith("Error:"):
         print("Modified/Untracked files:")
         for line in status.split('\n'):
             if line.strip():
                 print(f"  {line}")
     else:
         print("  No changes detected")
-    
-    # Check branch
+
+def display_branch_info() -> None:
+    """Display current branch information"""
     branch = run_git_command(["git", "branch", "--show-current"])
     print(f"\n📍 Current branch: {branch}")
-    
-    # Check remote URL
+
+def display_remote_info() -> None:
+    """Display remote repository information"""
     remote = run_git_command(["git", "remote", "-v"])
-    print(f"\n🔗 Remote repositories:")
-    for line in remote.split('\n'):
-        if line.strip():
-            print(f"  {line}")
+    print("\n🔗 Remote repositories:")
+    if remote and not remote.startswith("Error:"):
+        for line in remote.split('\n'):
+            if line.strip():
+                print(f"  {line}")
+    else:
+        print("  No remote repositories configured")
+
+def display_suggested_actions() -> None:
+    """Display suggested actions for sync"""
+    print("\n🔧 Suggested Actions:")
+    print("1. Add all files: git add .")
+    print("2. Check what will be committed: git status")
+    print("3. Commit changes: git commit -m 'Complete project sync'")  
+    print("4. Push to GitHub: git push origin main")
+    print("5. Verify on GitHub web interface")
+
+def main():
+    """Main function to check sync status"""
+    print("🔍 Commercial-View Sync Status Check")
+    print("=" * 50)
+    
+    # Display git information
+    display_git_status()
+    display_branch_info()
+    display_remote_info()
     
     # Check important files
-    print(f"\n📋 Project Files Status:")
+    print("\n📋 Project Files Status:")
     missing_files = check_project_files()
     
     if missing_files:
@@ -82,15 +103,10 @@ def main():
         print("  find . -name '*.py' | head -10")
         print("  find . -name '*.md' | head -10")
     else:
-        print(f"\n✅ All important files are present")
+        print("\n✅ All important files are present")
     
-    # Suggest actions
-    print(f"\n🔧 Suggested Actions:")
-    print("1. Add all files: git add .")
-    print("2. Check what will be committed: git status")
-    print("3. Commit changes: git commit -m 'Complete project sync'")  
-    print("4. Push to GitHub: git push origin main")
-    print("5. Verify on GitHub web interface")
+    # Display suggested actions
+    display_suggested_actions()
 
 if __name__ == "__main__":
     main()

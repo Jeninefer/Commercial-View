@@ -20,6 +20,7 @@ def run_command(command, check=True):
         return False, e.stderr.strip()
 
 def main():
+    """Main sync function"""
     print("🚀 Commercial-View Complete Sync")
     print("=" * 40)
     
@@ -27,20 +28,20 @@ def main():
     print(f"\n📍 Current directory: {os.getcwd()}")
     
     # Step 2: Git status
-    print(f"\n1️⃣ Checking Git status...")
-    success, output = run_command(["git", "status", "--short"])
+    print("\n1️⃣ Checking Git status...")
+    success, _ = run_command(["git", "status", "--short"])
     
     # Step 3: Add all files
-    print(f"\n2️⃣ Adding all files...")
+    print("\n2️⃣ Adding all files...")
     run_command(["git", "add", "."])
     run_command(["git", "add", "-A"])  # Also add deleted files
     
     # Step 4: Show what's staged
-    print(f"\n3️⃣ Checking staged files...")
+    print("\n3️⃣ Checking staged files...")
     run_command(["git", "status", "--short"])
     
     # Step 5: Commit
-    print(f"\n4️⃣ Creating commit...")
+    print("\n4️⃣ Creating commit...")
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     commit_msg = f"Complete sync: Commercial-View project update ({timestamp})"
     success, _ = run_command(["git", "commit", "-m", commit_msg], check=False)
@@ -49,19 +50,19 @@ def main():
         print("ℹ️  No changes to commit or commit failed")
     
     # Step 6: Push to remote  
-    print(f"\n5️⃣ Pushing to GitHub...")
+    print("\n5️⃣ Pushing to GitHub...")
     success, _ = run_command(["git", "push", "origin", "main"], check=False)
     
     if success:
-        print(f"\n🎉 Sync completed successfully!")
+        print("\n🎉 Sync completed successfully!")
     else:
-        print(f"\n⚠️  Push failed - check network connection and credentials")
+        print("\n⚠️  Push failed - check network connection and credentials")
     
     # Step 7: Show final status
-    print(f"\n6️⃣ Final status:")
+    print("\n6️⃣ Final status:")
     run_command(["git", "status"])
     
-    print(f"\n📝 Next steps:")
+    print("\n📝 Next steps:")
     print("1. Check GitHub repository web interface")
     print("2. Verify all files are present")
     print("3. Check commit history")

@@ -10,6 +10,7 @@ import shutil
 import json
 from pathlib import Path
 from datetime import datetime
+from typing import Tuple, Optional, List
 
 class ProjectBuilder:
     """Build manager for Commercial-View project"""
@@ -18,8 +19,14 @@ class ProjectBuilder:
         self.project_root = Path.cwd()
         self.dist_dir = self.project_root / "dist"
         self.build_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.build_log: List[str] = []
     
-    def run_command(self, command, cwd=None):
+    def log(self, message: str) -> None:
+        """Log a build message"""
+        self.build_log.append(f"[{datetime.now().strftime('%H:%M:%S')}] {message}")
+        print(message)
+    
+    def run_command(self, command: str, cwd: Optional[Path] = None) -> Tuple[bool, str]:
         """Run command and return success status"""
         try:
             result = subprocess.run(
@@ -30,54 +37,131 @@ class ProjectBuilder:
                 text=True,
                 cwd=cwd or self.project_root
             )
-            print(f"✅ {command}")
+            self.log(f"✅ {command}")
             return True, result.stdout
         except subprocess.CalledProcessError as e:
-            print(f"❌ {command}: {e.stderr}")
+            self.log(f"❌ {command}: {e.stderr}")
             return False, e.stderr
     
-    def clean_build(self):
+    def validate_environment(self) -> bool:
+        """Validate build environment requirements"""
+        self.log("🔍 Validating build environment...")
+        
+        # Check if we're in the correct directory
+        if not (self.project_root / "package.json").exists():
+            self.log("❌ package.json not found - not in project root?")
+            return False
+        
+        # Check for Python
+        success, version = self.run_command("python --version")
+        if not success:
+            self.log("❌ Python not found")
+            return False
+        else:
+            self.log(f"✅ Python found: {version.strip()}")
+        
+        # Check for Node.js
+        success, version = self.run_command("node --version")
+        if not success:
+            self.log("❌ Node.js not found")
+            return False
+        else:
+            self.log(f"✅ Node.js found: {version.strip()}")
+        
+        # Check for npm
+        success, version = self.run_command("npm --version")
+        if success:
+            self.log(f"✅ npm found: {version.strip()}")
+        
+        self.log("✅ Environment validation passed")
+        return True
+
+    def clean_build(self) -> bool:
         """Clean previous build artifacts"""
-        print("🧹 Cleaning build artifacts...")
+        self.log("🧹 Cleaning build artifacts...")
         
-        # Remove dist directory
-        if self.dist_dir.exists():
-            shutil.rmtree(self.dist_dir)
-        
-        # Remove zip files
-        for zip_file in self.project_root.glob("*.zip"):
-            zip_file.unlink()
-        
-        print("✅ Build artifacts cleaned")
+        try:
+            # Remove dist directory
+            if self.dist_dir.exists():
+                shutil.rmtree(self.dist_dir)
+                self.log("✅ Removed dist/ directory")
+            
+            # Remove zip files
+            zip_count = 0
+            for zip_file in self.project_root.glob("*.zip"):
+                zip_file.unlink()
+                zip_count += 1
+            
+            if zip_count > 0:
+                self.log(f"✅ Removed {zip_count} zip files")
+            
+            # Remove node_modules for fresh install
+            node_modules = self.project_root / "node_modules"
+            if node_modules.exists():
+                shutil.rmtree(node_modules)
+                self.log("✅ Removed node_modules for fresh install")
+            
+            self.log("✅ Build artifacts cleaned")
+            return True
+        except Exception as e:
+            self.log(f"❌ Error cleaning build artifacts: {e}")
+            return False
     
-    def compile_typescript(self):
+    def compile_typescript(self) -> bool:
         """Compile TypeScript files"""
-        print("🔧 Compiling TypeScript...")
+        self.log("🔧 Compiling TypeScript...")
         
         # Check if TypeScript files exist
         ts_dir = self.project_root / "src" / "typescript"
         if not ts_dir.exists():
-            print("ℹ️  No TypeScript files found, skipping compilation")
+            self.log("ℹ️  No TypeScript files found, skipping compilation")
             return True
         
+        # Install TypeScript if not available
+        success, _ = self.run_command("npx tsc --version")
+        if not success:
+            self.log("📦 Installing TypeScript...")
+            success, _ = self.run_command("npm install -g typescript")
+            if not success:
+                self.log("❌ Failed to install TypeScript")
+                return False
+        
         success, _ = self.run_command("npx tsc")
+        if success:
+            self.log("✅ TypeScript compilation completed")
         return success
     
-    def install_dependencies(self):
+    def install_dependencies(self) -> bool:
         """Install all project dependencies"""
-        print("📦 Installing dependencies...")
+        self.log("📦 Installing dependencies...")
         
         # Install root dependencies
         success, _ = self.run_command("npm install")
         if not success:
+            self.log("❌ Failed to install root dependencies")
             return False
+        
+        self.log("✅ Root dependencies installed")
         
         # Install frontend dependencies
         frontend_dir = self.project_root / "frontend" / "dashboard"
         if frontend_dir.exists():
+            self.log("📦 Installing frontend dependencies...")
             success, _ = self.run_command("npm install", cwd=frontend_dir)
             if not success:
+                self.log("❌ Failed to install frontend dependencies")
                 return False
+            self.log("✅ Frontend dependencies installed")
+        
+        # Install Python dependencies if requirements.txt exists
+        requirements_file = self.project_root / "requirements.txt"
+        if requirements_file.exists():
+            self.log("🐍 Installing Python dependencies...")
+            success, _ = self.run_command("pip install -r requirements.txt")
+            if success:
+                self.log("✅ Python dependencies installed")
+            else:
+                self.log("⚠️  Python dependencies installation failed (continuing anyway)")
         
         return True
     
@@ -316,6 +400,154 @@ if __name__ == "__main__":
         print("✅ MCP server script created at scripts/mcp_server.py")
         return True
 
+    def create_package_json_if_missing(self) -> None:
+        """Create package.json if it doesn't exist"""
+        package_json_path = self.project_root / "package.json"
+        if not package_json_path.exists():
+            print("📦 Creating package.json...")
+            
+            package_config = {
+                "name": "commercial-view",
+                "version": "1.0.0",
+                "description": "Enterprise-grade portfolio analytics for Abaco Capital",
+                "main": "dist/index.js",
+                "scripts": {
+                    "compile": "tsc",
+                    "watch": "tsc --watch",
+                    "build": "python scripts/build.py",
+                    "start": "python run.py",
+                    "test": "python -m pytest -q",
+                    "lint": "python -m black src/ scripts/",
+                    "sync": "python scripts/sync_github.py"
+                },
+                "devDependencies": {
+                    "@types/node": "^20.0.0",
+                    "typescript": "^5.0.0"
+                },
+                "engines": {
+                    "node": ">=18.0.0",
+                    "python": ">=3.11.0"
+                }
+            }
+            
+            with open(package_json_path, 'w', encoding='utf-8') as f:
+                json.dump(package_config, f, indent=2)
+            
+            print("✅ package.json created")
+
+    def create_tsconfig_if_missing(self) -> None:
+        """Create tsconfig.json if it doesn't exist"""
+        tsconfig_path = self.project_root / "tsconfig.json"
+        if not tsconfig_path.exists():
+            print("📝 Creating tsconfig.json...")
+            
+            tsconfig = {
+                "compilerOptions": {
+                    "target": "ES2020",
+                    "module": "commonjs",
+                    "lib": ["ES2020"],
+                    "outDir": "./dist",
+                    "rootDir": "./src/typescript",
+                    "strict": True,
+                    "esModuleInterop": True,
+                    "skipLibCheck": True,
+                    "forceConsistentCasingInFileNames": True,
+                    "declaration": True,
+                    "sourceMap": True
+                },
+                "include": ["src/typescript/**/*"],
+                "exclude": ["node_modules", "dist", "**/*.test.ts"]
+            }
+            
+            with open(tsconfig_path, 'w', encoding='utf-8') as f:
+                json.dump(tsconfig, f, indent=2)
+            
+            print("✅ tsconfig.json created")
+
+    def generate_build_report(self) -> None:
+        """Generate a build report"""
+        report_path = self.dist_dir / f"build-report-{self.build_timestamp}.txt"
+        self.dist_dir.mkdir(exist_ok=True)
+        
+        with open(report_path, 'w', encoding='utf-8') as f:
+            f.write(f"Commercial-View Build Report\n")
+            f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Build ID: {self.build_timestamp}\n")
+            f.write("=" * 50 + "\n\n")
+            
+            f.write("Build Log:\n")
+            f.write("-" * 20 + "\n")
+            for log_entry in self.build_log:
+                f.write(f"{log_entry}\n")
+            
+            f.write(f"\nBuild completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        
+        self.log(f"📄 Build report saved to: {report_path}")
+    
+    def create_deployment_config(self) -> bool:
+        """Create deployment configuration files"""
+        self.log("🚀 Creating deployment configuration...")
+        
+        # Create Docker configuration
+        dockerfile_content = '''# Commercial-View Dockerfile
+FROM node:18-alpine AS frontend-builder
+WORKDIR /app/frontend
+COPY frontend/dashboard/package*.json ./
+RUN npm install
+COPY frontend/dashboard/ ./
+RUN npm run build
+
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY src/ ./src/
+COPY scripts/ ./scripts/
+COPY run.py .
+COPY --from=frontend-builder /app/frontend/build ./static/
+EXPOSE 8000
+CMD ["python", "run.py"]
+'''
+        
+        dockerfile_path = self.project_root / "Dockerfile"
+        with open(dockerfile_path, 'w', encoding='utf-8') as f:
+            f.write(dockerfile_content)
+        
+        # Create docker-compose configuration
+        compose_content = '''version: '3.8'
+services:
+  commercial-view:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - API_BASE_URL=http://localhost:8000
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: commercial_view
+      POSTGRES_USER: commercial_view
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+'''
+        
+        compose_path = self.project_root / "docker-compose.yml"
+        with open(compose_path, 'w', encoding='utf-8') as f:
+            f.write(compose_content)
+        
+        self.log("✅ Deployment configuration created")
+        return True
+
 def main():
     """Main build function"""
     print("🚀 Commercial-View Build Process")
@@ -323,29 +555,42 @@ def main():
     
     builder = ProjectBuilder()
     
+    # Validate environment first
+    if not builder.validate_environment():
+        builder.log("❌ Environment validation failed")
+        sys.exit(1)
+    
+    # Create config files if missing
+    builder.create_package_json_if_missing()
+    builder.create_tsconfig_if_missing()
+    
     # Parse command line arguments
     if len(sys.argv) > 1:
         command = sys.argv[1]
         
-        if command == "clean":
-            builder.clean_build()
+        command_map = {
+            "clean": builder.clean_build,
+            "install": builder.install_dependencies,
+            "compile": builder.compile_typescript,
+            "frontend": builder.build_frontend,
+            "package": builder.package_project,
+            "mcp": lambda: (builder.setup_mcp_servers() and builder.create_mcp_server_script()),
+            "deploy": builder.create_deployment_config,
+            "report": builder.generate_build_report,
+        }
+        
+        if command in command_map:
+            result = command_map[command]()
+            if not result:
+                builder.log(f"❌ Command '{command}' failed")
+                builder.generate_build_report()
+                sys.exit(1)
+            builder.generate_build_report()
             return
-        elif command == "install":
-            builder.install_dependencies()
-            return
-        elif command == "compile":
-            builder.compile_typescript()
-            return
-        elif command == "frontend":
-            builder.build_frontend()
-            return
-        elif command == "package":
-            builder.package_project()
-            return
-        elif command == "mcp":
-            builder.setup_mcp_servers()
-            builder.create_mcp_server_script()
-            return
+        else:
+            builder.log(f"❌ Unknown command: {command}")
+            print("Available commands: clean, install, compile, frontend, package, mcp, deploy, report")
+            sys.exit(1)
     
     # Full build process
     steps = [
@@ -355,97 +600,22 @@ def main():
         ("Build Frontend", builder.build_frontend),
         ("Setup MCP Servers", builder.setup_mcp_servers),
         ("Create MCP Integration", builder.create_mcp_server_script),
+        ("Create Deployment Config", builder.create_deployment_config),
         ("Package Project", builder.package_project)
     ]
     
     for step_name, step_func in steps:
-        print(f"\n🔄 {step_name}...")
+        builder.log(f"\n🔄 {step_name}...")
         if not step_func():
-            print(f"❌ Build failed at step: {step_name}")
+            builder.log(f"❌ Build failed at step: {step_name}")
+            builder.generate_build_report()
             sys.exit(1)
     
-    print(f"\n🎉 Build completed successfully!")
-    print(f"📁 Build artifacts available in: {builder.dist_dir}")
+    # Generate final build report
+    builder.generate_build_report()
+    
+    builder.log("\n🎉 Build completed successfully!")
+    builder.log(f"📁 Build artifacts available in: {builder.dist_dir}")
 
 if __name__ == "__main__":
     main()
-
-{
-  "name": "commercial-view",
-  "version": "1.0.0",
-  "description": "Enterprise-grade portfolio analytics for Abaco Capital",
-  "main": "dist/index.js",
-  "scripts": {
-    "install": "npm install && cd frontend/dashboard && npm install",
-    "compile": "tsc",
-    "watch": "tsc --watch",
-    "package": "npm run compile && npm run package:backend && npm run package:frontend",
-    "package:backend": "zip -r commercial-view-backend.zip src/ scripts/ *.py requirements.txt README.md -x '*.pyc' '__pycache__/*'",
-    "package:frontend": "cd frontend/dashboard && npm run build && cd ../.. && zip -r commercial-view-frontend.zip frontend/dashboard/build/",
-    "start": "python run.py",
-    "dev": "python server_control.py --reload",
-    "test": "python -m pytest -q",
-    "lint": "python -m black src/ scripts/ tests/",
-    "type-check": "python -m mypy src/",
-    "sync": "python scripts/sync_github.py",
-    "upload": "python scripts/upload_to_drive.py",
-    "build": "npm run compile && npm run package",
-    "clean": "rm -rf dist/ node_modules/ frontend/dashboard/node_modules/ *.zip",
-    "setup": "python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "python": ">=3.11.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Jeninefer/Commercial-View.git"
-  },
-  "keywords": [
-    "portfolio",
-    "analytics",
-    "fastapi",
-    "react",
-    "finance"
-  ],
-  "author": "Abaco Capital",
-  "license": "PROPRIETARY"
-}
-
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "lib": ["ES2020"],
-    "outDir": "./dist",
-    "rootDir": "./src/typescript",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true, 
-    "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "removeComments": false,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  },
-  "include": [
-    "src/typescript/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts",
-    "**/*.spec.ts"
-  ]
-}

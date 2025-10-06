@@ -15,7 +15,7 @@ import signal
 import subprocess
 import sys
 import time
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 
 def find_port_processes(port: int) -> List[int]:
@@ -114,6 +114,56 @@ def check_environment() -> Tuple[bool, str]:
     return True, "Environment looks good"
 
 
+def handle_existing_processes(args, port_pids: List[int]) -> int:
+    """Handle existing processes on the specified port"""
+    print(f"Found {len(port_pids)} process(es) using port {args.port}:")
+    for pid in port_pids:
+        try:
+            cmd = subprocess.check_output(
+                ["ps", "-o", "command=", "-p", str(pid)],
+                universal_newlines=True
+            ).strip()
+            print(f"  PID {pid}: {cmd}")
+        except subprocess.CalledProcessError:
+            print(f"  PID {pid}: (process info unavailable)")
+    
+    if args.check_only:
+        return 0
+    
+    return handle_port_conflict(args, port_pids)
+
+def handle_port_conflict(args, port_pids: List[int]) -> int:
+    """Handle port conflict - either kill processes or suggest alternatives"""
+    if args.kill_existing:
+        success = kill_processes(port_pids, args.force_kill)
+        if not success:
+            print(f"Could not kill all processes on port {args.port}")
+            return 1
+        
+        # Wait a moment for the port to be freed
+        time.sleep(0.5)
+        return 0
+    else:
+        suggest_alternatives(args)
+        return 1
+
+def suggest_alternatives(args) -> None:
+    """Suggest alternative actions when port is in use"""
+    alt_port = args.port + 1
+    print(f"Port {args.port} is in use. Try a different port:")
+    print(f"  {sys.argv[0]} --port {alt_port}")
+    print("Or kill the existing process(es):")
+    print(f"  {sys.argv[0]} --port {args.port} --kill-existing")
+
+def validate_environment() -> int:
+    """Validate environment and return exit code if invalid"""
+    env_ok, env_msg = check_environment()
+    if not env_ok:
+        print(f"Environment issue: {env_msg}")
+        print("Tip: Activate your virtual environment with 'source .venv/bin/activate'")
+        return 1
+    return 0
+
 def main() -> int:
     """Main entry point for the server control script."""
     parser = argparse.ArgumentParser(
@@ -185,46 +235,18 @@ Examples:
     
     args = parser.parse_args()
     
-    # Check environment
-    env_ok, env_msg = check_environment()
-    if not env_ok:
-        print(f"Environment issue: {env_msg}")
-        print("Tip: Activate your virtual environment with 'source .venv/bin/activate'")
-        return 1
+    # Validate environment
+    env_error = validate_environment()
+    if env_error:
+        return env_error
     
     # Check for existing processes
     port_pids = find_port_processes(args.port)
     
     if port_pids:
-        print(f"Found {len(port_pids)} process(es) using port {args.port}:")
-        for pid in port_pids:
-            try:
-                cmd = subprocess.check_output(
-                    ["ps", "-o", "command=", "-p", str(pid)],
-                    universal_newlines=True
-                ).strip()
-                print(f"  PID {pid}: {cmd}")
-            except subprocess.CalledProcessError:
-                print(f"  PID {pid}: (process info unavailable)")
-        
-        if args.check_only:
-            return 0
-            
-        if args.kill_existing:
-            success = kill_processes(port_pids, args.force_kill)
-            if not success:
-                print(f"Could not kill all processes on port {args.port}")
-                return 1
-                
-            # Wait a moment for the port to be freed
-            time.sleep(0.5)
-        else:
-            alt_port = args.port + 1
-            print(f"Port {args.port} is in use. Try a different port:")
-            print(f"  {sys.argv[0]} --port {alt_port}")
-            print(f"Or kill the existing process(es):")
-            print(f"  {sys.argv[0]} --port {args.port} --kill-existing")
-            return 1
+        result = handle_existing_processes(args, port_pids)
+        if result != 0:
+            return result
     elif args.check_only:
         print(f"No processes found using port {args.port}")
         return 0
