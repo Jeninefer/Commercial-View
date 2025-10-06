@@ -11,7 +11,7 @@ product modules, and how to run or extend them locally and in CI.
 | **Data ingestion** | `data_loader`, `data_processor` | `tests/test_data_ingestion.py` | File discovery precedence, error handling for missing feeds, date conversion coercion |
 | **AI services & optimisation** | `feature_engineer`, `field_detector`, `portfolio_optimizer` | `tests/test_ai_services.py` | Customer type classification, payment-field detection heuristics, concentration and DPD alerting |
 | **Pipeline & integration** | `pipeline.CommercialViewPipeline` | `tests/test_pipeline_integration.py` | Dataset loading resilience, DPD distribution creation, cohort recovery calculations, executive summary synthesis |
-| **Frontend components** | React dashboard shell (`App`) | `frontend/dashboard/test/app.test.tsx` | Accessibility affordances, navigation attributes, hero content rendering |
+| **Frontend components** | React dashboard shell (`App`) | `frontend/dashboard/test/app.test.jsx` | Accessibility affordances, navigation attributes, hero content rendering |
 
 The suite currently implements **38 discrete test cases**, exceeding the 31-case
 target while ensuring coverage of happy paths, guard rails, and integration flows.
