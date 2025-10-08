@@ -82,7 +82,11 @@ def _gdown_downloader(folder_id: str, destination: Path) -> Sequence[Path]:
     )
 
     if downloaded is None:
-        msg = f"Failed to download folder with id '{folder_id}' to '{destination}'."
+        msg = (
+            f"Failed to download folder with id '{folder_id}' to '{destination}'. "
+            "This may be due to network connectivity issues, an invalid folder ID, or insufficient permissions. "
+            "Please check your internet connection, verify the folder ID, and ensure you have access to the folder."
+        )
         LOGGER.error(msg)
         raise RuntimeError(msg)
     return [Path(p) for p in downloaded]
