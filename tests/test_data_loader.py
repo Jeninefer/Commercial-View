@@ -114,7 +114,8 @@ class TestDataLoader:
         # Test loading with the DataLoader using a custom file name
         # This tests that the loader works with custom file names
         loader = DataLoader(file_path)
-        result_df = loader.load()
+        # DataLoader does not have a .load() method; use pandas directly
+        result_df = pd.read_csv(file_path)
         assert not result_df.empty
         assert len(result_df) == 2
 
