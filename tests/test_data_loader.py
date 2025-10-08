@@ -111,9 +111,10 @@ class TestDataLoader:
         })
         df.to_csv(file_path, index=False)
         
-        # Test loading with the directory containing the file
+        # Test loading with the DataLoader using a custom file name
         # This tests that the loader works with custom file names
-        result_df = pd.read_csv(file_path)
+        loader = DataLoader(file_path)
+        result_df = loader.load()
         assert not result_df.empty
         assert len(result_df) == 2
 
