@@ -304,8 +304,8 @@ async def get_historic_payments() -> List[Dict[str, Any]]:
                 logger.debug(f"Pipeline load_all_datasets failed: {exc}")
 
             dataset = None
-            if hasattr(pipeline_instance, "_datasets") and "historic_real_payment" in pipeline_instance._datasets:
-                dataset = pipeline_instance._datasets["historic_real_payment"]
+            if hasattr(pipeline_instance, "get_dataset"):
+                dataset = pipeline_instance.get_dataset("historic_real_payment")
             if dataset is not None:
                 records = dataset.to_dict("records") if hasattr(dataset, "to_dict") else list(dataset)
                 if records:
