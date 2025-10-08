@@ -1,7 +1,20 @@
 {
-  "name": "dashboard",
+  "name": "commercial-view-dashboard",
   "version": "0.1.0",
   "private": true,
+  "description": "Commercial lending analytics dashboard for Commercial-View platform",
+  "homepage": "https://commercial-view.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/commercial-view/dashboard.git"
+  },
+  "keywords": [
+    "commercial-lending",
+    "analytics",
+    "dashboard",
+    "react",
+    "typescript"
+  ],
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -10,29 +23,66 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "recharts": "^2.10.3",
+    "axios": "^1.6.2",
+    "@types/lodash": "^4.14.202",
+    "lodash": "^4.17.21",
+    "classnames": "^2.3.2",
+    "date-fns": "^2.30.0",
+    "react-router-dom": "^6.20.1",
+    "@mui/material": "^5.15.1",
+    "@mui/icons-material": "^5.15.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "react-hook-form": "^7.48.2",
+    "@tanstack/react-query": "^5.59.9",
+    "zustand": "^4.4.7",
+    "numeral": "^2.0.6",
+    "react-csv": "^2.2.2",
+    "react-virtualized": "^9.22.5"
   },
   "scripts": {
     "start": "react-scripts start",
+    "dev": "REACT_APP_ENV=development react-scripts start",
     "build": "react-scripts build",
-    "test": "node ./node_modules/tape/bin/tape \"test/**/*.js\"",
+    "build:prod": "REACT_APP_ENV=production react-scripts build",
+    "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
+    "test:tape": "node ./node_modules/tape/bin/tape \"test/**/*.js\"",
+    "test:integration": "vitest run",
+    "test:integration:watch": "vitest",
     "eject": "react-scripts eject",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "type-check": "tsc --noEmit",
+    "analyze": "npm run build && npx bundle-analyzer build/static/js/*.js",
     "update-deps": "npm install",
     "git-pull": "git pull origin main",
     "git-status": "git status",
-    "pull-and-update": "npm run git-pull && npm run update-deps"
+    "pull-and-update": "npm run git-pull && npm run update-deps",
+    "serve": "serve -s build -l 3000",
+    "docker:build": "docker build -t commercial-view-dashboard .",
+    "docker:run": "docker run -p 3000:3000 commercial-view-dashboard"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": "warn",
+      "react-hooks/exhaustive-deps": "warn",
+      "no-console": "warn"
+    }
   },
   "browserslist": {
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "not ie <= 11"
     ],
     "development": [
       "last 1 chrome version",
@@ -46,6 +96,53 @@
     "@types/react": "^18.3.25",
     "@types/react-dom": "^18.3.7",
     "@types/tape": "^4.13.4",
-    "tape": "^5.6.3"
+    "tape": "^5.6.3",
+    "typescript": "^5.3.3",
+    "@types/classnames": "^2.3.1",
+    "@types/numeral": "^2.0.5",
+    "@types/react-csv": "^1.1.10",
+    "@types/react-virtualized": "^9.21.29",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
+    "prettier": "^3.1.1",
+    "serve": "^14.2.1",
+    "@storybook/react": "^7.6.6",
+    "@storybook/addon-essentials": "^7.6.6",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "vitest": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "proxy": "http://localhost:8000",
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/index.tsx",
+      "!src/reportWebVitals.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   }
 }

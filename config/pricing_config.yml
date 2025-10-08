@@ -38,6 +38,36 @@ band_keys:
     lower_bound: "ltv_min"
     upper_bound: "ltv_max"
     description: "Loan-to-Value ratio range"
+  
+  debt_service_coverage:
+    lower_bound: "dscr_min"
+    upper_bound: "dscr_max"
+    description: "Debt Service Coverage Ratio range"
+    
+  debt_to_equity:
+    lower_bound: "dte_min"
+    upper_bound: "dte_max"
+    description: "Debt-to-Equity ratio range"
+    
+  years_in_business:
+    lower_bound: "yib_min"
+    upper_bound: "yib_max"
+    description: "Years in business range"
+    
+  annual_revenue:
+    lower_bound: "revenue_min"
+    upper_bound: "revenue_max"
+    description: "Annual revenue range"
+    
+  collateral_coverage:
+    lower_bound: "collateral_min"
+    upper_bound: "collateral_max"
+    description: "Collateral coverage ratio range"
+    
+  geographic_region:
+    lower_bound: "region_min"
+    upper_bound: "region_max"
+    description: "Geographic risk tier range"
 
 # Pricing grid structure
 pricing_grid:
@@ -73,3 +103,189 @@ pricing_rules:
   # Options: "best_fit", "first_match", "conservative"
   # See documentation for details on each strategy.
   matching_strategy: "best_fit"
+
+# Market Data Integration
+market_data:
+  benchmark_rates:
+    # Reference rate sources
+    prime_rate_source: "federal_reserve"
+    libor_source: "ice_benchmark"
+    sofr_source: "federal_reserve"
+    treasury_curve_source: "treasury_direct"
+    
+  # Rate update frequency
+  rate_refresh_frequency: "daily"
+  rate_fallback_days: 3
+  
+  # Credit spread matrices
+  credit_spreads:
+    base_path: "./data/pricing/credit_spreads"
+    industry_spreads: "./data/pricing/industry_credit_spreads.csv"
+    rating_spreads: "./data/pricing/rating_credit_spreads.csv"
+    
+# Risk-Based Pricing Matrix
+risk_based_pricing:
+  models:
+    credit_score_model:
+      file_path: "./data/pricing/credit_score_pricing.csv"
+      primary_factor: "credit_score"
+      adjustment_range: [-0.0200, 0.0300]
+      
+    financial_strength_model:
+      file_path: "./data/pricing/financial_strength_pricing.csv"
+      factors: ["dscr", "current_ratio", "debt_to_equity"]
+      adjustment_range: [-0.0150, 0.0250]
+      
+    industry_risk_model:
+      file_path: "./data/pricing/industry_risk_pricing.csv"
+      primary_factor: "industry_code"
+      adjustment_range: [-0.0100, 0.0400]
+      
+    geographic_risk_model:
+      file_path: "./data/pricing/geographic_pricing.csv"
+      primary_factor: "state_code"
+      adjustment_range: [-0.0075, 0.0200]
+      
+    collateral_model:
+      file_path: "./data/pricing/collateral_pricing.csv"
+      factors: ["collateral_type", "ltv_ratio", "collateral_liquidity"]
+      adjustment_range: [-0.0300, 0.0100]
+
+# Product-Specific Pricing
+product_pricing:
+  commercial_real_estate:
+    base_file: "./data/pricing/cre_pricing.csv"
+    margin_floor: 0.0200
+    margin_ceiling: 0.0800
+    default_term: 300
+    
+  equipment_financing:
+    base_file: "./data/pricing/equipment_pricing.csv"
+    margin_floor: 0.0150
+    margin_ceiling: 0.0600
+    default_term: 240
+    
+  working_capital:
+    base_file: "./data/pricing/working_capital_pricing.csv"
+    margin_floor: 0.0175
+    margin_ceiling: 0.0750
+    default_term: 120
+    
+  term_loans:
+    base_file: "./data/pricing/term_loan_pricing.csv"
+    margin_floor: 0.0125
+    margin_ceiling: 0.0550
+    default_term: 180
+    
+  lines_of_credit:
+    base_file: "./data/pricing/loc_pricing.csv"
+    commitment_fee: 0.0025
+    unused_line_fee: 0.0050
+    margin_floor: 0.0100
+    margin_ceiling: 0.0500
+
+# Dynamic Pricing Adjustments
+dynamic_adjustments:
+  relationship_discounts:
+    primary_banking: -0.0025
+    deposit_relationship: -0.0050
+    multi_product: -0.0075
+    tenure_5plus_years: -0.0100
+    
+  volume_discounts:
+    thresholds:
+      - amount: 1000000
+        discount: 0.0025
+      - amount: 5000000
+        discount: 0.0050
+      - amount: 10000000
+        discount: 0.0075
+        
+  market_conditions:
+    competitive_situation: [-0.0100, 0.0100]
+    portfolio_concentration: [-0.0050, 0.0150]
+    liquidity_premium: [-0.0025, 0.0075]
+    
+  regulatory_adjustments:
+    high_risk_geography: 0.0050
+    regulatory_scrutiny: 0.0025
+    compliance_complexity: 0.0075
+
+# Pricing Validation and Controls
+pricing_controls:
+  rate_floors:
+    absolute_floor: 0.0350
+    risk_adjusted_floor: 0.0250
+    regulatory_floor: 0.0300
+    
+  rate_ceilings:
+    usury_ceiling: 0.1800
+    internal_ceiling: 0.1500
+    competitive_ceiling: 0.1200
+    
+  approval_thresholds:
+    auto_approval_spread: 0.0200
+    manager_approval_spread: 0.0150
+    committee_approval_spread: 0.0100
+    
+  concentration_limits:
+    single_borrower_limit: 0.15
+    industry_limit: 0.25
+    geographic_limit: 0.30
+
+# Performance Monitoring
+performance_tracking:
+  pricing_accuracy_metrics:
+    target_spread_variance: 0.0025
+    repricing_frequency_days: 90
+    competitive_position_review: "monthly"
+    
+  profitability_metrics:
+    target_nim: 0.0350
+    target_roe: 0.1200
+    cost_of_funds_tracking: true
+    
+  market_feedback:
+    win_loss_tracking: true
+    competitive_intelligence: true
+    customer_feedback_integration: true
+
+# Export and Integration Settings
+export_integration:
+  pricing_output_formats:
+    loan_origination_system: "xml"
+    core_banking_system: "csv"
+    risk_management_system: "json"
+    
+  real_time_pricing:
+    enabled: true
+    cache_duration_minutes: 15
+    fallback_to_static: true
+    
+  audit_trail:
+    log_all_pricing_decisions: true
+    retain_pricing_history: true
+    regulatory_reporting: true
+
+# Stress Testing and Scenario Analysis
+stress_testing:
+  scenarios:
+    base_case:
+      rate_environment: "current"
+      credit_losses: "normal"
+      competition: "moderate"
+      
+    adverse_case:
+      rate_shock_up: 0.0200
+      credit_losses: "elevated"
+      competition: "intense"
+      
+    severely_adverse:
+      rate_shock_up: 0.0400
+      credit_losses: "severe"
+      competition: "price_war"
+      
+  sensitivity_analysis:
+    rate_sensitivity: [-0.0300, 0.0300]
+    credit_sensitivity: [0.5, 3.0]
+    volume_sensitivity: [0.7, 1.3]
