@@ -21,6 +21,7 @@ try:
     # Import application modules
     from pipeline import CommercialViewPipeline
     from data_loader import DataLoader
+    from dashboard_orchestrator import DashboardOrchestrator
     
 except ImportError as e:
     print(f"❌ Import error: {e}")
@@ -57,11 +58,13 @@ app.add_middleware(
 try:
     data_loader = DataLoader()
     pipeline = CommercialViewPipeline()
+    dashboard_orchestrator = DashboardOrchestrator(pipeline=pipeline)
     logger.info("✅ Commercial-View application initialized successfully")
 except Exception as e:
     logger.error(f"❌ Failed to initialize application components: {e}")
     data_loader = None
     pipeline = None
+    dashboard_orchestrator = None
 
 # Global exception handler
 @app.exception_handler(Exception)
@@ -165,6 +168,34 @@ async def get_portfolio_metrics() -> Dict[str, Any]:
             "error": str(e),
             "fallback": True
         }
+
+
+@app.post("/dashboard/export")
+async def export_dashboard(payload: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Generate dashboard views and export them to Figma and Slack."""
+
+    if not dashboard_orchestrator:
+        raise HTTPException(status_code=503, detail="Dashboard orchestrator unavailable")
+
+    options = payload or {}
+    export_to_figma = options.get("export_to_figma", True)
+    export_to_slack = options.get("export_to_slack", True)
+
+    try:
+        views = dashboard_orchestrator.build_dashboard_views()
+        exports = dashboard_orchestrator.export_dashboard_views(
+            views,
+            export_to_figma=export_to_figma,
+            export_to_slack=export_to_slack,
+        )
+        return {
+            "status": "success",
+            "views": views,
+            "exports": exports,
+        }
+    except Exception as exc:
+        logger.error(f"Dashboard export failed: {exc}")
+        raise HTTPException(status_code=500, detail=f"Dashboard export failed: {exc}")
 
 # Loan data endpoint
 @app.get("/loan-data")

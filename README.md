@@ -11,6 +11,7 @@ Commercial-View delivers comprehensive analytics, pricing intelligence, and oper
 - **Unified API Gateway** - FastAPI service exposing portfolio, payment, and health endpoints
 - **Advanced Analytics Pipeline** - Computes DPD, recovery, and optimization metrics from real data
 - **Interactive Dashboard** - React TypeScript frontend for analysts and executives
+- **Hybrid AI Narrative Engine** - Gemini-first summaries with OpenAI investor analysis and deterministic fallback
 - **Production Automation** - Server lifecycle management and automated reporting
 - **Real Data Integration** - Direct connection to production Google Drive data sources
 
@@ -55,6 +56,14 @@ graph TD
     L --> D
     M --> D
 ```
+
+## Hybrid Dashboard Orchestration
+
+- **Notebook Delivery** – `notebooks/commercial_view_dashboard.ipynb` is version-controlled for GitHub and packages the end-to-end executive/investor workflow.
+- **API Endpoint** – `POST /dashboard/export` generates investor and management views, then exports to both Figma (design review) and Slack (operational alerts).
+- **AI Routing** – Gemini powers executive summaries by default, with OpenAI reserved for investor-grade or advanced analysis and a deterministic on-platform fallback to guarantee output.
+
+Use the endpoint or notebook to tailor exports for investor presentations or internal management stand-ups without duplicating effort.
 
 ## Production Setup
 
