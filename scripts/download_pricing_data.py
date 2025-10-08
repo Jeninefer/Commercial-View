@@ -9,12 +9,12 @@ import tempfile
 from pathlib import Path
 from typing import Callable, Iterable, Optional, Sequence
 from zipfile import ZipFile
-
+import os
 from src.data_loader import PRICING_FILENAMES
 
 
 LOGGER = logging.getLogger("download_pricing_data")
-DEFAULT_FOLDER_ID = "1qIg_BnIf_IWYcWqCuvLaYU_Gu4C2-Dj8"
+DEFAULT_FOLDER_ID = os.environ.get("PRICING_GDRIVE_FOLDER_ID", "1qIg_BnIf_IWYcWqCuvLaYU_Gu4C2-Dj8")
 DEFAULT_DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "pricing"
 
 
