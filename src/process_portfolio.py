@@ -99,13 +99,9 @@ def main():
     
     # Load data
     print("\nLoading data...")
-    # Only pass base_path if CLI override is provided; otherwise, let loaders resolve internally
-    if args.data_dir:
-        loan_data = load_loan_data(args.data_dir)
-        customer_data = load_customer_data(args.data_dir)
-    else:
-        loan_data = load_loan_data()
-        customer_data = load_customer_data()
+    # Always pass base_path; loader functions handle None appropriately
+    loan_data = load_loan_data(args.data_dir)
+    customer_data = load_customer_data(args.data_dir)
     print(f"Loaded {loan_data.shape[0]} rows and {loan_data.shape[1]} columns from loan_data.")
     print(f"Loaded {customer_data.shape[0]} rows and {customer_data.shape[1]} columns from customer_data.")
 
