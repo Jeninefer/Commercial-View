@@ -146,6 +146,9 @@ class CSVProcessor:
         try:
             # Group by loan and get latest balance
             if "loan_id" in payment_data.columns and "remaining_balance" in payment_data.columns:
+                # Ensure data is sorted by payment_date before grouping
+                if "payment_date" in payment_data.columns:
+                    payment_data = payment_data.sort_values("payment_date")
                 latest_balances = payment_data.groupby("loan_id")["remaining_balance"].last()
                 return float(latest_balances.sum())
             elif "outstanding_balance" in payment_data.columns:
