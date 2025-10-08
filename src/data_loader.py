@@ -322,31 +322,31 @@ def _get_default_loader(base_path: Optional[Union[str, Path]] = None) -> DataLoa
 def load_loan_data(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
     """Load loan data using default DataLoader instance"""
     loader = _get_default_loader(base_path)
-    return loader.load_loan_data(base_path)
+    return loader.load_loan_data(None)
 
 
 def load_historic_real_payment(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
     """Load historic real payment data using default DataLoader instance"""
     loader = _get_default_loader(base_path)
-    return loader.load_historic_real_payment(base_path)
+    return loader.load_historic_real_payment(None)
 
 
 def load_payment_schedule(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
     """Load payment schedule data using default DataLoader instance"""
     loader = _get_default_loader(base_path)
-    return loader.load_payment_schedule(base_path)
+    return loader.load_payment_schedule(None)
 
 
 def load_customer_data(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
     """Load customer data using default DataLoader instance"""
     loader = _get_default_loader(base_path)
-    return loader.load_customer_data(base_path)
+    return loader.load_customer_data(None)
 
 
 def load_collateral(base_path: Optional[Union[str, Path]] = None) -> Optional[pd.DataFrame]:
     """Load collateral data using default DataLoader instance"""
     loader = _get_default_loader(base_path)
-    return loader.load_collateral(base_path)
+    return loader.load_collateral(None)
 
 
 def _resolve_base_path(base_path: Optional[Union[str, Path]] = None) -> Path:
