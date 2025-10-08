@@ -260,7 +260,7 @@ async def get_payment_schedule() -> List[Dict[str, Any]]:
             payment_df = loader.load_payment_schedule()
         except FileNotFoundError:
             logger.warning("Payment schedule file not found")
-            return []
+                records = dataset.to_dict("records")
         
         if payment_df is not None and not payment_df.empty:
             records = payment_df.to_dict('records')
