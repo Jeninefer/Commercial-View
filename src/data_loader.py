@@ -18,9 +18,9 @@ def _resolve_base_path(base_path: Optional[Union[str, Path]] = None) -> Path:
     """Return the directory that contains the source CSV files.
 
     The resolution order is:
-    1. Explicit ``base_path`` argument.
-    2. ``COMMERCIAL_VIEW_DATA_PATH`` environment variable.
-    3. Repository-relative default ``data/pricing`` directory.
+    1. Explicit `base_path` argument.
+    2. `COMMERCIAL_VIEW_DATA_PATH` environment variable.
+    3. Repository-relative default `data/pricing` directory.
     """
 
     if base_path is not None:
