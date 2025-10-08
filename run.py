@@ -303,14 +303,7 @@ async def get_historic_payments() -> List[Dict[str, Any]]:
             except Exception as exc:
                 logger.debug(f"Pipeline load_all_datasets failed: {exc}")
 
-            dataset = None
-            if hasattr(pipeline_instance, "get_dataset"):
-                dataset = pipeline_instance.get_dataset("historic_real_payment")
-            if dataset is not None:
-                records = dataset.to_dict("records") if hasattr(dataset, "to_dict") else list(dataset)
-                if records:
-                    return records
-
+            # No get_dataset method; proceed to fallback loader
         try:
             historic_df = loader.load_historic_real_payment()
         except FileNotFoundError:
