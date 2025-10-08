@@ -8,7 +8,7 @@ import shutil
 import tempfile
 from pathlib import Path
 import os
-from typing import Callable, Iterable, Optional, Sequence
+from zipfile import ZipFile
 from zipfile import ZipFile
 from src.data_loader import PRICING_FILENAMES
 
