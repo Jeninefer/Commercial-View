@@ -18,7 +18,7 @@ if [ ! -f "$ACTIVATE_SCRIPT" ]; then
     exit 1
 fi
 
-# shellcheck disable=SC1090
+# shellcheck disable=SC1090  # dynamic source path cannot be statically analyzed
 source "$ACTIVATE_SCRIPT"
 trap 'deactivate >/dev/null 2>&1' EXIT
 
