@@ -185,7 +185,7 @@ async def get_executive_summary() -> Dict[str, Any]:
             },
             "tenor_distribution": tenor_mix,
             "performance_metrics": {
-                "collection_rate": 95.0,  # Calculated from payment data
+                "collection_rate": csv_processor.calculate_collection_rate(payment_schedule),
                 "portfolio_yield": weighted_avg_rate,
             },
         }
