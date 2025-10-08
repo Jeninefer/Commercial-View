@@ -7,7 +7,7 @@ import logging
 import shutil
 import tempfile
 from pathlib import Path
-from typing import Callable, Iterable, List, Optional, Sequence
+from typing import Callable, Iterable, Optional, Sequence
 from zipfile import ZipFile
 
 from src.data_loader import PRICING_FILENAMES
