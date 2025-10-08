@@ -365,7 +365,7 @@ async def get_executive_summary() -> Dict[str, Any]:
             "timestamp": datetime.now().isoformat(),
             "portfolio_overview": {
                 "total_portfolio_value": outstanding,
-                "active_loan_count": len(datasets.get("loan_data", pd.DataFrame())),
+                "active_loan_count": len(datasets.get("loan_data") or pd.DataFrame()),
                 "weighted_average_rate": 0.0,  # Placeholder
             },
             "risk_indicators": {
