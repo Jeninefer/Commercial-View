@@ -269,53 +269,8 @@ async def get_risk_exposure() -> Dict[str, Any]:
         npl_metrics = csv_processor.calculate_npl_metrics(payment_schedule)
         outstanding = csv_processor.calculate_outstanding_portfolio(payment_schedule)
         
-        # Calculate DPD distribution
-        dpd_distribution = {
-            "current": 0.0,
-            "1-30_days": 0.0,
-            "31-60_days": 0.0,
-            "61-90_days": 0.0,
-            "90+_days": 0.0,
-        }
-        
-        if payment_schedule is not None and "days_past_due" in payment_schedule.columns:
-            total_loans = len(payment_schedule.groupby("loan_id"))
-            if total_loans > 0:
-                current_count = len(
-                    payment_schedule[payment_schedule["days_past_due"] == 0]
-                    .groupby("loan_id")
-                )
-                dpd_1_30 = len(
-                    payment_schedule[
-                        (payment_schedule["days_past_due"] > 0) & 
-                        (payment_schedule["days_past_due"] <= 30)
-                    ].groupby("loan_id")
-                )
-                dpd_31_60 = len(
-                    payment_schedule[
-                        (payment_schedule["days_past_due"] > 30) & 
-                        (payment_schedule["days_past_due"] <= 60)
-                    ].groupby("loan_id")
-                )
-                dpd_61_90 = len(
-                    payment_schedule[
-                        (payment_schedule["days_past_due"] > 60) & 
-                        (payment_schedule["days_past_due"] <= 90)
-                    ].groupby("loan_id")
-                )
-                dpd_90_plus = len(
-                    payment_schedule[payment_schedule["days_past_due"] > 90]
-                    .groupby("loan_id")
-                )
-                
-                dpd_distribution = {
-                    "current": (current_count / total_loans) * 100,
-                    "1-30_days": (dpd_1_30 / total_loans) * 100,
-                    "31-60_days": (dpd_31_60 / total_loans) * 100,
-                    "61-90_days": (dpd_61_90 / total_loans) * 100,
-                    "90+_days": (dpd_90_plus / total_loans) * 100,
-                }
-        
+        # Calculate DPD distribution using CSVProcessor method
+        dpd_distribution = csv_processor.calculate_dpd_distribution(payment_schedule)
         # Calculate concentration risk
         concentration_risk = {
             "top_1_client": 0.0,
