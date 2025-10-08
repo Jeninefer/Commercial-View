@@ -253,8 +253,9 @@ async def get_payment_schedule() -> List[Dict[str, Any]]:
             except Exception as exc:
                 logger.debug(f"Pipeline load_all_datasets failed: {exc}")
 
-            # No public interface to access datasets; skipping pipeline dataset retrieval.
-            # Fallback to loading payment schedule directly from loader.
+            # DESIGN LIMITATION: The pipeline does not expose loaded datasets via a public interface.
+            # Consider adding a method like `get_payment_schedule()` to CommercialViewPipeline to access cached datasets.
+            # For now, fallback to loading payment schedule directly from loader.
 
         try:
             payment_df = loader.load_payment_schedule()
