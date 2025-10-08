@@ -23,10 +23,8 @@ _CONFIG_KEY_MAP = {
     "historic_real_payment": "historic_real_payment_csv",
     "payment_schedule": "payment_schedule_csv",
     "customer_data": "customer_data_csv",
-    "collateral": "collateral_csv",
-    # All data types in _DEFAULT_PRICING_FILENAMES are now mapped to config keys and can be overridden by config.
+    "collateral": "collateral_csv",  # Now collateral can be configured via config.
 }
-
 _DEFAULT_PRICING_FILENAMES = {
     "loan_data": "main_pricing.csv",
     "historic_real_payment": "commercial_loans_pricing.csv",
