@@ -257,8 +257,8 @@ async def get_payment_schedule() -> List[Dict[str, Any]]:
             if hasattr(pipeline_instance, "get_dataset"):
                 dataset = pipeline_instance.get_dataset("payment_schedule")
             else:
-                logger.warning("Accessing private _datasets attribute directly; consider updating CommercialViewPipeline to provide a public interface.")
-                dataset = getattr(pipeline_instance, "_datasets", {}).get("payment_schedule")
+                logger.error("CommercialViewPipeline does not provide a public interface to access datasets. Please implement a public method like 'get_dataset'.")
+                return []
             if dataset is not None:
                 records = dataset.to_dict("records") if hasattr(dataset, "to_dict") else list(dataset)
                 if records:
