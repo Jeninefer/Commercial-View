@@ -191,7 +191,9 @@ class CSVProcessor:
         """Identify loans with >90 days past due"""
         npl_metrics = {"npl_count": 0, "npl_amount": 0.0, "npl_percentage": 0.0}
 
-        if payment_data is None or payment_data.empty:
+        if payment_data is None:
+            return npl_metrics
+        if payment_data.empty:
             return npl_metrics
 
         try:
