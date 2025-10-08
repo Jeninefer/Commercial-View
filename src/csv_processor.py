@@ -162,7 +162,7 @@ class CSVProcessor:
         """Group loans into tenor buckets for distribution analysis"""
         tenor_buckets = {"0-12": 0.0, "13-24": 0.0, "25-36": 0.0, "37+": 0.0}
 
-        if loan_data is None or loan_data.empty:
+        if loan_data is None or len(loan_data) == 0:
             return tenor_buckets
 
         try:
