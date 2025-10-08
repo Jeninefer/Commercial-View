@@ -45,6 +45,11 @@ PACKAGE_INFO = {
 
 # Core module imports with error handling
 _CORE_MODULES_AVAILABLE = True
+_ANALYTICS_MODULES_AVAILABLE = False
+_UTILITY_MODULES_AVAILABLE = False
+_ENHANCED_MODULES_AVAILABLE = False
+_ABACO_MODULES_AVAILABLE = False
+_AI_MODULES_AVAILABLE = False
 _IMPORT_ERRORS = []
 
 try:
@@ -127,15 +132,6 @@ if _CORE_MODULES_AVAILABLE:
     )
 else:
     logging.warning("Commercial-View initialized with limited functionality")
-            "utility_modules": _UTILITY_MODULES_AVAILABLE
-        },
-        "available_features": get_available_features(),
-        "system_info": {
-            "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
-            "platform": sys.platform,
-            "package_path": str(Path(__file__).parent)
-        }
-    }
 
 def get_available_features() -> Dict[str, bool]:
     """Get status of available commercial lending features"""
