@@ -139,3 +139,4 @@ frontend/dist/
 frontend/.next/
 frontend/coverage/
 
+-e .env\ntmp/\n*.tar.gz\n.vscode/
