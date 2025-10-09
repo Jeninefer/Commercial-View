@@ -26,11 +26,11 @@ _CONFIG_KEY_MAP = {
     "collateral": "collateral_csv",  # Now collateral can be configured via config.
 }
 _DEFAULT_PRICING_FILENAMES = {
-    "loan_data": "main_pricing.csv",
-    "historic_real_payment": "commercial_loans_pricing.csv",
-    "payment_schedule": "retail_loans_pricing.csv",
-    "customer_data": "risk_based_pricing.csv",
-    "collateral": "risk_based_pricing_enhanced.csv",
+    "loan_data": "loan_data.csv",
+    "historic_real_payment": "historic_real_payment.csv",
+    "payment_schedule": "payment_schedule.csv",
+    "customer_data": "customer_data.csv",
+    "collateral": "collateral.csv",
 }
 
 
