@@ -161,3 +161,4 @@ secret_*
 .env
 .env.*
 .env
+.env
