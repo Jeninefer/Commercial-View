@@ -1,20 +1,45 @@
 # Commercial-View
 
-Enterprise-grade commercial lending analytics platform for professional financial institutions.
+**Enterprise-grade portfolio analytics for Abaco Capital**
 
-## Overview
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-Proprietary-red.svg)](LICENSE)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Commercial-View delivers comprehensive analytics, pricing intelligence, and operational visibility for commercial loan portfolios. The platform combines a robust FastAPI service layer with advanced analytics pipelines that process real CSV datasets into actionable business insights.
+---
 
-### Key Capabilities
+## 🚀 Quick Start
 
-- **Unified API Gateway** - FastAPI service exposing portfolio, payment, and health endpoints
-- **Advanced Analytics Pipeline** - Computes DPD, recovery, and optimization metrics from real data
-- **Interactive Dashboard** - React TypeScript frontend for analysts and executives
-- **Production Automation** - Server lifecycle management and automated reporting
-- **Real Data Integration** - Direct connection to production Google Drive data sources
+```bash
+# Clone and setup
+git clone https://github.com/Jeninefer/Commercial-View.git
+cd Commercial-View
+./setup.sh
 
-## System Architecture
+# Or manual setup
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+**→ See [QUICKSTART.md](QUICKSTART.md) for detailed setup instructions**
+
+---
+
+## 📋 Overview
+
+Commercial-View is a comprehensive analytics platform for commercial lending portfolio management, providing:
+
+- **📊 Portfolio Analytics**: Real-time KPIs, growth tracking, cohort analysis
+- **⚠️ Risk Management**: PD modeling, NPL tracking, early warning systems
+- **💰 Financial Performance**: ROA, ROE, NIM calculations and trends
+- **🎯 Business Intelligence**: Customer segmentation, concentration analysis
+- **🤖 Predictive Analytics**: ML models for default and churn prediction
+- **📈 Automated Reporting**: Dashboard generation and executive summaries
+
+---
+
+## 🏗️ Architecture
 
 ```mermaid
 graph TD
@@ -56,7 +81,9 @@ graph TD
     M --> D
 ```
 
-## Production Setup
+---
+
+## 📦 Production Setup
 
 ### Prerequisites
 
@@ -96,7 +123,9 @@ export ALLOWED_ORIGINS="https://yourdomain.com"
 python server_control.py --host 0.0.0.0 --port 8000
 ```
 
-## Production Data Sources
+---
+
+## 📊 Production Data Sources
 
 ### Real Commercial Lending Data
 
@@ -107,14 +136,16 @@ python server_control.py --host 0.0.0.0 --port 8000
 
 ### Supported Datasets
 
-| Dataset | Description | Business Purpose |
-|---------|-------------|------------------|
-| `loan_data.csv` | Active commercial loan portfolio | Outstanding balances, terms, rates |
-| `payment_schedule.csv` | Scheduled loan payments | Cash flow projections, payment tracking |
-| `historic_real_payment.csv` | Actual payment history | Performance analysis, DPD calculations |
-| `customer_data.csv` | Commercial customer information | Risk assessment, relationship management |
+| Dataset                     | Description                      | Business Purpose                         |
+| --------------------------- | -------------------------------- | ---------------------------------------- |
+| `loan_data.csv`             | Active commercial loan portfolio | Outstanding balances, terms, rates       |
+| `payment_schedule.csv`      | Scheduled loan payments          | Cash flow projections, payment tracking  |
+| `historic_real_payment.csv` | Actual payment history           | Performance analysis, DPD calculations   |
+| `customer_data.csv`         | Commercial customer information  | Risk assessment, relationship management |
 
-## API Documentation
+---
+
+## 📚 API Documentation
 
 ### Core Endpoints
 
@@ -129,7 +160,9 @@ python server_control.py --host 0.0.0.0 --port 8000
 - **ReDoc Documentation**: `http://localhost:8000/redoc`
 - **OpenAPI Specification**: Available at `/openapi.json`
 
-## Commercial Lending Features
+---
+
+## 💼 Commercial Lending Features
 
 ### Portfolio Analytics
 
@@ -148,11 +181,13 @@ python server_control.py --host 0.0.0.0 --port 8000
 ### Business Intelligence
 
 - **Executive Dashboards** - Real-time KPI monitoring
-- **Trend Analysis** - Historical performance tracking  
+- **Trend Analysis** - Historical performance tracking
 - **Predictive Analytics** - Portfolio performance forecasting
 - **Customer Segmentation** - Relationship profitability analysis
 
-## Production Deployment
+---
+
+## 🚀 Production Deployment
 
 ### Server Management
 
@@ -191,7 +226,9 @@ black src/ tests/ --check
 mypy src/ --ignore-missing-imports
 ```
 
-## Production Monitoring
+---
+
+## 📈 Production Monitoring
 
 ### Health Checks
 
@@ -207,7 +244,9 @@ mypy src/ --ignore-missing-imports
 - **Data Quality** - Validation and completeness metrics
 - **User Activity** - Dashboard usage and API consumption
 
-## Security and Compliance
+---
+
+## 🔒 Security and Compliance
 
 ### Data Protection
 
@@ -223,16 +262,18 @@ mypy src/ --ignore-missing-imports
 - **Privacy Controls** - PII handling and masking
 - **Backup Procedures** - Automated data backup and recovery
 
-## Production Support
+---
+
+## 🛠️ Production Support
 
 ### Troubleshooting
 
-| Issue | Diagnostic | Resolution |
-|-------|------------|------------|
-| Import errors | Check virtual environment activation | `source .venv/bin/activate` |
-| Port conflicts | Verify port availability | `python server_control.py --check-only` |
-| Data loading failures | Validate data source connectivity | Check Google Drive permissions |
-| API timeouts | Review server logs | Increase timeout settings or optimize queries |
+| Issue                 | Diagnostic                           | Resolution                                    |
+| --------------------- | ------------------------------------ | --------------------------------------------- |
+| Import errors         | Check virtual environment activation | `source .venv/bin/activate`                   |
+| Port conflicts        | Verify port availability             | `python server_control.py --check-only`       |
+| Data loading failures | Validate data source connectivity    | Check Google Drive permissions                |
+| API timeouts          | Review server logs                   | Increase timeout settings or optimize queries |
 
 ### Performance Optimization
 
@@ -241,7 +282,9 @@ mypy src/ --ignore-missing-imports
 - **API Rate Limiting** - Request throttling and load balancing
 - **Resource Monitoring** - CPU, memory, and disk utilization tracking
 
-## Contributing
+---
+
+## 🤝 Contributing
 
 ### Development Workflow
 
@@ -256,7 +299,9 @@ mypy src/ --ignore-missing-imports
 - **TypeScript**: ESLint, Prettier formatting, Jest testing
 - **Documentation**: Markdown linting, comprehensive API documentation
 
-## License
+---
+
+## 📜 License
 
 **Proprietary** - Commercial lending platform for authorized use only.
 
