@@ -1,15 +1,15 @@
-"""Commercial-View package initialization."""
+"""Commercial-View Package
+
+Production-ready analytics platform for commercial lending portfolio management.
+"""
 
 __version__ = "1.0.0"
-__all__ = []
+__author__ = "Abaco Capital Analytics Team"
 
-# Add current directory to path for imports
-import sys
-import os
-from pathlib import Path
-
-sys.path.append(os.path.dirname(__file__))
-
+__all__ = [
+    # Core version
+    "__version__",
+]
 # Version and metadata
 __version__ = "1.0.0"
 __title__ = "Commercial-View"

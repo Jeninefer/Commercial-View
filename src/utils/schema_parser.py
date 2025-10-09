@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Set, Tuple
 from datetime import datetime
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 
 
@@ -40,11 +40,11 @@ class ColumnInfo:
 
     name: str
     dtype: str
-    sample_values: List[Any]
-    validation_rules: Dict[str, Any]
-    coerced_dtype: Optional[str] = None
     nullable: bool = True
     unique_count: Optional[int] = None
+    sample_values: List[Any] = field(default_factory=list)
+    validation_rules: Dict[str, Any] = field(default_factory=dict)
+    coerced_dtype: Optional[str] = None
     business_category: Optional[str] = None
 
     def __post_init__(self):
