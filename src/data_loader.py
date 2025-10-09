@@ -47,7 +47,7 @@ def _read_csv(filename: str, base_path: Optional[Union[str, Path]] = None) -> Da
         raise FileNotFoundError(
             "CSV file not found: "
             f"{file_path}. Configure the data directory using the "
-            f"`{ENV_VAR_NAME}` environment variable or pass a `base_path` "
+            "`COMMERCIAL_VIEW_DATA_PATH` environment variable or pass a `base_path` "
             "argument."
         )
 
