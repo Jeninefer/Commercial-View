@@ -156,6 +156,7 @@ export interface ApiResponse<T = any> {
   };
 }
 
+<<<<<<< HEAD
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
   pagination: {
     page: number;
@@ -167,6 +168,8 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
   };
 }
 
+=======
+>>>>>>> 9039104 (Add missing project files and documentation)
 export interface LoanData {
   loanId: string;
   borrowerName: string;
@@ -206,6 +209,7 @@ export interface CustomerData {
   lastReviewDate: string;
 }
 
+<<<<<<< HEAD
 // Enhanced Commercial-View Client
 export class CommercialViewClient {
   private baseUrl: string;
@@ -298,6 +302,53 @@ export class CommercialViewClient {
   }
 
   // Legacy support methods
+=======
+export class CommercialViewClient {
+  private baseUrl: string;
+  private headers: HeadersInit;
+
+  constructor(baseUrl: string = 'http://localhost:8000', apiKey?: string) {
+    this.baseUrl = baseUrl;
+    this.headers = {
+      'Content-Type': 'application/json',
+      ...(apiKey && { 'Authorization': `Bearer ${apiKey}` })
+    };
+  }
+
+  private async makeRequest<T>(endpoint: string): Promise<ApiResponse<T>> {
+    try {
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+        headers: this.headers
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      return {
+        data,
+        status: 'success'
+      };
+    } catch (error) {
+      return {
+        data: null as T,
+        status: 'error',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  async getExecutiveSummary(): Promise<ApiResponse<ExecutiveSummary>> {
+    return this.makeRequest<ExecutiveSummary>('/executive-summary');
+  }
+
+  async getHealth(): Promise<ApiResponse<{ status: string }>> {
+    return this.makeRequest<{ status: string }>('/health');
+  }
+
+>>>>>>> 9039104 (Add missing project files and documentation)
   async getLoanData(): Promise<ApiResponse<LoanData[]>> {
     return this.makeRequest<LoanData[]>('/loan-data');
   }
@@ -326,6 +377,7 @@ export class CommercialViewClient {
     return this.makeRequest<Record<string, any>>('/schema');
   }
 
+<<<<<<< HEAD
   // Enhanced commercial lending methods
   async getDPDAnalysis(loanId?: string): Promise<ApiResponse<DPDAnalysis[]>> {
     const endpoint = loanId ? `/api/v1/dpd-analysis/${loanId}` : '/api/v1/dpd-analysis';
@@ -414,6 +466,12 @@ export class CommercialViewClient {
 
   getConfig(): Partial<CommercialViewConfig> {
     return { ...this.config };
+=======
+  // Utility method to test connection
+  async testConnection(): Promise<boolean> {
+    const healthCheck = await this.getHealth();
+    return healthCheck.status === 'success';
+>>>>>>> 9039104 (Add missing project files and documentation)
   }
 
   // Method to get API base URL
@@ -424,6 +482,7 @@ export class CommercialViewClient {
   // Method to update headers (e.g., for authentication)
   updateHeaders(newHeaders: HeadersInit): void {
     this.headers = { ...this.headers, ...newHeaders };
+<<<<<<< HEAD
   }
 }
 
@@ -771,6 +830,8 @@ export namespace CommercialLendingUtils {
     } catch {
       return false;
     }
+=======
+>>>>>>> 9039104 (Add missing project files and documentation)
   }
 
   export function calculateVaR(

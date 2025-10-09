@@ -2,7 +2,10 @@
 
 # =============================================================================
 # DATA FILES - CSV & SPREADSHEETS
+<<<<<<< HEAD
 # =============================================================================
+=======
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.csv filter=lfs diff=lfs merge=lfs -text
 *.xlsx filter=lfs diff=lfs merge=lfs -text
 *.xls filter=lfs diff=lfs merge=lfs -text
@@ -10,19 +13,27 @@ data/pricing/*.csv filter=lfs diff=lfs merge=lfs -text
 data/raw/*.csv filter=lfs diff=lfs merge=lfs -text
 data/processed/*.csv filter=lfs diff=lfs merge=lfs -text
 data/exports/*.csv filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 
 # =============================================================================
 # DATABASE & BACKUP FILES
 # =============================================================================
+=======
+# DATABASE & BACKUP FILES
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.sql filter=lfs diff=lfs merge=lfs -text
 *.db filter=lfs diff=lfs merge=lfs -text
 *.sqlite filter=lfs diff=lfs merge=lfs -text
 *.dump filter=lfs diff=lfs merge=lfs -text
 *.backup filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 
 # =============================================================================
 # IMAGES & GRAPHICS
 # =============================================================================
+=======
+# IMAGES & GRAPHICS
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.png filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text
 *.jpeg filter=lfs diff=lfs merge=lfs -text
@@ -31,54 +42,78 @@ data/exports/*.csv filter=lfs diff=lfs merge=lfs -text
 *.tiff filter=lfs diff=lfs merge=lfs -text
 *.svg filter=lfs diff=lfs merge=lfs -text
 *.webp filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 
 # =============================================================================
 # DOCUMENTS & REPORTS
 # =============================================================================
+=======
+# DOCUMENTS & REPORTS
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.pdf filter=lfs diff=lfs merge=lfs -text
 *.doc filter=lfs diff=lfs merge=lfs -text
 *.docx filter=lfs diff=lfs merge=lfs -text
 *.ppt filter=lfs diff=lfs merge=lfs -text
 *.pptx filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 
 # =============================================================================
 # ARCHIVES & PACKAGES
 # =============================================================================
+=======
+# ARCHIVES & PACKAGES
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.zip filter=lfs diff=lfs merge=lfs -text
 *.tar.gz filter=lfs diff=lfs merge=lfs -text
 *.tgz filter=lfs diff=lfs merge=lfs -text
 *.rar filter=lfs diff=lfs merge=lfs -text
 *.7z filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 
 # =============================================================================
 # MEDIA & BINARY FILES
 # =============================================================================
+=======
+# MEDIA & BINARY FILES
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.mp4 filter=lfs diff=lfs merge=lfs -text
 *.mov filter=lfs diff=lfs merge=lfs -text
 *.avi filter=lfs diff=lfs merge=lfs -text
 *.mp3 filter=lfs diff=lfs merge=lfs -text
 *.wav filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 
 # =============================================================================
 # BUILD ARTIFACTS
 # =============================================================================
+=======
+# BUILD ARTIFACTS
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.exe filter=lfs diff=lfs merge=lfs -text
 *.dll filter=lfs diff=lfs merge=lfs -text
 *.so filter=lfs diff=lfs merge=lfs -text
 *.dylib filter=lfs diff=lfs merge=lfs -text
 dist/*.zip filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 
 # =============================================================================
 # CREDENTIALS & CERTIFICATES
 # =============================================================================
+=======
+# CREDENTIALS & CERTIFICATES
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.p12 filter=lfs diff=lfs merge=lfs -text
 *.pem filter=lfs diff=lfs merge=lfs -text
 *.key filter=lfs diff=lfs merge=lfs -text
 *.crt filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 
 # =============================================================================
 # TEXT FILE HANDLING (Normal Git)
 # =============================================================================
+=======
+# TEXT FILE HANDLING (Normal Git)
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.md text
 *.txt text
 *.py text
@@ -94,6 +129,7 @@ dist/*.zip filter=lfs diff=lfs merge=lfs -text
 *.sh text eol=lf
 *.bat text eol=crlf
 *.ps1 text eol=crlf
+<<<<<<< HEAD
 
 # =============================================================================
 # LINE ENDING NORMALIZATION
@@ -103,4 +139,9 @@ dist/*.zip filter=lfs diff=lfs merge=lfs -text
 *.sh text eol=lf
 *.bat text eol=crlf
 *.ps1 text eol=crlf
+=======
+# LINE ENDING NORMALIZATION
+* text=auto
+*.py text eol=lf
+>>>>>>> 9039104 (Add missing project files and documentation)
 *.cmd text eol=crlf

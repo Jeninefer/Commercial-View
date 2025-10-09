@@ -1,6 +1,7 @@
 #!/bin/csh
 # Project-specific activation script for Commercial-View (C shell version)
 
+<<<<<<< HEAD
 echo "🏦 Initializing Commercial-View Commercial Lending Platform..."
 
 # Activate virtual environment
@@ -11,6 +12,10 @@ else
     echo "❌ Virtual environment not found. Please run: python -m venv .venv"
     exit 1
 endif
+=======
+# Activate virtual environment
+source .venv/bin/activate.csh
+>>>>>>> 9039104 (Add missing project files and documentation)
 
 # Load environment variables if .env exists
 if ( -f ".env" ) then
@@ -21,6 +26,7 @@ endif
 # Set project-specific paths
 setenv COMMERCIAL_VIEW_ROOT "`pwd`"
 if ( "$?PYTHONPATH" ) then
+<<<<<<< HEAD
     setenv PYTHONPATH "$COMMERCIAL_VIEW_ROOT/src:$COMMERCIAL_VIEW_ROOT/scripts:$PYTHONPATH"
 else
     setenv PYTHONPATH "$COMMERCIAL_VIEW_ROOT/src:$COMMERCIAL_VIEW_ROOT/scripts"
@@ -34,6 +40,13 @@ setenv COLUMN_MAPS_PATH "$COMMERCIAL_VIEW_ROOT/configs/column_maps.yml"
 setenv DATA_DIR "$COMMERCIAL_VIEW_ROOT/data"
 setenv EXPORT_DIR "$COMMERCIAL_VIEW_ROOT/abaco_runtime/exports"
 
+=======
+    setenv PYTHONPATH "$COMMERCIAL_VIEW_ROOT/src:$PYTHONPATH"
+else
+    setenv PYTHONPATH "$COMMERCIAL_VIEW_ROOT/src"
+endif
+
+>>>>>>> 9039104 (Add missing project files and documentation)
 # Set development environment variables
 setenv ENVIRONMENT "development"
 setenv DEBUG "true"
@@ -41,6 +54,7 @@ if ( ! "$?API_BASE_URL" ) then
     setenv API_BASE_URL "http://localhost:8000"
 endif
 
+<<<<<<< HEAD
 # Ensure required directories exist
 set required_dirs = ("var/log" "var/run" "data/pricing" "abaco_runtime/exports/kpi/json" "abaco_runtime/exports/kpi/csv" "abaco_runtime/exports/dpd" "abaco_runtime/exports/buckets")
 
@@ -53,11 +67,15 @@ end
 
 # Display comprehensive status
 echo ""
+=======
+# Display status
+>>>>>>> 9039104 (Add missing project files and documentation)
 echo "🚀 Commercial-View development environment ready (csh)"
 echo "📁 Project root: $COMMERCIAL_VIEW_ROOT"
 echo "🐍 Python path: $PYTHONPATH"
 echo "💻 Virtual environment: `which python`"
 echo "🌐 API Base URL: $API_BASE_URL"
+<<<<<<< HEAD
 echo "💼 Commercial lending mode: $COMMERCIAL_VIEW_MODE"
 echo "📊 Data directory: $DATA_DIR"
 echo "📤 Export directory: $EXPORT_DIR"
@@ -191,3 +209,20 @@ echo "💡 Type 'cvhelp' for additional command information"
 
 # Create help command
 alias cvhelp 'echo "🏦 Commercial-View Development Commands:"; echo ""; echo "Server Management:"; echo "  cvdev      - Start development server"; echo "  cvprod     - Start production server"; echo "  cvperf     - Start high-performance server"; echo "  cvkill     - Stop server"; echo "  cvhealth   - Check server health"; echo "  cvstatus   - Show server status"; echo ""; echo "Commercial Lending:"; echo "  cvprice    - Commercial loan pricing"; echo "  cvdpd      - Days past due analysis"; echo "  cvkpi      - Generate KPI reports"; echo "  cvrisk     - Risk assessment"; echo "  cvexport   - Export management"; echo ""; echo "Development:"; echo "  cvtest     - Run tests"; echo "  cvlint     - Code formatting and linting"; echo "  cvlog      - View application logs"; echo "  cvclean    - Clean Python cache files"; echo ""; echo "For more help, see: docs/"'
+=======
+
+# Check if required packages are installed
+python -c "import fastapi" >& /dev/null
+if ( $status != 0 ) then
+    echo "⚠️  Missing dependencies. Run: pip install -r requirements.txt"
+endif
+
+# Create helpful aliases
+alias cvapi "python server_control.py"
+alias cvtest "pytest -v"
+alias cvlint "python -m black src/ scripts/ && python -m mypy src/"
+alias cvsync "python scripts/sync_github.py"
+alias cvupload "python scripts/upload_to_drive.py"
+
+echo "🎉 C shell environment setup complete!"
+>>>>>>> 9039104 (Add missing project files and documentation)
