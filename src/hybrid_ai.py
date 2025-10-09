@@ -114,7 +114,7 @@ class OpenAIProvider(AIProvider):
             output_text = ""
             if completion and hasattr(completion, "choices") and completion.choices:
                 # Extract the generated message content from the first choice
-                output_text = completion.choices[0].message.content
+                output_text = completion.choices[0].message.content or ""
             return output_text.strip()
         except Exception as exc:  # pragma: no cover - upstream failure
             raise AIProviderError(f"OpenAI generation failed: {exc}") from exc
