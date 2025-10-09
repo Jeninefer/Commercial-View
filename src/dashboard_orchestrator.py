@@ -146,8 +146,7 @@ class DashboardOrchestrator:
         weighted_apr = portfolio_metrics.get("weighted_apr", 0)
         recent_recovery = (
             recovery_metrics.sort_values("months_since_disbursement", ascending=False)
-            .head(1)
-            .get("recovery_pct")
+            .head(1)["recovery_pct"]
             if hasattr(recovery_metrics, "sort_values") and not recovery_metrics.empty
             else None
         )
