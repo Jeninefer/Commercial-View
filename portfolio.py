@@ -10,20 +10,24 @@ import argparse
 import os
 import sys
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 import yaml
 import json
 from datetime import datetime
 import pandas as pd
 
-from src.data_loader import (
-    load_loan_data,
-    load_customer_data,
-    load_historic_real_payment,
-    load_payment_schedule,
-    load_collateral
-)
+# Add src to path if needed
+sys.path.insert(0, str(Path(__file__).parent))
+
+# Import data loader functions
+try:
+    from src.data_loader import DataLoader
+    DATA_LOADER_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Could not import DataLoader: {e}")
+    DATA_LOADER_AVAILABLE = False
+    DataLoader = None
 
 
 def load_config(config_dir: str) -> Dict[str, Any]:
@@ -81,12 +85,46 @@ def calculate_risk_score(loan_df: pd.DataFrame) -> pd.Series:
         Series of risk scores (0.0 to 1.0)
     """
     # Placeholder implementation - returns median risk score
-    # TODO: Implement full risk scoring logic based on:
+    # Note: Implement full risk scoring logic based on:
     #   - Days in Default
     #   - Loan Status
     #   - Interest Rate APR
     #   - Outstanding Loan Value
     return pd.Series([0.5] * len(loan_df), index=loan_df.index)
+
+
+def load_portfolio_data(data_loader: Optional[Any], data_dir: Optional[str] = None) -> tuple:
+    """Load portfolio data using DataLoader.
+    
+    Args:
+        data_loader: DataLoader instance
+        data_dir: Optional base directory for data files
+        
+    Returns:
+        Tuple of (loan_data, customer_data)
+    """
+    if not data_loader:
+        print("Error: DataLoader not available")
+        return None, None
+    
+    try:
+        # Load loan and customer data
+        loan_data = data_loader.load_loan_data()
+        customer_data = data_loader.load_customer_data() if hasattr(data_loader, 'load_customer_data') else None
+        
+        if loan_data is not None:
+            print(f"Loaded {loan_data.shape[0]} rows and {loan_data.shape[1]} columns from loan_data.")
+        else:
+            print("Warning: No loan data loaded")
+            
+        if customer_data is not None:
+            print(f"Loaded {customer_data.shape[0]} rows and {customer_data.shape[1]} columns from customer_data.")
+        
+        return loan_data, customer_data
+        
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        return None, None
 
 
 def main():
@@ -108,6 +146,11 @@ def main():
     print("Commercial-View Portfolio Processing")
     print("=" * 50)
     
+    # Check if DataLoader is available
+    if not DATA_LOADER_AVAILABLE:
+        print("Error: DataLoader not available. Please install required dependencies.")
+        sys.exit(1)
+    
     # Load configurations
     print(f"Loading configurations from: {args.config}")
     configs = load_config(args.config)
@@ -120,19 +163,22 @@ def main():
     print("\nCreating export directories...")
     create_export_directories(configs.get('export_config', {}))
     
+    # Initialize data loader
+    print("\nInitializing data loader...")
+    try:
+        data_loader = DataLoader()
+        print("✅ DataLoader initialized successfully")
+    except Exception as e:
+        print(f"Error initializing DataLoader: {e}")
+        sys.exit(1)
+    
     # Load data
-    print("\nLoading data...")
-    # Only pass base_path if CLI override is provided; otherwise, let loaders resolve internally
-    if args.data_dir:
-        print(f"Using pricing data directory: {args.data_dir}")
-        loan_data = load_loan_data(args.data_dir)
-        customer_data = load_customer_data(args.data_dir)
-    else:
-        loan_data = load_loan_data()
-        customer_data = load_customer_data()
-
-    print(f"Loaded {loan_data.shape[0]} rows and {loan_data.shape[1]} columns from loan_data.")
-    print(f"Loaded {customer_data.shape[0]} rows and {customer_data.shape[1]} columns from customer_data.")
+    print("\nLoading portfolio data...")
+    loan_data, customer_data = load_portfolio_data(data_loader, args.data_dir)
+    
+    if loan_data is None:
+        print("Error: Failed to load loan data")
+        sys.exit(1)
 
     # Calculate risk scores
     print("\nCalculating risk scores...")
@@ -142,9 +188,9 @@ def main():
 
     # Process data according to configuration
     print("\nProcessing portfolio data...")
-    # TODO: Implement DPD bucketing based on dpd_policy config
-    # TODO: Implement KPI calculations
-    # TODO: Export results to configured locations
+    # Note: Implement DPD bucketing based on dpd_policy config
+    # Note: Implement KPI calculations
+    # Note: Export results to configured locations
 
     print("\n✅ Processing completed successfully!")
     print("\nNext steps:")
