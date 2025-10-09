@@ -121,7 +121,7 @@ class OpenAIProvider(AIProvider):
 
 
 class LocalScribeProvider(AIProvider):
-    """Deterministic fallback provider using handcrafted summarisation."""
+    """Deterministic fallback provider using handcrafted summarization."""
 
     def __init__(self) -> None:
         super().__init__("local")
