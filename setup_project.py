@@ -124,12 +124,8 @@ def fix_requirements():
         with open(req_dev_path, 'r') as f:
             content = f.read()
         
-        # Replace the httpx version
-        updated_content = re.sub(
-            r'httpx>=0\.28\.1', 
-            'httpx==0.25.1',
-            content
-        )
+        # Replace the httpx version using str.replace (more efficient than re.sub)
+        updated_content = content.replace('httpx>=0.28.1', 'httpx==0.25.1')
         
         # Write back
         with open(req_dev_path, 'w') as f:
