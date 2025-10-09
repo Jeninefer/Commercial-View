@@ -1,7 +1,7 @@
 # Git LFS Configuration for Commercial-View Project
-
 # =============================================================================
 # DATA FILES - CSV & SPREADSHEETS
+<<<<<<< HEAD
 <<<<<<< HEAD
 # =============================================================================
 =======
@@ -9,6 +9,8 @@
 *.csv filter=lfs diff=lfs merge=lfs -text
 *.xlsx filter=lfs diff=lfs merge=lfs -text
 *.xls filter=lfs diff=lfs merge=lfs -text
+=======
+>>>>>>> 91cf8e3 (Update without large data files)
 data/pricing/*.csv filter=lfs diff=lfs merge=lfs -text
 data/raw/*.csv filter=lfs diff=lfs merge=lfs -text
 data/processed/*.csv filter=lfs diff=lfs merge=lfs -text
@@ -145,3 +147,5 @@ dist/*.zip filter=lfs diff=lfs merge=lfs -text
 *.py text eol=lf
 >>>>>>> 9039104 (Add missing project files and documentation)
 *.cmd text eol=crlf
+*.csv filter=lfs diff=lfs merge=lfs -text
+*.xlsx filter=lfs diff=lfs merge=lfs -text
