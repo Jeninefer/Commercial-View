@@ -10,29 +10,41 @@ from typing import Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
+
 class LoanAnalytics:
     """Analytics class for weighted portfolio calculations"""
-    
+
     def __init__(self):
         self.alias_map = {
             "apr": ["apr", "effective_apr", "annual_rate", "tasa_anual"],
-            "eir": ["eir", "effective_interest_rate", "tasa_efectiva"], 
-            "term": ["term", "tenor_days", "plazo_dias", "tenor"]
+            "eir": ["eir", "effective_interest_rate", "tasa_efectiva"],
+            "term": ["term", "tenor_days", "plazo_dias", "tenor"],
         }
-    
-    def calculate_weighted_stats(self,
-                               loan_df: pd.DataFrame,
-                               weight_field: str = "outstanding_balance",
-                               metrics: Optional[List[str]] = None) -> pd.DataFrame:
+
+    def calculate_weighted_stats(
+        self,
+        loan_df: pd.DataFrame,
+        weight_field: str = "outstanding_balance",
+        metrics: Optional[List[str]] = None,
+    ) -> pd.DataFrame:
         """Calculate weighted averages with alias resolution and data guards"""
         alias_map = self.alias_map
         targets = metrics or ["apr", "eir", "term"]
         df = loan_df.copy()
-        
+
         # Resolve weight field or detect alternative
         if weight_field not in df.columns:
-            candidates = ["outstanding_balance", "olb", "current_balance", "saldo_actual", "balance"]
-            found_weight_field = next((c for c in df.columns for k in candidates if k.lower() in c.lower()), None)
+            candidates = [
+                "outstanding_balance",
+                "olb",
+                "current_balance",
+                "saldo_actual",
+                "balance",
+            ]
+            found_weight_field = next(
+                (c for c in df.columns for k in candidates if k.lower() in c.lower()),
+                None,
+            )
             if found_weight_field is not None:
                 weight_field = found_weight_field
             else:
@@ -69,11 +81,14 @@ class LoanAnalytics:
                 logger.warning(f"No valid data to compute weighted {tgt}.")
                 continue
 
-            wavg = np.average(sub[col].astype(float), weights=sub[weight_field].astype(float))
+            wavg = np.average(
+                sub[col].astype(float), weights=sub[weight_field].astype(float)
+            )
             out[f"weighted_{tgt}"] = float(wavg)
             logger.info(f"Weighted {tgt}: {wavg:.6f}")
 
         return pd.DataFrame([out]) if out else pd.DataFrame()
+
 
 if __name__ == "__main__":
     # Test the module independently

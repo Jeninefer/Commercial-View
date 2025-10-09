@@ -26,7 +26,9 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # Print warning if not using virtual environment
-if not os.environ.get('VIRTUAL_ENV'):
-    print("\033[93mWARNING: You are not using the virtual environment. "
-          "Tests may fail due to missing dependencies.\033[0m")
+if not os.environ.get("VIRTUAL_ENV"):
+    print(
+        "\033[93mWARNING: You are not using the virtual environment. "
+        "Tests may fail due to missing dependencies.\033[0m"
+    )
     print("\033[93mRun 'source .venv/bin/activate' first.\033[0m")

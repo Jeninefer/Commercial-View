@@ -93,3 +93,49 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 .venv/
+
+# Temporary workflow exclusion
+.github/workflows/
+github_workflows_backup/
+
+# Demo and test files
+*demo*
+*example*
+*sample*
+test_*.py
+# Temporary workflow exclusion (OAuth scope limitation)
+.github/workflows/
+github_workflows_backup/
+
+# Demo and test files (production-ready repository)
+*demo*
+*example*
+test_*.py
+*_fix.py
+
+# Development artifacts
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Package manager lockfiles (keep only npm)
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+.yarn/
+.pnpm/
+
+# Node modules and dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Frontend build artifacts
+frontend/build/
+frontend/dist/
+frontend/.next/
+frontend/coverage/
+
