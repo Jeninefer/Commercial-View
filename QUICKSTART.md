@@ -1,119 +1,119 @@
-# Quick Start Guide for Commercial-View
+# Commercial-View Quick Start Guide
 
-## Immediate Setup Steps
+## Prerequisites
 
-### 1. Install Dependencies
+1. **Python 3.11+** with virtual environment activated:
+   ```bash
+   source .venv/bin/activate  # macOS/Linux
+   .\.venv\Scripts\Activate.ps1  # Windows PowerShell
+   ```
+
+2. **Required packages installed**:
+   ```bash
+   pip install pandas numpy plotly xgboost scikit-learn jupyter
+   ```
+
+## Quick Test Run
+
+### Option 1: Run Test Script (Fastest)
 
 ```bash
-# Basic installation
+# From project root
+python run_portfolio_analysis.py
+```
+
+This will:
+- Test data loading (creates sample data if files not found)
+- Run basic analytics
+- Generate test outputs in `output/test_results/`
+
+### Option 2: Run Jupyter Notebook
+
+```bash
+# Start Jupyter
+jupyter notebook
+
+# Open: notebooks/portfolio_analytics_pipeline.ipynb
+# Run All Cells
+```
+
+### Option 3: Run Schema Parser Tests
+
+```bash
+# Test schema parser
+python test_schema_parser.py
+
+# Or view specific dataset
+python -m src.utils.schema_parser Downloads/abaco_schema_autodetected.json --dataset "Loan Data"
+```
+
+## Expected Outputs
+
+After running tests, check:
+- `output/test_results/` - KPIs, visualizations, reports
+- `docs/schema_documentation.md` - Auto-generated schema docs
+
+## Troubleshooting
+
+### Import Errors
+```bash
+# Ensure project root is in Python path
+export PYTHONPATH="${PYTHONPATH}:$(pwd)"  # Linux/macOS
+$env:PYTHONPATH += ";$(pwd)"  # PowerShell
+```
+
+### Data Not Found
+The test script will create sample data automatically. For real data:
+1. Place CSV files in `data/pricing/`
+2. Update `CONFIG` in the notebook with your file paths
+
+### Module Not Found
+```bash
+# Reinstall dependencies
 pip install -r requirements.txt
-
-# For development (includes testing and linting tools)
-pip install -r requirements-dev.txt
 ```
 
-### 2. Validate Configuration
+## Next Steps
 
-Run the schema validator to ensure all configuration files are correct:
+1. ✅ **Customize Configuration**: Edit notebook cell 4 (CONFIG dictionary)
+2. ✅ **Add Your Data**: Place CSVs in `data/pricing/`
+3. ✅ **Run Full Analysis**: Execute all notebook cells
+4. ✅ **Review Outputs**: Check `output/dashboards/`
+
+## Getting Help
+
+- Review error messages in test output
+- Check `TESTING.md` for detailed testing guide
+- Ensure all prerequisites are met
+
+## Quick Commands Reference
 
 ```bash
-python validators/schema_validator.py
+# Activate environment
+source .venv/bin/activate
+
+# Run tests
+python run_portfolio_analysis.py
+
+# Run schema parser
+python test_schema_parser.py
+
+# Start Jupyter
+jupyter notebook
+
+# Check Python environment
+which python
+python --version
+pip list | grep -E "(pandas|plotly|xgboost)"
 ```
 
-Expected output:
-```
-✅ All validations passed!
-```
+## Success Indicators
 
-### 3. Customize Configuration
-
-#### A. Column Mappings (REQUIRED)
-
-Edit `config/column_maps.yml` to match your data schema:
-
-```bash
-# Open in your editor
-nano config/column_maps.yml  # or vi, vim, code, etc.
-```
-
-Update field mappings:
-```yaml
-loan_data:
-  loan_id: "your_actual_loan_id_column"
-  customer_id: "your_customer_id_column"
-  loan_amount: "your_amount_column"
-  # ... etc
-```
-
-#### B. Pricing Files (REQUIRED)
-
-1. Review example pricing files in `data/pricing/`
-2. Either modify them or create your own following the same structure
-3. Update paths in `config/pricing_config.yml` if needed
-
-Example pricing file structure:
-```csv
-tenor_min,tenor_max,amount_min,amount_max,base_rate,margin,total_rate
-0,90,0,50000,0.0500,0.0200,0.0700
-```
-
-#### C. DPD Policy (REVIEW REQUIRED)
-
-Choose your default threshold in `config/dpd_policy.yml`:
-
-```yaml
-default_threshold:
-  days: 180  # Options: 90, 120, or 180
-```
-
-Review and adjust DPD buckets if needed.
-
-#### D. Export Path (OPTIONAL)
-
-Default export path is `./abaco_runtime/exports`. To change:
-
-```yaml
-# In config/export_config.yml
-export_paths:
-  base_path: "/your/preferred/path"
-```
-
-### 4. Validate Your Changes
-
-After customization, run validation again:
-
-```bash
-python validators/schema_validator.py
-```
-
-### 5. Directory Setup
-
-Create the export directories:
-
-```bash
-mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archive}
-```
-
-### 6. Test Run (When Implementation Ready)
-
-Once your processing code is implemented:
-
-```bash
-# Example command structure
-# python src/process_portfolio.py --config config/
-```
-
-### 7. Set Up Pre-commit Hooks (Development)
-
-If you're developing:
-
-```bash
-pip install pre-commit
-pre-commit install
-```
-
-Test pre-commit:
-```bash
+✅ You're ready when:
+- Test script runs without errors
+- Sample visualizations generate in `output/test_results/`
+- KPIs export to CSV successfully
+- You see "🎉 All tests passed!"
 pre-commit run --all-files
 ```
 

@@ -1,0 +1,390 @@
+# Commercial-View Dashboard Configuration
+# Ábaco Financial - Portfolio Analytics Pipeline
+# Version: 2.0
+# Last Updated: January 2025
+
+# ============================================================================
+# DATA SOURCES
+# ============================================================================
+data_sources:
+  # CSV file paths (relative to data directory)
+  loan_data: "Abaco - Loan Tape_Loan Data_Table.csv"
+  customer_data: "Abaco - Loan Tape_Customer Data_Table.csv"
+  collateral_data: "Abaco - Loan Tape_Collateral_Table.csv"
+  payment_history: "Abaco - Loan Tape_Historic Real Payment_Table.csv"
+  payment_schedule: "Abaco - Loan Tape_Payment Schedule_Table.csv"
+  financials: "financials-abaco-consolidated-financials.xlsx"
+  
+  # Google Sheets integration (optional)
+  google_sheets:
+    enabled: false
+    main_sheet_id: "YOUR_GOOGLE_SHEET_ID_HERE"
+    tabs:
+      desembolsos: "DESEMBOLSOS"
+      data: "Data"
+      tabla_aux: "Tabla Aux"
+  
+  # Google Drive folders
+  google_drive:
+    enabled: false
+    folders:
+      loan_data: "YOUR_DRIVE_FOLDER_ID_HERE"
+      financial_statements: "YOUR_DRIVE_FOLDER_ID_HERE"
+
+# ============================================================================
+# CREDENTIALS
+# ============================================================================
+credentials:
+  # Google OAuth (use environment variable or path)
+  google_oauth: "env:GOOGLE_APPLICATION_CREDENTIALS"
+  
+  # API Keys (use environment variables for security)
+  slack_webhook: "env:SLACK_WEBHOOK_URL"
+  openai_api_key: "env:OPENAI_API_KEY"
+  gemini_api_key: "env:GEMINI_API_KEY"
+  hubspot_api_key: "env:HUBSPOT_API_KEY"
+  figma_token: "env:FIGMA_ACCESS_TOKEN"
+  github_token: "env:GITHUB_TOKEN"
+
+# ============================================================================
+# ANALYSIS PARAMETERS
+# ============================================================================
+parameters:
+  # General settings
+  analysis_date: "2025-01-15"  # Override with current date if null
+  base_currency: "USD"
+  
+  # Cohort Analysis
+  cohort_analysis:
+    alert_threshold: 0.10  # 10% below average triggers alert
+    min_cohort_size: 5  # Minimum loans per cohort for analysis
+    mob_periods: 12  # Months on book to analyze (0-11)
+    benchmark_cohorts:
+      - "2024-01"
+      - "2024-02"
+      - "2024-03"
+  
+  # Risk Analysis
+  risk:
+    npl_definitions:
+      NPL30: 30
+      NPL60: 60
+      NPL90: 90
+      NPL180: 180
+    target_npl_ratio: 0.03  # 3% target
+    alert_npl_ratio: 0.05  # 5% triggers alert
+    target_default_rate: 0.04  # 4% annual default rate target
+    
+    # Concentration limits
+    concentration:
+      single_borrower_limit: 0.04  # 4% of portfolio
+      top_10_borrowers_limit: 0.30  # 30% of portfolio
+      single_industry_limit: 0.25  # 25% of portfolio
+      single_region_limit: 0.40  # 40% of portfolio
+  
+  # Customer Segmentation
+  segmentation:
+    # Exposure tiers (minimum balance for each tier)
+    exposure_tiers:
+      A: 500000  # $500k+
+      B: 200000  # $200k-$500k
+      C: 100000  # $100k-$200k
+      D: 50000   # $50k-$100k
+      E: 10000   # $10k-$50k
+      F: 0       # < $10k
+    
+    # Industry grouping
+    industry_categories:
+      tech: ["Software", "IT Services", "Technology", "SaaS"]
+      retail: ["Retail", "E-commerce", "Consumer Goods"]
+      manufacturing: ["Manufacturing", "Industrial", "Production"]
+      services: ["Consulting", "Professional Services", "Business Services"]
+      finance: ["Financial Services", "Banking", "Insurance"]
+      other: ["Other", "Miscellaneous"]
+  
+  # Predictive Modeling
+  modeling:
+    default_prediction:
+      test_size: 0.2
+      random_state: 42
+      xgboost_params:
+        n_estimators: 100
+        max_depth: 5
+        learning_rate: 0.1
+      risk_grades:
+        A: [0, 0.02]    # 0-2% PD
+        B: [0.02, 0.05] # 2-5% PD
+        C: [0.05, 0.10] # 5-10% PD
+        D: [0.10, 0.20] # 10-20% PD
+        E: [0.20, 1.00] # 20%+ PD
+    
+    churn_prediction:
+      enabled: false
+      lookback_months: 6
+      definition_no_activity_days: 90
+  
+  # Marketing & Sales
+  marketing:
+    funnel_stages:
+      - "Website Visitors"
+      - "Leads Generated"
+      - "Qualified Leads"
+      - "Customers"
+    conversion_targets:
+      visitor_to_lead: 0.03   # 3%
+      lead_to_qualified: 0.50 # 50%
+      qualified_to_customer: 0.20 # 20%
+
+# ============================================================================
+# 2026 TARGETS
+# ============================================================================
+targets_2026:
+  # Portfolio targets
+  portfolio:
+    total_portfolio_size: 50000000  # $50M
+    active_customers: 200
+    active_loans: 500
+    avg_loan_size: 100000  # $100k
+  
+  # Performance targets
+  performance:
+    weighted_avg_apr: 0.18  # 18%
+    net_interest_margin: 0.12  # 12%
+    roa: 0.03  # 3%
+    roe: 0.15  # 15%
+  
+  # Risk targets
+  risk:
+    npl_90_ratio: 0.03  # 3%
+    default_rate: 0.04  # 4%
+    single_client_concentration: 0.04  # 4%
+    top_10_concentration: 0.30  # 30%
+  
+  # Efficiency targets
+  efficiency:
+    portfolio_turnover: 2.5
+    cost_to_income_ratio: 0.40  # 40%
+    customer_acquisition_cost: 4000  # $4k
+  
+  # Marketing targets
+  marketing:
+    social_media_followers: 20000
+    monthly_website_visits: 7500
+    monthly_leads: 200
+    lead_to_customer_conversion: 0.20  # 20%
+    marketing_roi: 3.0  # 3x return
+
+# ============================================================================
+# OUTPUT & STYLING
+# ============================================================================
+outputs:
+  # Theme settings
+  theme:
+    mode: "light"  # light or dark
+    template: "plotly_white"  # plotly template
+  
+  # Ábaco Brand Colors
+  colors:
+    primary: "#1c7c7d"      # Teal - main brand color
+    secondary: "#f4a259"    # Orange - secondary brand
+    accent: "#3a6ea5"       # Blue - accent color
+    danger: "#d64550"       # Red - alerts/negative
+    success: "#27ae60"      # Green - positive/good
+    warning: "#f39c12"      # Yellow - warnings
+    dark: "#3a4b68"         # Dark blue - text
+    light: "#f8f9fa"        # Light gray - background
+    
+    # Chart color palette
+    palette:
+      - "#1c7c7d"
+      - "#f4a259"
+      - "#3a6ea5"
+      - "#27ae60"
+      - "#d64550"
+      - "#f39c12"
+      - "#9b59b6"
+      - "#34495e"
+  
+  # Typography
+  typography:
+    font_family: "Poppins, Arial, sans-serif"
+    title_size: 24
+    subtitle_size: 18
+    body_size: 14
+    caption_size: 12
+  
+  # Export settings
+  export:
+    # Output formats
+    formats:
+      csv: true
+      excel: true
+      json: true
+      html: true
+      pdf: false
+      markdown: true
+    
+    # Integration channels
+    channels:
+      slack: true
+      github: true
+      figma: false
+      hubspot: false
+      email: false
+    
+    # File naming
+    naming:
+      use_timestamp: true
+      prefix: "abaco_portfolio"
+      date_format: "%Y%m%d_%H%M%S"
+  
+  # Dashboard layout
+  dashboard:
+    sections:
+      - name: "Executive Summary"
+        enabled: true
+        order: 1
+      - name: "Portfolio KPIs"
+        enabled: true
+        order: 2
+      - name: "Risk Analysis"
+        enabled: true
+        order: 3
+      - name: "Target Tracking"
+        enabled: true
+        order: 4
+      - name: "Cohort Analysis"
+        enabled: true
+        order: 5
+      - name: "Segmentation"
+        enabled: true
+        order: 6
+      - name: "Predictive Models"
+        enabled: true
+        order: 7
+      - name: "Marketing Performance"
+        enabled: true
+        order: 8
+    
+    # Chart settings
+    charts:
+      default_height: 400
+      default_width: 1200
+      show_legends: true
+      show_grid: true
+      interactive: true
+
+# ============================================================================
+# DATA QUALITY
+# ============================================================================
+data_quality:
+  # Validation rules
+  validation:
+    max_missing_percentage: 0.15  # 15% max missing data
+    min_row_count: 10
+    required_columns:
+      loan_data:
+        - "Loan ID"
+        - "Customer ID"
+        - "Disbursement Amount"
+        - "Loan Status"
+      customer_data:
+        - "Customer ID"
+        - "Customer Name"
+  
+  # Data cleansing
+  cleansing:
+    remove_duplicates: true
+    handle_missing_values: "impute"  # impute, drop, or flag
+    standardize_dates: true
+    normalize_currency: true
+
+# ============================================================================
+# AUTOMATION
+# ============================================================================
+automation:
+  # Scheduling
+  schedule:
+    enabled: false
+    frequency: "daily"  # daily, weekly, monthly
+    time: "08:00"
+    timezone: "America/New_York"
+  
+  # Alerts
+  alerts:
+    enabled: true
+    channels: ["slack", "email"]
+    triggers:
+      high_npl: true
+      concentration_breach: true
+      target_variance: true
+      data_quality_issues: true
+  
+  # Refresh settings
+  refresh:
+    auto_reload_data: true
+    cache_duration_hours: 24
+    incremental_updates: false
+
+# ============================================================================
+# ADVANCED FEATURES
+# ============================================================================
+advanced:
+  # AI/ML features
+  ai:
+    enabled: true
+    provider: "openai"  # openai, gemini, or local
+    model: "gpt-4"
+    temperature: 0.7
+    max_tokens: 1000
+    
+    # Insight generation
+    insights:
+      executive_summary: true
+      risk_assessment: true
+      growth_recommendations: true
+      customer_insights: true
+  
+  # Performance optimization
+  performance:
+    use_parallel_processing: true
+    max_workers: 4
+    chunk_size: 10000
+    optimize_memory: true
+  
+  # Logging
+  logging:
+    level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+    log_to_file: true
+    log_file: "logs/portfolio_analytics.log"
+    log_rotation: "daily"
+    retain_days: 30
+
+# ============================================================================
+# ENVIRONMENT OVERRIDES
+# ============================================================================
+# These settings can be overridden by environment-specific configs
+environments:
+  development:
+    data_sources:
+      use_sample_data: true
+    outputs:
+      export:
+        channels:
+          slack: false
+          github: false
+  
+  staging:
+    targets_2026:
+      portfolio:
+        total_portfolio_size: 10000000  # Lower targets for staging
+    
+  production:
+    automation:
+      schedule:
+        enabled: true
+    outputs:
+      export:
+        channels:
+          slack: true
+          github: true
