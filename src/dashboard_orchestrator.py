@@ -49,7 +49,7 @@ class DashboardOrchestrator:
             "risk": risk_snapshot,
             "growth": growth_indicators,
             "performance": recovery_metrics.head(5).to_dict("records")
-            if not recovery_metrics.empty
+            if recovery_metrics is not None and not recovery_metrics.empty
             else {},
             "operations": operational_focus,
             "alerts": alerts["alerts"],
