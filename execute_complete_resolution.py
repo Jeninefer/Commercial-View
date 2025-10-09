@@ -534,12 +534,7 @@ class CompleteResolutionOrchestrator:
                 self._log_success("Applied Prettier formatting")
             except FileNotFoundError:
                 self._log_warning("Prettier not available")
-    
-    def _enhance_type_hints(self):
-        """Enhance type hints across codebase"""
-        self._log_info("Enhancing type hints...")
-        # Already handled in _add_type_hints_to_file
-    
+
     def _optimize_imports(self):
         """Optimize import statements"""
         try:
@@ -755,8 +750,6 @@ Repository achieves market-leading excellence"""
             return 0, 0, 0
             
         total = sum(len(issues) for issues in self.detected_issues.values())
-        # Note: This implementation assumes issues don't have a 'resolved' flag
-        # If you want to track resolved issues, add that functionality
         resolved = 0  # Placeholder - implement resolution tracking if needed
         pending = total - resolved
         return total, resolved, pending
@@ -781,9 +774,16 @@ Repository achieves market-leading excellence"""
             f"start_time='{self.start_time.isoformat() if hasattr(self, 'start_time') else 'not started'}'"
             f")"
         )
-    
+
 def main():
     """Main execution entry point"""
+    orchestrator = CompleteResolutionOrchestrator()
+    success = orchestrator.execute_complete_resolution()
+    
+    return 0 if success else 1
+
+if __name__ == "__main__":
+    sys.exit(main())
     orchestrator = CompleteResolutionOrchestrator()
     success = orchestrator.execute_complete_resolution()
     

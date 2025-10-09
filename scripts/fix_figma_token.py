@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Enhanced Figma token management for Commercial-View commercial lending platform
+Production-ready with comprehensive error handling and logging
 """
 
 import requests
@@ -10,11 +11,16 @@ import os
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
+import logging
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def test_figma_token(token: str) -> Tuple[bool, Dict]:
     """Enhanced Figma token testing with detailed validation"""
     if not token or not token.startswith("figd_"):
+        logger.error("Invalid token format. Must start with 'figd_'")
         print("❌ Invalid token format. Must start with 'figd_'")
         return False, {}
 
@@ -22,10 +28,11 @@ def test_figma_token(token: str) -> Tuple[bool, Dict]:
 
     try:
         # Test basic authentication
-        response = requests.get("https://api.figma.com/v1/me", headers=headers)
+        response = requests.get("https://api.figma.com/v1/me", headers=headers, timeout=10)
 
         if response.status_code == 200:
             user_info = response.json()
+            logger.info(f"Token valid for user: {user_info.get('email', 'Unknown')}")
             print(f"✅ Token valid for user: {user_info.get('email', 'Unknown')}")
             print(f"   User ID: {user_info.get('id', 'Unknown')}")
             print(f"   Handle: {user_info.get('handle', 'Unknown')}")
@@ -33,6 +40,7 @@ def test_figma_token(token: str) -> Tuple[bool, Dict]:
             # Test file access permissions for Commercial-View
             return test_commercial_view_access(token, headers, user_info)
         elif response.status_code == 403:
+            logger.error("403 Forbidden - Token is invalid, expired, or lacks permissions")
             print("❌ 403 Forbidden - Token is invalid, expired, or lacks permissions")
             print("🔧 Action required:")
             print("   1. Go to https://www.figma.com/settings/account")
@@ -42,10 +50,16 @@ def test_figma_token(token: str) -> Tuple[bool, Dict]:
             print("   5. Update your configuration with the new token")
             return False, {}
         else:
+            logger.error(f"Token test failed: {response.status_code} - {response.text}")
             print(f"❌ Token test failed: {response.status_code} - {response.text}")
             return False, {}
 
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Network error testing token: {e}")
+        print(f"❌ Network error testing token: {e}")
+        return False, {}
     except Exception as e:
+        logger.error(f"Unexpected error testing token: {e}")
         print(f"❌ Error testing token: {e}")
         return False, {}
 
@@ -161,28 +175,43 @@ def find_token_references() -> List[Path]:
 
 
 def update_config_files(new_token: str, old_token: Optional[str] = None) -> int:
-    """Enhanced configuration file updating with backup"""
+    """Enhanced configuration file updating with backup and validation"""
     if not old_token:
         old_token = "figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK"
+
+    # Validate new token format
+    if not new_token.startswith("figd_"):
+        logger.error("New token has invalid format")
+        print("❌ New token must start with 'figd_'")
+        return 0
 
     # Standard configuration files
     standard_files = [
         "mcp-config.json",
-        ".env.figma",
+        ".env.figma", 
         "mcp-servers.md",
         "scripts/start_figma_mcp.py",
     ]
 
     # Find additional files with token references
-    additional_files = find_token_references()
-
-    all_files = list(set(standard_files + [str(f) for f in additional_files]))
+    try:
+        additional_files = find_token_references()
+        all_files = list(set(standard_files + [str(f) for f in additional_files]))
+    except Exception as e:
+        logger.warning(f"Could not scan for additional token files: {e}")
+        all_files = standard_files
 
     print(f"🔍 Found {len(all_files)} files to check for token updates")
 
     updated_count = 0
     backup_dir = Path("backups/figma_tokens")
-    backup_dir.mkdir(parents=True, exist_ok=True)
+    
+    try:
+        backup_dir.mkdir(parents=True, exist_ok=True)
+    except Exception as e:
+        logger.error(f"Could not create backup directory: {e}")
+        print(f"❌ Could not create backup directory: {e}")
+        return 0
 
     for file_path_str in all_files:
         file_path = Path(file_path_str)
@@ -192,31 +221,33 @@ def update_config_files(new_token: str, old_token: Optional[str] = None) -> int:
 
                 # Check for old token
                 if old_token in content:
-                    # Create backup
-                    backup_path = (
-                        backup_dir
-                        / f"{file_path.name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.bak"
-                    )
-                    backup_path.write_text(content)
+                    # Create backup with timestamp
+                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                    backup_path = backup_dir / f"{file_path.name}_{timestamp}.bak"
+                    backup_path.write_text(content, encoding="utf-8")
 
                     # Update content
                     updated_content = content.replace(old_token, new_token)
                     file_path.write_text(updated_content, encoding="utf-8")
 
+                    logger.info(f"Updated {file_path}")
                     print(f"✅ Updated {file_path} (backup: {backup_path.name})")
                     updated_count += 1
-                elif "figd_" in content:
+                elif "figd_" in content and new_token not in content:
                     print(f"ℹ️  {file_path} contains other Figma tokens (not updated)")
 
             except Exception as e:
+                logger.error(f"Failed to update {file_path}: {e}")
                 print(f"❌ Failed to update {file_path}: {e}")
         else:
-            print(f"⚠️  File not found: {file_path}")
+            logger.warning(f"File not found: {file_path}")
 
     if updated_count > 0:
+        logger.info(f"Successfully updated {updated_count} configuration files")
         print(f"🎉 Successfully updated {updated_count} configuration files")
         print(f"💾 Backups saved to: {backup_dir}")
     else:
+        logger.warning("No files were updated")
         print("⚠️  No files were updated")
 
     return updated_count
@@ -269,30 +300,40 @@ def main():
     """Enhanced main function with comprehensive Commercial-View integration"""
     print("🏦 Commercial-View Figma Token Management")
     print("=" * 50)
+    
+    logger.info("Starting Figma token management")
 
     # Validate environment
     if not validate_environment():
+        logger.error("Environment validation failed")
         return 1
 
     # Test current token
     current_token = "figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK"
     print("🔍 Testing current token...")
+    logger.info("Testing current Figma token")
 
     is_valid, token_info = test_figma_token(current_token)
 
     if is_valid:
+        logger.info("Current token is valid")
         print("✅ Current token is working correctly!")
         print("💡 No action needed - token is valid for Commercial-View")
 
         # Create/update configuration
-        create_figma_config()
+        try:
+            create_figma_config()
+            logger.info("Figma configuration created/updated")
+        except Exception as e:
+            logger.error(f"Failed to create Figma configuration: {e}")
 
         print("\n🚀 Integration ready! Available endpoints:")
         print("   - Dashboard components sync")
-        print("   - KPI visualization updates")
+        print("   - KPI visualization updates") 
         print("   - Commercial lending metrics display")
         return 0
 
+    logger.warning("Current token is invalid")
     print("\n💡 To fix this issue:")
     print("1. Get a new token from: https://www.figma.com/settings/account")
     print("2. Ensure token has 'File content' read permission")
@@ -301,33 +342,43 @@ def main():
 
     if len(sys.argv) > 1:
         new_token = sys.argv[1].strip()
+        logger.info(f"Testing new token: {new_token[:10]}...")
         print(f"\n🔄 Testing new token: {new_token[:10]}...")
 
         is_valid, token_info = test_figma_token(new_token)
 
         if is_valid:
+            logger.info("New token is valid")
             print("✅ New token is valid!")
-            updated_count = update_config_files(new_token, current_token)
-
-            if updated_count > 0:
-                create_figma_config()
-                print("🎉 Configuration updated successfully!")
-                print("\n🚀 Next steps:")
-                print("1. Restart any running MCP servers")
-                print("2. Test the integration: python scripts/start_figma_mcp.py test")
-                print("3. Verify Commercial-View dashboard sync")
-                return 0
-            else:
-                print("⚠️  Token is valid but no files were updated")
+            
+            try:
+                updated_count = update_config_files(new_token, current_token)
+                
+                if updated_count > 0:
+                    create_figma_config()
+                    logger.info("Configuration updated successfully")
+                    print("🎉 Configuration updated successfully!")
+                    print("\n🚀 Next steps:")
+                    print("1. Restart any running MCP servers")
+                    print("2. Test the integration: python scripts/start_figma_mcp.py test")
+                    print("3. Verify Commercial-View dashboard sync")
+                    return 0
+                else:
+                    logger.warning("Token is valid but no files were updated")
+                    print("⚠️  Token is valid but no files were updated")
+                    return 1
+            except Exception as e:
+                logger.error(f"Failed to update configuration: {e}")
+                print(f"❌ Failed to update configuration: {e}")
                 return 1
         else:
+            logger.error("New token is invalid")
             print("❌ New token is also invalid")
             print("💡 Please check the token format and permissions")
             print("💡 Ensure token has access to Commercial-View Figma files")
             return 1
 
     return 1
-
 
 if __name__ == "__main__":
     sys.exit(main())
