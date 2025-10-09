@@ -154,7 +154,7 @@ class DashboardOrchestrator:
             "portfolio_outstanding": round(outstanding, 2),
             "active_clients": active_clients,
             "weighted_apr": round(weighted_apr, 2),
-            "latest_recovery_pct": round(float(recent_recovery.iloc[0]), 2)
+            "latest_recovery_pct": round(float(recent_recovery.item()), 2)
             if recent_recovery is not None and not recent_recovery.empty
             else None,
         }
