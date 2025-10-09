@@ -139,4 +139,20 @@ frontend/dist/
 frontend/.next/
 frontend/coverage/
 
--e .env\ntmp/\n*.tar.gz\n.vscode/
+# Environment variables - NEVER commit these
+.env
+.env.*
+!.env.example
+
+# Credentials
+credentials/
+*.json
+!**/config/*.json
+*.pem
+*.key
+
+# API Keys and Secrets
+secrets/
+secret_*
+*_secret.*
+.env
