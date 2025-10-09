@@ -140,3 +140,4 @@ frontend/.next/
 frontend/coverage/
 
 .venv/
+.venv/
