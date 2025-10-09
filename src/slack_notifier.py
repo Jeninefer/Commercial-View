@@ -17,7 +17,7 @@ class SlackNotifier:
     def __init__(self, webhook_url: Optional[str] = None) -> None:
         self.webhook_url = webhook_url or os.getenv("SLACK_WEBHOOK_URL")
         if not self.webhook_url:
-            logger.warning("SlackNotifier initialised without webhook URL")
+            logger.warning("SlackNotifier initialized without webhook URL")
 
     def send_dashboard_alert(
         self,
