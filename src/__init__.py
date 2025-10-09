@@ -1,20 +1,13 @@
 """Commercial-View package initialization."""
 
 __version__ = "1.0.0"
-Production-ready with comprehensive feature set
-"""
-
-import sys
-import os
-import logging
-from pathlib import Path
-from typing import Dict, Any, Optional
-from datetime import datetime
-
-# Configure package-level logging
-logging.getLogger(__name__).addHandler(logging.NullHandler())
+__all__ = []
 
 # Add current directory to path for imports
+import sys
+import os
+from pathlib import Path
+
 sys.path.append(os.path.dirname(__file__))
 
 # Version and metadata
@@ -490,6 +483,13 @@ REPOSITORY_CHARACTERISTICS = {
         "client_classification_system": True,
         "multi_objective_optimization": True,
         "ai_powered_analysis": True,
+        "interactive_dashboard": True,
+        "automated_workflows": True,
+        "comprehensive_integrations": True
+    }
+}
+
+__all__.append('REPOSITORY_CHARACTERISTICS')
         "interactive_dashboard": True,
         "automated_workflows": True,
         "comprehensive_integrations": True

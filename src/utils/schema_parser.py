@@ -40,12 +40,12 @@ class ColumnInfo:
 
     name: str
     dtype: str
+    sample_values: List[Any]
+    validation_rules: Dict[str, Any]
     coerced_dtype: Optional[str] = None
     nullable: bool = True
     unique_count: Optional[int] = None
-    sample_values: List[Any]
     business_category: Optional[str] = None
-    validation_rules: Dict[str, Any]
 
     def __post_init__(self):
         if self.sample_values is None:
