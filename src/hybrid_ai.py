@@ -107,17 +107,14 @@ class OpenAIProvider(AIProvider):
         if not self._available or not self._client:
             raise AIProviderError("OpenAI provider is not available")
         try:
-            completion = self._client.responses.create(
+            completion = self._client.chat.completions.create(
                 model=self._model_name,
-                input=prompt,
+                messages=[{"role": "user", "content": prompt}],
             )
             output_text = ""
-            if completion and getattr(completion, "output", None):
-                # the responses endpoint returns a list of content parts
-                parts = completion.output[0].content  # type: ignore[index]
-                output_text = "\n".join(
-                    getattr(part, "text", "") for part in parts if hasattr(part, "text")
-                )
+            if completion and hasattr(completion, "choices") and completion.choices:
+                # Extract the generated message content from the first choice
+                output_text = completion.choices[0].message.content
             return output_text.strip()
         except Exception as exc:  # pragma: no cover - upstream failure
             raise AIProviderError(f"OpenAI generation failed: {exc}") from exc
