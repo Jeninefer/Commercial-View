@@ -49,7 +49,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ series, loading, error }) => {
   }
 
   if (!series.length) {
-    return <p role="status">No trend data available yet. Upload portfolio data to get started.</p>;
+    return <output>No trend data available yet. Upload portfolio data to get started.</output>;
   }
 
   return (

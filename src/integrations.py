@@ -37,14 +37,20 @@ class SlackIntegration:
     def __init__(self):
         """Initialize Slack client."""
         self.token = os.getenv("SLACK_BOT_TOKEN")
-        self.client = None
+        self.client = self._initialize_client()
         
-        if self.token and SLACK_SDK_AVAILABLE:
-            try:
-                self.client = WebClient(token=self.token)
-                logger.info("✅ Slack client initialized")
-            except Exception as e:
-                logger.warning(f"Slack SDK init failed: {e}")
+    def _initialize_client(self) -> Optional[WebClient]:
+        """Initialize Slack WebClient if available."""
+        if not self.token or not SLACK_SDK_AVAILABLE:
+            return None
+            
+        try:
+            client = WebClient(token=self.token)
+            logger.info("✅ Slack client initialized")
+            return client
+        except Exception as e:
+            logger.warning(f"Slack SDK init failed: {e}")
+            return None
 
     def send_message(
         self,
@@ -71,41 +77,46 @@ class SlackIntegration:
 
         try:
             if self.client:
-                # Use Slack SDK
-                response = self.client.chat_postMessage(
-                    channel=target_channel,
-                    text=message,
-                    blocks=blocks
-                )
-                logger.info(f"✅ Slack message sent to {target_channel}")
-                return True
-            else:
-                # Fallback to REST API
-                response = requests.post(
-                    SLACK_API_URL,
-                    headers={
-                        "Authorization": f"Bearer {self.token}",
-                        "Content-Type": "application/json"
-                    },
-                    json={
-                        "channel": target_channel,
-                        "text": message,
-                        "blocks": blocks
-                    },
-                    timeout=DEFAULT_TIMEOUT
-                )
-                response.raise_for_status()
-                
-                data = response.json()
-                if not data.get("ok"):
-                    raise RuntimeError(f"Slack API error: {data.get('error')}")
-                
-                logger.info(f"✅ Slack message sent to {target_channel}")
-                return True
+                return self._send_with_sdk(target_channel, message, blocks)
+            return self._send_with_rest_api(target_channel, message, blocks)
 
         except Exception as e:
             logger.error(f"Failed to send Slack message: {e}")
             return False
+    
+    def _send_with_sdk(self, channel: str, message: str, blocks: Optional[list]) -> bool:
+        """Send message using Slack SDK."""
+        self.client.chat_postMessage(
+            channel=channel,
+            text=message,
+            blocks=blocks
+        )
+        logger.info(f"✅ Slack message sent to {channel}")
+        return True
+    
+    def _send_with_rest_api(self, channel: str, message: str, blocks: Optional[list]) -> bool:
+        """Send message using REST API fallback."""
+        response = requests.post(
+            SLACK_API_URL,
+            headers={
+                "Authorization": f"Bearer {self.token}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "channel": channel,
+                "text": message,
+                "blocks": blocks
+            },
+            timeout=DEFAULT_TIMEOUT
+        )
+        response.raise_for_status()
+        
+        data = response.json()
+        if not data.get("ok"):
+            raise RuntimeError(f"Slack API error: {data.get('error')}")
+        
+        logger.info(f"✅ Slack message sent to {channel}")
+        return True
 
     def send_file(
         self,
@@ -134,7 +145,7 @@ class SlackIntegration:
 
         try:
             with open(filepath, 'rb') as file_content:
-                response = self.client.files_upload_v2(
+                self.client.files_upload_v2(
                     channel=target_channel,
                     file=file_content,
                     title=title or Path(filepath).name,
@@ -171,35 +182,11 @@ class HubSpotIntegration:
             logger.warning("HUBSPOT_API_TOKEN not set")
             return {}
 
-        metrics = {}
-
         try:
-            # Fetch contacts count
-            contacts_response = self._get(
-                "/crm/v3/objects/contacts",
-                params={"limit": 1}
-            )
-            
-            if contacts_response:
-                metrics['total_contacts'] = contacts_response.get('total', 0)
-            
-            # Fetch deals count
-            deals_response = self._get(
-                "/crm/v3/objects/deals",
-                params={"limit": 1}
-            )
-            
-            if deals_response:
-                metrics['total_deals'] = deals_response.get('total', 0)
-            
-            # Fetch companies count
-            companies_response = self._get(
-                "/crm/v3/objects/companies",
-                params={"limit": 1}
-            )
-            
-            if companies_response:
-                metrics['total_companies'] = companies_response.get('total', 0)
+            metrics = {}
+            metrics.update(self._fetch_contacts_count())
+            metrics.update(self._fetch_deals_count())
+            metrics.update(self._fetch_companies_count())
             
             logger.info(f"✅ Fetched HubSpot metrics: {len(metrics)} metrics")
             return metrics
@@ -207,6 +194,27 @@ class HubSpotIntegration:
         except Exception as e:
             logger.error(f"Error fetching HubSpot metrics: {e}")
             return {}
+    
+    def _fetch_contacts_count(self) -> Dict[str, int]:
+        """Fetch contacts count from HubSpot."""
+        response = self._get("/crm/v3/objects/contacts", params={"limit": 1})
+        if response:
+            return {'total_contacts': response.get('total', 0)}
+        return {}
+    
+    def _fetch_deals_count(self) -> Dict[str, int]:
+        """Fetch deals count from HubSpot."""
+        response = self._get("/crm/v3/objects/deals", params={"limit": 1})
+        if response:
+            return {'total_deals': response.get('total', 0)}
+        return {}
+    
+    def _fetch_companies_count(self) -> Dict[str, int]:
+        """Fetch companies count from HubSpot."""
+        response = self._get("/crm/v3/objects/companies", params={"limit": 1})
+        if response:
+            return {'total_companies': response.get('total', 0)}
+        return {}
 
     def _get(self, endpoint: str, params: Optional[Dict] = None) -> Optional[Dict]:
         """Make GET request to HubSpot API."""
@@ -238,7 +246,6 @@ class FigmaIntegration:
 
     def upload_chart(
         self,
-        image_path: str,
         node_id: str,
         image_url: Optional[str] = None
     ) -> bool:
@@ -249,15 +256,13 @@ class FigmaIntegration:
         Consider uploading to S3/CDN first.
         
         Args:
-            image_path: Local path to image
             node_id: Figma node ID to update
             image_url: Public URL of image (required)
             
         Returns:
             True if successful
         """
-        if not self.token or not self.file_id:
-            logger.error("FIGMA_API_TOKEN or FIGMA_FILE_ID not set")
+        if not self._validate_credentials():
             return False
 
         if not image_url:
@@ -265,10 +270,6 @@ class FigmaIntegration:
             return False
 
         try:
-            # Note: This is a placeholder. Actual implementation requires:
-            # 1. Upload image to public CDN
-            # 2. Use Figma API to set image fill
-            
             url = f"{FIGMA_API_BASE}/files/{self.file_id}/images"
             
             # Get node images
@@ -286,6 +287,13 @@ class FigmaIntegration:
         except Exception as e:
             logger.error(f"Failed to upload to Figma: {e}")
             return False
+    
+    def _validate_credentials(self) -> bool:
+        """Validate Figma credentials are present."""
+        if not self.token or not self.file_id:
+            logger.error("FIGMA_API_TOKEN or FIGMA_FILE_ID not set")
+            return False
+        return True
 
 
 class ZapierIntegration:
@@ -338,10 +346,10 @@ def fetch_hubspot_metrics() -> Dict[str, Any]:
     return hubspot.fetch_metrics()
 
 
-def upload_chart_to_figma(image_path: str, node_id: str) -> bool:
+def upload_chart_to_figma(node_id: str, image_url: str) -> bool:
     """Upload chart to Figma."""
     figma = FigmaIntegration()
-    return figma.upload_chart(image_path, node_id)
+    return figma.upload_chart(node_id, image_url)
 
 
 def trigger_zapier_webhook(data: Dict[str, Any]) -> bool:

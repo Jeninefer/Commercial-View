@@ -30,9 +30,33 @@ except ImportError as e:
     DataLoader = None
 
 
+def _load_single_config(config_dir: Path, config_file: str) -> Optional[Dict[str, Any]]:
+    """Load a single configuration file.
+    
+    Args:
+        config_dir: Path to configuration directory
+        config_file: Name of configuration file
+        
+    Returns:
+        Configuration dictionary or None if file not found
+    """
+    config_path = config_dir / config_file
+    if not config_path.exists():
+        print(f"Warning: Configuration file {config_file} not found")
+        return None
+    
+    try:
+        with open(config_path, 'r') as f:
+            return yaml.safe_load(f)
+    except Exception as e:
+        print(f"Error loading {config_file}: {e}")
+        return None
+
+
 def load_config(config_dir: str) -> Dict[str, Any]:
     """Load all configuration files from the config directory."""
     configs = {}
+    config_path = Path(config_dir)
     
     config_files = [
         'column_maps.yml',
@@ -42,15 +66,22 @@ def load_config(config_dir: str) -> Dict[str, Any]:
     ]
     
     for config_file in config_files:
-        config_path = Path(config_dir) / config_file
-        if config_path.exists():
-            with open(config_path, 'r') as f:
-                config_name = config_file.replace('.yml', '')
-                configs[config_name] = yaml.safe_load(f)
-        else:
-            print(f"Warning: Configuration file {config_file} not found")
+        config_data = _load_single_config(config_path, config_file)
+        if config_data:
+            config_name = config_file.replace('.yml', '')
+            configs[config_name] = config_data
     
     return configs
+
+
+def _create_directory(directory: str) -> None:
+    """Create a single directory if it doesn't exist.
+    
+    Args:
+        directory: Path to directory to create
+    """
+    Path(directory).mkdir(parents=True, exist_ok=True)
+    print(f"Created directory: {directory}")
 
 
 def create_export_directories(export_config: Dict[str, Any]) -> None:
@@ -66,8 +97,7 @@ def create_export_directories(export_config: Dict[str, Any]) -> None:
     ]
     
     for directory in directories:
-        Path(directory).mkdir(parents=True, exist_ok=True)
-        print(f"Created directory: {directory}")
+        _create_directory(directory)
 
 
 def calculate_risk_score(loan_df: pd.DataFrame) -> pd.Series:
@@ -93,38 +123,86 @@ def calculate_risk_score(loan_df: pd.DataFrame) -> pd.Series:
     return pd.Series([0.5] * len(loan_df), index=loan_df.index)
 
 
-def load_portfolio_data(data_loader: Optional[Any], data_dir: Optional[str] = None) -> tuple:
+def load_portfolio_data(data_loader: Optional[Any]) -> pd.DataFrame:
     """Load portfolio data using DataLoader.
     
     Args:
         data_loader: DataLoader instance
-        data_dir: Optional base directory for data files
         
     Returns:
-        Tuple of (loan_data, customer_data)
+        DataFrame with loan data or None if loading fails
     """
     if not data_loader:
         print("Error: DataLoader not available")
-        return None, None
+        return None
     
     try:
-        # Load loan and customer data
+        # Load loan data
         loan_data = data_loader.load_loan_data()
-        customer_data = data_loader.load_customer_data() if hasattr(data_loader, 'load_customer_data') else None
         
         if loan_data is not None:
             print(f"Loaded {loan_data.shape[0]} rows and {loan_data.shape[1]} columns from loan_data.")
         else:
             print("Warning: No loan data loaded")
             
-        if customer_data is not None:
-            print(f"Loaded {customer_data.shape[0]} rows and {customer_data.shape[1]} columns from customer_data.")
-        
-        return loan_data, customer_data
+        return loan_data
         
     except Exception as e:
         print(f"Error loading data: {e}")
-        return None, None
+        return None
+
+
+def _validate_dependencies() -> bool:
+    """Validate that required dependencies are available.
+    
+    Returns:
+        True if dependencies are available, False otherwise
+    """
+    if not DATA_LOADER_AVAILABLE:
+        print("Error: DataLoader not available. Please install required dependencies.")
+        return False
+    return True
+
+
+def _initialize_data_loader() -> Optional[Any]:
+    """Initialize the DataLoader instance.
+    
+    Returns:
+        DataLoader instance or None if initialization fails
+    """
+    try:
+        data_loader = DataLoader()
+        print("✅ DataLoader initialized successfully")
+        return data_loader
+    except Exception as e:
+        print(f"Error initializing DataLoader: {e}")
+        return None
+
+
+def _process_portfolio_data(loan_data: pd.DataFrame) -> None:
+    """Process portfolio data and calculate metrics.
+    
+    Args:
+        loan_data: DataFrame with loan data
+    """
+    print("\nCalculating risk scores...")
+    risk_scores = calculate_risk_score(loan_data)
+    loan_data['risk_score'] = risk_scores
+    print(f"Risk scores calculated for {len(risk_scores)} loans")
+
+    print("\nProcessing portfolio data...")
+    # Note: Implement DPD bucketing based on dpd_policy config
+    # Note: Implement KPI calculations
+    # Note: Export results to configured locations
+
+
+def _print_next_steps() -> None:
+    """Print next steps for the user."""
+    print("\n✅ Processing completed successfully!")
+    print("\nNext steps:")
+    print("1. Check the generated files in ./abaco_runtime/exports/")
+    print("2. Customize the configuration files for your data")
+    print("3. Implement actual data processing logic in this script")
 
 
 def main():
@@ -146,9 +224,8 @@ def main():
     print("Commercial-View Portfolio Processing")
     print("=" * 50)
     
-    # Check if DataLoader is available
-    if not DATA_LOADER_AVAILABLE:
-        print("Error: DataLoader not available. Please install required dependencies.")
+    # Validate dependencies
+    if not _validate_dependencies():
         sys.exit(1)
     
     # Load configurations
@@ -165,38 +242,30 @@ def main():
     
     # Initialize data loader
     print("\nInitializing data loader...")
-    try:
-        data_loader = DataLoader()
-        print("✅ DataLoader initialized successfully")
-    except Exception as e:
-        print(f"Error initializing DataLoader: {e}")
+    data_loader = _initialize_data_loader()
+    if not data_loader:
         sys.exit(1)
     
     # Load data
     print("\nLoading portfolio data...")
-    loan_data, customer_data = load_portfolio_data(data_loader, args.data_dir)
+    loan_data = load_portfolio_data(data_loader)
     
     if loan_data is None:
         print("Error: Failed to load loan data")
         sys.exit(1)
 
-    # Calculate risk scores
-    print("\nCalculating risk scores...")
-    risk_scores = calculate_risk_score(loan_data)
-    loan_data['risk_score'] = risk_scores
-    print(f"Risk scores calculated for {len(risk_scores)} loans")
+    # Process data
+    _process_portfolio_data(loan_data)
+    
+    # Print completion message
+    _print_next_steps()
 
-    # Process data according to configuration
-    print("\nProcessing portfolio data...")
-    # Note: Implement DPD bucketing based on dpd_policy config
-    # Note: Implement KPI calculations
-    # Note: Export results to configured locations
 
-    print("\n✅ Processing completed successfully!")
-    print("\nNext steps:")
-    print("1. Check the generated files in ./abaco_runtime/exports/")
-    print("2. Customize the configuration files for your data")
-    print("3. Implement actual data processing logic in this script")
+if __name__ == '__main__':
+    main()
+    
+    # Print completion message
+    _print_next_steps()
 
 
 if __name__ == '__main__':

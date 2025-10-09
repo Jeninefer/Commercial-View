@@ -34,12 +34,133 @@ logger = logging.getLogger(__name__)
 # Constants
 DEFAULT_FIGURE_SIZE = (10, 6)
 DEFAULT_COLOR_SCHEME = 'viridis'
+ERROR_MESSAGE_EMPTY_DF = "Cannot plot: empty {}"
+ERROR_MESSAGE_NO_LIBRARY = "No plotting library available"
 
 
 def _ensure_output_dir(output_path: str) -> None:
     """Ensure output directory exists."""
     if output_path:
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+
+def _validate_dataframe_and_column(
+    df: pd.DataFrame,
+    column: str,
+    df_name: str = "DataFrame"
+) -> bool:
+    """
+    Validate DataFrame and column existence.
+    
+    Args:
+        df: DataFrame to validate
+        column: Column name to check
+        df_name: Name of DataFrame for error messages
+        
+    Returns:
+        True if valid, False otherwise
+    """
+    if df is None or df.empty:
+        logger.warning(ERROR_MESSAGE_EMPTY_DF.format(df_name))
+        return False
+    
+    if column not in df.columns:
+        logger.warning(f"Column '{column}' not found in {df_name}")
+        return False
+    
+    return True
+
+
+def _validate_dataframe_and_columns(
+    df: pd.DataFrame,
+    columns: list,
+    df_name: str = "DataFrame"
+) -> bool:
+    """
+    Validate DataFrame and multiple columns existence.
+    
+    Args:
+        df: DataFrame to validate
+        columns: List of column names to check
+        df_name: Name of DataFrame for error messages
+        
+    Returns:
+        True if valid, False otherwise
+    """
+    if df is None or df.empty:
+        logger.warning(ERROR_MESSAGE_EMPTY_DF.format(df_name))
+        return False
+    
+    missing_cols = [col for col in columns if col not in df.columns]
+    if missing_cols:
+        logger.warning(f"Required columns not found in {df_name}: {missing_cols}")
+        return False
+    
+    return True
+
+
+def _create_plotly_bar_chart(
+    dist: pd.DataFrame,
+    output_path: Optional[str]
+) -> Any:
+    """Create Plotly bar chart for delinquency distribution."""
+    fig = px.bar(
+        dist,
+        x='Bucket',
+        y='Loans',
+        title="Loan Delinquency Distribution",
+        labels={'Loans': 'Number of Loans'},
+        color='Loans',
+        color_continuous_scale='Reds'
+    )
+    
+    fig.update_layout(
+        xaxis_title="Delinquency Bucket",
+        yaxis_title="Number of Loans",
+        showlegend=False,
+        height=500
+    )
+
+    if output_path:
+        _ensure_output_dir(output_path)
+        fig.write_html(output_path)
+        logger.info(f"✅ Chart saved to {output_path}")
+
+    return fig
+
+
+def _create_matplotlib_bar_chart(
+    dist: pd.DataFrame,
+    output_path: Optional[str]
+) -> Any:
+    """Create Matplotlib bar chart for delinquency distribution."""
+    fig, ax = plt.subplots(figsize=DEFAULT_FIGURE_SIZE)
+    
+    bars = ax.bar(dist['Bucket'], dist['Loans'], color='crimson', alpha=0.7)
+    ax.set_xlabel('Delinquency Bucket')
+    ax.set_ylabel('Number of Loans')
+    ax.set_title('Loan Delinquency Distribution')
+    ax.tick_params(axis='x', rotation=45)
+    
+    # Add value labels on bars
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(
+            bar.get_x() + bar.get_width() / 2.,
+            height,
+            f'{int(height)}',
+            ha='center',
+            va='bottom'
+        )
+    
+    plt.tight_layout()
+
+    if output_path:
+        _ensure_output_dir(output_path)
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        logger.info(f"✅ Chart saved to {output_path}")
+
+    return fig
 
 
 def plot_delinquency_distribution(
@@ -60,12 +181,7 @@ def plot_delinquency_distribution(
     Returns:
         Figure object or None
     """
-    if loan_df is None or loan_df.empty:
-        logger.warning("Cannot plot: empty DataFrame")
-        return None
-
-    if bucket_column not in loan_df.columns:
-        logger.warning(f"Column '{bucket_column}' not found")
+    if not _validate_dataframe_and_column(loan_df, bucket_column, "loan DataFrame"):
         return None
 
     try:
@@ -75,68 +191,89 @@ def plot_delinquency_distribution(
         dist = dist.sort_values('Loans', ascending=False)
 
         if interactive and PLOTLY_AVAILABLE:
-            # Create Plotly chart
-            fig = px.bar(
-                dist,
-                x='Bucket',
-                y='Loans',
-                title="Loan Delinquency Distribution",
-                labels={'Loans': 'Number of Loans'},
-                color='Loans',
-                color_continuous_scale='Reds'
-            )
-            
-            fig.update_layout(
-                xaxis_title="Delinquency Bucket",
-                yaxis_title="Number of Loans",
-                showlegend=False,
-                height=500
-            )
-
-            if output_path:
-                _ensure_output_dir(output_path)
-                fig.write_html(output_path)
-                logger.info(f"✅ Chart saved to {output_path}")
-
-            return fig
-
-        elif MATPLOTLIB_AVAILABLE:
-            # Create Matplotlib chart
-            fig, ax = plt.subplots(figsize=DEFAULT_FIGURE_SIZE)
-            
-            bars = ax.bar(dist['Bucket'], dist['Loans'], color='crimson', alpha=0.7)
-            ax.set_xlabel('Delinquency Bucket')
-            ax.set_ylabel('Number of Loans')
-            ax.set_title('Loan Delinquency Distribution')
-            ax.tick_params(axis='x', rotation=45)
-            
-            # Add value labels on bars
-            for bar in bars:
-                height = bar.get_height()
-                ax.text(
-                    bar.get_x() + bar.get_width() / 2.,
-                    height,
-                    f'{int(height)}',
-                    ha='center',
-                    va='bottom'
-                )
-            
-            plt.tight_layout()
-
-            if output_path:
-                _ensure_output_dir(output_path)
-                plt.savefig(output_path, dpi=300, bbox_inches='tight')
-                logger.info(f"✅ Chart saved to {output_path}")
-
-            return fig
-
-        else:
-            logger.error("No plotting library available")
-            return None
+            return _create_plotly_bar_chart(dist, output_path)
+        
+        if MATPLOTLIB_AVAILABLE:
+            return _create_matplotlib_bar_chart(dist, output_path)
+        
+        logger.error(ERROR_MESSAGE_NO_LIBRARY)
+        return None
 
     except Exception as e:
         logger.error(f"Error generating delinquency distribution plot: {e}")
         return None
+
+
+def _create_plotly_line_chart(
+    df: pd.DataFrame,
+    date_column: str,
+    value_column: str,
+    output_path: Optional[str]
+) -> Any:
+    """Create Plotly line chart for portfolio trend."""
+    fig = go.Figure()
+    
+    fig.add_trace(go.Scatter(
+        x=df[date_column],
+        y=df[value_column],
+        mode='lines+markers',
+        name='Portfolio Outstanding',
+        line={'color': '#1f77b4', 'width': 2},
+        marker={'size': 6}
+    ))
+    
+    fig.update_layout(
+        title="Portfolio Outstanding Over Time",
+        xaxis_title="Date",
+        yaxis_title="Outstanding Principal",
+        hovermode='x unified',
+        height=500
+    )
+
+    if output_path:
+        _ensure_output_dir(output_path)
+        fig.write_html(output_path)
+        logger.info(f"✅ Chart saved to {output_path}")
+
+    return fig
+
+
+def _create_matplotlib_line_chart(
+    df: pd.DataFrame,
+    date_column: str,
+    value_column: str,
+    output_path: Optional[str]
+) -> Any:
+    """Create Matplotlib line chart for portfolio trend."""
+    fig, ax = plt.subplots(figsize=DEFAULT_FIGURE_SIZE)
+    
+    ax.plot(
+        df[date_column],
+        df[value_column],
+        marker='o',
+        linewidth=2,
+        markersize=6,
+        color='#1f77b4'
+    )
+    
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Outstanding Principal')
+    ax.set_title('Portfolio Outstanding Over Time')
+    ax.grid(True, alpha=0.3)
+    
+    # Format x-axis dates
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+    ax.xaxis.set_major_locator(mdates.MonthLocator())
+    plt.xticks(rotation=45)
+    
+    plt.tight_layout()
+
+    if output_path:
+        _ensure_output_dir(output_path)
+        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        logger.info(f"✅ Chart saved to {output_path}")
+
+    return fig
 
 
 def plot_portfolio_trend(
@@ -159,12 +296,11 @@ def plot_portfolio_trend(
     Returns:
         Figure object or None
     """
-    if financials_df is None or financials_df.empty:
-        logger.warning("Cannot plot: empty DataFrame")
-        return None
-
-    if date_column not in financials_df.columns or value_column not in financials_df.columns:
-        logger.warning(f"Required columns not found: {date_column}, {value_column}")
+    if not _validate_dataframe_and_columns(
+        financials_df,
+        [date_column, value_column],
+        "financials DataFrame"
+    ):
         return None
 
     try:
@@ -174,68 +310,13 @@ def plot_portfolio_trend(
         df = df.sort_values(date_column)
 
         if interactive and PLOTLY_AVAILABLE:
-            # Create Plotly chart
-            fig = go.Figure()
-            
-            fig.add_trace(go.Scatter(
-                x=df[date_column],
-                y=df[value_column],
-                mode='lines+markers',
-                name='Portfolio Outstanding',
-                line=dict(color='#1f77b4', width=2),
-                marker=dict(size=6)
-            ))
-            
-            fig.update_layout(
-                title="Portfolio Outstanding Over Time",
-                xaxis_title="Date",
-                yaxis_title="Outstanding Principal",
-                hovermode='x unified',
-                height=500
-            )
-
-            if output_path:
-                _ensure_output_dir(output_path)
-                fig.write_html(output_path)
-                logger.info(f"✅ Chart saved to {output_path}")
-
-            return fig
-
-        elif MATPLOTLIB_AVAILABLE:
-            # Create Matplotlib chart
-            fig, ax = plt.subplots(figsize=DEFAULT_FIGURE_SIZE)
-            
-            ax.plot(
-                df[date_column],
-                df[value_column],
-                marker='o',
-                linewidth=2,
-                markersize=6,
-                color='#1f77b4'
-            )
-            
-            ax.set_xlabel('Date')
-            ax.set_ylabel('Outstanding Principal')
-            ax.set_title('Portfolio Outstanding Over Time')
-            ax.grid(True, alpha=0.3)
-            
-            # Format x-axis dates
-            ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
-            ax.xaxis.set_major_locator(mdates.MonthLocator())
-            plt.xticks(rotation=45)
-            
-            plt.tight_layout()
-
-            if output_path:
-                _ensure_output_dir(output_path)
-                plt.savefig(output_path, dpi=300, bbox_inches='tight')
-                logger.info(f"✅ Chart saved to {output_path}")
-
-            return fig
-
-        else:
-            logger.error("No plotting library available")
-            return None
+            return _create_plotly_line_chart(df, date_column, value_column, output_path)
+        
+        if MATPLOTLIB_AVAILABLE:
+            return _create_matplotlib_line_chart(df, date_column, value_column, output_path)
+        
+        logger.error(ERROR_MESSAGE_NO_LIBRARY)
+        return None
 
     except Exception as e:
         logger.error(f"Error generating portfolio trend plot: {e}")
@@ -264,8 +345,7 @@ def plot_risk_heatmap(
         logger.warning("Plotly not available for heatmap")
         return None
 
-    if loan_df is None or loan_df.empty:
-        logger.warning("Cannot plot: empty DataFrame")
+    if not _validate_dataframe_and_column(loan_df, bucket_column, "loan DataFrame"):
         return None
 
     try:
@@ -278,7 +358,7 @@ def plot_risk_heatmap(
 
         fig = px.imshow(
             [pivot[risk_column].values],
-            labels=dict(x="Risk Score", y="Bucket", color="Average Risk"),
+            labels={'x': "Risk Score", 'y': "Bucket", 'color': "Average Risk"},
             x=pivot[bucket_column].values,
             color_continuous_scale='RdYlGn_r',
             title="Risk Distribution by Delinquency Bucket"

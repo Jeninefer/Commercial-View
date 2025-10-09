@@ -7,15 +7,15 @@ and stress testing capabilities for portfolio risk assessment.
 
 import logging
 from typing import Optional, Tuple, Dict, Any
-import pandas as pd
+from sklearn.preprocessing import StandardScaler
 import numpy as np
+import pandas as pd
 from pathlib import Path
 import joblib
 
 # ML imports
 try:
     from sklearn.linear_model import LogisticRegression
-    from sklearn.preprocessing import StandardScaler
     from sklearn.model_selection import train_test_split
     from sklearn.metrics import roc_auc_score, classification_report
     SKLEARN_AVAILABLE = True

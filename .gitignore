@@ -160,3 +160,4 @@ secret_*
 # Environment variables - NEVER commit
 .env
 .env.*
+.env
