@@ -13,7 +13,7 @@ from typing import Dict, Any, List, Optional
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 try:
-    from fastapi import FastAPI, HTTPException
+    from fastapi import FastAPI, HTTPException, Request
     from fastapi.responses import JSONResponse
     from fastapi.middleware.cors import CORSMiddleware
     import uvicorn
@@ -65,10 +65,42 @@ except Exception as e:
     data_loader = None
     pipeline = None
 
-# Constants
+# Constants - Consolidate duplicate string literals
 DATA_LOADER_NOT_AVAILABLE_MSG = "Data loader not available"
 CUSTOMER_ID_COL = "Customer ID"
 LOAN_ID_COL = "Loan ID"
+STATUS_SUCCESS = "success"
+STATUS_ERROR = "error"
+STATUS_HEALTHY = "healthy"
+STATUS_UNHEALTHY = "unhealthy"
+APP_NAME = "Commercial-View"
+APP_VERSION = "1.0.0"
+ENV_PRODUCTION = "production"
+
+# Dataset names
+DATASET_LOAN_DATA = "loan_data"
+DATASET_PAYMENT_SCHEDULE = "payment_schedule"
+DATASET_HISTORIC_PAYMENT = "historic_real_payment"
+
+# Common column names (from schema)
+COL_COMPANY = "Company"
+COL_CLIENTE = "Cliente"
+COL_PAGADOR = "Pagador"
+COL_LOAN_AMOUNT = "Disbursement Amount"
+COL_INTEREST_RATE = "Interest Rate APR"
+COL_TERM = "Term"
+COL_LOAN_STATUS = "Loan Status"
+COL_DISBURSEMENT_DATE = "Disbursement Date"
+COL_PAYMENT_DATE = "Payment Date"
+COL_DUE_DATE = "Payment Date"
+COL_PRINCIPAL_PAYMENT = "Principal Payment"
+COL_INTEREST_PAYMENT = "Interest Payment"
+COL_TOTAL_PAYMENT = "Total Payment"
+COL_TRUE_PAYMENT_DATE = "True Payment Date"
+COL_AMOUNT_PAID = "True Total Payment"
+COL_DAYS_IN_DEFAULT = "Days in Default"
+COL_PAYMENT_STATUS = "True Payment Status"
+COL_OUTSTANDING = "Outstanding Loan Value"
 
 # Global exception handler
 @app.exception_handler(Exception)
@@ -109,10 +141,10 @@ async def health_check() -> Dict[str, Any]:
                     }
         
         return {
-            "status": "healthy",
-            "version": "1.0.0",
-            "application": "Commercial-View",
-            "environment": os.getenv("ENVIRONMENT", "production"),
+            "status": STATUS_HEALTHY,
+            "version": APP_VERSION,
+            "application": APP_NAME,
+            "environment": os.getenv("ENVIRONMENT", ENV_PRODUCTION),
             "datasets_available": datasets_status,
             "data_source": "Production Google Drive",
             "timestamp": pipeline.get_current_timestamp() if pipeline else None
@@ -123,9 +155,9 @@ async def health_check() -> Dict[str, Any]:
         return JSONResponse(
             status_code=503,
             content={
-                "status": "unhealthy", 
+                "status": STATUS_UNHEALTHY, 
                 "error": str(e),
-                "application": "Commercial-View"
+                "application": APP_NAME
             }
         )
 
@@ -151,7 +183,7 @@ async def get_portfolio_metrics() -> Dict[str, Any]:
             "npl_rate": pipeline.compute_npl_rate(),
             "concentration_risk": pipeline.compute_concentration_risk(),
             "collection_rate": pipeline.compute_collection_rate(),
-            "status": "success",
+            "status": STATUS_SUCCESS,
             "calculation_timestamp": pipeline.get_current_timestamp()
         }
         
@@ -168,7 +200,7 @@ async def get_portfolio_metrics() -> Dict[str, Any]:
             "npl_rate": 0.0,
             "concentration_risk": 0.0,
             "collection_rate": 0.0,
-            "status": "error",
+            "status": STATUS_ERROR,
             "error": str(e),
             "fallback": True
         }
@@ -187,7 +219,7 @@ async def get_loans() -> JSONResponse:
         loans_data = loans_df.to_dict('records')
         
         return JSONResponse(content={
-            "status": "success",
+            "status": STATUS_SUCCESS,
             "data": loans_data,
             "count": len(loans_data)
         })
@@ -203,7 +235,7 @@ async def get_payment_schedule() -> List[Dict[str, Any]]:
     """
     try:
         if not data_loader:
-            raise HTTPException(status_code=503, detail="Data loader not available")
+            raise HTTPException(status_code=503, detail=DATA_LOADER_NOT_AVAILABLE_MSG)
         
         # Load payment schedule data
         payment_df = data_loader.load_payment_schedule()
@@ -229,7 +261,7 @@ async def get_historic_payments() -> List[Dict[str, Any]]:
     """
     try:
         if not data_loader:
-            raise HTTPException(status_code=503, detail="Data loader not available")
+            raise HTTPException(status_code=503, detail=DATA_LOADER_NOT_AVAILABLE_MSG)
         
         # Load historic payment data
         historic_df = data_loader.load_historic_real_payment()
@@ -255,20 +287,39 @@ async def get_dataset_schema(dataset_name: str) -> Dict[str, Any]:
     """
     try:
         schemas = {
-            "loan_data": {
-                "name": "loan_data",
+            DATASET_LOAN_DATA: {
+                "name": DATASET_LOAN_DATA,
                 "description": "Commercial loan portfolio data",
-                "columns": ["Customer ID", "Loan Amount", "Interest Rate", "Term", "Status", "Origination Date"]
+                "columns": [
+                    CUSTOMER_ID_COL,
+                    COL_LOAN_AMOUNT,
+                    COL_INTEREST_RATE,
+                    COL_TERM,
+                    COL_LOAN_STATUS,
+                    COL_DISBURSEMENT_DATE
+                ]
             },
-            "payment_schedule": {
-                "name": "payment_schedule", 
+            DATASET_PAYMENT_SCHEDULE: {
+                "name": DATASET_PAYMENT_SCHEDULE, 
                 "description": "Scheduled loan payments",
-                "columns": ["Customer ID", "Due Date", "Principal Payment", "Interest Payment", "Total Payment"]
+                "columns": [
+                    CUSTOMER_ID_COL,
+                    COL_DUE_DATE,
+                    COL_PRINCIPAL_PAYMENT,
+                    COL_INTEREST_PAYMENT,
+                    COL_TOTAL_PAYMENT
+                ]
             },
-            "historic_real_payment": {
-                "name": "historic_real_payment",
+            DATASET_HISTORIC_PAYMENT: {
+                "name": DATASET_HISTORIC_PAYMENT,
                 "description": "Historical payment performance",
-                "columns": ["Customer ID", "Payment Date", "Amount Paid", "Days Past Due", "Payment Status"]
+                "columns": [
+                    CUSTOMER_ID_COL,
+                    COL_TRUE_PAYMENT_DATE,
+                    COL_AMOUNT_PAID,
+                    COL_DAYS_IN_DEFAULT,
+                    COL_PAYMENT_STATUS
+                ]
             }
         }
         
@@ -288,9 +339,9 @@ async def get_dataset_schema(dataset_name: str) -> Dict[str, Any]:
 async def root() -> Dict[str, str]:
     """Welcome message for Commercial-View API"""
     return {
-        "message": "Welcome to Commercial-View API",
+        "message": f"Welcome to {APP_NAME} API",
         "description": "Enterprise commercial lending analytics platform",
-        "version": "1.0.0",
+        "version": APP_VERSION,
         "documentation": "/docs"
     }
 
@@ -298,22 +349,22 @@ async def root() -> Dict[str, str]:
 @app.on_event("startup")
 async def startup_event():
     """Application startup initialization"""
-    logger.info("🚀 Starting Commercial-View application...")
-    logger.info(f"Environment: {os.getenv('ENVIRONMENT', 'production')}")
+    logger.info(f"🚀 Starting {APP_NAME} application...")
+    logger.info(f"Environment: {os.getenv('ENVIRONMENT', ENV_PRODUCTION)}")
     logger.info(f"CORS Origins: {ALLOWED_ORIGINS}")
 
 # Application shutdown
 @app.on_event("shutdown") 
 async def shutdown_event():
     """Application shutdown cleanup"""
-    logger.info("🛑 Shutting down Commercial-View application...")
+    logger.info(f"🛑 Shutting down {APP_NAME} application...")
 
 # Development server runner
 if __name__ == "__main__":
     # Development configuration
     port = int(os.getenv("PORT", 8000))
     host = os.getenv("HOST", "0.0.0.0")
-    reload = os.getenv("ENVIRONMENT", "production") == "development"
+    reload = os.getenv("ENVIRONMENT", ENV_PRODUCTION) == "development"
     
     logger.info(f"Starting server on {host}:{port}")
     
