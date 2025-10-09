@@ -147,7 +147,12 @@ class DashboardOrchestrator:
         recent_recovery = (
             recovery_metrics.sort_values("months_since_disbursement", ascending=False)
             .head(1)["recovery_pct"]
-            if hasattr(recovery_metrics, "sort_values") and not recovery_metrics.empty
+            if (
+                recovery_metrics is not None
+                and hasattr(recovery_metrics, "sort_values")
+                and hasattr(recovery_metrics, "empty")
+                and not recovery_metrics.empty
+            )
             else None
         )
         return {
