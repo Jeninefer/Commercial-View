@@ -4,71 +4,49 @@
 
 # Loan/Portfolio Dataset Column Mappings
 loan_data:
-<<<<<<< HEAD
   # Core Loan Identifiers
-  loan_id: "loan_id"              # Unique loan identifier
-  customer_id: "customer_id"      # Customer identifier
-  
-  # Loan Details
-  loan_amount: "amount"           # Original loan amount
-  outstanding_balance: "balance"  # Current outstanding balance
-  interest_rate: "rate"           # Interest rate
-  
+  loan_id: "Loan ID"
+  customer_id: "Customer ID"
+  customer_name: "Cliente"
+  payer_name: "Pagador"
+  application_id: "Application ID"
+
+  # Company & Product Information
+  company: "Company"
+  product_type: "Product Type"
+
+  # Financial Details
+  loan_amount: "Disbursement Amount"
+  outstanding_balance: "Outstanding Loan Value"
+  interest_rate: "Interest Rate APR"
+  loan_currency: "Loan Currency"
+
   # Dates
-  origination_date: "origination_date"
+  origination_date: "Disbursement Date"
   maturity_date: "maturity_date"
   last_payment_date: "last_payment_date"
   last_due_date: "last_due_date"
   first_arrears_date: "first_arrears_date"
   reference_date: "reference_date"
-  
-  # Status Fields
-  loan_status: "status"
-  days_past_due: "dpd"
+
+  # Status & Risk Fields
+  loan_status: "Loan Status"
+  days_past_due: "Days in Default"
   past_due_amount: "past_due_amount"
-  
+
   # Tenor Information
+  term_days: "Term"
+  term_unit: "Term Unit"
+  payment_frequency: "Payment Frequency"
   tenor_months: "tenor_months"
-  tenor_days: "tenor_days"
 
 # Payment Dataset Column Mappings
 payment_data:
   payment_id: "payment_id"
-  loan_id: "loan_id"
-  payment_date: "payment_date"
-  payment_amount: "payment_amount"
-  principal_paid: "principal_paid"
-  interest_paid: "interest_paid"
-  fees_paid: "fees_paid"
-=======
-  company: "Company"
-  customer_id: "Customer ID"
-  customer_name: "Cliente"
-  payer_name: "Pagador"
-  loan_id: "Loan ID"
-  application_id: "Application ID"
-  product_type: "Product Type"
-  loan_currency: "Loan Currency"
-  loan_amount: "Disbursement Amount"
-  outstanding_balance: "Outstanding Loan Value"
-  interest_rate: "Interest Rate APR"
-  origination_date: "Disbursement Date"
-  term_days: "Term"
-  term_unit: "Term Unit"
-  payment_frequency: "Payment Frequency"
-  days_past_due: "Days in Default"
-  loan_status: "Loan Status"
-  past_due_amount: "past_due_amount"
-  first_arrears_date: "first_arrears_date"
-  last_payment_date: "last_payment_date"
-  last_due_date: "last_due_date"
-  reference_date: "reference_date"
-
-# Payment Dataset Column Mappings
-payment_data:
   loan_id: "Loan ID"
   payment_date: "Payment Date"
   total_payment: "Total Payment"
+  payment_amount: "payment_amount"
   principal_paid: "Principal Payment"
   interest_paid: "Interest Payment"
   fees_paid: "Fee Payment"
@@ -76,7 +54,6 @@ payment_data:
   outstanding_balance: "Outstanding Loan Value"
   currency: "Currency"
   tpv: "TPV"
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
 
 # DPD Frame Output Columns (Contract Output)
 dpd_frame_output:
@@ -97,13 +74,6 @@ buckets_output:
 
 # Customer/Entity Dataset Column Mappings
 customer_data:
-<<<<<<< HEAD
-  customer_id: "customer_id"
-  customer_name: "customer_name"
-  customer_type: "customer_type"
-  registration_date: "registration_date"
-  credit_score: "credit_score"
-=======
   customer_id: "Customer ID"
   customer_name: "Customer Name"
   business_year_founded: "Business Year Founded"
@@ -244,4 +214,3 @@ regulatory_data:
   charge_off_rate: "Charge Off Rate"
   recovery_rate: "Recovery Rate"
   stressed_loss_rate: "Stressed Loss Rate"
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
