@@ -22,6 +22,7 @@ wheels/
 MANIFEST
 
 # Virtual environments
+.venv/
 venv/
 env/
 ENV/
@@ -30,11 +31,18 @@ venv.bak/
 
 # IDEs
 .vscode/
+.vscode/settings.json
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # Testing
 .pytest_cache/
@@ -44,10 +52,16 @@ htmlcov/
 .tox/
 .hypothesis/
 *.cover
+*.lcov
+.nyc_output
 
 # Runtime exports
 abaco_runtime/
+abaco_runtime/exports/*.csv
+abaco_runtime/exports/*.json
+abaco_runtime/exports/*.xlsx
 *.log
+logs/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -63,21 +77,47 @@ abaco_runtime/
 *.backup
 tmp/
 temp/
+get-pip.py
 
 # Build artifacts
 node_modules/
+jspm_packages/
 package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+.yarn/
+.pnpm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# OS
-Thumbs.db
+# Frontend build artifacts
+frontend/build/
+frontend/dist/
+frontend/.next/
+frontend/coverage/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+.eslintcache
 
 # Security
 .secrets.baseline
 *.key
 *.pem
 *.crt
+credentials.json
+token.json
+drive_config.json
 
-# Data files (add specific patterns as needed)
+# Data files
 data/raw/
 data/processed/
 data/temp/
@@ -87,3 +127,22 @@ data/temp/
 *.tar.gz
 *.tar
 *.rar
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Temporary workflow exclusion
+.github/workflows/
+github_workflows_backup/
+
+# Demo and test files
+*demo*
+*example*
+*sample*
+test_*.py
+*_fix.py
+
+# Project specific
+Commercial-View/

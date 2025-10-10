@@ -1,0 +1,22 @@
+{
+  "figma": {
+    "api_base_url": "https://api.figma.com/v1",
+    "commercial_view": {
+      "dashboard_file_id": "Zli1oqL-_I1usmRAkOZtRTXdTWeHF6E-OTKKhgJwKPE",
+      "components": {
+        "kpi_tiles": true,
+        "charts": true,
+        "tables": true,
+        "navigation": true
+      }
+    },
+    "rate_limits": {
+      "requests_per_minute": 60,
+      "burst_limit": 10
+    },
+    "cache": {
+      "enabled": true,
+      "ttl_seconds": 300
+    }
+  }
+}
