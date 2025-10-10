@@ -16,17 +16,21 @@ import json
 
 logger = logging.getLogger(__name__)
 
-# Constants for better maintainability
+# Constants for better maintainability - Fixed based on actual Abaco schema
 ABACO_LOAN_DATA_FILE = 'Abaco - Loan Tape_Loan Data_Table.csv'
 ABACO_PAYMENT_HISTORY_FILE = 'Abaco - Loan Tape_Historic Real Payment_Table.csv'
 ABACO_PAYMENT_SCHEDULE_FILE = 'Abaco - Loan Tape_Payment Schedule_Table.csv'
 
-# Abaco-specific column constants
+# Abaco-specific column constants - Exact names from schema
 DAYS_IN_DEFAULT_COLUMN = 'Days in Default'
 LOAN_STATUS_COLUMN = 'Loan Status'
 INTEREST_RATE_APR_COLUMN = 'Interest Rate APR'
 CUSTOMER_ID_COLUMN = 'Customer ID'
 LOAN_ID_COLUMN = 'Loan ID'
+DISBURSEMENT_DATE_COLUMN = 'Disbursement Date'
+TRUE_PAYMENT_DATE_COLUMN = 'True Payment Date'
+DISBURSEMENT_AMOUNT_COLUMN = 'Disbursement Amount'
+OUTSTANDING_LOAN_VALUE_COLUMN = 'Outstanding Loan Value'
 
 class AbacoSchemaValidator:
     """Validates Abaco data against the autodetected schema."""
@@ -34,43 +38,56 @@ class AbacoSchemaValidator:
     def __init__(self, schema_path: Optional[str] = None):
         """Initialize with schema from JSON file."""
         self.schema = {}
+        if not schema_path:
+            # Try to find schema file in standard locations
+            potential_paths = [
+                os.path.join(os.getcwd(), 'config', 'abaco_schema_autodetected.json'),
+                os.path.join(Path.home(), 'Downloads', 'abaco_schema_autodetected.json')
+            ]
+            for path in potential_paths:
+                if os.path.exists(path):
+                    schema_path = path
+                    break
+        
         if schema_path and os.path.exists(schema_path):
-            with open(schema_path, 'r', encoding='utf-8') as f:
-                self.schema = json.load(f)
+            try:
+                with open(schema_path, 'r', encoding='utf-8') as f:
+                    self.schema = json.load(f)
+                logger.info(f"✅ Loaded Abaco schema from {schema_path}")
+            except Exception as e:
+                logger.error(f"Error loading schema from {schema_path}: {e}")
+        else:
+            logger.warning("Abaco schema file not found. Validation will be limited.")
     
     def validate_table_structure(self, df: pd.DataFrame, table_name: str) -> Tuple[bool, List[str]]:
         """Validate DataFrame structure against schema."""
         issues = []
         
-        if table_name not in self.schema.get('datasets', {}):
+        if not self.schema:
+            issues.append("No schema loaded for validation")
+            return False, issues
+            
+        datasets = self.schema.get('datasets', {})
+        if table_name not in datasets:
             issues.append(f"Table {table_name} not found in schema")
             return False, issues
         
-        table_schema = self.schema['datasets'][table_name]
+        table_schema = datasets[table_name]
         expected_columns = {col['name']: col for col in table_schema.get('columns', [])}
         
-        # Check for missing required columns (non-null columns)
-        for col_name, col_info in expected_columns.items():
-            if col_info.get('non_null', 0) > 0 and col_name not in df.columns:
-                issues.append(f"Missing required column: {col_name}")
+        # Check for missing required columns (non-null > 0)
+        required_cols = [name for name, info in expected_columns.items() if info.get('non_null', 0) > 0]
+        missing_cols = [col for col in required_cols if col not in df.columns]
+        if missing_cols:
+            issues.append(f"Missing required columns: {missing_cols}")
         
-        # Check data types
-        for col_name in df.columns:
-            if col_name in expected_columns:
-                expected_dtype = expected_columns[col_name].get('dtype')
-                actual_dtype = str(df[col_name].dtype)
-                
-                # Type mapping for validation
-                type_mapping = {
-                    'string': ['object', 'string'],
-                    'float': ['float64', 'float32', 'int64', 'int32'],
-                    'int': ['int64', 'int32', 'float64', 'float32'],
-                    'datetime': ['datetime64[ns]', 'object']
-                }
-                
-                if expected_dtype in type_mapping:
-                    if not any(dtype in actual_dtype for dtype in type_mapping[expected_dtype]):
-                        issues.append(f"Column {col_name}: expected {expected_dtype}, got {actual_dtype}")
+        # Check expected row count (with tolerance)
+        expected_rows = table_schema.get('rows', 0)
+        actual_rows = len(df)
+        if expected_rows > 0:
+            tolerance = 0.05  # 5% tolerance
+            if abs(actual_rows - expected_rows) / expected_rows > tolerance:
+                issues.append(f"Row count mismatch: expected ~{expected_rows}, got {actual_rows}")
         
         return len(issues) == 0, issues
 
@@ -104,9 +121,7 @@ class DataLoader:
         os.makedirs(self.data_dir, exist_ok=True)
         
         logger.info(f"DataLoader initialized with config_dir: {self.config_dir}, data_dir: {self.data_dir}")
-        if schema_path:
-            logger.info(f"Abaco schema loaded from: {schema_path}")
-    
+
     def load_csv(self, filepath: str, encoding: str = 'utf-8') -> Optional[pd.DataFrame]:
         """
         Load a single CSV file with enhanced error handling.
@@ -129,7 +144,7 @@ class DataLoader:
             for enc in encodings_to_try:
                 try:
                     df = pd.read_csv(filepath, encoding=enc)
-                    logger.info(f"✅ Loaded CSV: {filepath} ({len(df)} rows, {len(df.columns)} columns) with encoding: {enc}")
+                    logger.info(f"✅ Loaded CSV: {os.path.basename(filepath)} ({len(df)} rows, {len(df.columns)} columns)")
                     return df
                 except UnicodeDecodeError:
                     continue
@@ -141,51 +156,248 @@ class DataLoader:
             logger.error(f"Error loading CSV {filepath}: {e}")
             return None
     
-    def validate_abaco_data_quality(self, df: pd.DataFrame, table_type: str) -> Tuple[bool, List[str]]:
+    def load_abaco_data(self, config_path: Optional[str] = None) -> Dict[str, pd.DataFrame]:
         """
-        Validate data quality for Abaco tables.
+        Load Abaco loan data with comprehensive validation and processing.
         
         Args:
-            df: DataFrame to validate
-            table_type: Type of table ('loan_data', 'payment_history', 'payment_schedule')
+            config_path: Path to abaco_column_maps.yml config file
             
         Returns:
-            Tuple of (is_valid, list_of_issues)
+            Dictionary containing loaded and processed DataFrames
         """
-        issues = []
+        logger.info("🏦 Starting Abaco loan tape data loading...")
         
-        # Common validations
-        if df.empty:
-            issues.append("DataFrame is empty")
-            return False, issues
+        # Load configuration if available
+        config = self._load_config(config_path)
         
-        # Check for required columns based on table type
-        required_columns = {
-            'loan_data': ['Customer ID', 'Loan ID', 'Company'],
-            'payment_history': ['Customer ID', 'Loan ID', 'True Payment Date'],
-            'payment_schedule': ['Customer ID', 'Loan ID', 'Payment Date']
+        data = {}
+        
+        # Define Abaco table mappings based on schema
+        abaco_tables = {
+            'Loan Data': {
+                'file': ABACO_LOAN_DATA_FILE,
+                'key': 'loan_data',
+                'expected_rows': 16205,
+                'description': 'Core loan information and status'
+            },
+            'Historic Real Payment': {
+                'file': ABACO_PAYMENT_HISTORY_FILE, 
+                'key': 'payment_history',
+                'expected_rows': 16443,
+                'description': 'Historical payment records and performance'
+            },
+            'Payment Schedule': {
+                'file': ABACO_PAYMENT_SCHEDULE_FILE,
+                'key': 'payment_schedule', 
+                'expected_rows': 16205,
+                'description': 'Scheduled payment projections'
+            }
         }
         
-        if table_type in required_columns:
-            missing_cols = [col for col in required_columns[table_type] if col not in df.columns]
-            if missing_cols:
-                issues.append(f"Missing required columns: {missing_cols}")
+        # Load each table
+        for schema_name, table_info in abaco_tables.items():
+            file_path = os.path.join(self.data_dir, table_info['file'])
+            
+            if os.path.exists(file_path):
+                logger.info(f"📊 Loading {table_info['description']}...")
+                
+                # Load CSV
+                df = self.load_csv(file_path)
+                if df is not None:
+                    # Validate against schema
+                    is_valid, issues = self.schema_validator.validate_table_structure(df, schema_name)
+                    
+                    if not is_valid:
+                        logger.warning(f"⚠️  Schema validation issues for {schema_name}: {issues}")
+                    else:
+                        logger.info(f"✅ Schema validation passed for {schema_name}")
+                    
+                    # Apply transformations
+                    df_processed = self._apply_abaco_transformations(df, config, table_info['key'])
+                    data[table_info['key']] = df_processed
+                    
+                    # Log results
+                    logger.info(f"✅ Processed {len(df_processed)} {table_info['key']} records")
+                    
+                    # Log key statistics
+                    self._log_table_statistics(df_processed, table_info['key'])
+            else:
+                logger.warning(f"📁 File not found: {table_info['file']}")
         
-        # Check for excessive null values
-        null_percentages = df.isnull().sum() / len(df) * 100
-        high_null_cols = null_percentages[null_percentages > 50].index.tolist()
-        if high_null_cols:
-            issues.append(f"Columns with >50% null values: {high_null_cols}")
-        
-        # Check for duplicate IDs in loan data
-        if table_type == 'loan_data' and 'Loan ID' in df.columns:
-            duplicates = df['Loan ID'].duplicated().sum()
-            if duplicates > 0:
-                issues.append(f"Found {duplicates} duplicate Loan IDs")
-        
-        is_valid = len(issues) == 0
-        return is_valid, issues
+        # Generate summary
+        if data:
+            total_records = sum(len(df) for df in data.values())
+            logger.info(f"🎯 Abaco loading complete: {len(data)} tables, {total_records:,} total records")
+        else:
+            logger.warning("❌ No Abaco data loaded. Check file locations and formats.")
+            
+        return data
     
+    def _load_config(self, config_path: Optional[str]) -> Dict[str, Any]:
+        """Load configuration with fallback."""
+        if not config_path:
+            config_path = os.path.join(self.config_dir, 'abaco_column_maps.yml')
+        
+        config = {}
+        if os.path.exists(config_path):
+            try:
+                import yaml
+                with open(config_path, 'r', encoding='utf-8') as f:
+                    config = yaml.safe_load(f)
+                logger.info(f"✅ Loaded configuration from {config_path}")
+            except Exception as e:
+                logger.warning(f"Error loading config {config_path}: {e}")
+        else:
+            logger.info("Using default configuration (no config file found)")
+        
+        return config
+    
+    def _apply_abaco_transformations(self, df: pd.DataFrame, config: Dict, table_type: str) -> pd.DataFrame:
+        """Apply comprehensive Abaco-specific transformations."""
+        df_processed = df.copy()
+        
+        try:
+            # Apply datetime conversions based on schema
+            datetime_columns = {
+                'loan_data': [DISBURSEMENT_DATE_COLUMN],
+                'payment_history': [TRUE_PAYMENT_DATE_COLUMN],
+                'payment_schedule': ['Payment Date']
+            }
+            
+            for col in datetime_columns.get(table_type, []):
+                if col in df_processed.columns:
+                    df_processed[col] = pd.to_datetime(df_processed[col], errors='coerce')
+                    null_count = df_processed[col].isnull().sum()
+                    if null_count > 0:
+                        logger.warning(f"⚠️  Failed to parse {null_count} dates in {col}")
+            
+            # Table-specific transformations
+            if table_type == 'loan_data':
+                df_processed = self._transform_loan_data(df_processed, config)
+            elif table_type == 'payment_history':
+                df_processed = self._transform_payment_history(df_processed, config)
+            elif table_type == 'payment_schedule':
+                df_processed = self._transform_payment_schedule(df_processed, config)
+            
+            return df_processed
+            
+        except Exception as e:
+            logger.error(f"Error in transformations for {table_type}: {e}")
+            return df_processed
+    
+    def _transform_loan_data(self, df: pd.DataFrame, config: Dict) -> pd.DataFrame:
+        """Apply loan data specific transformations."""
+        # Add delinquency buckets
+        if DAYS_IN_DEFAULT_COLUMN in df.columns:
+            df['delinquency_bucket'] = df[DAYS_IN_DEFAULT_COLUMN].apply(self._get_delinquency_bucket)
+        
+        # Calculate risk scores
+        df['risk_score'] = self._calculate_risk_score(df)
+        
+        # Add derived fields
+        if 'TPV' in df.columns and DISBURSEMENT_AMOUNT_COLUMN in df.columns:
+            df['advance_rate'] = df[DISBURSEMENT_AMOUNT_COLUMN] / df['TPV']
+            df['advance_rate'] = df['advance_rate'].fillna(0).clip(0, 1)
+        
+        return df
+    
+    def _transform_payment_history(self, df: pd.DataFrame, config: Dict) -> pd.DataFrame:
+        """Apply payment history specific transformations."""
+        # Calculate payment efficiency
+        if 'True Total Payment' in df.columns and 'True Principal Payment' in df.columns:
+            df['payment_efficiency'] = df['True Principal Payment'] / df['True Total Payment']
+            df['payment_efficiency'] = df['payment_efficiency'].fillna(0).clip(0, 1)
+        
+        return df
+    
+    def _transform_payment_schedule(self, df: pd.DataFrame, config: Dict) -> pd.DataFrame:
+        """Apply payment schedule specific transformations."""
+        # Calculate interest burden
+        if 'Total Payment' in df.columns and 'Principal Payment' in df.columns:
+            df['interest_burden'] = 1 - (df['Principal Payment'] / df['Total Payment'])
+            df['interest_burden'] = df['interest_burden'].fillna(0).clip(0, 1)
+        
+        return df
+    
+    def _get_delinquency_bucket(self, days: Union[int, float]) -> str:
+        """Map days in default to delinquency bucket."""
+        if pd.isna(days):
+            return 'unknown'
+        
+        try:
+            days = int(days)
+        except (ValueError, TypeError):
+            return 'unknown'
+        
+        # Standard Abaco delinquency buckets
+        if days == 0:
+            return 'current'
+        elif 1 <= days <= 30:
+            return 'early_delinquent'
+        elif 31 <= days <= 60:
+            return 'moderate_delinquent'
+        elif 61 <= days <= 90:
+            return 'late_delinquent'
+        elif 91 <= days <= 120:
+            return 'severe_delinquent'
+        elif 121 <= days <= 180:
+            return 'default'
+        else:
+            return 'npl'  # Non-performing loan
+    
+    def _calculate_risk_score(self, df: pd.DataFrame) -> pd.Series:
+        """Calculate comprehensive risk score for Abaco loans."""
+        risk_scores = pd.Series([0.0] * len(df), index=df.index)
+        
+        # Days in Default (40% weight)
+        if DAYS_IN_DEFAULT_COLUMN in df.columns:
+            days_normalized = np.minimum(df[DAYS_IN_DEFAULT_COLUMN].fillna(0) / 180.0, 1.0)
+            risk_scores += 0.4 * days_normalized
+        
+        # Loan Status (30% weight)
+        if LOAN_STATUS_COLUMN in df.columns:
+            status_risk = df[LOAN_STATUS_COLUMN].map({
+                'Current': 0.0,
+                'Complete': 0.0,
+                'Default': 1.0
+            }).fillna(0.5)
+            risk_scores += 0.3 * status_risk
+        
+        # Interest Rate (20% weight) - normalize to 0-1 range
+        if INTEREST_RATE_APR_COLUMN in df.columns:
+            rate_normalized = np.minimum(df[INTEREST_RATE_APR_COLUMN].fillna(0) / 0.5, 1.0)  # Assume max 50%
+            risk_scores += 0.2 * rate_normalized
+        
+        # Loan Size relative risk (10% weight)
+        if OUTSTANDING_LOAN_VALUE_COLUMN in df.columns:
+            balance_col = df[OUTSTANDING_LOAN_VALUE_COLUMN].fillna(0)
+            if balance_col.max() > 0:
+                balance_percentile = balance_col.rank(pct=True)
+                risk_scores += 0.1 * balance_percentile
+        
+        return risk_scores.clip(0.0, 1.0)
+    
+    def _log_table_statistics(self, df: pd.DataFrame, table_type: str) -> None:
+        """Log key statistics for loaded table."""
+        if table_type == 'loan_data':
+            if 'Company' in df.columns:
+                companies = df['Company'].value_counts()
+                logger.info(f"   📈 Companies: {dict(companies)}")
+            
+            if LOAN_STATUS_COLUMN in df.columns:
+                statuses = df[LOAN_STATUS_COLUMN].value_counts()
+                logger.info(f"   📊 Loan Status: {dict(statuses)}")
+            
+            if 'delinquency_bucket' in df.columns:
+                buckets = df['delinquency_bucket'].value_counts()
+                logger.info(f"   🎯 Delinquency: {dict(buckets)}")
+        
+        elif table_type == 'payment_history':
+            if 'True Payment Status' in df.columns:
+                payment_statuses = df['True Payment Status'].value_counts()
+                logger.info(f"   💰 Payment Status: {dict(payment_statuses)}")
+
     def load_loan_data(self) -> Optional[pd.DataFrame]:
         """
         Load generic loan data from data directory.
@@ -196,247 +408,41 @@ class DataLoader:
         loan_files = [
             'loan_data.csv',
             'loans.csv',
-            'Abaco - Loan Tape_Loan Data_Table.csv'
+            ABACO_LOAN_DATA_FILE
         ]
         
         for filename in loan_files:
             filepath = os.path.join(self.data_dir, filename)
             df = self.load_csv(filepath)
             if df is not None:
+                logger.info(f"✅ Loaded generic loan data from {filename}")
                 return df
         
         logger.warning("No loan data files found")
         return None
-    
-    def load_abaco_data(self, config_path: Optional[str] = None) -> Dict[str, pd.DataFrame]:
-        """
-        Load Abaco loan data using the schema configuration.
-        
-        Args:
-            config_path: Path to abaco_column_maps.yml config file
-            
-        Returns:
-            Dictionary containing loaded DataFrames
-        """
-        if not config_path:
-            config_path = os.path.join(self.config_dir, 'abaco_column_maps.yml')
-        
-        try:
-            # Try to load config - if it doesn't exist, we'll use defaults
-            config = {}
-            if os.path.exists(config_path):
-                import yaml
-                with open(config_path, 'r', encoding='utf-8') as f:
-                    config = yaml.safe_load(f)
-                logger.info(f"✅ Loaded Abaco config from {config_path}")
-            else:
-                logger.warning(f"Config file not found: {config_path} - using defaults")
-            
-            data = {}
-            
-            # Load Loan Data
-            loan_data_path = os.path.join(self.data_dir, ABACO_LOAN_DATA_FILE)
-            if os.path.exists(loan_data_path):
-                df = self.load_csv(loan_data_path)
-                if df is not None:
-                    # Validate data quality
-                    is_valid, issues = self.validate_abaco_data_quality(df, 'loan_data')
-                    if issues:
-                        logger.warning(f"Data quality issues in loan data: {issues}")
-                    
-                    df = self._apply_abaco_transformations(df, config, 'loan_data')
-                    data['loan_data'] = df
-                    logger.info(f"✅ Loaded {len(df)} loan records")
-            
-            # Load Payment History  
-            payment_history_path = os.path.join(self.data_dir, ABACO_PAYMENT_HISTORY_FILE)
-            if os.path.exists(payment_history_path):
-                df = self.load_csv(payment_history_path)
-                if df is not None:
-                    # Validate data quality
-                    is_valid, issues = self.validate_abaco_data_quality(df, 'payment_history')
-                    if issues:
-                        logger.warning(f"Data quality issues in payment history: {issues}")
-                    
-                    df = self._apply_abaco_transformations(df, config, 'payment_history')
-                    data['payment_history'] = df
-                    logger.info(f"✅ Loaded {len(df)} payment history records")
-            
-            # Load Payment Schedule
-            payment_schedule_path = os.path.join(self.data_dir, ABACO_PAYMENT_SCHEDULE_FILE)
-            if os.path.exists(payment_schedule_path):
-                df = self.load_csv(payment_schedule_path)
-                if df is not None:
-                    # Validate data quality
-                    is_valid, issues = self.validate_abaco_data_quality(df, 'payment_schedule')
-                    if issues:
-                        logger.warning(f"Data quality issues in payment schedule: {issues}")
-                    
-                    df = self._apply_abaco_transformations(df, config, 'payment_schedule')
-                    data['payment_schedule'] = df
-                    logger.info(f"✅ Loaded {len(df)} payment schedule records")
-            
-            if not data:
-                logger.warning("No Abaco CSV files found in data directory")
-                
-            return data
-            
-        except Exception as e:
-            logger.error(f"Error loading Abaco data: {e}")
-            return {}
-    
-    def _apply_abaco_transformations(self, df: pd.DataFrame, config: Dict, table_type: str) -> pd.DataFrame:
-        """Apply data transformations for Abaco data with enhanced error handling."""
-        try:
-            df_copy = df.copy()  # Work on a copy to avoid modifying original
-            
-            # Convert datetime columns
-            datetime_cols = config.get('data_types', {}).get('datetime_columns', [])
-            for col in datetime_cols:
-                if col in df_copy.columns:
-                    df_copy[col] = pd.to_datetime(df_copy[col], errors='coerce')
-                    null_count = df_copy[col].isnull().sum()
-                    if null_count > 0:
-                        logger.warning(f"Failed to parse {null_count} dates in column {col}")
-            
-            # Add delinquency buckets for loan data
-            if table_type == 'loan_data' and DAYS_IN_DEFAULT_COLUMN in df_copy.columns:
-                bucket_config = config.get('delinquency_buckets', {})
-                df_copy['delinquency_bucket'] = df_copy[DAYS_IN_DEFAULT_COLUMN].apply(
-                    lambda x: self._get_delinquency_bucket(x, bucket_config)
-                )
-            
-            # Calculate derived fields
-            if table_type == 'loan_data':
-                # Risk score calculation
-                df_copy['risk_score'] = self._calculate_abaco_risk_score(df_copy)
-                
-                # Add data quality score
-                df_copy['data_quality_score'] = self._calculate_data_quality_score(df_copy)
-                
-            logger.info(f"✅ Applied transformations to {table_type}")
-            return df_copy
-            
-        except Exception as e:
-            logger.error(f"Error applying transformations: {e}")
-            return df
-    
-    def _calculate_data_quality_score(self, df: pd.DataFrame) -> pd.Series:
-        """Calculate data quality score for each row."""
-        scores = pd.Series([1.0] * len(df), index=df.index)
-        
-        # Penalize for missing critical fields
-        critical_fields = ['Customer ID', 'Loan ID', 'Disbursement Amount']
-        for field in critical_fields:
-            if field in df.columns:
-                scores -= df[field].isnull() * 0.3
-        
-        # Penalize for invalid values
-        if DAYS_IN_DEFAULT_COLUMN in df.columns:
-            scores -= (df[DAYS_IN_DEFAULT_COLUMN] < 0) * 0.2
-        
-        return scores.clip(0.0, 1.0)
-    
-    def _get_delinquency_bucket(self, days: Union[int, float], bucket_config: Dict) -> str:
-        """Map days in default to delinquency bucket with improved handling."""
-        # Handle NaN values
-        if pd.isna(days):
-            return 'unknown'
-        
-        try:
-            days = int(days)
-        except (ValueError, TypeError):
-            return 'unknown'
-        
-        if not bucket_config:
-            # Default buckets if no config
-            if days == 0:
-                return 'current'
-            elif 1 <= days <= 3:
-                return 'early'
-            elif 4 <= days <= 7:
-                return 'moderate'
-            elif 8 <= days <= 15:
-                return 'late'
-            elif 16 <= days <= 30:
-                return 'severe'
-            elif 31 <= days <= 60:
-                return 'default'
-            else:
-                return 'npl'
-        
-        # Use config-based buckets
-        for bucket_name, day_ranges in bucket_config.items():
-            if len(day_ranges) == 1:
-                if days == day_ranges[0]:
-                    return bucket_name
-            elif len(day_ranges) >= 2:
-                if day_ranges[0] <= days <= day_ranges[1]:
-                    return bucket_name
-        return 'unknown'
-    
-    def _calculate_abaco_risk_score(self, df: pd.DataFrame) -> pd.Series:
-        """Calculate risk score for Abaco loans with improved handling."""
-        risk_scores = pd.Series([0.0] * len(df), index=df.index)
-        
-        # Days in Default component (0-1 scale)
-        if DAYS_IN_DEFAULT_COLUMN in df.columns:
-            days_col = df[DAYS_IN_DEFAULT_COLUMN].fillna(0)
-            max_days = days_col.max() or 1
-            risk_scores += 0.4 * (days_col / max_days)
-        
-        # Loan Status component
-        if LOAN_STATUS_COLUMN in df.columns:
-            status_risk = df[LOAN_STATUS_COLUMN].map({
-                'Current': 0.0,
-                'Complete': 0.0,
-                'Default': 1.0
-            }).fillna(0.5)  # Unknown status gets medium risk
-            risk_scores += 0.3 * status_risk
-        
-        # Interest Rate component (higher rate = higher risk)
-        if INTEREST_RATE_APR_COLUMN in df.columns:
-            rate_col = df[INTEREST_RATE_APR_COLUMN].fillna(0)
-            max_rate = rate_col.max() or 1
-            risk_scores += 0.1 * (rate_col / max_rate)
-        
-        # Outstanding balance component (larger loans = higher risk)
-        if 'Outstanding Loan Value' in df.columns:
-            balance_col = df['Outstanding Loan Value'].fillna(0)
-            max_balance = balance_col.max() or 1
-            risk_scores += 0.2 * (balance_col / max_balance)
-        
-        return risk_scores.clip(0.0, 1.0)
 
-    def get_data_summary(self, data: Dict[str, pd.DataFrame]) -> Dict[str, Any]:
-        """Generate comprehensive summary of loaded data."""
-        summary = {
-            'total_tables': len(data),
-            'total_rows': sum(len(df) for df in data.values()),
-            'total_columns': sum(len(df.columns) for df in data.values()),
-            'tables': {},
-            'generated_at': datetime.now().isoformat()
-        }
+    def load_customer_data(self) -> Optional[pd.DataFrame]:
+        """
+        Load customer data from data directory.
         
-        for table_name, df in data.items():
-            table_summary = {
-                'rows': len(df),
-                'columns': len(df.columns),
-                'memory_usage_mb': df.memory_usage(deep=True).sum() / 1024 / 1024,
-                'null_percentage': (df.isnull().sum().sum() / (len(df) * len(df.columns))) * 100
-            }
-            
-            # Add table-specific metrics
-            if table_name == 'loan_data':
-                if 'risk_score' in df.columns:
-                    table_summary['avg_risk_score'] = df['risk_score'].mean()
-                    table_summary['high_risk_loans'] = (df['risk_score'] > 0.7).sum()
-                if 'delinquency_bucket' in df.columns:
-                    table_summary['delinquency_distribution'] = df['delinquency_bucket'].value_counts().to_dict()
-            
-            summary['tables'][table_name] = table_summary
+        Returns:
+            DataFrame with customer data or None
+        """
+        customer_files = [
+            'customer_data.csv',
+            'customers.csv',
+            'clients.csv'
+        ]
         
-        return summary
+        for filename in customer_files:
+            filepath = os.path.join(self.data_dir, filename)
+            df = self.load_csv(filepath)
+            if df is not None:
+                logger.info(f"✅ Loaded customer data from {filename}")
+                return df
+        
+        logger.warning("No customer data files found")
+        return None
 
 # Convenience functions
 def load_abaco_portfolio(data_dir: str = None, config_dir: str = None) -> Dict[str, pd.DataFrame]:
@@ -452,3 +458,29 @@ def load_abaco_portfolio(data_dir: str = None, config_dir: str = None) -> Dict[s
     """
     loader = DataLoader(config_dir=config_dir, data_dir=data_dir)
     return loader.load_abaco_data()
+
+def load_loan_data(data_dir: str = None) -> Optional[pd.DataFrame]:
+    """
+    Convenience function to load loan data.
+    
+    Args:
+        data_dir: Directory containing data files
+        
+    Returns:
+        DataFrame with loan data or None
+    """
+    loader = DataLoader(data_dir=data_dir)
+    return loader.load_loan_data()
+
+def load_customer_data(data_dir: str = None) -> Optional[pd.DataFrame]:
+    """
+    Convenience function to load customer data.
+    
+    Args:
+        data_dir: Directory containing data files
+        
+    Returns:
+        DataFrame with customer data or None
+    """
+    loader = DataLoader(data_dir=data_dir)
+    return loader.load_customer_data()
