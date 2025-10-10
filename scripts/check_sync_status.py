@@ -2,14 +2,15 @@
 Enhanced script to check Git synchronization status and validate Commercial-View project structure
 """
 
-import os
-import subprocess
 import glob
 import json
-import yaml
-from pathlib import Path
+import os
+import subprocess
 from datetime import datetime
-from typing import List, Dict, Tuple
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
+
+import yaml
 
 
 def run_git_command(command: List[str]) -> str:

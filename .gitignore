@@ -1,7 +1,11 @@
+# Commercial-View .gitignore
+# Ábaco Capital - Portfolio Analytics Platform
+
 # Virtual environments
 .venv/
 venv/
 env/
+ENV/
 
 # Python
 __pycache__/
@@ -24,14 +28,16 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# IDE
-.vscode/settings.json
+# IDE and Editors
+.vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# OS
+# OS generated files
 .DS_Store
 .DS_Store?
 ._*
@@ -40,95 +46,29 @@ wheels/
 ehthumbs.db
 Thumbs.db
 
-# Logs
+# Logs and runtime data
 *.log
 logs/
-
-# Runtime data
 pids
 *.pid
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
+# Test coverage and artifacts
 coverage/
 *.lcov
 .nyc_output
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
 
-# Dependency directories
+# Node.js dependencies
 node_modules/
 jspm_packages/
-
-# Optional npm cache directory
 .npm
-
-# Optional eslint cache
 .eslintcache
-
-# Temporary files
-*.tmp
-get-pip.py
-
-# Google Drive credentials
-credentials.json
-token.json
-drive_config.json
-
-# Export directories (if large)
-abaco_runtime/exports/*.csv
-abaco_runtime/exports/*.json
-abaco_runtime/exports/*.xlsx
-
-# Test artifacts
-.pytest_cache/
-.coverage
-htmlcov/
-
-# MyPy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-.venv/
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
-.venv/
-
-# Temporary workflow exclusion
-.github/workflows/
-github_workflows_backup/
-
-# Demo and test files
-*demo*
-*example*
-*sample*
-test_*.py
-# Temporary workflow exclusion (OAuth scope limitation)
-.github/workflows/
-github_workflows_backup/
-
-# Demo and test files (production-ready repository)
-*demo*
-*example*
-test_*.py
-*_fix.py
-
-# Development artifacts
-__pycache__/
-*.pyc
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Package manager lockfiles (keep only npm)
-yarn.lock
-pnpm-lock.yaml
-bun.lockb
-.yarn/
-.pnpm/
-
-# Node modules and dependencies
-node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -139,39 +79,69 @@ frontend/dist/
 frontend/.next/
 frontend/coverage/
 
-<<<<<<< HEAD
-.venv/
-.venv/
-=======
+# Package manager lockfiles (keep package-lock.json only)
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+.yarn/
+.pnpm/
+
 # Environment variables - NEVER commit these
 .env
 .env.*
 !.env.example
+.env.local
+.env.production
 
-# Credentials
+# Credentials and API keys - NEVER commit
+credentials.json
+token.json
+drive_config.json
 credentials/
-*.json
-!**/config/*.json
 *.pem
 *.key
-
-# API Keys and Secrets
 secrets/
 secret_*
 *_secret.*
-.env
-.env
-.env.local
-.env.production
-.env
 
-# Environment variables - NEVER commit
-.env
-.env.*
-.env
-.env
-.env
-.env.local
-.env.production
->>>>>>> 97dda22 (Update Commercial-View: sync all project improvements)
-.venv/
+# Commercial-View specific exports
+abaco_runtime/exports/*.csv
+abaco_runtime/exports/*.json
+abaco_runtime/exports/*.xlsx
+abaco_runtime/cache/
+abaco_runtime/temp/
+
+# Production data (sensitive)
+data/production/
+data/real/
+data/client/
+*.csv
+!data/examples/*.csv
+!data/templates/*.csv
+
+# Temporary files
+*.tmp
+*.temp
+get-pip.py
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Development artifacts (production-ready repository)
+*demo*
+*example*
+*sample*
+*_fix.py
+
+# Temporary workflow exclusion (OAuth scope limitation)
+.github/workflows/
+github_workflows_backup/
+
+# Test files (keep essential tests)
+test_*.py
+!tests/test_*.py

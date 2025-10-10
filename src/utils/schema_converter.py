@@ -4,9 +4,10 @@ Enhanced schema conversion utilities for Commercial-View commercial lending data
 
 import json
 import re
-from typing import Dict, Any, Optional, Union, List, Set
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Union
+
 import pandas as pd
 
 
@@ -82,7 +83,7 @@ class CommercialLendingSchemaConverter:
             "properties": {},
             "required": [],
             "commercial_lending": {
-                "dataset_type": self._detect_dataset_type(df, dataset_name),
+                "dataset_type": self._detect_dataset_type(df),
                 "field_categories": {},
                 "data_quality": self._assess_data_quality(df),
                 "generated_at": datetime.now().isoformat(),
@@ -139,25 +140,49 @@ class CommercialLendingSchemaConverter:
 
         return schema
 
-    def _detect_dataset_type(self, df: pd.DataFrame, dataset_name: str) -> str:
+    def _detect_dataset_type(self, df: pd.DataFrame) -> str:
         """Detect the type of commercial lending dataset"""
         column_names = [col.lower() for col in df.columns]
 
-        if any("loan" in col for col in column_names):
-            if any("payment" in col for col in column_names):
-                return "loan_payments"
-            elif any("application" in col for col in column_names):
-                return "loan_applications"
-            else:
-                return "loan_portfolio"
-        elif any("customer" in col or "borrower" in col for col in column_names):
+        if self._is_loan_dataset(column_names):
+            return self._get_loan_dataset_subtype(column_names)
+
+        if self._is_customer_dataset(column_names):
             return "customer_data"
-        elif any("collateral" in col for col in column_names):
+
+        if self._is_collateral_dataset(column_names):
             return "collateral_data"
-        elif any("transaction" in col for col in column_names):
+
+        if self._is_transaction_dataset(column_names):
             return "transaction_data"
-        else:
-            return "general"
+
+        return "general"
+
+    def _is_loan_dataset(self, column_names: List[str]) -> bool:
+        """Check if dataset contains loan-related columns"""
+        return any("loan" in col for col in column_names)
+
+    def _get_loan_dataset_subtype(self, column_names: List[str]) -> str:
+        """Determine the specific type of loan dataset"""
+        if any("payment" in col for col in column_names):
+            return "loan_payments"
+
+        if any("application" in col for col in column_names):
+            return "loan_applications"
+
+        return "loan_portfolio"
+
+    def _is_customer_dataset(self, column_names: List[str]) -> bool:
+        """Check if dataset contains customer/borrower-related columns"""
+        return any("customer" in col or "borrower" in col for col in column_names)
+
+    def _is_collateral_dataset(self, column_names: List[str]) -> bool:
+        """Check if dataset contains collateral-related columns"""
+        return any("collateral" in col for col in column_names)
+
+    def _is_transaction_dataset(self, column_names: List[str]) -> bool:
+        """Check if dataset contains transaction-related columns"""
+        return any("transaction" in col for col in column_names)
 
     def _categorize_field(self, field_name: str) -> str:
         """Categorize field based on commercial lending patterns"""

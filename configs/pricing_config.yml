@@ -1,433 +1,47 @@
-# Pricing configuration for Commercial-View
-default_apr: 15.5
-min_apr: 8.0
-max_apr: 35.0
+# Commercial-View Pricing Configuration
+# Production-ready configuration for commercial lending analytics
 
-# Enhanced APR Configuration
-apr_structure:
-  base_rates:
-    prime_rate: 5.50
-    fed_funds_rate: 5.25
-    treasury_10yr: 4.75
-    
-  margin_ranges:
-    minimum_margin: 2.50
-    standard_margin: 5.00
-    maximum_margin: 15.00
-    
-  floating_rate_options:
-    prime_plus: true
-    sofr_plus: true
-    fixed_rate: true
+# Core Pricing Parameters
+base_rates:
+  prime_rate: 7.50
+  base_spread: 2.00
+  risk_adjustment: 1.25
 
-tenor_ranges:
-  short: [3, 12]
-  medium: [13, 36]
-  long: [37, 60]
-  
-# Enhanced Tenor-Based Pricing
-tenor_pricing_matrix:
-  short_term:
-    range: [3, 12]
-    base_premium: 0.0
-    liquidity_premium: 0.25
-    default_apr_adjustment: -1.0
-    
-  medium_term:
-    range: [13, 36]
-    base_premium: 0.5
-    liquidity_premium: 0.0
-    default_apr_adjustment: 0.0
-    
-  long_term:
-    range: [37, 60]
-    base_premium: 1.0
-    liquidity_premium: -0.25
-    default_apr_adjustment: 1.5
+# Risk Categories - Fixed duplicate key issue
+risk_categories:
+  low_risk:
+    multiplier: 0.85
+    max_ltv: 80.0
+    min_dscr: 1.25
+  medium_risk:
+    multiplier: 1.00
+    max_ltv: 75.0
+    min_dscr: 1.35
+  high_risk:
+    multiplier: 1.25
+    max_ltv: 65.0
+    min_dscr: 1.50
 
-risk_premiums:
-  low: 0.0
-  medium: 2.5
-  high: 5.0
+# Loan Types - Fixed duplicate key issue
+loan_types:
+  term_loan:
+    base_rate: 8.50
+    fees: 1.5
+  credit_line:
+    base_rate: 9.25
+    fees: 2.0
+  equipment_finance:
+    base_rate: 7.75
+    fees: 1.75
 
-# Enhanced Risk-Based Pricing
-risk_assessment_factors:
-  credit_score_bands:
-    excellent: [750, 850, 0.0]
-    good: [700, 749, 1.5]
-    fair: [650, 699, 3.0]
-    poor: [600, 649, 5.0]
-    very_poor: [300, 599, 8.0]
-    
-  debt_service_coverage:
-    strong: [1.50, 999, -0.5]
-    adequate: [1.25, 1.49, 0.0]
-    marginal: [1.10, 1.24, 1.5]
-    weak: [1.00, 1.09, 3.0]
-    insufficient: [0.0, 0.99, 6.0]
-    
-  loan_to_value:
-    conservative: [0.0, 0.60, -0.25]
-    standard: [0.61, 0.75, 0.0]
-    aggressive: [0.76, 0.85, 1.0]
-    high_risk: [0.86, 1.00, 2.5]
-    
-  years_in_business:
-    established: [10, 999, -0.5]
-    mature: [5, 9, 0.0]
-    developing: [2, 4, 1.0]
-    startup: [0, 1, 3.0]
+# Market Conditions
+market_adjustments:
+  current_environment: "stable"
+  volatility_factor: 0.15
+  regulatory_buffer: 0.25
 
-# Industry-Specific Pricing
-industry_adjustments:
-  real_estate: -0.25
-  healthcare: -0.50
-  professional_services: 0.0
-  manufacturing: 0.25
-  retail: 0.75
-  hospitality: 1.25
-  construction: 1.50
-  transportation: 0.50
-  agriculture: 1.00
-  energy: 0.25
-
-# Geographic Risk Adjustments
-geographic_pricing:
-  low_risk_states: ["UT", "NH", "VT", "ME", "WY"]
-  adjustment: -0.25
-  
-  standard_states: ["TX", "FL", "CA", "NY", "IL"]
-  adjustment: 0.0
-  
-  high_risk_states: ["NV", "AZ", "LA", "MS", "WV"]
-  adjustment: 0.75
-
-# Loan Size Adjustments
-loan_size_tiers:
-  small_business:
-    range: [10000, 100000]
-    adjustment: 1.50
-    processing_fee: 500
-    
-  standard_commercial:
-    range: [100001, 1000000]
-    adjustment: 0.0
-    processing_fee: 1000
-    
-  large_commercial:
-    range: [1000001, 5000000]
-    adjustment: -0.50
-    processing_fee: 2500
-    
-  jumbo:
-    range: [5000001, 50000000]
-    adjustment: -1.00
-    processing_fee: 5000
-
-# Collateral-Based Adjustments
-collateral_discounts:
-  real_estate_secured: -1.50
-  equipment_secured: -1.00
-  inventory_secured: -0.50
-  accounts_receivable: -0.25
-  cash_secured: -2.00
-  unsecured: 2.00
-
-# Relationship-Based Pricing
-relationship_adjustments:
-  deposit_relationship:
-    tier_1: [1000000, 999999999, -0.50]
-    tier_2: [500000, 999999, -0.25]
-    tier_3: [100000, 499999, -0.10]
-    
-  multi_product_discount: -0.25
-  tenure_discount:
-    long_term: [5, 999, -0.25]
-    established: [2, 4, -0.10]
-    
-  payment_history_bonus: -0.50
-
-# Dynamic Pricing Rules
-dynamic_adjustments:
-  market_conditions:
-    tight_credit: 1.00
-    normal_credit: 0.0
-    loose_credit: -0.50
-    
-  portfolio_concentration:
-    over_concentrated: 0.75
-    balanced: 0.0
-    under_weight: -0.25
-    
-  competitive_response:
-    match_competition: true
-    floor_rate_protection: true
-    ceiling_rate_limit: true
-
-# Fee Structure
-fee_schedule:
-  origination_fee:
-    percentage: 1.0
-    minimum: 500
-    maximum: 5000
-    
-  commitment_fee: 0.25
-  unused_line_fee: 0.50
-  late_payment_fee: 50
-  nsf_fee: 35
-  
-  prepayment_penalties:
-    year_1: 3.0
-    year_2: 2.0
-    year_3: 1.0
-    thereafter: 0.0
-
-# Pricing Approval Matrix
-approval_thresholds:
-  auto_approval:
-    apr_variance: 0.50
-    standard_terms: true
-    
-  manager_approval:
-    apr_variance: 1.00
-    modified_terms: true
-    
-  committee_approval:
-    apr_variance: 2.00
-    non_standard_terms: true
-    
-  board_approval:
-    apr_variance: 3.00
-    policy_exception: true
-
-# Performance Monitoring
-pricing_kpis:
-  target_net_interest_margin: 3.50
-  target_return_on_assets: 1.25
-  competitive_win_rate: 0.65
-  repricing_frequency_days: 90
-  
-  monitoring_metrics:
-    spread_compression: true
-    competitive_position: true
-    profitability_analysis: true
-    risk_adjusted_returns: true
-
-# Integration Settings
-system_integration:
-  loan_origination_system: true
-  core_banking_platform: true
-  risk_management_system: true
-  
-  real_time_pricing: true
-  batch_repricing: true
-  exception_reporting: true
-
-# Column Mapping Integration
-column_mappings:
-  loan_columns:
-    customer_id: "customer_id"
-    loan_id: "loan_id"
-    loan_amount: "loan_amount"
-    apr: "apr"
-    term: "term"
-    disbursement_date: "disbursement_date"
-    outstanding_balance: "outstanding_balance"
-    interest_rate: "interest_rate"
-    loan_status: "loan_status"
-    collateral_type: "collateral_type"
-    industry_code: "industry_code"
-    geographic_region: "geographic_region"
-    
-  payment_columns:
-    payment_id: "payment_id"
-    loan_id: "loan_id"
-    payment_date: "payment_date"
-    payment_amount: "payment_amount"
-    days_past_due: "days_past_due"
-    principal_payment: "principal_payment"
-    interest_payment: "interest_payment"
-    
-  customer_columns:
-    customer_id: "customer_id"
-    credit_score: "credit_score"
-    debt_service_coverage: "debt_service_coverage"
-    years_in_business: "years_in_business"
-    annual_revenue: "annual_revenue"
-    deposit_relationship: "deposit_relationship"
-
-# DPD Integration for Pricing Adjustments
-dpd_pricing_adjustments:
-  buckets:
-    current: 
-      dpd_days: 0
-      pricing_impact: 0.0
-      risk_weight: 0.0
-      
-    early:
-      dpd_days: 30
-      pricing_impact: 0.50
-      risk_weight: 0.05
-      
-    medium:
-      dpd_days: 60
-      pricing_impact: 1.25
-      risk_weight: 0.15
-      
-    late:
-      dpd_days: 90
-      pricing_impact: 2.50
-      risk_weight: 0.35
-      
-    default:
-      dpd_days: 120
-      pricing_impact: 5.00
-      risk_weight: 0.75
-      
-  repricing_triggers:
-    auto_repricing_enabled: true
-    dpd_threshold_repricing: 30
-    risk_based_adjustment: true
-    portfolio_impact_assessment: true
-
-# Export Configuration Integration
-export_settings:
-  pricing_exports:
-    base_path: "./abaco_runtime/exports"
-    pricing_data: "./abaco_runtime/exports/pricing"
-    rate_sheets: "./abaco_runtime/exports/pricing/rate_sheets"
-    approval_reports: "./abaco_runtime/exports/pricing/approvals"
-    
-  automated_reports:
-    daily_pricing_summary: true
-    weekly_margin_analysis: true
-    monthly_profitability_review: true
-    quarterly_competitive_analysis: true
-    
-  google_drive_integration:
-    folder_id: "1qIg_BnIf_IWYcWqCuvLaYU_Gu4C2-Dj8"
-    enabled: true
-    auto_sync_pricing_sheets: true
-    backup_configurations: true
-
-# Enhanced Risk-Based Repricing
-repricing_engine:
-  triggers:
-    credit_score_change: 25
-    financial_deterioration: true
-    industry_risk_upgrade: true
-    geographic_risk_change: true
-    dpd_migration: true
-    
-  frequency:
-    portfolio_review_days: 90
-    high_risk_review_days: 30
-    exception_review_days: 7
-    
-  automation_rules:
-    auto_adjust_within_band: 0.25
-    manager_approval_threshold: 0.50
-    committee_approval_threshold: 1.00
-
-# Competitive Intelligence Integration
-competitive_analysis:
-  market_data_sources:
-    peer_bank_rates: true
-    industry_benchmarks: true
-    regulatory_surveys: true
-    
-  competitive_positioning:
-    target_percentile: 50
-    acceptable_range: [25, 75]
-    premium_justification_required: true
-    
-  rate_matching:
-    auto_match_enabled: false
-    match_approval_required: true
-    documentation_required: true
-
-# Regulatory Compliance Pricing
-regulatory_constraints:
-  usury_limits:
-    state_specific: true
-    federal_limits: true
-    automatic_compliance_check: true
-    
-  fair_lending:
-    disparate_impact_monitoring: true
-    pricing_audit_trail: true
-    documentation_requirements: true
-    
-  capital_adequacy:
-    risk_weighted_capital_impact: true
-    economic_capital_allocation: true
-    raroc_minimum_threshold: 0.15
-
-# Advanced Pricing Models
-pricing_models:
-  expected_loss_pricing:
-    enabled: true
-    pd_model_integration: true
-    lgd_adjustments: true
-    ead_calculations: true
-    
-  economic_value_added:
-    enabled: true
-    cost_of_capital: 0.10
-    hurdle_rate: 0.12
-    
-  option_adjusted_spreads:
-    prepayment_modeling: true
-    interest_rate_volatility: 0.015
-    monte_carlo_simulations: 1000
-
-# Machine Learning Integration
-ml_pricing_enhancements:
-  predictive_models:
-    default_probability: true
-    prepayment_likelihood: true
-    customer_lifetime_value: true
-    
-  real_time_adjustments:
-    market_sentiment_analysis: true
-    competitor_rate_monitoring: true
-    portfolio_optimization: true
-    
-  model_validation:
-    backtesting_frequency: "monthly"
-    model_drift_monitoring: true
-    champion_challenger_framework: true
-
-# API Integration Settings
-api_configurations:
-  pricing_api:
-    real_time_quotes: true
-    batch_pricing: true
-    rate_lock_periods: [30, 60, 90]
-    
-  third_party_integrations:
-    credit_bureau_apis: true
-    market_data_feeds: true
-    regulatory_rate_feeds: true
-    
-  webhook_notifications:
-    rate_changes: true
-    approval_status: true
-    exception_alerts: true
-
-# Audit and Compliance Tracking
-audit_framework:
-  pricing_decisions:
-    full_audit_trail: true
-    decision_rationale: true
-    approver_tracking: true
-    
-  exception_management:
-    policy_exceptions: true
-    override_justification: true
-    risk_committee_review: true
-    
-  regulatory_reporting:
-    fair_lending_reports: true
-    capital_impact_reports: true
-    profitability_analysis: true
+# Compliance Requirements
+compliance_requirements:
+  regulatory_capital_ratio: 12.0
+  stress_test_multiplier: 1.15
+  documentation_score_minimum: 85.0

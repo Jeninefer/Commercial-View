@@ -1,0 +1,28 @@
+# Commercial-View Production Configuration
+environment: production
+debug: false
+api:
+  host: 0.0.0.0
+  port: 8000
+  cors_origins:
+    - https://commercial-view.com
+database:
+  host: production-db-host
+  port: 5432
+  ssl_mode: require
+security:
+  jwt_secret_key: ${JWT_SECRET_KEY}
+  session_timeout: 3600
+logging:
+  level: INFO
+  format: json
+  handlers:
+    - console
+    - file
+commercial_lending:
+  risk_models:
+    enabled: true
+    default_model: comprehensive_v2
+  compliance:
+    regulatory_reporting: true
+    audit_trail: true

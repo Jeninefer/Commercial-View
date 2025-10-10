@@ -3,15 +3,16 @@
 Enhanced Figma MCP server for Commercial-View commercial lending platform
 """
 
+import json
 import os
 import subprocess
 import sys
-import json
 import time
-import requests
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, Optional, List
+from pathlib import Path
+from typing import Dict, List, Optional
+
+import requests
 
 
 def load_figma_config() -> Dict:
@@ -229,23 +230,23 @@ const checkRateLimit = (req, res, next) => {{
     const now = Date.now();
     const windowMs = 60000; // 1 minute
     const limit = CONFIG.figma.rate_limits.requests_per_minute;
-    
+
     if (!rateLimit.has(ip)) {{
         rateLimit.set(ip, {{ count: 1, resetTime: now + windowMs }});
         return next();
     }}
-    
+
     const userLimit = rateLimit.get(ip);
     if (now > userLimit.resetTime) {{
         userLimit.count = 1;
         userLimit.resetTime = now + windowMs;
         return next();
     }}
-    
+
     if (userLimit.count >= limit) {{
         return res.status(429).json({{ error: 'Rate limit exceeded' }});
     }}
-    
+
     userLimit.count++;
     next();
 }};
@@ -290,22 +291,6 @@ app.get('/figma/me', async (req, res) => {{
     }}
 }});
 
-app.get('/figma/files/:key', async (req, res) => {{
-    try {{
-        const fetch = await import('node-fetch');
-        const response = await fetch.default(`https://api.figma.com/v1/files/${{req.params.key}}`, {{
-            headers: {{
-                'X-Figma-Token': FIGMA_TOKEN
-            }}
-        }});
-        const data = await response.json();
-        res.json(data);
-    }} catch (error) {{
-        console.error('Error fetching file:', error);
-        res.status(500).json({{ error: error.message }});
-    }}
-}});
-
 // Commercial-View specific endpoints
 app.get('/commercial-view/dashboard', async (req, res) => {{
     try {{
@@ -313,7 +298,7 @@ app.get('/commercial-view/dashboard', async (req, res) => {{
         if (!dashboardId) {{
             return res.status(404).json({{ error: 'Dashboard file ID not configured' }});
         }}
-        
+
         const fetch = await import('node-fetch');
         const response = await fetch.default(`https://api.figma.com/v1/files/${{dashboardId}}`, {{
             headers: {{
@@ -328,144 +313,35 @@ app.get('/commercial-view/dashboard', async (req, res) => {{
     }}
 }});
 
-app.get('/commercial-view/kpi-components', async (req, res) => {{
-    try {{
-        const dashboardId = CONFIG.figma.commercial_view.dashboard_file_id;
-        const fetch = await import('node-fetch');
-        const response = await fetch.default(`https://api.figma.com/v1/files/${{dashboardId}}/components`, {{
-            headers: {{
-                'X-Figma-Token': FIGMA_TOKEN
-            }}
-        }});
-        const data = await response.json();
-        
-        // Filter for KPI-related components
-        const kpiComponents = {{}};
-        if (data.meta && data.meta.components) {{
-            Object.entries(data.meta.components).forEach(([id, component]) => {{
-                const name = component.name.toLowerCase();
-                if (name.includes('kpi') || name.includes('metric') || name.includes('chart')) {{
-                    kpiComponents[id] = component;
-                }}
-            }});
-        }}
-        
-        res.json({{ components: kpiComponents, total: Object.keys(kpiComponents).length }});
-    }} catch (error) {{
-        console.error('Error fetching KPI components:', error);
-        res.status(500).json({{ error: error.message }});
-    }}
-}});
+// Dynamic port selection to avoid conflicts
+const findAvailablePort = async (startPort = 3001) => {{
+    const net = require('net');
 
-// Enhanced Commercial-View specific endpoints
-app.get('/commercial-view/portfolio-components', async (req, res) => {{
-    try {{
-        const dashboardId = CONFIG.figma.commercial_view.dashboard_file_id;
-        const fetch = await import('node-fetch');
-        const response = await fetch.default(`https://api.figma.com/v1/files/${{dashboardId}}/components`, {{
-            headers: {{
-                'X-Figma-Token': FIGMA_TOKEN
-            }}
+    return new Promise((resolve) => {{
+        const server = net.createServer();
+        server.listen(startPort, () => {{
+            const port = server.address().port;
+            server.close(() => resolve(port));
         }});
-        const data = await response.json();
-        
-        // Filter for portfolio-related components
-        const portfolioComponents = {{}};
-        if (data.meta && data.meta.components) {{
-            Object.entries(data.meta.components).forEach(([id, component]) => {{
-                const name = component.name.toLowerCase();
-                if (name.includes('portfolio') || name.includes('loan') || name.includes('credit')) {{
-                    portfolioComponents[id] = component;
-                }}
-            }});
-        }}
-        
-        res.json({{ 
-            components: portfolioComponents, 
-            total: Object.keys(portfolioComponents).length,
-            timestamp: new Date().toISOString()
-        }});
-    }} catch (error) {{
-        console.error('Error fetching portfolio components:', error);
-        res.status(500).json({{ error: error.message }});
-    }}
-}});
-
-app.get('/commercial-view/risk-indicators', async (req, res) => {{
-    try {{
-        const dashboardId = CONFIG.figma.commercial_view.dashboard_file_id;
-        const fetch = await import('node-fetch');
-        const response = await fetch.default(`https://api.figma.com/v1/files/${{dashboardId}}/components`, {{
-            headers: {{
-                'X-Figma-Token': FIGMA_TOKEN
-            }}
-        }});
-        const data = await response.json();
-        
-        // Filter for risk-related components
-        const riskComponents = {{}};
-        if (data.meta && data.meta.components) {{
-            Object.entries(data.meta.components).forEach(([id, component]) => {{
-                const name = component.name.toLowerCase();
-                if (name.includes('risk') || name.includes('alert') || name.includes('warning')) {{
-                    riskComponents[id] = component;
-                }}
-            }});
-        }}
-        
-        res.json({{ 
-            components: riskComponents, 
-            total: Object.keys(riskComponents).length,
-            categories: ['credit_risk', 'operational_risk', 'market_risk'],
-            timestamp: new Date().toISOString()
-        }});
-    }} catch (error) {{
-        console.error('Error fetching risk indicators:', error);
-        res.status(500).json({{ error: error.message }});
-    }}
-}});
-
-// WebSocket for real-time updates with enhanced features
-io.on('connection', (socket) => {{
-    console.log('🔗 Commercial-View client connected:', socket.id);
-    
-    socket.on('subscribe-dashboard', (dashboardId) => {{
-        socket.join(`dashboard:${{dashboardId}}`);
-        console.log(`📊 Client subscribed to dashboard: ${{dashboardId}}`);
-        
-        // Send current dashboard status
-        socket.emit('dashboard-status', {{
-            dashboard_id: dashboardId,
-            status: 'connected',
-            timestamp: new Date().toISOString()
+        server.on('error', () => {{
+            findAvailablePort(startPort + 1).then(resolve);
         }});
     }});
-    
-    socket.on('subscribe-component-updates', (componentType) => {{
-        socket.join(`components:${{componentType}}`);
-        console.log(`🔧 Client subscribed to component updates: ${{componentType}}`);
-    }});
-    
-    socket.on('disconnect', () => {{
-        console.log('🔌 Client disconnected:', socket.id);
-    }});
-}});
+}};
 
-const port = process.env.PORT || 3001;
-server.listen(port, () => {{
-    console.log(`🏦 Commercial-View Figma MCP server running on port ${{port}}`);
-    console.log(`🎨 Dashboard ID: ${{CONFIG.figma.commercial_view.dashboard_file_id}}`);
-    console.log(`🔑 Token: ${{FIGMA_TOKEN ? FIGMA_TOKEN.substring(0, 10) + '...' : 'Not set'}}`);
-    console.log(`📊 Available endpoints:`);
-    console.log(`   GET  /health`);
-    console.log(`   GET  /figma/me`);
-    console.log(`   GET  /figma/files/:key`);
-    console.log(`   GET  /commercial-view/dashboard`);
-    console.log(`   GET  /commercial-view/kpi-components`);
-    console.log(`   GET  /commercial-view/portfolio-components`);
-    console.log(`   GET  /commercial-view/risk-indicators`);
-    console.log(`   WebSocket: /socket.io/`);
-    console.log(`🚀 Commercial lending features enabled`);
+// Start server with dynamic port
+findAvailablePort().then(port => {{
+    server.listen(port, () => {{
+        console.log(`🏦 Commercial-View Figma MCP server running on port ${{port}}`);
+        console.log(`🎨 Dashboard ID: ${{CONFIG.figma.commercial_view.dashboard_file_id}}`);
+        console.log(`🔑 Token: ${{FIGMA_TOKEN ? FIGMA_TOKEN.substring(0, 10) + '...' : 'Not set'}}`);
+        console.log(`📊 Available endpoints:`);
+        console.log(`   GET  /health`);
+        console.log(`   GET  /figma/me`);
+        console.log(`   GET  /commercial-view/dashboard`);
+        console.log(`🚀 Commercial lending features enabled`);
+        console.log(`🌐 Access at: http://localhost:${{port}}`);
+    }});
 }});
 """
 
@@ -528,6 +404,7 @@ def start_figma_mcp_server() -> bool:
         try:
             print(f"🚀 Starting {package_name}...")
             subprocess.run(["npx", package_name], check=True)
+            return True
         except subprocess.CalledProcessError as e:
             print(f"❌ Failed to start {package_name}: {e}")
             print("🔄 Falling back to Commercial-View custom server...")
@@ -536,8 +413,6 @@ def start_figma_mcp_server() -> bool:
         print("📦 Official Figma MCP package not available")
         print("🔄 Using Commercial-View custom Figma MCP integration...")
         return start_commercial_view_server()
-
-    return True
 
 
 def start_commercial_view_server() -> bool:
@@ -549,9 +424,11 @@ def start_commercial_view_server() -> bool:
 
         # Install required dependencies
         print("📦 Installing Commercial-View Figma MCP dependencies...")
-        result = subprocess.run(["npm", "install"], capture_output=True, text=True)
-        if result.returncode != 0:
-            print(f"⚠️  npm install warnings: {result.stderr}")
+        install_result = subprocess.run(
+            ["npm", "install"], capture_output=True, text=True
+        )
+        if install_result.returncode != 0:
+            print(f"⚠️  npm install warnings: {install_result.stderr}")
 
         # Create enhanced server
         server_file = create_commercial_view_figma_server()
@@ -609,9 +486,11 @@ def validate_figma_environment() -> bool:
 
     # Check Node.js availability
     try:
-        result = subprocess.run(["node", "--version"], capture_output=True, text=True)
-        if result.returncode == 0:
-            print(f"✅ Node.js available: {result.stdout.strip()}")
+        node_result = subprocess.run(
+            ["node", "--version"], capture_output=True, text=True
+        )
+        if node_result.returncode == 0:
+            print(f"✅ Node.js available: {node_result.stdout.strip()}")
         else:
             print("❌ Node.js not found")
             return False
@@ -621,9 +500,11 @@ def validate_figma_environment() -> bool:
 
     # Check npm availability
     try:
-        result = subprocess.run(["npm", "--version"], capture_output=True, text=True)
-        if result.returncode == 0:
-            print(f"✅ npm available: {result.stdout.strip()}")
+        npm_result = subprocess.run(
+            ["npm", "--version"], capture_output=True, text=True
+        )
+        if npm_result.returncode == 0:
+            print(f"✅ npm available: {npm_result.stdout.strip()}")
         else:
             print("❌ npm not found")
             return False
@@ -690,11 +571,87 @@ Edit `configs/figma_config.json` to customize:
 - Cache settings
 - Commercial lending specific features
 
+## Getting Started
+
+### Prerequisites
+- Python 3.8+
+- Node.js 16+
+- PostgreSQL 12+
+- Git
+
+### Installation
+1. Clone the repository
+2. Set up virtual environment
+3. Install dependencies
+4. Configure environment variables
+5. Initialize database
+6. Start services
+
+See [Quick Start Guide](quickstart.md) for detailed instructions.
+
 ## Commercial Lending Features
-- Loan portfolio component tracking
-- Risk indicator monitoring
-- KPI dashboard synchronization
-- Regulatory report component management
+
+### Loan Portfolio Analytics
+- Portfolio composition analysis
+- Geographic and industry distribution
+- Maturity profile and concentration risk
+- Performance trending and forecasting
+
+### Risk Management
+- Credit risk scoring and grading
+- Probability of default modeling
+- Loss given default estimation
+- Expected credit loss calculations
+
+### Regulatory Compliance
+- Basel III capital adequacy reporting
+- CECL (Current Expected Credit Losses) calculations
+- Stress testing and scenario analysis
+- Audit trail and documentation
+
+### Performance Monitoring
+- Key performance indicators (KPIs)
+- Early warning systems
+- Exception reporting
+- Management dashboards
+
+## API Reference
+
+### Authentication
+All API endpoints require authentication via JWT tokens.
+
+### Core Endpoints
+- `/api/v1/portfolio/` - Portfolio management
+- `/api/v1/loans/` - Individual loan operations
+- `/api/v1/analytics/` - Analytics and calculations
+- `/api/v1/reports/` - Report generation
+- `/api/v1/kpi/` - Key performance indicators
+
+See [API Reference](api-reference.md) for complete documentation.
+
+## Support and Maintenance
+
+### Support Channels
+- Documentation: In-repository docs
+- Issues: GitHub issue tracker
+- Updates: Regular maintenance releases
+
+### System Requirements
+- Minimum 8GB RAM for production deployment
+- SSD storage recommended for optimal performance
+- Load balancer for high-availability deployments
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Contributing
+
+Contributions welcome. Please see contributing guidelines and code of conduct.
+
+---
+
+*Commercial-View - Empowering Commercial Lending Through Advanced Analytics*
 """
 
     with open("FIGMA_INTEGRATION.md", "w") as f:

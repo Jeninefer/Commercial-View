@@ -6,7 +6,7 @@ Ensures 100% English content with zero demo/example data
 import os
 import re
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import Any, Dict, List, Tuple
 
 
 class FinalRepositoryAuditor:
@@ -17,7 +17,7 @@ class FinalRepositoryAuditor:
         self.issues = []
         self.validated_files = []
 
-    def audit_complete_repository(self) -> Dict[str, any]:
+    def audit_complete_repository(self) -> Dict[str, Any]:
         """Perform comprehensive repository audit"""
 
         audit_results = {
@@ -32,9 +32,8 @@ class FinalRepositoryAuditor:
         audit_results["summary"] = self._generate_audit_summary(audit_results)
         return audit_results
 
-    def _audit_language_compliance(self) -> Dict[str, any]:
-        """Ensure 100% English language compliance"""
-
+    def _audit_language_compliance(self) -> Dict[str, Any]:
+        """Ensure 100% English language compliance - refactored for lower complexity"""
         non_english_patterns = [
             r"[^\x00-\x7F]+",  # Non-ASCII characters
             r"\b(español|français|deutsch|italiano|português)\b",  # Common languages
@@ -50,20 +49,14 @@ class FinalRepositoryAuditor:
                 with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                     content = f.read()
 
-                for pattern in non_english_patterns:
-                    matches = re.findall(pattern, content, re.IGNORECASE)
-                    if matches:
-                        issues.append(
-                            {
-                                "file": str(file_path.relative_to(self.repo_root)),
-                                "issue": "Non-English content detected",
-                                "matches": matches[:5],  # First 5 matches
-                            }
-                        )
-
+                # Check for non-English patterns
+                file_issues = self._check_language_patterns(
+                    file_path, content, non_english_patterns
+                )
+                issues.extend(file_issues)
                 english_files += 1
 
-            except Exception as e:
+            except (OSError, IOError, UnicodeDecodeError) as e:
                 issues.append(
                     {
                         "file": str(file_path.relative_to(self.repo_root)),
@@ -82,7 +75,24 @@ class FinalRepositoryAuditor:
             ),
         }
 
-    def _audit_demo_data(self) -> Dict[str, any]:
+    def _check_language_patterns(
+        self, file_path: Path, content: str, patterns: List[str]
+    ) -> List[Dict[str, Any]]:
+        """Helper method to check language patterns in content"""
+        issues = []
+        for pattern in patterns:
+            matches = re.findall(pattern, content, re.IGNORECASE)
+            if matches:
+                issues.append(
+                    {
+                        "file": str(file_path.relative_to(self.repo_root)),
+                        "issue": "Non-English content detected",
+                        "matches": matches[:5],  # First 5 matches
+                    }
+                )
+        return issues
+
+    def _audit_demo_data(self) -> Dict[str, Any]:
         """Ensure zero demo/example data"""
 
         demo_indicators = [
@@ -109,31 +119,10 @@ class FinalRepositoryAuditor:
         content_issues = []
 
         # Check file names
-        for file_path in self.repo_root.rglob("*"):
-            if file_path.is_file():
-                filename = file_path.name.lower()
-                for pattern in demo_indicators[:5]:  # File naming patterns
-                    if re.match(pattern, filename):
-                        demo_files.append(str(file_path.relative_to(self.repo_root)))
+        demo_files = self._check_demo_file_names(demo_indicators[:5])
 
         # Check file contents
-        for file_path in self._get_text_files():
-            try:
-                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-                    content = f.read().lower()
-
-                for pattern in demo_indicators[5:]:  # Content patterns
-                    if re.search(pattern, content, re.IGNORECASE):
-                        content_issues.append(
-                            {
-                                "file": str(file_path.relative_to(self.repo_root)),
-                                "pattern": pattern,
-                                "context": self._extract_context(content, pattern),
-                            }
-                        )
-
-            except Exception:
-                continue
+        content_issues = self._check_demo_content(demo_indicators[5:])
 
         return {
             "demo_free": len(demo_files) == 0 and len(content_issues) == 0,
@@ -145,6 +134,41 @@ class FinalRepositoryAuditor:
                 else f"❌ {len(demo_files + content_issues)} demo references found"
             ),
         }
+
+    def _check_demo_file_names(self, patterns: List[str]) -> List[str]:
+        """Check for demo file names"""
+        demo_files = []
+        for file_path in self.repo_root.rglob("*"):
+            if file_path.is_file():
+                filename = file_path.name.lower()
+                for pattern in patterns:
+                    if re.match(pattern, filename):
+                        demo_files.append(str(file_path.relative_to(self.repo_root)))
+        return demo_files
+
+    def _check_demo_content(self, patterns: List[str]) -> List[Dict[str, Any]]:
+        """Check for demo content in files"""
+        content_issues = []
+        for file_path in self._get_text_files():
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    content = f.read().lower()
+
+                for pattern in patterns:
+                    if re.search(pattern, content, re.IGNORECASE):
+                        content_issues.append(
+                            {
+                                "file": str(file_path.relative_to(self.repo_root)),
+                                "pattern": pattern,
+                                "context": self._extract_context(content, pattern),
+                            }
+                        )
+
+            except (OSError, IOError, UnicodeDecodeError):
+                # Skip files that can't be read
+                continue
+
+        return content_issues
 
     def _audit_production_readiness(self) -> Dict[str, any]:
         """Audit production readiness indicators"""
@@ -328,8 +352,9 @@ class FinalRepositoryAuditor:
                 start = max(0, match.start() - context_length // 2)
                 end = min(len(content), match.end() + context_length // 2)
                 return f"...{content[start:end]}..."
-        except:
-            pass
+        except (re.error, AttributeError) as e:
+            # Handle regex errors or attribute errors
+            return f"Error extracting context: {e}"
         return ""
 
     def _count_lines(self, file_path: Path) -> int:
@@ -337,7 +362,8 @@ class FinalRepositoryAuditor:
         try:
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 return sum(1 for _ in f)
-        except:
+        except (OSError, IOError, UnicodeDecodeError):
+            # Return 0 for files that can't be read
             return 0
 
     def _generate_audit_summary(self, audit_results: Dict) -> Dict[str, any]:

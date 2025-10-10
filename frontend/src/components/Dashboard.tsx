@@ -3,7 +3,7 @@
  * Enterprise-grade TypeScript React implementation
  */
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Card,
   Grid,
@@ -24,16 +24,8 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
-import {
-  TrendingUp,
-  TrendingDown,
-  AccountBalance,
-  Assessment,
-  Warning,
-} from "@mui/icons-material";
+import { TrendingUp, TrendingDown, Warning } from "@mui/icons-material";
 
 interface KPIMetric {
   id: string;
