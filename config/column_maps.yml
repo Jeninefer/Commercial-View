@@ -21,6 +21,11 @@ loan_data:
   interest_rate: "Interest Rate APR"
   loan_currency: "Loan Currency"
 
+  # Additional Abaco Financial Fields
+  tpv: "TPV"
+  origination_fee: "Origination Fee"
+  origination_fee_taxes: "Origination Fee Taxes"
+
   # Dates
   origination_date: "Disbursement Date"
   maturity_date: "maturity_date"
@@ -54,6 +59,43 @@ payment_data:
   outstanding_balance: "Outstanding Loan Value"
   currency: "Currency"
   tpv: "TPV"
+
+# Abaco Payment History Mappings
+payment_history:
+  company: "Company"
+  customer_id: "Customer ID"
+  client_name: "Cliente"
+  payer_name: "Pagador"
+  loan_id: "Loan ID"
+  payment_date: "True Payment Date"
+  devolution: "True Devolution"
+  total_payment: "True Total Payment"
+  payment_currency: "True Payment Currency"
+  principal_payment: "True Principal Payment"
+  interest_payment: "True Interest Payment"
+  fee_payment: "True Fee Payment"
+  tax_payment: "True Tax Payment"
+  fee_tax_payment: "True Fee Tax Payment"
+  rebates: "True Rabates"
+  outstanding_value: "True Outstanding Loan Value"
+  payment_status: "True Payment Status"
+
+# Abaco Payment Schedule Mappings
+payment_schedule:
+  company: "Company"
+  customer_id: "Customer ID"
+  client_name: "Cliente"
+  payer_name: "Pagador"
+  loan_id: "Loan ID"
+  payment_date: "Payment Date"
+  tpv: "TPV"
+  total_payment: "Total Payment"
+  currency: "Currency"
+  principal_payment: "Principal Payment"
+  interest_payment: "Interest Payment"
+  fee_payment: "Fee Payment"
+  tax_payment: "Tax Payment"
+  outstanding_value: "Outstanding Loan Value"
 
 # DPD Frame Output Columns (Contract Output)
 dpd_frame_output:

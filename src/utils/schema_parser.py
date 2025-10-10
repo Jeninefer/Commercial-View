@@ -62,8 +62,11 @@ class CommercialLendingSchemaParser:
                     r".*fee.*",
                     r".*cost.*",
                     r".*value.*",
+                    r".*tpv.*",  # Abaco Total Purchase Value
+                    r".*disbursement.*",  # Abaco disbursement amounts
+                    r".*origination.*",  # Abaco origination fees
                 ],
-                "examples": ["loan_amount", "current_balance", "monthly_payment"],
+                "examples": ["loan_amount", "current_balance", "monthly_payment", "tpv", "disbursement_amount"],
             },
             "rate_percentage": {
                 "patterns": [
@@ -73,7 +76,7 @@ class CommercialLendingSchemaParser:
                     r".*yield.*",
                     r".*apr.*",
                 ],
-                "examples": ["interest_rate", "default_rate", "ltv_ratio"],
+                "examples": ["interest_rate", "default_rate", "ltv_ratio", "interest_rate_apr"],
             },
             "temporal": {
                 "patterns": [
@@ -84,8 +87,9 @@ class CommercialLendingSchemaParser:
                     r".*maturity.*",
                     r".*due.*",
                     r".*term.*",
+                    r".*disbursement.*date.*",  # Abaco disbursement dates
                 ],
-                "examples": ["origination_date", "maturity_date", "last_payment_date"],
+                "examples": ["origination_date", "maturity_date", "last_payment_date", "disbursement_date"],
             },
             "status_classification": {
                 "patterns": [
@@ -96,8 +100,9 @@ class CommercialLendingSchemaParser:
                     r".*class.*",
                     r".*grade.*",
                     r".*rating.*",
+                    r".*frequency.*",  # Abaco payment frequency
                 ],
-                "examples": ["loan_status", "risk_grade", "loan_type"],
+                "examples": ["loan_status", "risk_grade", "loan_type", "payment_frequency"],
             },
             "risk_metrics": {
                 "patterns": [
@@ -108,35 +113,28 @@ class CommercialLendingSchemaParser:
                     r".*default.*",
                     r".*delinq.*",
                     r".*dpd.*",
+                    r".*days.*default.*",  # Abaco Days in Default
                 ],
-                "examples": ["credit_score", "pd_score", "days_past_due"],
+                "examples": ["credit_score", "pd_score", "days_past_due", "days_in_default"],
             },
-            "geographic": {
+            "abaco_specific": {
                 "patterns": [
-                    r".*state.*",
-                    r".*country.*",
-                    r".*zip.*",
-                    r".*postal.*",
-                    r".*region.*",
-                    r".*city.*",
-                    r".*address.*",
+                    r".*cliente.*",  # Abaco client names
+                    r".*pagador.*",  # Abaco payer names
+                    r".*dsb.*",  # Abaco loan/application IDs
+                    r".*factoring.*",  # Abaco product type
+                    r".*true.*payment.*",  # Abaco actual payment fields
+                    r".*rabates.*",  # Abaco rebates field
                 ],
-                "examples": ["state_code", "zip_code", "country"],
-            },
-            "industry": {
-                "patterns": [
-                    r".*industry.*",
-                    r".*sector.*",
-                    r".*naics.*",
-                    r".*sic.*",
-                    r".*business.*",
-                ],
-                "examples": ["industry_code", "naics_code", "business_type"],
+                "examples": ["cliente", "pagador", "loan_id", "product_type", "true_payment_date"],
             },
         }
 
         # Dataset type detection patterns
         self.dataset_types = {
+            "abaco_loan_data": ["abaco", "loan_tape", "loan_data"],
+            "abaco_payment_history": ["historic_real_payment", "payment_history"],
+            "abaco_payment_schedule": ["payment_schedule", "schedule"],
             "loan_portfolio": ["loan", "credit", "facility", "advance"],
             "customer_data": ["customer", "borrower", "client", "counterparty"],
             "payment_history": ["payment", "transaction", "cash_flow"],
@@ -278,13 +276,14 @@ def get_dataset_info(schema: Dict[str, Any], dataset_name: str) -> DatasetInfo:
 
 
 def categorize_field(field_name: str) -> str:
-    """Categorize field based on commercial lending business patterns"""
+    """Categorize field based on commercial lending business patterns with Abaco support"""
     if not field_name:
         return "other"
 
     field_lower = field_name.lower()
     parser = CommercialLendingSchemaParser()
 
+    # Check Abaco-specific patterns first
     for category, info in parser.business_categories.items():
         for pattern in info["patterns"]:
             if re.search(pattern, field_lower):
@@ -294,17 +293,41 @@ def categorize_field(field_name: str) -> str:
 
 
 def detect_dataset_type(dataset_name: str, columns: List[str]) -> str:
-    """Detect dataset type based on name and column patterns"""
+    """Detect dataset type based on name and column patterns with Abaco support"""
     dataset_lower = dataset_name.lower()
     columns_lower = [col.lower() for col in columns]
 
     parser = CommercialLendingSchemaParser()
 
-    # Check dataset name first
+    # Check for Abaco-specific patterns first
+    if any(pattern in dataset_lower for pattern in ["abaco", "loan_tape"]):
+        if "historic" in dataset_lower or "real_payment" in dataset_lower:
+            return "abaco_payment_history"
+        elif "schedule" in dataset_lower:
+            return "abaco_payment_schedule"
+        elif "loan_data" in dataset_lower:
+            return "abaco_loan_data"
+
+    # Check dataset name patterns
     for dataset_type, keywords in parser.dataset_types.items():
         for keyword in keywords:
             if keyword in dataset_lower:
                 return dataset_type
+
+    # Check column patterns for Abaco identification
+    abaco_indicators = ["cliente", "pagador", "dsb", "true_payment", "rabates"]
+    abaco_matches = sum(1 for indicator in abaco_indicators 
+                       for col in columns_lower if indicator in col)
+    
+    if abaco_matches >= 2:
+        # Determine Abaco table type based on columns
+        if any("true_payment" in col for col in columns_lower):
+            return "abaco_payment_history"
+        elif any("payment_date" in col and "schedule" not in dataset_lower 
+                for col in columns_lower):
+            return "abaco_payment_schedule"
+        else:
+            return "abaco_loan_data"
 
     # Check column patterns
     for dataset_type, keywords in parser.dataset_types.items():
@@ -318,39 +341,62 @@ def detect_dataset_type(dataset_name: str, columns: List[str]) -> str:
 
 
 def generate_validation_rules(column_info: Dict[str, Any]) -> Dict[str, Any]:
-    """Generate validation rules based on column information"""
+    """Generate validation rules based on column information with Abaco-specific rules"""
     rules = {}
 
     dtype = column_info.get("dtype", "")
     coerced_dtype = column_info.get("coerced_dtype", "")
     field_name = column_info.get("name", "").lower()
 
-    # Type-based rules
-    if "int" in dtype or "int" in coerced_dtype:
+    # Abaco-specific validation rules
+    if "customer_id" in field_name and "cliab" in str(column_info.get("sample_values", [])[0] if column_info.get("sample_values") else "").lower():
+        rules["type"] = "string"
+        rules["pattern"] = "^CLIAB\\d{6}$"
+        rules["description"] = "Abaco Customer ID format"
+    elif "loan_id" in field_name and "dsb" in str(column_info.get("sample_values", [])[0] if column_info.get("sample_values") else "").lower():
+        rules["type"] = "string"
+        rules["pattern"] = "^DSB\\d{4}-\\d{3}$"
+        rules["description"] = "Abaco Loan ID format"
+    elif "product_type" in field_name:
+        rules["type"] = "string"
+        rules["enum"] = ["factoring"]
+        rules["description"] = "Abaco product types"
+    elif "loan_currency" in field_name or "currency" in field_name:
+        rules["type"] = "string"
+        rules["enum"] = ["USD"]
+        rules["description"] = "Supported currencies"
+    elif "days_in_default" in field_name or "days.*default" in field_name:
         rules["type"] = "integer"
-        if "id" in field_name:
-            rules["minimum"] = 1
-    elif "float" in dtype or "float" in coerced_dtype:
-        rules["type"] = "number"
-        if any(term in field_name for term in ["rate", "percent"]):
-            rules["minimum"] = 0
-            rules["maximum"] = 100
-        elif "amount" in field_name or "balance" in field_name:
-            rules["minimum"] = 0
-    elif "datetime" in dtype or "date" in field_name:
-        rules["type"] = "string"
-        rules["format"] = "date-time"
+        rules["minimum"] = 0
+        rules["maximum"] = 999
+        rules["description"] = "Days in default range"
     else:
-        rules["type"] = "string"
+        # Type-based rules
+        if "int" in dtype or "int" in coerced_dtype:
+            rules["type"] = "integer"
+            if "id" in field_name:
+                rules["minimum"] = 1
+        elif "float" in dtype or "float" in coerced_dtype:
+            rules["type"] = "number"
+            if any(term in field_name for term in ["rate", "percent"]):
+                rules["minimum"] = 0
+                rules["maximum"] = 100
+            elif "amount" in field_name or "balance" in field_name:
+                rules["minimum"] = 0
+        elif "datetime" in dtype or "date" in field_name:
+            rules["type"] = "string"
+            rules["format"] = "date-time"
+        else:
+            rules["type"] = "string"
 
-        # String length rules based on field purpose
-        if "id" in field_name:
-            rules["minLength"] = 1
-            rules["maxLength"] = 50
-        elif any(term in field_name for term in ["code", "status", "type"]):
-            rules["maxLength"] = 20
-        elif "description" in field_name or "notes" in field_name:
-            rules["maxLength"] = 1000
+            # String length rules based on field purpose
+            if "id" in field_name:
+                rules["minLength"] = 1
+                rules["maxLength"] = 50
+            elif any(term in field_name for term in ["code", "status", "type"]):
+                rules["maxLength"] = 20
+            elif "description" in field_name or "notes" in field_name:
+                rules["maxLength"] = 1000
 
     # Nullable rules
     if not column_info.get("nullable", True):
@@ -360,14 +406,34 @@ def generate_validation_rules(column_info: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def validate_dataset_schema(schema: Dict[str, Any], dataset_name: str) -> List[str]:
-    """Validate dataset schema for commercial lending requirements"""
+    """Validate dataset schema for commercial lending requirements with Abaco support"""
     issues = []
 
     try:
         dataset_info = get_dataset_info(schema, dataset_name)
-
-        # Check for required commercial lending fields
         column_names = [col.name.lower() for col in dataset_info.columns]
+
+        # Abaco-specific validation
+        if "abaco" in dataset_name.lower():
+            # Common Abaco requirements
+            required_abaco_fields = ["company", "customer_id", "loan_id"]
+            for field in required_abaco_fields:
+                if not any(field.replace("_", " ") in col_name or field in col_name 
+                          for col_name in column_names):
+                    issues.append(f"Missing required Abaco field: {field}")
+
+            # Table-specific validation
+            if "loan_data" in dataset_name.lower():
+                loan_specific_fields = ["disbursement_amount", "interest_rate_apr", "days_in_default"]
+                for field in loan_specific_fields:
+                    if not any(field.replace("_", " ") in col_name for col_name in column_names):
+                        issues.append(f"Missing Abaco loan data field: {field}")
+
+            elif "payment_history" in dataset_name.lower():
+                payment_fields = ["true_payment_date", "true_total_payment"]
+                for field in payment_fields:
+                    if not any(field.replace("_", " ") in col_name for col_name in column_names):
+                        issues.append(f"Missing Abaco payment history field: {field}")
 
         # Basic requirements for loan datasets
         if "loan" in dataset_name.lower():

@@ -10,7 +10,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Tuple
 
 import yaml
 import json
@@ -64,7 +64,7 @@ def create_export_directories(export_config: Dict[str, Any]) -> None:
         print(f"📁 Created directory: {directory}")
 
 
-def process_abaco_portfolio(data_loader: DataLoader, configs: Dict[str, Any]) -> Dict[str, pd.DataFrame]:
+def process_abaco_portfolio(data_loader: DataLoader, configs: Dict[str, Any]) -> Tuple[Dict[str, pd.DataFrame], Dict[str, Any]]:
     """Process Abaco loan tape data with risk scoring and analytics."""
     print("\n🏦 Processing Abaco loan tape data...")
     
@@ -76,7 +76,7 @@ def process_abaco_portfolio(data_loader: DataLoader, configs: Dict[str, Any]) ->
         print("   - Abaco - Loan Tape_Loan Data_Table.csv")
         print("   - Abaco - Loan Tape_Historic Real Payment_Table.csv")
         print("   - Abaco - Loan Tape_Payment Schedule_Table.csv")
-        return {}
+        return {}, {}
     
     # Generate analytics summary
     analytics_summary = {}
