@@ -223,7 +223,8 @@ class AbacoCore:
         comparison = {
             "snapshot1": snapshot1_name,
             "snapshot2": snapshot2_name,
-            "record_count_change": snapshot2["record_count"] - snapshot1["record_count"],
+            "record_count_change": snapshot2["record_count"]
+            - snapshot1["record_count"],
             "column_changes": {
                 "added": list(set(snapshot2["columns"]) - set(snapshot1["columns"])),
                 "removed": list(set(snapshot1["columns"]) - set(snapshot2["columns"])),
@@ -234,7 +235,9 @@ class AbacoCore:
             },
         }
 
-        logger.info(f"Snapshot comparison completed: {snapshot1_name} vs {snapshot2_name}")
+        logger.info(
+            f"Snapshot comparison completed: {snapshot1_name} vs {snapshot2_name}"
+        )
         return comparison
 
     def validate_loan_portfolio(self, df: pd.DataFrame) -> Tuple[bool, List[str]]:
@@ -270,10 +273,14 @@ class AbacoCore:
 
         # Check for future disbursement dates
         if "disbursement_date" in df.columns:
-            df["disbursement_date"] = pd.to_datetime(df["disbursement_date"], errors="coerce")
+            df["disbursement_date"] = pd.to_datetime(
+                df["disbursement_date"], errors="coerce"
+            )
             future_dates = (df["disbursement_date"] > pd.Timestamp.now()).sum()
             if future_dates > 0:
-                issues.append(f"Found {future_dates} loans with future disbursement dates")
+                issues.append(
+                    f"Found {future_dates} loans with future disbursement dates"
+                )
 
         is_valid = len(issues) == 0
 
@@ -314,9 +321,7 @@ class AbacoCore:
             if "days_past_due" in df.columns:
                 delinquent_loans = (df["days_past_due"] > 30).sum()
                 metrics["delinquency_rate"] = (
-                    delinquent_loans / len(df) * 100
-                    if len(df) > 0
-                    else 0.0
+                    delinquent_loans / len(df) * 100 if len(df) > 0 else 0.0
                 )
 
             logger.info("Portfolio metrics calculated successfully")

@@ -139,6 +139,39 @@ frontend/dist/
 frontend/.next/
 frontend/coverage/
 
+<<<<<<< HEAD
 .venv/
 .venv/
+=======
+# Environment variables - NEVER commit these
+.env
+.env.*
+!.env.example
+
+# Credentials
+credentials/
+*.json
+!**/config/*.json
+*.pem
+*.key
+
+# API Keys and Secrets
+secrets/
+secret_*
+*_secret.*
+.env
+.env
+.env.local
+.env.production
+.env
+
+# Environment variables - NEVER commit
+.env
+.env.*
+.env
+.env
+.env
+.env.local
+.env.production
+>>>>>>> 97dda22 (Update Commercial-View: sync all project improvements)
 .venv/
