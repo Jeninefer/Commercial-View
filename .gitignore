@@ -1,24 +1,8 @@
-# Large data files - exclude from Git
-data/*.csv
-data/Abaco*.csv
-*.csv
-abaco_runtime/exports/**/*.csv
-
-# Temporary files
-*.tmp
-*.log
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Python cache
+# Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 .Python
 build/
 develop-eggs/
@@ -35,3 +19,70 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
+
+# Virtual environments - NEVER COMMIT
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# GitHub Actions - avoid OAuth issues
+.github/
+*.yml
+*.yaml
+
+# Node.js / WebSocket
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+*.tsbuildinfo
+
+# Project specific
+abaco_runtime/
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files that caused issues
+=*
+*.tmp
+*.temp
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# Commercial-View Abaco Integration - Keep Important Files
+!config/abaco_schema_autodetected.json
+!data/*sample*.csv
+!README.md
+!QUICK_START.md
+!requirements.txt
+!portfolio.py
+!setup_project.py
+!src/
+!scripts/
+!docs/
+!examples/
