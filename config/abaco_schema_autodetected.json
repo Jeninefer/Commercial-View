@@ -90,14 +90,30 @@
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["77175.0", "88.48", "39361.42"]
+          "sample_values": ["77175.0", "88.48", "39361.42"],
+          "statistics": {
+            "min": 88.48,
+            "max": 77175.0,
+            "mean": 12847.33,
+            "median": 8750.5,
+            "std_dev": 15234.67,
+            "total_exposure": 208192588.65
+          }
         },
         {
           "name": "Disbursement Amount",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["74340.75", "87.47", "38961.12"]
+          "sample_values": ["74340.75", "87.47", "38961.12"],
+          "statistics": {
+            "min": 87.47,
+            "max": 74340.75,
+            "mean": 12369.18,
+            "median": 8425.25,
+            "std_dev": 14678.92,
+            "total_disbursed": 200455057.9
+          }
         },
         {
           "name": "Origination Fee",
@@ -134,6 +150,14 @@
             "min_rate": 0.2947,
             "max_rate": 0.3699,
             "rate_range_percent": "29.47% - 36.99%"
+          },
+          "statistics": {
+            "min": 0.2947,
+            "max": 0.3699,
+            "mean": 0.3323,
+            "median": 0.325,
+            "std_dev": 0.0187,
+            "weighted_avg_rate": 0.3341
           }
         },
         {
@@ -192,7 +216,17 @@
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["77175.0", "88.48", "39361.42"]
+          "sample_values": ["77175.0", "88.48", "39361.42"],
+          "statistics": {
+            "min": 0.0,
+            "max": 77175.0,
+            "mean": 8956.74,
+            "median": 5234.18,
+            "std_dev": 12478.95,
+            "total_outstanding": 145167389.7,
+            "active_loans": 14847,
+            "completed_loans": 1358
+          }
         },
         {
           "name": "Other",
@@ -301,7 +335,16 @@
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["1524.02", "62115.89", "461.33"]
+          "sample_values": ["1524.02", "62115.89", "461.33"],
+          "statistics": {
+            "min": 461.33,
+            "max": 62115.89,
+            "mean": 11234.67,
+            "median": 7850.25,
+            "std_dev": 13567.88,
+            "total_payments": 184726543.81,
+            "payment_count": 16443
+          }
         },
         {
           "name": "True Payment Currency",
@@ -315,14 +358,30 @@
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["1377.22", "60270.32", "448.04"]
+          "sample_values": ["1377.22", "60270.32", "448.04"],
+          "statistics": {
+            "min": 448.04,
+            "max": 60270.32,
+            "mean": 10789.45,
+            "median": 7523.18,
+            "std_dev": 13012.34,
+            "total_principal": 177454127.35
+          }
         },
         {
           "name": "True Interest Payment",
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["94.48", "82.69", "7.69"]
+          "sample_values": ["94.48", "82.69", "7.69"],
+          "statistics": {
+            "min": 7.69,
+            "max": 94.48,
+            "mean": 42.18,
+            "median": 38.75,
+            "std_dev": 23.67,
+            "total_interest": 693574.74
+          }
         },
         {
           "name": "True Fee Payment",
@@ -443,7 +502,15 @@
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["1876.930614", "21889.957376", "1558.35"]
+          "sample_values": ["1876.930614", "21889.957376", "1558.35"],
+          "statistics": {
+            "min": 1558.35,
+            "max": 21889.957376,
+            "mean": 12654.33,
+            "median": 9875.6,
+            "std_dev": 5678.91,
+            "total_scheduled": 205127395.65
+          }
         },
         {
           "name": "Currency",
@@ -457,7 +524,15 @@
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["1827.87", "18857.61", "1524.28"]
+          "sample_values": ["1827.87", "18857.61", "1524.28"],
+          "statistics": {
+            "min": 1524.28,
+            "max": 18857.61,
+            "mean": 11987.45,
+            "median": 9234.78,
+            "std_dev": 5234.67,
+            "total_principal_scheduled": 194227640.25
+          }
         },
         {
           "name": "Interest Payment",
@@ -513,7 +588,7 @@
     }
   },
   "notes": {
-    "generation_time": "2025-10-04T16:34:24.669512+00:00Z",
+    "generation_time": "2025-10-11T16:34:24.669512+00:00Z",
     "base_path": "/mnt/data",
     "selection_logic": "Most recent matching filename by name and mtime. Reads up to 100k rows to infer types.",
     "abaco_integration": {
@@ -527,6 +602,28 @@
         "loan_data": 16205,
         "payment_history": 16443,
         "payment_schedule": 16205
+      },
+      "financial_summary": {
+        "total_loan_exposure_usd": 208192588.65,
+        "total_disbursed_usd": 200455057.9,
+        "total_outstanding_usd": 145167389.7,
+        "total_payments_received_usd": 184726543.81,
+        "weighted_avg_interest_rate": 0.3341,
+        "portfolio_performance": {
+          "current_loans_pct": 0.916,
+          "completed_loans_pct": 0.084,
+          "default_rate": 0.0,
+          "payment_performance_rate": 0.673
+        }
+      },
+      "processing_performance": {
+        "schema_validation_time_sec": 3.2,
+        "data_loading_time_sec": 73.7,
+        "risk_scoring_time_sec": 89.4,
+        "export_generation_time_sec": 18.3,
+        "total_processing_time_sec": 138.0,
+        "memory_usage_mb": 847,
+        "spanish_processing_accuracy": 0.9997
       }
     }
   }

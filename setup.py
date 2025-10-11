@@ -54,7 +54,15 @@ def install_python_dependencies():
 
 def create_project_structure():
     """Create necessary project directories."""
-    directories = ["src", "config", "data", "exports", "tests", "docs", "scripts"]
+    directories = [
+        "src",
+        "config",
+        "data",
+        "exports",
+        "tests",
+        "docs",
+        "scripts",
+    ]
 
     print("\n📁 Creating project structure...")
 

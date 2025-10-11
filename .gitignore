@@ -21,9 +21,9 @@ wheels/
 *.egg
 MANIFEST
 
-# Virtual environments - NEVER COMMIT
+# Virtual environments
 .env
-.venv/
+.venv
 env/
 venv/
 ENV/
@@ -31,7 +31,7 @@ env.bak/
 venv.bak/
 
 # IDE
-.vscode/settings.json
+.vscode/
 .idea/
 *.swp
 *.swo
@@ -46,19 +46,6 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# GitHub Actions - avoid OAuth issues
-.github/
-*.yml
-*.yaml
-
-# Node.js / WebSocket
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-dist/
-*.tsbuildinfo
-
 # Project specific
 abaco_runtime/
 *.log
@@ -66,23 +53,7 @@ abaco_runtime/
 .coverage
 htmlcov/
 
-# Temporary files that caused issues
-=*
-*.tmp
-*.temp
-
-# Jupyter Notebooks checkpoints
-.ipynb_checkpoints/
-
-# Commercial-View Abaco Integration - Keep Important Files
+# Keep schema and sample data
 !config/abaco_schema_autodetected.json
 !data/*sample*.csv
-!README.md
-!QUICK_START.md
-!requirements.txt
-!portfolio.py
-!setup_project.py
-!src/
-!scripts/
-!docs/
-!examples/
+!data/Abaco_Production_Sample.csv
