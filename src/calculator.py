@@ -1,11 +1,20 @@
 """
-Calculator module extracted from PR #30
-Safe division operations for KPI calculations
+Calculator module for Commercial-View
+Handles financial calculations for commercial lending analytics
 """
 
+import math
+from typing import Union, Optional
 import pandas as pd
 import numpy as np
-from typing import Union, Optional
+
+# Constants for floating point comparison
+FLOAT_TOLERANCE = 1e-9
+
+
+def safe_float_compare(a: float, b: float, tolerance: float = FLOAT_TOLERANCE) -> bool:
+    """Safely compare floating point numbers with tolerance."""
+    return abs(a - b) < tolerance
 
 
 class Calculator:
@@ -54,3 +63,10 @@ class Calculator:
             out = np.where((den.values == 0) | ~np.isfinite(out), default, out)
 
         return pd.Series(out, index=num.index) if isinstance(num, pd.Series) else out
+
+    def calculate_interest_rate(self, principal: float, payment: float, term: int) -> float:
+        """Calculate effective interest rate."""
+        if safe_float_compare(principal, 0.0) or term <= 0:
+            return 0.0
+        
+        # ...existing code...

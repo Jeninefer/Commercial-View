@@ -6,8 +6,15 @@ Setup script to fix project issues and prepare development environment.
 import os
 import sys
 import subprocess
-import re
 from pathlib import Path
+
+# Constants to replace duplicated string literals (fixing python:S1192)
+HTTPX_VERSION_PATTERN = "httpx>=0.28.1"
+HTTPX_REPLACEMENT = "httpx==0.25.1"
+REQUIREMENTS_DEV_FILENAME = "requirements-dev.txt"
+REQUIREMENTS_FILENAME = "requirements.txt"
+DATA_LOADER_FILENAME = "data_loader.py"
+SRC_DIRECTORY = "src"
 
 def run_command(cmd, check=True):
     """Run a command and return its output."""
@@ -36,13 +43,13 @@ def kill_port_processes(port):
                 print(f"Killing process {pid} using port {port}")
                 run_command(["kill", "-9", pid], check=False)
         return True
-    except Exception as e:
+    except OSError as e:  # More specific exception (fixing python:S112)
         print(f"Error killing processes on port {port}: {str(e)}")
         return False
 
 def fix_data_loader():
     """Fix the data_loader.py file."""
-    data_loader_path = Path(__file__).parent / "src" / "data_loader.py"
+    data_loader_path = Path(__file__).parent / SRC_DIRECTORY / DATA_LOADER_FILENAME
     print(f"Fixing {data_loader_path}...")
     
     # New content for data_loader.py
@@ -103,18 +110,18 @@ __all__ = [
         os.makedirs(os.path.dirname(data_loader_path), exist_ok=True)
         with open(data_loader_path, 'w') as f:
             f.write(content)
-        print("✅ data_loader.py file fixed!")
+        print(f"✅ {DATA_LOADER_FILENAME} file fixed!")
         return True
-    except Exception as e:
-        print(f"Error fixing data_loader.py: {str(e)}")
+    except IOError as e:  # More specific exception (fixing python:S112)
+        print(f"Error fixing {DATA_LOADER_FILENAME}: {str(e)}")
         return False
 
 def fix_requirements():
     """Fix the httpx version conflict in requirements-dev.txt."""
-    req_dev_path = Path(__file__).parent / "requirements-dev.txt"
+    req_dev_path = Path(__file__).parent / REQUIREMENTS_DEV_FILENAME
     
     if not req_dev_path.exists():
-        print("⚠️ requirements-dev.txt not found. Skipping fix.")
+        print(f"⚠️ {REQUIREMENTS_DEV_FILENAME} not found. Skipping fix.")
         return True
     
     print(f"Fixing httpx version in {req_dev_path}...")
@@ -124,30 +131,26 @@ def fix_requirements():
         with open(req_dev_path, 'r') as f:
             content = f.read()
         
-        # Replace the httpx version
-        updated_content = re.sub(
-            r'httpx>=0\.28\.1', 
-            'httpx==0.25.1',
-            content
-        )
+        # Replace the httpx version using str.replace instead of re.sub (fixing python:S5361)
+        updated_content = content.replace(HTTPX_VERSION_PATTERN, HTTPX_REPLACEMENT)
         
         # Write back
         with open(req_dev_path, 'w') as f:
             f.write(updated_content)
             
-        print("✅ httpx version fixed in requirements-dev.txt!")
+        print(f"✅ httpx version fixed in {REQUIREMENTS_DEV_FILENAME}!")
         return True
-    except Exception as e:
-        print(f"Error fixing requirements-dev.txt: {str(e)}")
+    except IOError as e:  # More specific exception (fixing python:S112)
+        print(f"Error fixing {REQUIREMENTS_DEV_FILENAME}: {str(e)}")
         return False
 
 def install_dependencies():
     """Install dependencies from requirements files."""
-    req_path = Path(__file__).parent / "requirements.txt"
-    req_dev_path = Path(__file__).parent / "requirements-dev.txt"
+    req_path = Path(__file__).parent / REQUIREMENTS_FILENAME
+    req_dev_path = Path(__file__).parent / REQUIREMENTS_DEV_FILENAME
     
     if not req_path.exists():
-        print("⚠️ requirements.txt not found. Cannot install dependencies.")
+        print(f"⚠️ {REQUIREMENTS_FILENAME} not found. Cannot install dependencies.")
         return False
     
     print("Installing dependencies...")

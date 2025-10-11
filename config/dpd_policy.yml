@@ -1,329 +1,87 @@
 # Days Past Due (DPD) Policy Configuration
-# Defines thresholds, buckets, and default classifications
+# Defines DPD thresholds and bucketing rules for Abaco loan analysis
 
-# Default Threshold Configuration
+# Default DPD Threshold for loan classification
 default_threshold:
-  days: 180  # Number of days past due to classify as default
-  description: "Loans with DPD >= 180 days are considered defaulted"
-  
-  # Alternative thresholds for different scenarios
-  alternatives:
-    conservative: 90   # More conservative default threshold
-    moderate: 120      # Moderate default threshold
-    standard: 180      # Standard default threshold (current)
+  days: 180 # Loans beyond 180 days are considered defaults
+  description: "Standard commercial lending threshold"
 
-# DPD Bucket Definitions
-dpd_buckets:
-  - bucket: "Current"
-    value: 0
-    min_dpd: 0
-    max_dpd: 0
-    description: "No payments overdue"
+# Delinquency Bucket Definitions
+# Maps days past due to risk categories
+delinquency_buckets:
+  current:
+    days_range: [0, 0]
+    description: "No payment delays"
     risk_level: "low"
-    default_flag: false
-  
-  - bucket: "1-30 Days"
-    value: 1
-    min_dpd: 1
-    max_dpd: 31  # Exclusive upper bound
-    description: "1 to 30 days past due (max_dpd exclusive)"
+
+  early_delinquent:
+    days_range: [1, 30]
+    description: "1-30 days past due"
     risk_level: "low"
-    default_flag: false
-  
-  - bucket: "31-60 Days"
-    value: 2
-    min_dpd: 31
-    max_dpd: 61  # Exclusive upper bound
-    description: "31 to 60 days past due (max_dpd exclusive)"
+
+  moderate_delinquent:
+    days_range: [31, 60]
+    description: "31-60 days past due"
     risk_level: "medium"
-    default_flag: false
-  
-  - bucket: "61-90 Days"
-    value: 3
-    min_dpd: 61
-    max_dpd: 91  # Exclusive upper bound
-    description: "61 to 90 days past due (max_dpd exclusive)"
-    risk_level: "medium"
-    default_flag: false
-  
-  - bucket: "91-120 Days"
-    value: 4
-    min_dpd: 91
-    max_dpd: 121  # Exclusive upper bound
-    description: "91 to 120 days past due (max_dpd exclusive)"
+
+  late_delinquent:
+    days_range: [61, 90]
+    description: "61-90 days past due"
+    risk_level: "medium-high"
+
+  severe_delinquent:
+    days_range: [91, 120]
+    description: "91-120 days past due"
     risk_level: "high"
-    default_flag: false
-  
-  - bucket: "121-180 Days"
-    value: 5
-    min_dpd: 121
-    max_dpd: 181  # Exclusive upper bound
-    description: "121 to 180 days past due (max_dpd exclusive)"
-    risk_level: "high"
-    default_flag: false
-  
-  - bucket: "180+ Days (Default)"
-    value: 6
-    min_dpd: 181
-    max_dpd: null  # No upper limit
-    description: "More than 180 days past due - Default"
+
+  default:
+    days_range: [121, 180]
+    description: "121-180 days past due"
+    risk_level: "very-high"
+
+  npl:
+    days_range: [181, 999]
+    description: "Non-performing loan (>180 days)"
     risk_level: "critical"
-    default_flag: true
 
-# Business Rules
-business_rules:
-  # Grace period before DPD starts counting
-  grace_period_days: 0
-  
-  # Working days vs calendar days
-  use_calendar_days: true
-  
-  # Treatment of partial payments
-  partial_payment_resets_dpd: false
-  
-  # Cure period (moving from default back to performing)
-  cure_period_required: true
-  cure_period_days: 90
+# Risk Weight Mappings for calculations
+risk_weights:
+  current: 0.0
+  early_delinquent: 0.1
+  moderate_delinquent: 0.3
+  late_delinquent: 0.5
+  severe_delinquent: 0.7
+  default: 0.9
+  npl: 1.0
 
-# Calculation Settings
-calculation_settings:
-  # Reference date for DPD calculation
-  # Options: "system_date", "report_date", "custom"
-  reference_date_type: "report_date"
-  
-  # How to handle weekends and holidays
-  exclude_weekends: false
-  exclude_holidays: false
-  
-  # Timezone for date calculations
-  timezone: "UTC"
-<<<<<<< HEAD
-=======
+# Provisioning Requirements by bucket
+provisioning_rates:
+  current: 0.01 # 1% provision
+  early_delinquent: 0.02 # 2% provision
+  moderate_delinquent: 0.05 # 5% provision
+  late_delinquent: 0.15 # 15% provision
+  severe_delinquent: 0.30 # 30% provision
+  default: 0.50 # 50% provision
+  npl: 1.00 # 100% provision
 
-# Risk-Based Provisioning Rules
-provisioning_policy:
-  stage_1_performing:
-    max_dpd: 30
-    provision_rate: 0.0125
-    description: "Performing loans with 12-month expected loss"
-  
-  stage_2_underperforming:
-    min_dpd: 31
-    max_dpd: 89
-    provision_rate: 0.0350
-    description: "Significant increase in credit risk - lifetime expected loss"
-  
-  stage_3_impaired:
-    min_dpd: 90
-    provision_rate: 1.0000
-    description: "Credit impaired - full lifetime expected loss"
+# Abaco-specific settings
+abaco_settings:
+  factoring_threshold: 180 # Days for factoring products
+  bullet_payment_grace: 5 # Grace period for bullet payments
+  currency: "USD"
+  companies:
+    - "Abaco Technologies"
+    - "Abaco Financial"
 
-# Regulatory Classifications
-regulatory_buckets:
-  pass: 
-    max_dpd: 30
-    risk_weight: 1.0
-    capital_requirement: 0.08
-    
-  special_mention:
-    min_dpd: 31
-    max_dpd: 89
-    risk_weight: 1.0
-    capital_requirement: 0.08
-    
-  substandard:
-    min_dpd: 90
-    max_dpd: 179
-    risk_weight: 1.5
-    capital_requirement: 0.15
-    
-  doubtful:
-    min_dpd: 180
-    max_dpd: 269
-    risk_weight: 1.5
-    capital_requirement: 0.50
-    
-  loss:
-    min_dpd: 270
-    risk_weight: 0.0
-    capital_requirement: 1.0
-    charge_off_required: true
-
-# Industry-Specific Rules
-industry_adjustments:
-  real_estate:
-    extended_grace_period: 15
-    seasonal_adjustment: true
-    default_threshold_override: 210
-    
-  agriculture:
-    seasonal_adjustment: true
-    harvest_season_grace: 45
-    default_threshold_override: 270
-    
-  manufacturing:
-    working_capital_adjustment: true
-    inventory_cycle_grace: 30
-    
-  retail:
-    seasonal_peaks: ["nov", "dec", "jan"]
-    peak_grace_period: 20
-    
-  services:
-    standard_treatment: true
-    
-  hospitality:
-    seasonal_adjustment: true
-    peak_seasons: ["jun", "jul", "aug", "dec"]
-    off_season_grace: 30
-
-# Geographic Risk Adjustments
-geographic_policy:
-  high_risk_states:
-    - "PR"  # Puerto Rico
-    - "VI"  # Virgin Islands
-  
-  natural_disaster_zones:
-    hurricane_prone:
-      states: ["FL", "TX", "LA", "NC", "SC"]
-      disaster_grace_period: 90
-      automatic_forbearance: true
-      
-    earthquake_zones:
-      states: ["CA", "AK", "NV"]
-      disaster_grace_period: 60
-      
-    flood_zones:
-      fema_designation_required: true
-      grace_period: 45
-
-# Loan Size Stratification
-loan_size_tiers:
-  small_balance:
-    max_amount: 100000
-    accelerated_charge_off: 120
-    simplified_workout: true
-    
-  standard:
-    min_amount: 100001
-    max_amount: 1000000
-    standard_treatment: true
-    
-  large_exposure:
-    min_amount: 1000001
-    extended_workout_period: 270
-    board_approval_required: true
-    regulatory_notification: true
-
-# Collateral-Based Adjustments
-collateral_policy:
-  secured_loans:
-    real_estate_secured:
-      extended_default_threshold: 360
-      foreclosure_timeline: 18
-      
-    equipment_secured:
-      depreciation_adjustment: true
-      repossession_timeline: 12
-      
-    inventory_secured:
-      seasonal_valuation: true
-      liquidation_discount: 0.40
-      
-    cash_secured:
-      minimal_risk_treatment: true
-      provision_override: 0.01
-      
-  unsecured_loans:
-    accelerated_provisioning: true
-    early_intervention: 60
-    charge_off_threshold: 120
-
-# Workout and Recovery Settings
-workout_policy:
-  trigger_points:
-    - dpd_threshold: 31
-      action: "early_intervention"
-      contact_required: true
-      
-    - dpd_threshold: 61
-      action: "formal_workout"
-      workout_plan_required: true
-      
-    - dpd_threshold: 91
-      action: "legal_review"
-      attorney_consultation: true
-      
-    - dpd_threshold: 181
-      action: "charge_off_review"
-      committee_approval: true
-
-  recovery_timeframes:
-    pre_legal: 180
-    legal_phase: 360
-    post_judgment: 720
-    final_resolution: 1080
-
-# Regulatory Reporting Thresholds
-reporting_requirements:
-  call_report_buckets:
-    current: 0
-    past_due_30_89: [30, 89]
-    past_due_90_plus: [90, null]
-    
-  charge_off_reporting:
-    consumer_loans: 180
-    commercial_loans: 180
-    real_estate_loans: 360
-    
-  npl_classification:
-    non_accrual_threshold: 90
-    impaired_loan_threshold: 90
-    
-  stress_testing:
-    baseline_loss_rates:
-      performing: 0.0125
-      stage_2: 0.0350
-      stage_3: 0.6500
-      
-    adverse_scenario_multiplier: 2.5
-    severely_adverse_multiplier: 4.0
-
-# Automation and Alert Settings
-automation_rules:
-  auto_charge_off:
-    enabled: true
-    unsecured_threshold: 180
-    secured_threshold: 360
-    manual_review_required: true
-    
-  early_warning_alerts:
-    - trigger: "dpd_15"
-      recipients: ["loan_officer", "portfolio_manager"]
-      
-    - trigger: "dpd_30" 
-      recipients: ["loan_officer", "portfolio_manager", "credit_admin"]
-      
-    - trigger: "dpd_60"
-      recipients: ["all_credit_staff", "senior_management"]
-      
-    - trigger: "dpd_90"
-      recipients: ["all_credit_staff", "senior_management", "board"]
+# Reporting Configuration
+reporting:
+  include_grace_period: true
+  round_days: true
+  export_bucket_details: true
 
 # Performance Monitoring
-monitoring_metrics:
-  portfolio_quality:
-    target_current_ratio: 0.95
-    max_30dpd_ratio: 0.03
-    max_90dpd_ratio: 0.01
-    
-  early_warning_indicators:
-    migration_rates: true
-    vintage_analysis: true
-    cohort_tracking: true
-    
-  benchmark_comparisons:
-    peer_group_analysis: true
-    regulatory_averages: true
-    historical_performance: true
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
+monitoring:
+  alert_thresholds:
+    high_risk_percentage: 0.15 # Alert if >15% of portfolio is high risk
+    npl_percentage: 0.05 # Alert if >5% of portfolio is NPL
+    avg_dpd_threshold: 30 # Alert if average DPD >30 days

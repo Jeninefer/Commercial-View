@@ -10,12 +10,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
-<<<<<<< HEAD
 from typing import Dict, Any
-import yaml
-import json
-from datetime import datetime
-=======
 import yaml
 import json
 from datetime import datetime
@@ -45,31 +40,11 @@ from google_drive_exporter import GoogleDriveExporter
 from typing import Any, Dict, Optional
 
 logger = logging.getLogger(__name__)
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
 
 
 def load_config(config_dir: str) -> Dict[str, Any]:
     """Load all configuration files from the config directory."""
     configs = {}
-<<<<<<< HEAD
-    
-    config_files = [
-        'column_maps.yml',
-        'pricing_config.yml', 
-        'dpd_policy.yml',
-        'export_config.yml'
-    ]
-    
-    for config_file in config_files:
-        config_path = Path(config_dir) / config_file
-        if config_path.exists():
-            with open(config_path, 'r') as f:
-                config_name = config_file.replace('.yml', '')
-                configs[config_name] = yaml.safe_load(f)
-        else:
-            print(f"Warning: Configuration file {config_file} not found")
-    
-=======
 
     config_files = [
         "column_maps.yml",
@@ -87,24 +62,11 @@ def load_config(config_dir: str) -> Dict[str, Any]:
         else:
             print(f"Warning: Configuration file {config_file} not found")
 
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
     return configs
 
 
 def create_export_directories(export_config: Dict[str, Any]) -> None:
     """Create necessary export directories."""
-<<<<<<< HEAD
-    export_paths = export_config.get('export_paths', {})
-    
-    directories = [
-        export_paths.get('base_path', './abaco_runtime/exports'),
-        export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json'),
-        export_paths.get('kpi_csv', './abaco_runtime/exports/kpi/csv'),
-        './abaco_runtime/exports/dpd',
-        './abaco_runtime/exports/buckets'
-    ]
-    
-=======
     export_paths = export_config.get("export_paths", {})
 
     directories = [
@@ -115,7 +77,6 @@ def create_export_directories(export_config: Dict[str, Any]) -> None:
         "./abaco_runtime/exports/buckets",
     ]
 
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
     for directory in directories:
         Path(directory).mkdir(parents=True, exist_ok=True)
         print(f"Created directory: {directory}")
@@ -123,43 +84,26 @@ def create_export_directories(export_config: Dict[str, Any]) -> None:
 
 def generate_sample_output(export_config: Dict[str, Any]) -> None:
     """Generate sample output files to demonstrate the system."""
-<<<<<<< HEAD
-    export_paths = export_config.get('export_paths', {})
-    base_path = export_paths.get('base_path', './abaco_runtime/exports')
-    
-=======
     export_paths = export_config.get("export_paths", {})
     base_path = export_paths.get("base_path", "./abaco_runtime/exports")
 
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
     # Sample DPD data
     dpd_data = {
         "analysis_date": datetime.now().isoformat(),
         "portfolio_summary": {
             "total_loans": 1000,
             "total_exposure": 50000000,
-<<<<<<< HEAD
-            "default_rate": 0.05
-=======
             "default_rate": 0.05,
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
         },
         "dpd_analysis": {
             "current": {"count": 850, "amount": 42500000},
             "1_30_days": {"count": 100, "amount": 5000000},
             "31_60_days": {"count": 30, "amount": 1500000},
             "61_90_days": {"count": 15, "amount": 750000},
-<<<<<<< HEAD
-            "90_plus_days": {"count": 5, "amount": 250000}
-        }
-    }
-    
-=======
             "90_plus_days": {"count": 5, "amount": 250000},
         },
     }
 
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
     # Sample KPI data
     kpi_data = {
         "generated_at": datetime.now().isoformat(),
@@ -168,22 +112,6 @@ def generate_sample_output(export_config: Dict[str, Any]) -> None:
             "default_rate": 0.05,
             "recovery_rate": 0.75,
             "provision_coverage": 0.12,
-<<<<<<< HEAD
-            "net_charge_off_rate": 0.03
-        }
-    }
-    
-    # Write sample files
-    with open(f"{base_path}/dpd/dpd_analysis.json", 'w') as f:
-        json.dump(dpd_data, f, indent=2)
-    
-    with open(f"{export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json')}/kpi_report.json", 'w') as f:
-        json.dump(kpi_data, f, indent=2)
-    
-    print("Generated sample output files:")
-    print(f"  - {base_path}/dpd/dpd_analysis.json")
-    print(f"  - {export_paths.get('kpi_json', './abaco_runtime/exports/kpi/json')}/kpi_report.json")
-=======
             "net_charge_off_rate": 0.03,
         },
     }
@@ -537,38 +465,10 @@ class ProcessPortfolio:
             metrics["calculation_error"] = str(e)
 
         return metrics
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
 
 
 def main():
     """Main processing function."""
-<<<<<<< HEAD
-    parser = argparse.ArgumentParser(description='Process commercial lending portfolio')
-    parser.add_argument('--config', required=True, help='Configuration directory path')
-    parser.add_argument('--data', help='Input data file path (optional for demo)')
-    
-    args = parser.parse_args()
-    
-    print("Commercial-View Portfolio Processing")
-    print("=" * 50)
-    
-    # Load configurations
-    print(f"Loading configurations from: {args.config}")
-    configs = load_config(args.config)
-    
-    if not configs:
-        print("Error: No valid configuration files found")
-        sys.exit(1)
-    
-    # Create export directories
-    print("\nCreating export directories...")
-    create_export_directories(configs.get('export_config', {}))
-    
-    # For now, generate sample output
-    print("\nGenerating sample analysis (demo mode)...")
-    generate_sample_output(configs.get('export_config', {}))
-    
-=======
     parser = argparse.ArgumentParser(description="Process commercial lending portfolio")
     parser.add_argument("--config", required=True, help="Configuration directory path")
     parser.add_argument("--data", help="Input data file path (optional for demo)")
@@ -658,55 +558,6 @@ def main():
 
     print(f"Weighted metrics saved to: {weighted_path}")
 
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
-    print("\n✅ Processing completed successfully!")
-    print("\nNext steps:")
-    print("1. Check the generated files in ./abaco_runtime/exports/")
-    print("2. Customize the configuration files for your data")
-    print("3. Implement actual data processing logic in this script")
-
-
-<<<<<<< HEAD
-if __name__ == '__main__':
-=======
-if __name__ == "__main__":
-    main()
-    comprehensive_results = comprehensive_analysis(configs)
-
-    # Save comprehensive results
-    comprehensive_path = f"{export_paths.get('base_path', './abaco_runtime/exports')}/comprehensive_analytics.json"
-    with open(comprehensive_path, "w") as f:
-        json.dump(comprehensive_results, f, indent=2, default=str)
-
-    print(f"Comprehensive analytics saved to: {comprehensive_path}")
-    print(
-        f"✅ Found {comprehensive_results['reactivation_count']} reactivated customers"
-    )
-    print(f"✅ Customer types: {comprehensive_results['customer_type_distribution']}")
-
-    # Enhanced analysis with cohort and classification features
-    print("\nRunning cohort and classification analysis...")
-    enhanced_results = enhanced_analysis(configs)
-
-    # Save enhanced results
-    enhanced_path = f"{export_paths.get('base_path', './abaco_runtime/exports')}/cohort_analysis.json"
-    with open(enhanced_path, "w") as f:
-        json.dump(enhanced_results, f, indent=2, default=str)
-
-    print(f"Cohort analysis saved to: {enhanced_path}")
-
-    # Weighted metrics analysis
-    print("\nRunning weighted metrics analysis...")
-    # Use comprehensive_analysis to get weighted metrics as it already computes them
-    weighted_results = comprehensive_analysis(configs).get("weighted_metrics", {})
-
-    # Save weighted metrics results
-    weighted_path = f"{export_paths.get('base_path', './abaco_runtime/exports')}/weighted_metrics.json"
-    with open(weighted_path, "w") as f:
-        json.dump(weighted_results, f, indent=2, default=str)
-
-    print(f"Weighted metrics saved to: {weighted_path}")
-
     print("\n✅ Processing completed successfully!")
     print("\nNext steps:")
     print("1. Check the generated files in ./abaco_runtime/exports/")
@@ -715,5 +566,184 @@ if __name__ == "__main__":
 
 
 if __name__ == "__main__":
->>>>>>> fa393d2be80b675bbc0b12c922c156c6c1d27af7
     main()
+
+
+"""
+Portfolio processing module for Commercial-View
+Handles the main portfolio processing logic for Abaco loan tape data
+"""
+
+import pandas as pd
+from typing import Dict, Any, Optional, List
+import numpy as np
+from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
+
+def process_abaco_portfolio(
+    loan_data: pd.DataFrame,
+    payment_data: Optional[pd.DataFrame] = None,
+    schedule_data: Optional[pd.DataFrame] = None,
+    config: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    """
+    Process complete Abaco portfolio data with analytics.
+    
+    Args:
+        loan_data: Loan data DataFrame
+        payment_data: Payment history DataFrame (optional)
+        schedule_data: Payment schedule DataFrame (optional)  
+        config: Configuration parameters (optional)
+        
+    Returns:
+        Dictionary containing processed results and analytics
+    """
+    config = config or {}
+    results = {}
+    
+    # Process loan data
+    if loan_data is not None and not loan_data.empty:
+        loan_analytics = process_loan_analytics(loan_data, config)
+        results['loan_analytics'] = loan_analytics
+        logger.info(f"Processed {len(loan_data)} loan records")
+    
+    # Process payment data
+    if payment_data is not None and not payment_data.empty:
+        payment_analytics = process_payment_analytics(payment_data, config)
+        results['payment_analytics'] = payment_analytics
+        logger.info(f"Processed {len(payment_data)} payment records")
+    
+    # Process schedule data
+    if schedule_data is not None and not schedule_data.empty:
+        schedule_analytics = process_schedule_analytics(schedule_data, config)
+        results['schedule_analytics'] = schedule_analytics
+        logger.info(f"Processed {len(schedule_data)} schedule records")
+    
+    # Generate combined analytics
+    results['portfolio_summary'] = generate_portfolio_summary(results)
+    
+    return results
+
+def process_loan_analytics(df: pd.DataFrame, config: Dict[str, Any]) -> Dict[str, Any]:
+    """Process loan data with Abaco-specific analytics."""
+    analytics = {
+        'total_loans': len(df),
+        'companies': df['Company'].value_counts().to_dict() if 'Company' in df.columns else {},
+        'currency_distribution': df['Loan Currency'].value_counts().to_dict() if 'Loan Currency' in df.columns else {},
+        'product_types': df['Product Type'].value_counts().to_dict() if 'Product Type' in df.columns else {},
+        'loan_statuses': df['Loan Status'].value_counts().to_dict() if 'Loan Status' in df.columns else {}
+    }
+    
+    # Financial metrics
+    if 'Outstanding Loan Value' in df.columns:
+        analytics['total_exposure'] = float(df['Outstanding Loan Value'].sum())
+        analytics['avg_loan_size'] = float(df['Outstanding Loan Value'].mean())
+    
+    if 'Interest Rate APR' in df.columns:
+        analytics['avg_interest_rate'] = float(df['Interest Rate APR'].mean())
+        analytics['interest_rate_range'] = {
+            'min': float(df['Interest Rate APR'].min()),
+            'max': float(df['Interest Rate APR'].max())
+        }
+    
+    # Delinquency analysis
+    if 'Days in Default' in df.columns:
+        analytics['delinquency_distribution'] = analyze_delinquency(df['Days in Default'])
+    
+    return analytics
+
+def process_payment_analytics(df: pd.DataFrame, config: Dict[str, Any]) -> Dict[str, Any]:
+    """Process payment history with performance metrics."""
+    analytics = {
+        'total_payments': len(df),
+        'payment_statuses': df['True Payment Status'].value_counts().to_dict() if 'True Payment Status' in df.columns else {}
+    }
+    
+    if 'True Total Payment' in df.columns:
+        analytics['total_payment_amount'] = float(df['True Total Payment'].sum())
+        analytics['avg_payment_size'] = float(df['True Total Payment'].mean())
+    
+    if 'True Payment Status' in df.columns:
+        # Calculate payment performance metrics
+        total_payments = len(df)
+        on_time_payments = len(df[df['True Payment Status'] == 'On Time'])
+        analytics['on_time_rate'] = on_time_payments / total_payments if total_payments > 0 else 0
+    
+    return analytics
+
+def process_schedule_analytics(df: pd.DataFrame, config: Dict[str, Any]) -> Dict[str, Any]:
+    """Process payment schedule data."""
+    analytics = {
+        'total_scheduled_payments': len(df)
+    }
+    
+    if 'Total Payment' in df.columns:
+        analytics['total_scheduled_amount'] = float(df['Total Payment'].sum())
+        
+    if 'Currency' in df.columns:
+        analytics['currency_distribution'] = df['Currency'].value_counts().to_dict()
+    
+    return analytics
+
+def analyze_delinquency(days_in_default: pd.Series) -> Dict[str, Any]:
+    """Analyze delinquency distribution with Abaco buckets."""
+    def get_bucket(days):
+        if pd.isna(days) or days == 0:
+            return 'current'
+        elif 1 <= days <= 30:
+            return 'early_delinquent'
+        elif 31 <= days <= 60:
+            return 'moderate_delinquent'
+        elif 61 <= days <= 90:
+            return 'late_delinquent'
+        elif 91 <= days <= 120:
+            return 'severe_delinquent'
+        elif 121 <= days <= 180:
+            return 'default'
+        else:
+            return 'npl'
+    
+    buckets = days_in_default.apply(get_bucket).value_counts()
+    
+    return {
+        'buckets': buckets.to_dict(),
+        'current_rate': buckets.get('current', 0) / len(days_in_default),
+        'delinquent_rate': (len(days_in_default) - buckets.get('current', 0)) / len(days_in_default)
+    }
+
+def generate_portfolio_summary(results: Dict[str, Any]) -> Dict[str, Any]:
+    """Generate overall portfolio summary."""
+    summary = {
+        'generation_timestamp': datetime.now().isoformat(),
+        'data_sources': list(results.keys())
+    }
+    
+    # Aggregate key metrics
+    if 'loan_analytics' in results:
+        loan_data = results['loan_analytics']
+        summary.update({
+            'total_loans': loan_data.get('total_loans', 0),
+            'total_exposure': loan_data.get('total_exposure', 0),
+            'primary_currency': 'USD',  # Based on Abaco data
+            'primary_product': 'factoring'  # Based on Abaco data
+        })
+    
+    if 'payment_analytics' in results:
+        payment_data = results['payment_analytics']
+        summary.update({
+            'total_payments': payment_data.get('total_payments', 0),
+            'on_time_rate': payment_data.get('on_time_rate', 0)
+        })
+    
+    return summary
+
+# Legacy compatibility functions
+def process_loan_data(df: pd.DataFrame, config: Dict[str, Any]) -> Dict[str, Any]:
+    """Legacy function for backward compatibility."""
+    return process_loan_analytics(df, config)
+
+def process_payment_data(df: pd.DataFrame, config: Dict[str, Any]) -> Dict[str, Any]:
+    """Legacy function for backward compatibility."""
+    return process_payment_analytics(df, config)

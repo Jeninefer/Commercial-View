@@ -22,6 +22,7 @@ DISBURSEMENT_DATE_COLUMN = "Disbursement Date"
 TRUE_PAYMENT_DATE_COLUMN = "True Payment Date"
 DISBURSEMENT_AMOUNT_COLUMN = "Disbursement Amount"
 DATA_LOADER_NOT_AVAILABLE_MSG = "Data loader not available"
+ABACO_SCHEMA_FILENAME = "abaco_schema_autodetected.json"
 
 class AbacoSchemaManager:
     """
@@ -231,7 +232,7 @@ class AbacoSchemaManager:
             
             config = {
                 'schema_info': {
-                    'generated_from': 'abaco_schema_autodetected.json',
+                    'generated_from': ABACO_SCHEMA_FILENAME,
                     'generation_time': datetime.now().isoformat(),
                     'total_datasets': len([d for d in self.schema.get('datasets', {}).values() if d.get('exists')])
                 }
@@ -283,8 +284,8 @@ def integrate_abaco_schema(data_loader_class):
         if not schema_path:
             # Try to find schema in Downloads or config directory
             potential_paths = [
-                str(Path.home() / 'Downloads' / 'abaco_schema_autodetected.json'),
-                str(Path(self.config_dir) / 'abaco_schema_autodetected.json')
+                str(Path.home() / 'Downloads' / ABACO_SCHEMA_FILENAME),
+                str(Path(self.config_dir) / ABACO_SCHEMA_FILENAME)
             ]
             for path in potential_paths:
                 if Path(path).exists():
@@ -306,5 +307,6 @@ __all__ = [
     'DISBURSEMENT_DATE_COLUMN',
     'TRUE_PAYMENT_DATE_COLUMN',
     'DISBURSEMENT_AMOUNT_COLUMN',
-    'DATA_LOADER_NOT_AVAILABLE_MSG'
+    'DATA_LOADER_NOT_AVAILABLE_MSG',
+    'ABACO_SCHEMA_FILENAME'
 ]

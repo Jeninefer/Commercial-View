@@ -11,14 +11,21 @@
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["Abaco Technologies", "Abaco Financial"]
+          "sample_values": [
+            "Abaco Technologies",
+            "Abaco Financial"
+          ]
         },
         {
           "name": "Customer ID",
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["CLIAB000198", "CLIAB000237", "CLIAB000225"]
+          "sample_values": [
+            "CLIAB000198",
+            "CLIAB000237",
+            "CLIAB000225"
+          ]
         },
         {
           "name": "Cliente",
@@ -29,12 +36,7 @@
             "SERVICIOS TECNICOS MEDICOS, S.A. DE C.V.",
             "KEVIN ENRIQUE  CABEZAS MORALES",
             "PRODUCTOS DE CONCRETO, S.A. DE C.V."
-          ],
-          "abaco_validation": {
-            "spanish_companies": 2,
-            "individual_names": 1,
-            "supports_utf8": true
-          }
+          ]
         },
         {
           "name": "Pagador",
@@ -45,37 +47,38 @@
             "HOSPITAL NACIONAL \"SAN JUAN DE DIOS\" SAN MIGUEL",
             "ASSA COMPAÑIA DE SEGUROS, S.A. ",
             "EMPRESA TRANSMISORA DE EL SALVADOR, S.A. DE C.V. ETESAL, S.A. DE C.V."
-          ],
-          "abaco_validation": {
-            "spanish_entities": 3,
-            "hospital_systems": 1,
-            "supports_quotes": true
-          }
+          ]
         },
         {
           "name": "Application ID",
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["DSB1710-001", "DSB1704-007", "DSB1707-001"]
+          "sample_values": [
+            "DSB1710-001",
+            "DSB1704-007",
+            "DSB1707-001"
+          ]
         },
         {
           "name": "Loan ID",
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["DSB1710-001", "DSB1704-007", "DSB1707-001"]
+          "sample_values": [
+            "DSB1710-001",
+            "DSB1704-007",
+            "DSB1707-001"
+          ]
         },
         {
           "name": "Product Type",
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["factoring"],
-          "abaco_validation": {
-            "exclusive_product": "factoring",
-            "commercial_lending": true
-          }
+          "sample_values": [
+            "factoring"
+          ]
         },
         {
           "name": "Disbursement Date",
@@ -83,90 +86,115 @@
           "non_null": 16205,
           "nulls": 0,
           "coerced_dtype": "datetime",
-          "sample_values": ["2025-09-30", "2025-09-29", "2025-09-26"]
+          "sample_values": [
+            "2025-09-30",
+            "2025-09-29",
+            "2025-09-26"
+          ]
         },
         {
           "name": "TPV",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["77175.0", "88.48", "39361.42"]
+          "sample_values": [
+            "77175.0",
+            "88.48",
+            "39361.42"
+          ]
         },
         {
           "name": "Disbursement Amount",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["74340.75", "87.47", "38961.12"]
+          "sample_values": [
+            "74340.75",
+            "87.47",
+            "38961.12"
+          ]
         },
         {
           "name": "Origination Fee",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["2508.19", "0.89", "354.25"]
+          "sample_values": [
+            "2508.19",
+            "0.89",
+            "354.25"
+          ]
         },
         {
           "name": "Origination Fee Taxes",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["326.06", "0.12", "46.05"]
+          "sample_values": [
+            "326.06",
+            "0.12",
+            "46.05"
+          ]
         },
         {
           "name": "Loan Currency",
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["USD"],
-          "abaco_validation": {
-            "exclusive_currency": "USD",
-            "factoring_currency": true
-          }
+          "sample_values": [
+            "USD"
+          ]
         },
         {
           "name": "Interest Rate APR",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["0.2947", "0.3699", "0.295"],
-          "abaco_validation": {
-            "min_rate": 0.2947,
-            "max_rate": 0.3699,
-            "rate_range_percent": "29.47% - 36.99%"
-          }
+          "sample_values": [
+            "0.2947",
+            "0.3699",
+            "0.295"
+          ]
         },
         {
           "name": "Term",
           "dtype": "int",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["90", "30", "120"]
+          "sample_values": [
+            "90",
+            "30",
+            "120"
+          ]
         },
         {
           "name": "Term Unit",
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["days"]
+          "sample_values": [
+            "days"
+          ]
         },
         {
           "name": "Payment Frequency",
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["bullet"],
-          "abaco_validation": {
-            "exclusive_frequency": "bullet",
-            "factoring_standard": true
-          }
+          "sample_values": [
+            "bullet"
+          ]
         },
         {
           "name": "Days in Default",
           "dtype": "int",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["0", "1", "3"]
+          "sample_values": [
+            "0",
+            "1",
+            "3"
+          ]
         },
         {
           "name": "Pledge To",
@@ -185,14 +213,22 @@
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["Current", "Complete", "Default"]
+          "sample_values": [
+            "Current",
+            "Complete",
+            "Default"
+          ]
         },
         {
           "name": "Outstanding Loan Value",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["77175.0", "88.48", "39361.42"]
+          "sample_values": [
+            "77175.0",
+            "88.48",
+            "39361.42"
+          ]
         },
         {
           "name": "Other",
@@ -243,14 +279,21 @@
           "dtype": "string",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["Abaco Financial", "Abaco Technologies"]
+          "sample_values": [
+            "Abaco Financial",
+            "Abaco Technologies"
+          ]
         },
         {
           "name": "Customer ID",
           "dtype": "string",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["CLI2006", "CLIAB000223", "CLIAB000225"]
+          "sample_values": [
+            "CLI2006",
+            "CLIAB000223",
+            "CLIAB000225"
+          ]
         },
         {
           "name": "Cliente",
@@ -279,7 +322,11 @@
           "dtype": "string",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["DSB3135-001", "DSB1351-001", "DSB1524-004"]
+          "sample_values": [
+            "DSB3135-001",
+            "DSB1351-001",
+            "DSB1524-004"
+          ]
         },
         {
           "name": "True Payment Date",
@@ -287,49 +334,75 @@
           "non_null": 16443,
           "nulls": 0,
           "coerced_dtype": "datetime",
-          "sample_values": ["2025-09-30", "2025-09-29", "2025-09-27"]
+          "sample_values": [
+            "2025-09-30",
+            "2025-09-29",
+            "2025-09-27"
+          ]
         },
         {
           "name": "True Devolution",
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["0.0", "658.45", "0.01"]
+          "sample_values": [
+            "0.0",
+            "658.45",
+            "0.01"
+          ]
         },
         {
           "name": "True Total Payment",
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["1524.02", "62115.89", "461.33"]
+          "sample_values": [
+            "1524.02",
+            "62115.89",
+            "461.33"
+          ]
         },
         {
           "name": "True Payment Currency",
           "dtype": "string",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["USD"]
+          "sample_values": [
+            "USD"
+          ]
         },
         {
           "name": "True Principal Payment",
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["1377.22", "60270.32", "448.04"]
+          "sample_values": [
+            "1377.22",
+            "60270.32",
+            "448.04"
+          ]
         },
         {
           "name": "True Interest Payment",
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["94.48", "82.69", "7.69"]
+          "sample_values": [
+            "94.48",
+            "82.69",
+            "7.69"
+          ]
         },
         {
           "name": "True Fee Payment",
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["35.43", "1550.56", "4.07"]
+          "sample_values": [
+            "35.43",
+            "1550.56",
+            "4.07"
+          ]
         },
         {
           "name": "True Other Payment",
@@ -342,35 +415,53 @@
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["12.28", "10.75", "1.0"]
+          "sample_values": [
+            "12.28",
+            "10.75",
+            "1.0"
+          ]
         },
         {
           "name": "True Fee Tax Payment",
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["4.61", "201.57", "0.53"]
+          "sample_values": [
+            "4.61",
+            "201.57",
+            "0.53"
+          ]
         },
         {
           "name": "True Rabates",
           "dtype": "int",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["0"]
+          "sample_values": [
+            "0"
+          ]
         },
         {
           "name": "True Outstanding Loan Value",
           "dtype": "float",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["0.0", "8054.78", "78.77"]
+          "sample_values": [
+            "0.0",
+            "8054.78",
+            "78.77"
+          ]
         },
         {
           "name": "True Payment Status",
           "dtype": "string",
           "non_null": 16443,
           "nulls": 0,
-          "sample_values": ["Late", "On Time", "Prepayment"]
+          "sample_values": [
+            "Late",
+            "On Time",
+            "Prepayment"
+          ]
         }
       ]
     },
@@ -385,14 +476,21 @@
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["Abaco Technologies", "Abaco Financial"]
+          "sample_values": [
+            "Abaco Technologies",
+            "Abaco Financial"
+          ]
         },
         {
           "name": "Customer ID",
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["CLIAB000078", "CLIAB000165", "CLIAB000100"]
+          "sample_values": [
+            "CLIAB000078",
+            "CLIAB000165",
+            "CLIAB000100"
+          ]
         },
         {
           "name": "Cliente",
@@ -421,7 +519,11 @@
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["DSB1613-006", "DSB0849-001", "DSB0629-005"]
+          "sample_values": [
+            "DSB1613-006",
+            "DSB0849-001",
+            "DSB0629-005"
+          ]
         },
         {
           "name": "Payment Date",
@@ -429,49 +531,75 @@
           "non_null": 16205,
           "nulls": 0,
           "coerced_dtype": "datetime",
-          "sample_values": ["2025-10-02", "2025-06-06", "2024-11-07"]
+          "sample_values": [
+            "2025-10-02",
+            "2025-06-06",
+            "2024-11-07"
+          ]
         },
         {
           "name": "TPV",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["1847.7", "21784.0", "1731.5"]
+          "sample_values": [
+            "1847.7",
+            "21784.0",
+            "1731.5"
+          ]
         },
         {
           "name": "Total Payment",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["1876.930614", "21889.957376", "1558.35"]
+          "sample_values": [
+            "1876.930614",
+            "21889.957376",
+            "1558.35"
+          ]
         },
         {
           "name": "Currency",
           "dtype": "string",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["USD"]
+          "sample_values": [
+            "USD"
+          ]
         },
         {
           "name": "Principal Payment",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["1827.87", "18857.61", "1524.28"]
+          "sample_values": [
+            "1827.87",
+            "18857.61",
+            "1524.28"
+          ]
         },
         {
           "name": "Interest Payment",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["25.8678", "2021.5552", "0.0"]
+          "sample_values": [
+            "25.8678",
+            "2021.5552",
+            "0.0"
+          ]
         },
         {
           "name": "Fee Payment",
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["17.55", "661.94", "30.15"]
+          "sample_values": [
+            "17.55",
+            "661.94",
+            "30.15"
+          ]
         },
         {
           "name": "Other Payment",
@@ -484,7 +612,11 @@
           "dtype": "float",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["5.644314", "348.854376", "3.9195"]
+          "sample_values": [
+            "5.644314",
+            "348.854376",
+            "3.9195"
+          ]
         },
         {
           "name": "All Rebates",
@@ -497,7 +629,9 @@
           "dtype": "int",
           "non_null": 16205,
           "nulls": 0,
-          "sample_values": ["0"]
+          "sample_values": [
+            "0"
+          ]
         }
       ]
     },
@@ -515,19 +649,6 @@
   "notes": {
     "generation_time": "2025-10-04T16:34:24.669512+00:00Z",
     "base_path": "/mnt/data",
-    "selection_logic": "Most recent matching filename by name and mtime. Reads up to 100k rows to infer types.",
-    "abaco_integration": {
-      "total_records": 48853,
-      "validation_status": "production_ready",
-      "spanish_support": true,
-      "usd_factoring": true,
-      "bullet_payments": true,
-      "companies": ["Abaco Technologies", "Abaco Financial"],
-      "record_breakdown": {
-        "loan_data": 16205,
-        "payment_history": 16443,
-        "payment_schedule": 16205
-      }
-    }
+    "selection_logic": "Most recent matching filename by name and mtime. Reads up to 100k rows to infer types."
   }
 }
