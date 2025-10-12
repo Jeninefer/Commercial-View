@@ -1,0 +1,115 @@
+# Abaco Schema Column Mapping for Commercial-View
+# Generated from: abaco_schema_autodetected.json
+
+loan_data:
+  # Core Loan Information
+  company: "Company"
+  customer_id: "Customer ID"
+  client_name: "Cliente"
+  payer: "Pagador"
+  application_id: "Application ID"
+  loan_id: "Loan ID"
+  product_type: "Product Type"
+
+  # Financial Data
+  disbursement_date: "Disbursement Date"
+  tpv: "TPV" # Total Purchase Value
+  disbursement_amount: "Disbursement Amount"
+  origination_fee: "Origination Fee"
+  origination_fee_taxes: "Origination Fee Taxes"
+  currency: "Loan Currency"
+  interest_rate_apr: "Interest Rate APR"
+  outstanding_principal: "Outstanding Loan Value"
+
+  # Loan Terms
+  term: "Term"
+  term_unit: "Term Unit"
+  payment_frequency: "Payment Frequency"
+
+  # Risk & Status
+  days_in_default: "Days in Default"
+  loan_status: "Loan Status"
+
+payment_history:
+  # Core Information
+  company: "Company"
+  customer_id: "Customer ID"
+  client_name: "Cliente"
+  payer: "Pagador"
+  loan_id: "Loan ID"
+
+  # Payment Details
+  payment_date: "True Payment Date"
+  total_payment: "True Total Payment"
+  currency: "True Payment Currency"
+  principal_payment: "True Principal Payment"
+  interest_payment: "True Interest Payment"
+  fee_payment: "True Fee Payment"
+  tax_payment: "True Tax Payment"
+  fee_tax_payment: "True Fee Tax Payment"
+
+  # Status & Outstanding
+  devolution: "True Devolution"
+  outstanding_value: "True Outstanding Loan Value"
+  payment_status: "True Payment Status"
+  rebates: "True Rabates"
+
+payment_schedule:
+  # Core Information
+  company: "Company"
+  customer_id: "Customer ID"
+  client_name: "Cliente"
+  payer: "Pagador"
+  loan_id: "Loan ID"
+
+  # Scheduled Payment Details
+  payment_date: "Payment Date"
+  tpv: "TPV"
+  total_payment: "Total Payment"
+  currency: "Currency"
+  principal_payment: "Principal Payment"
+  interest_payment: "Interest Payment"
+  fee_payment: "Fee Payment"
+  tax_payment: "Tax Payment"
+  outstanding_value: "Outstanding Loan Value"
+
+# Data Type Mappings
+data_types:
+  datetime_columns:
+    - "Disbursement Date"
+    - "True Payment Date"
+    - "Payment Date"
+
+  float_columns:
+    - "TPV"
+    - "Disbursement Amount"
+    - "Origination Fee"
+    - "Interest Rate APR"
+    - "Outstanding Loan Value"
+    - "True Total Payment"
+    - "True Principal Payment"
+    - "True Interest Payment"
+
+  string_columns:
+    - "Company"
+    - "Customer ID"
+    - "Cliente"
+    - "Loan ID"
+    - "Loan Status"
+
+# Delinquency Bucket Mapping
+delinquency_buckets:
+  current: [0] # 0 days
+  early: [1, 3] # 1-3 days
+  moderate: [4, 7] # 4-7 days
+  late: [8, 15] # 8-15 days
+  severe: [16, 30] # 16-30 days
+  default: [31, 60] # 31-60 days
+  npl: [61, 999] # 61+ days (Non-Performing Loans)
+
+# Business Rules
+business_rules:
+  currency_default: "USD"
+  term_unit_default: "days"
+  payment_frequency_default: "bullet"
+  product_type_default: "factoring"

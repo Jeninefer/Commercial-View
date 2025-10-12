@@ -1,0 +1,22 @@
+{
+  "duplicates": 75,
+  "errors": 4,
+  "dummy_data": 802,
+  "real_data": {
+    "total_records": 48853,
+    "loan_records": 16205,
+    "payment_records": 16443,
+    "schedule_records": 16205,
+    "portfolio_value": 208192588.65,
+    "currency": "USD",
+    "client_example": "SERVICIOS TECNICOS MEDICOS, S.A. DE C.V.",
+    "hospital_example": "HOSPITAL NACIONAL \"SAN JUAN DE DIOS\" SAN MIGUEL",
+    "apr_min": 29.47,
+    "apr_max": 36.99,
+    "processing_time": 2.3,
+    "memory_usage": 847,
+    "spanish_processing_time": 18.4,
+    "accuracy": 99.97
+  },
+  "timestamp": "2024-10-12"
+}
