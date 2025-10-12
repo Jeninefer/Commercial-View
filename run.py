@@ -55,7 +55,7 @@ app.add_middleware(
 
 # Initialize Abaco data components
 try:
-    data_loader = DataLoader(data_dir="data/raw")
+    data_loader = DataLoader(data_path="data/raw")
     logger.info("✅ Abaco data loader initialized successfully")
 except Exception as e:
     logger.error(f"❌ Failed to initialize Abaco data loader: {e}")
