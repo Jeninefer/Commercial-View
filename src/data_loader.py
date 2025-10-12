@@ -20,7 +20,7 @@ class DataLoaderError(Exception):
 
 # Expected record counts for Abaco integration
 # 48,853 = 16,205 (dataset A) + 16,443 (dataset B) + 16,205 (dataset C)
-from constants import ABACO_RECORDS_EXPECTED
+ABACO_RECORDS_EXPECTED = 48853
 
 
 def validate_abaco_schema(schema: Dict[str, Any]) -> bool:
