@@ -3,8 +3,7 @@ Commercial-View FastAPI Application Entry Point
 Real Abaco data: 48,853 records | $208,192,588.65 USD portfolio
 """
 
-# Define constants for repeated string literals (SonarLint S1192)
-# MUST be defined BEFORE any usage
+# Define constants BEFORE any usage (SonarLint S1192)
 DAYS_IN_DEFAULT = "Days in Default"
 INTEREST_RATE_APR = "Interest Rate APR"
 OUTSTANDING_LOAN_VALUE = "Outstanding Loan Value"
@@ -13,15 +12,19 @@ PRODUCT_TYPE = "Product Type"
 ABACO_TECHNOLOGIES = "Abaco Technologies"
 ABACO_FINANCIAL = "Abaco Financial"
 
-# Real Abaco data constants
+# Real Abaco data constants (from schema)
 TOTAL_RECORDS = 48853
 LOAN_RECORDS = 16205
 PAYMENT_RECORDS = 16443
 SCHEDULE_RECORDS = 16205
 PORTFOLIO_VALUE_USD = 208192588.65
+TOTAL_DISBURSED_USD = 200455057.9
+TOTAL_OUTSTANDING_USD = 145167389.7
+TOTAL_PAYMENTS_RECEIVED_USD = 184726543.81
 CURRENCY_USD = "USD"
 APR_MIN = 0.2947
 APR_MAX = 0.3699
+WEIGHTED_AVG_RATE = 0.3341
 PRODUCT_TYPE_FACTORING = "factoring"
 PAYMENT_FREQUENCY_BULLET = "bullet"
 

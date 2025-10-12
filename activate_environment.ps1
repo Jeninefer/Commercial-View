@@ -24,7 +24,7 @@ Write-Host "   VALIDATED, AND READY FOR UNLIMITED PRODUCTION USE!" -ForegroundCo
 
 Write-Host "`n🚀 Activating Development Environment..." -ForegroundColor Cyan
 
-# Detect platform - use different variable names to avoid read-only conflicts
+# Detect platform - avoid read-only variable conflicts
 $detectedMacOS = $PSVersionTable.OS -like "*Darwin*"
 $detectedWindows = $env:OS -eq "Windows_NT"
 
@@ -32,7 +32,6 @@ if ($detectedMacOS) {
     Write-Host "🍎 macOS PowerShell detected - Using Unix virtual environment" -ForegroundColor Blue
     
     if (Test-Path "./.venv/bin/python") {
-        # Activate virtual environment (macOS method)
         $env:VIRTUAL_ENV = (Resolve-Path "./.venv").Path
         $env:PATH = "$env:VIRTUAL_ENV/bin:$env:PATH"
         
@@ -40,7 +39,6 @@ if ($detectedMacOS) {
         Write-Host "📊 Python: ./.venv/bin/python" -ForegroundColor Blue
         Write-Host "📦 Pip: ./.venv/bin/pip" -ForegroundColor Blue
         
-        # Show environment info
         & "./.venv/bin/python" --version
         Write-Host "🏦 Ready for Commercial-View development!" -ForegroundColor Green
         Write-Host "💰 Portfolio: `$208,192,588.65 USD accessible" -ForegroundColor Blue
