@@ -1,0 +1,43 @@
+{
+  "mcpServers": {
+    "figma": {
+      "command": "npx",
+      "args": ["@figma/mcp-server"],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "${FIGMA_ACCESS_TOKEN}"
+      },
+      "autoStart": true,
+      "timeout": 30000,
+      "retries": 3
+    },
+    "zapier": {
+      "command": "npx",
+      "args": ["@zapier/mcp-server"],
+      "env": {
+        "ZAPIER_API_KEY": "${ZAPIER_API_KEY}"
+      },
+      "autoStart": true,
+      "timeout": 30000,
+      "retries": 3
+    },
+    "commercial-view": {
+      "command": "python",
+      "args": ["-m", "src.mcp_server"],
+      "env": {
+        "ABACO_RECORDS": "48853",
+        "PORTFOLIO_VALUE": "208192588.65",
+        "SPANISH_ACCURACY": "99.97"
+      },
+      "autoStart": true,
+      "timeout": 15000,
+      "retries": 2,
+      "workingDirectory": "/Users/jenineferderas/Documents/GitHub/Commercial-View"
+    }
+  },
+  "settings": {
+    "startupMode": "auto",
+    "logLevel": "info",
+    "healthCheckInterval": 60000,
+    "maxConcurrentServers": 10
+  }
+}

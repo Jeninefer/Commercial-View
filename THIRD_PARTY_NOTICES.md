@@ -331,3 +331,46 @@ For questions regarding license compliance or to report license issues, please c
 **Generated**: October 11, 2024  
 **Version**: 1.0.0  
 **Abaco Integration**: Production Ready (48,853 records validated)
+
+## Step 4: Create Quick Run Script
+
+### [run_integration_summary.sh](file:///Users/jenineferderas/Documents/GitHub/Commercial-View/run_integration_summary.sh)
+
+Create a quick run script for future use:
+
+```bash
+#!/bin/bash
+# filepath: /Users/jenineferderas/Documents/GitHub/Commercial-View/run_integration_summary.sh
+
+echo "🎉 Running Commercial-View Integration Summary"
+echo "48,853 Records | $208,192,588.65 USD Portfolio | Ultimate Success"
+echo "================================================================"
+
+# Change to project directory
+cd "$(dirname "$0")"
+
+# Activate Python environment
+source ../venv/bin/activate
+
+# Run the integration summary script
+python3 integration_summary.py
+
+# Deactivate Python environment
+deactivate
+
+echo "✅ Integration summary completed successfully!"
+```
+
+### Usage
+
+1. **Save Script**: Save the above script as `run_integration_summary.sh`.
+2. **Make Executable**: Run `chmod +x run_integration_summary.sh` to make it executable.
+3. **Execute**: Run `./run_integration_summary.sh` to execute the script.
+
+### Script Details
+
+- **Change Directory**: Navigates to the script's directory.
+- **Activate Virtual Environment**: Activates the Python virtual environment.
+- **Run Integration Summary**: Executes the integration summary Python script.
+- **Deactivate Virtual Environment**: Deactivates the Python virtual environment.
+- **Success Message**: Displays a success message upon completion.
