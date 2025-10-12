@@ -43,7 +43,7 @@ class DataLoader:
             "loan_data": 16205,
             "payment_history": 16443,
             "payment_schedule": 16205,
-            "total": 48853,
+            "total": ABACO_RECORDS_EXPECTED,
         }
 
     # Legacy methods for backward compatibility
