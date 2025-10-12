@@ -27,7 +27,7 @@ def find_port_processes(port: int) -> List[int]:
     try:
         # Check for processes using the port
         output = subprocess.check_output(
-            ["lso", "-i", f":{port}", "-t"],
+            ["lsof", "-i", f":{port}", "-t"],
             stderr=subprocess.STDOUT,
             universal_newlines=True,
         ).strip()

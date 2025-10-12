@@ -701,20 +701,22 @@ function Get-CommercialViewMetrics {
     Write-Host "🎯 Your $($PortfolioValue.ToString('C')) portfolio is fully accessible!" -ForegroundColor Yellow
 }
 
-# Export all functions including the new ones
-Export-ModuleMember -Function @(
-    'Start-CommercialViewValidation',
-    'Test-CommercialViewEnvironment', 
-    'Get-CommercialViewStatus',
-    'Invoke-CommercialViewSetup',
-    'Start-CommercialViewServer',
-    'Test-CommercialViewPerformance',
-    'Backup-CommercialViewEnvironment',
-    'Restore-CommercialViewEnvironment',
-    'Start-CommercialViewMonitoring',
-    'Get-CommercialViewMetrics',
-    'Start-CommercialViewReporting'
-)
+# Export all functions at the very end of the module
+if ($MyInvocation.InvocationName -ne '.') {
+    Export-ModuleMember -Function @(
+        'Start-CommercialViewValidation',
+        'Test-CommercialViewEnvironment', 
+        'Get-CommercialViewStatus',
+        'Invoke-CommercialViewSetup',
+        'Start-CommercialViewServer',
+        'Test-CommercialViewPerformance',
+        'Backup-CommercialViewEnvironment',
+        'Restore-CommercialViewEnvironment',
+        'Start-CommercialViewMonitoring',
+        'Get-CommercialViewMetrics',
+        'Start-CommercialViewReporting'
+    )
+}
 
 Write-Host "📦 Commercial-View PowerShell Module Loaded Successfully" -ForegroundColor Green
 Write-Host "🎯 Ready for 48,853 record Abaco integration testing" -ForegroundColor Blue
