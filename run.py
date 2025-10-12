@@ -503,7 +503,11 @@ async def get_dataset_schema(dataset_name: str) -> Dict[str, Any]:
         
         actual_dataset = dataset_map.get(dataset_name, dataset_name)
         
-        if actual_dataset in abaco_data and not abaco_data[actual_dataset].empty:
+        if (
+            actual_dataset in abaco_data
+            and abaco_data[actual_dataset] is not None
+            and not abaco_data[actual_dataset].empty
+        ):
             df = abaco_data[actual_dataset]
             return {
                 "dataset": dataset_name,
