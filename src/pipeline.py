@@ -1,65 +1,6 @@
-
-# Abaco Integration Constants - 48,853 Records
-# Spanish Clients | USD Factoring | Commercial Lending
-DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
-INTEREST_RATE_APR = INTEREST_RATE_APR
-OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
-LOAN_CURRENCY = LOAN_CURRENCY
-PRODUCT_TYPE = PRODUCT_TYPE
-ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
-ABACO_FINANCIAL = ABACO_FINANCIAL
-LOAN_DATA = LOAN_DATA
-HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
-PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
-CUSTOMER_ID = CUSTOMER_ID
-LOAN_ID = LOAN_ID
-SA_DE_CV = SA_DE_CV
-TRUE_PAYMENT_STATUS = TRUE_PAYMENT_STATUS
-TRUE_PAYMENT_DATE = TRUE_PAYMENT_DATE
-DISBURSEMENT_DATE = DISBURSEMENT_DATE
-DISBURSEMENT_AMOUNT = DISBURSEMENT_AMOUNT
-PAYMENT_FREQUENCY = PAYMENT_FREQUENCY
-LOAN_STATUS = LOAN_STATUS
-
-"""Commercial View Data Pipeline - Enterprise Grade Implementation.
-
-⚠️ ENVIRONMENT SETUP INSTRUCTIONS ⚠️
------------------------------------
-You're seeing this error because you're using system Python (/opt/homebrew/bin/python3)
-instead of the project's virtual environment Python.
-
-TO FIX THIS, COPY-PASTE THESE EXACT COMMANDS:
-
-cd /Users/jenineferderas/Documents/GitHub/Commercial-View
-source .venv/bin/activate
-python -c "import pandas; print('✓ Environment is working correctly')"
-
-THEN run your script with:
-python src/pipeline.py
-
-💡 IMPORTANT: NEVER use '/opt/homebrew/bin/python3' directly to run scripts
-"""
-
 from __future__ import annotations
 
-import logging
-import sys
-import os
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any
-
-import numpy as np
-import pandas as pd
-from pandas import DataFrame
-
-# Import constants to avoid string duplication (fixing SonarLint S1192)
-from .abaco_schema import (
-    DAYS_IN_DEFAULT_COLUMN,
-    OUTSTANDING_LOAN_VALUE_COLUMN,
-    DISBURSEMENT_DATE_COLUMN,
-    TRUE_PAYMENT_DATE_COLUMN,
-    DISBURSEMENT_AMOUNT_COLUMN,
+"""Commercial View Data Pipeline - Enterprise Grade Implementation."""
     CUSTOMER_ID_COLUMN,
 )
 
@@ -188,9 +129,7 @@ class CommercialViewPipeline:
 
             # Active Clients
             metrics["active_clients"] = int(
-                loan_data[loan_data[OUTSTANDING_LOAN_VALUE] > 0][
-                    CUSTOMER_ID
-                ].nunique()
+                loan_data[loan_data[OUTSTANDING_LOAN_VALUE] > 0][CUSTOMER_ID].nunique()
             )
 
             # Weighted APR
@@ -236,9 +175,7 @@ class CommercialViewPipeline:
             # DPD distribution
             dpd_data = self.compute_dpd_metrics()
             if not dpd_data.empty:
-                dpd_dist = dpd_data.groupby("dpd_bucket")[
-                    OUTSTANDING_LOAN_VALUE
-                ].sum()
+                dpd_dist = dpd_data.groupby("dpd_bucket")[OUTSTANDING_LOAN_VALUE].sum()
                 metrics["dpd_distribution"] = {
                     str(k): float(v) for k, v in dpd_dist.items()
                 }
@@ -261,21 +198,15 @@ class CommercialViewPipeline:
 
         try:
             # Convert dates
-            loan_data[DISBURSEMENT_DATE] = pd.to_datetime(
-                loan_data[DISBURSEMENT_DATE]
-            )
-            payments[TRUE_PAYMENT_DATE] = pd.to_datetime(
-                payments[TRUE_PAYMENT_DATE]
-            )
+            loan_data[DISBURSEMENT_DATE] = pd.to_datetime(loan_data[DISBURSEMENT_DATE])
+            payments[TRUE_PAYMENT_DATE] = pd.to_datetime(payments[TRUE_PAYMENT_DATE])
 
             # Create cohort based on disbursement month
             loan_data["cohort"] = loan_data[DISBURSEMENT_DATE].dt.to_period("M")
 
             # Merge payments with loan data
             recovery_data = payments.merge(
-                loan_data[
-                    [LOAN_ID, DISBURSEMENT_AMOUNT, "cohort", DISBURSEMENT_DATE]
-                ],
+                loan_data[[LOAN_ID, DISBURSEMENT_AMOUNT, "cohort", DISBURSEMENT_DATE]],
                 on=LOAN_ID,
                 how="left",
             )
