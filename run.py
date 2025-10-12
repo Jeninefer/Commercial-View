@@ -57,15 +57,15 @@ from typing import Dict, Any, List, Optional
 # Add src to Python path for imports
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
+# Fix the import - remove validate_abaco_schema which doesn't exist
 try:
-    from fastapi import FastAPI, HTTPException, Request
-    from fastapi.middleware.cors import CORSMiddleware
-    from fastapi.responses import JSONResponse
-    import uvicorn
-
-    # Import Abaco-specific modules
-    from data_loader import DataLoader, validate_abaco_schema
-
+    from src.data_loader import (
+        load_loan_data,
+        load_historic_real_payment,
+        load_payment_schedule,
+        # validate_abaco_schema,  # REMOVE THIS - doesn't exist
+    )
+    from src.abaco_schema import validate_schema  # Use this instead if needed
 except ImportError as e:
     print(f"❌ Import error: {e}")
     print("Please run: pip install fastapi uvicorn[standard] pandas numpy")
@@ -490,8 +490,3 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"Server failed to start: {e}")
         sys.exit(1)
-
-"To properly fix all errors, I need to see:
-- run.py (where the NameError occurs)
-- activate_environment.ps1 (where variable conflicts occur)
-- Any other files that have runtime issues"
