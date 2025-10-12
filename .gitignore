@@ -4,34 +4,74 @@ data/Abaco*.csv
 *.csv
 abaco_runtime/exports/**/*.csv
 
-# Temporary files
-*.tmp
-*.log
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
 
-# IDE files
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-build/
-develop-eggs/
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build artifacts
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
+build/
 *.egg-info/
-.installed.cfg
-*.egg
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Data files (optional - uncomment if you don't want to track data)
+# data/raw/*.csv
+# data/processed/*.csv
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Backup files
+*_backup_*
+*.bak
+
+# Node modules (if using any JS tools)
+node_modules/
+
+# Schema backups (keep main schema, ignore backups)
+*schema_backup*.json
+requirements_backup*.txt
+venv_packages_backup*.txt
+
+# Validation reports (these can be regenerated)
+VALIDATION_REPORT.json
+
+# Git files
+*.orig
