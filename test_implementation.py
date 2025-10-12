@@ -102,7 +102,7 @@ def test_specific_responses():
     response = client.get("/abaco")
     data = response.json()
     assert data.get("records_supported") == 48853, "Abaco records count incorrect"
-    assert data.get("spanish_support") == True, "Spanish support flag incorrect"
+    assert data.get("spanish_support") is True, "Spanish support flag incorrect"
     print("✅ Abaco info endpoint correct")
     
     # Test schema endpoint has required structure
