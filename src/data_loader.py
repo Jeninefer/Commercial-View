@@ -32,7 +32,8 @@ def validate_abaco_schema(schema: Dict[str, Any]) -> bool:
             if dataset.get("exists", False)
         )
         return total_records == ABACO_RECORDS_EXPECTED
-    except Exception:
+    except (KeyError, TypeError, AttributeError) as e:
+        logger.error(f"Schema validation error: {e}", exc_info=True)
         return False
 
 
