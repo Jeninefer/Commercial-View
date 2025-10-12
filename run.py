@@ -21,7 +21,7 @@ try:
     import pandas as pd
 
     # Import Abaco-specific modules
-    from data_loader import DataLoader, ABACO_RECORDS_EXPECTED, validate_abaco_schema
+    from data_loader import DataLoader, ABACO_RECORDS_EXPECTED
 
 except ImportError as e:
     print(f"❌ Import error: {e}")
