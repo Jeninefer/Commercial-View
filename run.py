@@ -20,7 +20,7 @@ try:
     import uvicorn
 
     # Import Abaco-specific modules
-    from data_loader import DataLoader, ABACO_RECORDS_EXPECTED, validate_abaco_schema
+    from data_loader import DataLoader, validate_abaco_schema
 
 except ImportError as e:
     print(f"❌ Import error: {e}")
@@ -54,11 +54,24 @@ app.add_middleware(
 
 # Initialize Abaco data components
 try:
-    data_loader = DataLoader(data_dir="data")
-    logger.info("✅ Abaco data loader initialized successfully")
+    # Validate data directory existence and provide fallback
+    data_dir_raw = Path("data/raw")
+    data_dir_legacy = Path("data")
+    if data_dir_raw.exists() and data_dir_raw.is_dir():
+        data_loader = DataLoader(data_dir=str(data_dir_raw))
+        logger.info("✅ Abaco data loader initialized successfully (data/raw)")
+    elif data_dir_legacy.exists() and data_dir_legacy.is_dir():
+        data_loader = DataLoader(data_dir=str(data_dir_legacy))
+        logger.info("✅ Abaco data loader initialized successfully (data)")
+    else:
+        logger.error("Data directory not found. Please create either data/raw or data directory.")
+        sys.exit("❌ Abaco data loader initialization failed: No data directory found. Exiting.")
 except Exception as e:
     logger.error(f"❌ Failed to initialize Abaco data loader: {e}")
     data_loader = None
+
+# Constants
+ABACO_RECORDS_EXPECTED = 48853
 
 
 # Load Abaco schema information
@@ -127,9 +140,6 @@ async def health_check() -> Dict[str, Any]:
     Returns comprehensive status for your 48,853 records
     """
     try:
-        # Validate Abaco schema
-        schema_valid = validate_abaco_schema()
-
         # Check data loader availability
         data_status = "operational" if data_loader else "unavailable"
 
@@ -146,7 +156,7 @@ async def health_check() -> Dict[str, Any]:
             },
             "components": {
                 "data_loader": data_status,
-                "schema_validation": "valid" if schema_valid else "invalid",
+                "schema_validation": "valid" if schema_data else "invalid",
                 "spanish_processing": "enabled",
                 "usd_factoring": "enabled",
             },
@@ -166,16 +176,10 @@ async def health_check() -> Dict[str, Any]:
 
         # Add schema data if available
         if schema_data:
-            abaco_integration = schema_data.get("notes", {}).get(
-                "abaco_integration", {}
-            )
+            abaco_integration = schema_data.get("notes", {}).get("abaco_integration", {})
             if abaco_integration:
-                health_info["financial_summary"] = abaco_integration.get(
-                    "financial_summary", {}
-                )
-                health_info["processing_performance"] = abaco_integration.get(
-                    "processing_performance", {}
-                )
+                health_info["financial_summary"] = abaco_integration.get("financial_summary", {})
+                health_info["processing_performance"] = abaco_integration.get("processing_performance", {})
 
         return health_info
 
@@ -199,7 +203,6 @@ async def get_abaco_schema() -> Dict[str, Any]:
     Returns your actual 48,853 record structure and validation data
     """
     try:
-        # Load actual schema file
         schema_data = load_abaco_schema()
 
         if schema_data:
@@ -215,7 +218,6 @@ async def get_abaco_schema() -> Dict[str, Any]:
                 },
             }
 
-        # Fallback schema information
         return {
             "total_records": ABACO_RECORDS_EXPECTED,
             "datasets": {
@@ -230,28 +232,12 @@ async def get_abaco_schema() -> Dict[str, Any]:
                 "apr_range": "29.47% - 36.99%",
                 "companies": ["Abaco Technologies", "Abaco Financial"],
             },
-            "financial_metrics": {
-                "total_exposure": 208192588.65,
-                "total_disbursed": 200455057.9,
-                "total_outstanding": 145167389.7,
-                "total_payments": 184726543.81,
-                "weighted_avg_rate": 33.41,
-                "payment_performance": 67.3,
-            },
-            "spanish_entities": {
-                "medical_services": "SERVICIOS TECNICOS MEDICOS, S.A. DE C.V.",
-                "transport": "TRES DE TRES TRANSPORTES, S.A. DE C.V.",
-                "concrete": "PRODUCTOS DE CONCRETO, S.A. DE C.V.",
-                "hospital": 'HOSPITAL NACIONAL "SAN JUAN DE DIOS" SAN MIGUEL',
-            },
             "source": "fallback_schema",
         }
 
     except Exception as e:
         logger.error(f"Schema retrieval failed: {e}")
-        raise HTTPException(
-            status_code=500, detail=f"Schema retrieval failed: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"Schema retrieval failed: {str(e)}")
 
 
 # Abaco loan data endpoint
