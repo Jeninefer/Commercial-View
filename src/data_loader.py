@@ -95,7 +95,7 @@ class DataLoader:
             "customer_data": self.load_customer_data,
             "loan_data": self.load_loan_data,
             "payment_history": self.load_payment_history,
-            "payment_schedule": self.load_payment_schedule_old,
+            "payment_schedule": self.load_payment_schedule,
         }
 
         for name, loader in loaders.items():
