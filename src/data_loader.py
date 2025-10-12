@@ -329,9 +329,8 @@ def load_payment_data() -> Optional[pd.DataFrame]:
 
 
 def load_schedule_data() -> Optional[pd.DataFrame]:
-    """Load schedule data - standalone function"""
-    loader = DataLoader()
-    return loader.load_payment_schedule_old()
+    """Load schedule data - standalone function (alias for load_payment_schedule)"""
+    return load_payment_schedule()
 
 
 def load_historic_real_payment() -> Optional[pd.DataFrame]:
