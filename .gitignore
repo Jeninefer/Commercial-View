@@ -1,77 +1,240 @@
-# Large data files - exclude from Git
-data/*.csv
-data/Abaco*.csv
-*.csv
-abaco_runtime/exports/**/*.csv
-
-# Python cache files
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-
-# Virtual environments
+# ============================================
+# Python Virtual Environments
+# ============================================
 .venv/
 venv/
 ENV/
 env/
+.virtualenv/
+virtualenv/
 
-# IDE
+# ============================================
+# Python Cache Files
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# ============================================
+# Distribution / Packaging
+# ============================================
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============================================
+# PyInstaller
+# ============================================
+*.manifest
+*.spec
+
+# ============================================
+# Unit Test / Coverage
+# ============================================
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# ============================================
+# Jupyter Notebook
+# ============================================
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# ============================================
+# IPython
+# ============================================
+profile_default/
+ipython_config.py
+
+# ============================================
+# pyenv
+# ============================================
+.python-version
+
+# ============================================
+# IDE Specific Files
+# ============================================
+# VSCode
 .vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# PyCharm
 .idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
 *.swp
 *.swo
 *~
 
-# OS files
+# ============================================
+# Operating System Files
+# ============================================
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
-# Test coverage
-.coverage
-htmlcov/
-.pytest_cache/
+# Linux
+*~
 
-# Build artifacts
-dist/
-build/
-*.egg-info/
-
-# Logs
-*.log
-logs/
-
-# Environment variables
+# ============================================
+# Environment Variables
+# ============================================
 .env
 .env.local
+.env.development
+.env.test
+.env.production
+*.env
 
-# Jupyter Notebook
-.ipynb_checkpoints/
+# ============================================
+# Logs
+# ============================================
+*.log
+logs/
+log/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Data files (optional - uncomment if you don't want to track data)
-# data/raw/*.csv
-# data/processed/*.csv
-
-# Temporary files
+# ============================================
+# Temporary Files
+# ============================================
 *.tmp
 *.temp
 temp/
 tmp/
-
-# Backup files
-*_backup_*
 *.bak
+*.swp
+*.swo
 
-# Node modules (if using any JS tools)
-node_modules/
-
-# Schema backups (keep main schema, ignore backups)
+# ============================================
+# Backup Files (Project Specific)
+# ============================================
+*_backup_*
+*_backup.*
+*backup*
+*.backup
 *schema_backup*.json
 requirements_backup*.txt
 venv_packages_backup*.txt
 
-# Validation reports (these can be regenerated)
-VALIDATION_REPORT.json
+# ============================================
+# Data Files (Optional - Uncomment to ignore)
+# ============================================
+# data/raw/*.csv
+# data/processed/*.csv
+# *.csv
 
-# Git files
+# ============================================
+# Validation & Reports (Regenerable)
+# ============================================
+VALIDATION_REPORT.json
+*_validation_report.json
+*_report_*.json
+
+# ============================================
+# Git Specific
+# ============================================
 *.orig
+*.rej
+*.patch
+
+# ============================================
+# Node Modules (If using any JS tools)
+# ============================================
+node_modules/
+package-lock.json
+yarn.lock
+
+# ============================================
+# Database Files
+# ============================================
+*.db
+*.sqlite
+*.sqlite3
+
+# ============================================
+# Compiled Files
+# ============================================
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# ============================================
+# Archives
+# ============================================
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# ============================================
+# Documentation Build Outputs
+# ============================================
+docs/_build/
+site/
+
+# ============================================
+# Project Specific
+# ============================================
+# Keep main schema, ignore duplicates
+!abaco_schema_autodetected.json
+*schema_duplicate*.json
+*schema_copy*.json
+
+# Commercial-View specific
+*.pyc
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
