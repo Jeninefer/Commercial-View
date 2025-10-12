@@ -23,7 +23,7 @@ try:
     # Import Abaco-specific modules
     from data_loader import DataLoader
     # Define ABACO_RECORDS_EXPECTED directly to avoid circular import
-    ABACO_RECORDS_EXPECTED = 48853  # TODO: Replace with actual value if different
+    ABACO_RECORDS_EXPECTED = 48853
 except ImportError as e:
     print(f"❌ Import error: {e}")
     print("Please run: pip install fastapi uvicorn[standard] pandas numpy")
