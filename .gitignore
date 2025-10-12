@@ -149,3 +149,8 @@ Commercial-View/
 
 # Clean up malformed files from requirements
 =*
+
+# Emergency backup directories
+emergency_backup_*/
+*_backup_*/
+backup_inventory_*.log
