@@ -1,0 +1,15 @@
+Commercial-View/
+├── src/
+│   ├── data_loader.py          # Abaco data loading with schema validation
+│   ├── abaco_schema.py         # Schema management and validation
+│   └── process_portfolio.py    # Portfolio processing logic
+├── scripts/
+│   ├── create_complete_abaco_sample.py  # Sample data generation
+│   └── production_validation_complete.py # Production validation
+├── config/
+│   ├── abaco_column_maps.yml   # Abaco-specific column mappings
+│   ├── pricing_config.yml      # Pricing configuration
+│   └── dpd_policy.yml         # Delinquency policy configuration
+├── portfolio.py               # Main processing script
+├── setup_project.py          # Project setup and validation
+└── requirements.txt          # Python dependencies
