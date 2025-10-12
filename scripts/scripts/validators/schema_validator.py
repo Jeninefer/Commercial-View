@@ -13,6 +13,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+logging.basicConfig(level=logging.ERROR, format='%(asctime)s %(levelname)s: %(message)s')
 try:
     import yaml
 except ImportError:

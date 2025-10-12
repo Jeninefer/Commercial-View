@@ -16,10 +16,22 @@ import os
 import sys
 from pathlib import Path
 
-from scripts.utils.env_check import check_virtualenv
-
 # Check if running in virtual environment
-check_virtualenv()
+if not hasattr(sys, "real_prefix") and not (
+    hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
+):
+    print("\n" + "=" * 80)
+    print("\033[91m⚠️  ERROR: NOT USING VIRTUAL ENVIRONMENT ⚠️\033[0m")
+    print("=" * 80)
+    print(
+        "\033[93mYou must activate the virtual environment before running tests.\033[0m"
+    )
+    print("\033[93mCopy and paste these commands:\033[0m")
+    print("\033[92m  cd /Users/jenineferderas/Documents/GitHub/Commercial-View\033[0m")
+    print("\033[92m  source .venv/bin/activate\033[0m")
+    print("\033[92m  pytest tests/\033[0m")
+    print("=" * 80 + "\n")
+    sys.exit(1)  # Exit with error code to prevent further execution with wrong Python
 
 # Try importing pytest with helpful error message
 try:
