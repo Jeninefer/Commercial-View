@@ -1,0 +1,75 @@
+{
+  "processing_timestamp": "2025-10-10T11:59:11.790181",
+  "datasets_loaded": [
+    "customer_data",
+    "loan_data",
+    "payment_history",
+    "payment_schedule"
+  ],
+  "total_records": {
+    "customer_data": 16219,
+    "loan_data": 16219,
+    "payment_history": 16463,
+    "payment_schedule": 16219
+  },
+  "customer_analysis": {
+    "total_customers": 16219,
+    "unique_customers": 2
+  },
+  "loan_analysis": {
+    "total_loans": 16219,
+    "columns": [
+      "Company",
+      "Customer ID",
+      "Cliente",
+      "Pagador",
+      "Application ID",
+      "Loan ID",
+      "Product Type",
+      "Disbursement Date",
+      "TPV",
+      "Disbursement Amount",
+      "Origination Fee",
+      "Origination Fee Taxes",
+      "Loan Currency",
+      "Interest Rate APR",
+      "Term",
+      "Term Unit",
+      "Payment Frequency",
+      "Days in Default",
+      "Pledge To",
+      "Pledge Date",
+      "Loan Status",
+      "Outstanding Loan Value",
+      "Other",
+      "New Loan ID",
+      "New Loan Date",
+      "Old Loan ID",
+      "Recovery Date",
+      "Recovery Value"
+    ]
+  },
+  "payment_analysis": {
+    "total_payments": 16463,
+    "columns": [
+      "Company",
+      "Customer ID",
+      "Cliente",
+      "Pagador",
+      "Loan ID",
+      "True Payment Date",
+      "True Devolution",
+      "True Total Payment",
+      "True Payment Currency",
+      "True Principal Payment",
+      "True Interest Payment",
+      "True Fee Payment",
+      "True Other Payment",
+      "True Tax Payment",
+      "True Fee Tax Payment",
+      "True Rabates",
+      "True Outstanding Loan Value",
+      "True Payment Status"
+    ]
+  }
+}

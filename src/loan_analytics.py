@@ -1,97 +1,122 @@
 """
-Loan analytics module extracted from PRs #10, #11
-Weighted statistics calculations for commercial lending portfolios
+Loan Analytics Module for Commercial View
+Advanced loan analysis and metrics calculation
 """
 
 import pandas as pd
 import numpy as np
 import logging
-from typing import Dict, List, Optional
+from datetime import datetime
+from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger(__name__)
 
+# Constants to avoid duplicated literals
+DISBURSEMENT_AMOUNT_FIELD = 'Disbursement Amount'
+DAYS_IN_DEFAULT_FIELD = 'Days in Default'
+OUTSTANDING_LOAN_VALUE_FIELD = 'Outstanding Loan Value'
+INTEREST_RATE_APR_FIELD = 'Interest Rate APR'
+CUSTOMER_ID_FIELD = 'Customer ID'
+LOAN_STATUS_FIELD = 'Loan Status'
+PRODUCT_TYPE_FIELD = 'Product Type'
 
-class LoanAnalytics:
-    """Analytics class for weighted portfolio calculations"""
-
+class LoanAnalyzer:
+    """Advanced loan analysis and metrics class"""
+    
     def __init__(self):
+        self.logger = logger
+        # Add alias_map attribute that was referenced in the code
         self.alias_map = {
-            "apr": ["apr", "effective_apr", "annual_rate", "tasa_anual"],
-            "eir": ["eir", "effective_interest_rate", "tasa_efectiva"],
-            "term": ["term", "tenor_days", "plazo_dias", "tenor"],
+            'loan_amount': DISBURSEMENT_AMOUNT_FIELD,
+            'customer_id': CUSTOMER_ID_FIELD,
+            'status': LOAN_STATUS_FIELD
         }
-
-    def calculate_weighted_stats(
-        self,
-        loan_df: pd.DataFrame,
-        weight_field: str = "outstanding_balance",
-        metrics: Optional[List[str]] = None,
-    ) -> pd.DataFrame:
-        """Calculate weighted averages with alias resolution and data guards"""
-        alias_map = self.alias_map
-        targets = metrics or ["apr", "eir", "term"]
-        df = loan_df.copy()
-
-        # Resolve weight field or detect alternative
-        if weight_field not in df.columns:
-            candidates = [
-                "outstanding_balance",
-                "olb",
-                "current_balance",
-                "saldo_actual",
-                "balance",
-            ]
-            found_weight_field = next(
-                (c for c in df.columns for k in candidates if k.lower() in c.lower()),
-                None,
+    
+    def analyze_loan_portfolio(self, loan_df: pd.DataFrame) -> Dict[str, Any]:
+        """Comprehensive loan portfolio analysis"""
+        try:
+            analysis = {
+                "portfolio_summary": self._get_portfolio_summary(loan_df),
+                "risk_metrics": self._calculate_risk_metrics(loan_df),
+                "performance_metrics": self._calculate_performance_metrics(loan_df),
+                "segmentation": self._segment_portfolio(loan_df)
+            }
+            
+            self.logger.info("Loan portfolio analysis completed successfully")
+            return analysis
+            
+        except Exception as e:
+            self.logger.error(f"Error in loan portfolio analysis: {e}")
+            return {"error": str(e)}
+    
+    def _get_portfolio_summary(self, df: pd.DataFrame) -> Dict[str, Any]:
+        """Get basic portfolio summary statistics"""
+        summary = {
+            "total_loans": len(df),
+            "total_principal": df.get(DISBURSEMENT_AMOUNT_FIELD, pd.Series(dtype=float)).sum() if DISBURSEMENT_AMOUNT_FIELD in df.columns else 0,
+            "average_loan_size": df.get(DISBURSEMENT_AMOUNT_FIELD, pd.Series(dtype=float)).mean() if DISBURSEMENT_AMOUNT_FIELD in df.columns else 0,
+            "unique_customers": df.get(CUSTOMER_ID_FIELD, pd.Series(dtype=object)).nunique() if CUSTOMER_ID_FIELD in df.columns else 0
+        }
+        return summary
+    
+    def _calculate_risk_metrics(self, df: pd.DataFrame) -> Dict[str, Any]:
+        """Calculate risk-related metrics"""
+        risk_metrics = {}
+        
+        if DAYS_IN_DEFAULT_FIELD in df.columns:
+            risk_metrics['default_rate'] = (df[DAYS_IN_DEFAULT_FIELD] > 0).mean()
+            risk_metrics['avg_days_in_default'] = df[DAYS_IN_DEFAULT_FIELD].mean()
+        
+        if LOAN_STATUS_FIELD in df.columns:
+            risk_metrics['status_distribution'] = df[LOAN_STATUS_FIELD].value_counts().to_dict()
+        
+        return risk_metrics
+    
+    def _calculate_performance_metrics(self, df: pd.DataFrame) -> Dict[str, Any]:
+        """Calculate performance metrics"""
+        performance = {}
+        
+        if OUTSTANDING_LOAN_VALUE_FIELD in df.columns:
+            performance['total_outstanding'] = df[OUTSTANDING_LOAN_VALUE_FIELD].sum()
+            performance['avg_outstanding'] = df[OUTSTANDING_LOAN_VALUE_FIELD].mean()
+        
+        if INTEREST_RATE_APR_FIELD in df.columns:
+            performance['avg_interest_rate'] = df[INTEREST_RATE_APR_FIELD].mean()
+            performance['interest_rate_range'] = {
+                'min': df[INTEREST_RATE_APR_FIELD].min(),
+                'max': df[INTEREST_RATE_APR_FIELD].max()
+            }
+        
+        return performance
+    
+    def _segment_portfolio(self, df: pd.DataFrame) -> Dict[str, Any]:
+        """Segment portfolio by various criteria"""
+        segments = {}
+        
+        # Segment by product type
+        if PRODUCT_TYPE_FIELD in df.columns:
+            segments['by_product_type'] = df[PRODUCT_TYPE_FIELD].value_counts().to_dict()
+        
+        # Segment by loan size
+        if DISBURSEMENT_AMOUNT_FIELD in df.columns:
+            df_temp = df.copy()
+            df_temp['loan_size_segment'] = pd.cut(
+                df_temp[DISBURSEMENT_AMOUNT_FIELD], 
+                bins=3, 
+                labels=['Small', 'Medium', 'Large']
             )
-            if found_weight_field is not None:
-                weight_field = found_weight_field
-            else:
-                logger.error("Weight field not found; cannot compute weighted stats.")
-                return pd.DataFrame()
+            segments['by_loan_size'] = df_temp['loan_size_segment'].value_counts().to_dict()
+        
+        return segments
 
-        # Map each target to the first existing column that matches its aliases
-        resolved_cols: Dict[str, Optional[str]] = {}
-        lc_cols = {c.lower(): c for c in df.columns}
-        for tgt in targets:
-            found = None
-            for alias in alias_map.get(tgt, [tgt]):
-                # exact lower match or substring match
-                if alias.lower() in lc_cols:
-                    found = lc_cols[alias.lower()]
-                    break
-                matches = [c for c in df.columns if alias.lower() in c.lower()]
-                if matches:
-                    found = matches[0]
-                    break
-            resolved_cols[tgt] = found
-
-        # Compute weighted averages with guards
-        out: Dict[str, float] = {}
-        for tgt, col in resolved_cols.items():
-            if not col:
-                logger.warning(f"No column found for metric '{tgt}'. Skipping.")
-                continue
-
-            sub = df[[col, weight_field]].dropna()
-            # Remove non-positive or NaN weights
-            sub = sub[(sub[weight_field] > 0) & np.isfinite(sub[weight_field])]
-            if sub.empty or sub[weight_field].sum() == 0:
-                logger.warning(f"No valid data to compute weighted {tgt}.")
-                continue
-
-            wavg = np.average(
-                sub[col].astype(float), weights=sub[weight_field].astype(float)
-            )
-            out[f"weighted_{tgt}"] = float(wavg)
-            logger.info(f"Weighted {tgt}: {wavg:.6f}")
-
-        return pd.DataFrame([out]) if out else pd.DataFrame()
+# Alias for backwards compatibility
+class LoanAnalytics(LoanAnalyzer):
+    """Alias for LoanAnalyzer"""
+    pass
 
 
 if __name__ == "__main__":
     # Test the module independently
     print("LoanAnalytics module loaded successfully")
-    analytics = LoanAnalytics()
+    analytics = LoanAnalyzer()
     print(f"Available metrics: {list(analytics.alias_map.keys())}")

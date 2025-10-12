@@ -55,11 +55,11 @@ htmlcov/
 *.lcov
 .nyc_output
 
-# Runtime exports
-abaco_runtime/
+# Runtime exports - keep structure but ignore large files
 abaco_runtime/exports/*.csv
 abaco_runtime/exports/*.json
 abaco_runtime/exports/*.xlsx
+abaco_runtime/exports/*/temp/
 *.log
 logs/
 

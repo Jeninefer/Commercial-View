@@ -1,65 +1,53 @@
 """
-Metrics registry module extracted from PR #9
-Performance monitoring and data quality tracking
+Metrics Registry Module for Commercial View
+Centralized metrics collection and management
 """
 
-from typing import Dict, List, Any
+import logging
+from typing import Dict, List, Any, Optional
 from datetime import datetime
-import numpy as np
+
+logger = logging.getLogger(__name__)
 
 
 class MetricsRegistry:
-    """Registry for tracking performance and data quality metrics"""
+    """Central registry for metrics collection and management"""
 
     def __init__(self):
         self.metrics = {}
-        self.performance_logs = []
-        self.data_quality_checks = {}
+        self.logger = logger
+        self.created_at = datetime.now()
 
-    def track_performance(self, operation: str, duration: float):
-        """Track operation performance"""
-        self.performance_logs.append(
-            {
-                "operation": operation,
-                "duration": duration,
-                "timestamp": datetime.now().isoformat(),
-            }
-        )
-
-    def register_metric(self, name: str, value: Any, category: str = "general"):
-        """Register a metric value"""
-        if category not in self.metrics:
-            self.metrics[category] = {}
-
-        self.metrics[category][name] = {
+    def register_metric(
+        self, name: str, value: Any, metadata: Optional[Dict] = None
+    ) -> None:
+        """Register a new metric"""
+        self.metrics[name] = {
             "value": value,
             "timestamp": datetime.now().isoformat(),
+            "metadata": metadata or {},
         }
+        self.logger.debug(f"Registered metric: {name}")
 
-    def check_data_quality(self, data_frame, checks: List[str]) -> Dict[str, bool]:
-        """Run data quality checks"""
-        quality_results = {}
+    def get_metric(self, name: str) -> Optional[Dict]:
+        """Get a specific metric"""
+        return self.metrics.get(name)
 
-        for check in checks:
-            if check == "no_nulls":
-                quality_results[check] = not data_frame.isnull().any().any()
-            elif check == "positive_values":
-                numeric_cols = data_frame.select_dtypes(include=[np.number]).columns
-                quality_results[check] = (data_frame[numeric_cols] >= 0).all().all()
-            # ...existing code for other quality checks...
+    def get_all_metrics(self) -> Dict[str, Any]:
+        """Get all registered metrics"""
+        return self.metrics.copy()
 
-        self.data_quality_checks[datetime.now().isoformat()] = quality_results
-        return quality_results
+    def clear_metrics(self) -> None:
+        """Clear all metrics"""
+        self.metrics.clear()
+        self.logger.info("All metrics cleared")
 
-    def get_performance_summary(self) -> Dict[str, Any]:
-        """Get summary of performance metrics"""
-        if not self.performance_logs:
-            return {"average_duration": 0, "operation_count": 0}
-
-        durations = [log["duration"] for log in self.performance_logs]
+    def get_summary(self) -> Dict[str, Any]:
+        """Get registry summary"""
         return {
-            "average_duration": sum(durations) / len(durations),
-            "max_duration": max(durations),
-            "min_duration": min(durations),
-            "operation_count": len(self.performance_logs),
+            "total_metrics": len(self.metrics),
+            "created_at": self.created_at.isoformat(),
+            "last_updated": max(
+                [m["timestamp"] for m in self.metrics.values()]
+            ) if self.metrics else None,
         }

@@ -1,96 +1,156 @@
 """
-Feature engineering module extracted from PR #8 and #9
-Customer classification and data processing utilities
+Feature Engineering Module for Commercial View
+Handles data transformation and feature creation
 """
 
 import pandas as pd
 import numpy as np
+import logging
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Dict, List, Optional, Any
+
+logger = logging.getLogger(__name__)
 
 
 class FeatureEngineer:
-    """Feature engineering for commercial lending analytics"""
+    """Feature engineering and data transformation class"""
 
-    CUSTOMER_TYPES = {"NEW": "New", "RECURRENT": "Recurrent", "RECOVERED": "Recovered"}
+    def __init__(self):
+        # Initialize feature engineer with default configuration
+        # No specific initialization required at this time
+        pass
 
-    def classify_client_type(
-        self,
-        df: pd.DataFrame,
-        customer_id_col: str = "customer_id",
-        loan_count_col: str = "loan_count",
-        last_active_col: str = "last_active_date",
-        reference_date: Optional[datetime] = None,
+    def engineer_loan_features(self, loan_df: pd.DataFrame) -> pd.DataFrame:
+        """Create loan-specific features"""
+        df = loan_df.copy()
+
+        try:
+            # Example feature engineering
+            if "loan_amount" in df.columns:
+                df["loan_amount_log"] = np.log1p(df["loan_amount"])
+
+            if "interest_rate" in df.columns:
+                df["high_interest"] = df["interest_rate"] > df["interest_rate"].median()
+
+            logger.info("Loan features engineered successfully")
+        except Exception as e:
+            logger.error(f"Error in loan feature engineering: {e}")
+
+        return df
+
+    def engineer_payment_features(self, payment_df: pd.DataFrame) -> pd.DataFrame:
+        """Create payment-specific features"""
+        df = payment_df.copy()
+
+        try:
+            # Example payment feature engineering
+            if "payment_date" in df.columns:
+                df["payment_month"] = pd.to_datetime(df["payment_date"]).dt.month
+                df["payment_year"] = pd.to_datetime(df["payment_date"]).dt.year
+
+            logger.info("Payment features engineered successfully")
+        except Exception as e:
+            logger.error(f"Error in payment feature engineering: {e}")
+
+        return df
+
+    def classify_client_type(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Classify client types based on loan characteristics"""
+        df = df.copy()
+
+        try:
+            # Simple classification based on available columns
+            if "loan_amount" in df.columns:
+                df["client_type"] = np.where(
+                    df["loan_amount"] > df["loan_amount"].quantile(0.75),
+                    "high_value",
+                    "standard",
+                )
+            else:
+                df["client_type"] = "standard"
+
+            logger.info("Client classification completed")
+        except Exception as e:
+            logger.error(f"Error in client classification: {e}")
+            df["client_type"] = "unknown"
+
+        return df
+
+    def create_risk_features(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Create risk-based features for portfolio analysis"""
+        df = df.copy()
+
+        try:
+            # Risk scoring based on available data
+            risk_score = 0
+
+            if "dpd" in df.columns:
+                risk_score += np.where(df["dpd"] > 30, 2, 0)
+
+            if "loan_amount" in df.columns:
+                risk_score += np.where(
+                    df["loan_amount"] > df["loan_amount"].quantile(0.9), 1, 0
+                )
+
+            df["risk_score"] = risk_score
+            df["risk_category"] = pd.cut(
+                df["risk_score"], bins=[-1, 0, 1, 3], labels=["low", "medium", "high"]
+            )
+
+            logger.info("Risk features created successfully")
+        except Exception as e:
+            logger.error(f"Error creating risk features: {e}")
+
+        return df
+
+    def engineer_temporal_features(
+        self, df: pd.DataFrame, date_column: str = "date"
     ) -> pd.DataFrame:
-        """
-        Classify as New / Recurrent / Recovered based on loan count and gaps.
-        If last gap >90d and returns => Recovered; if >1 loan and gaps <=90d => Recurrent; else New.
-        """
-        ref = (reference_date or datetime.now()).date()
-        out = df.copy()
-        if last_active_col in out.columns:
-            out[last_active_col] = pd.to_datetime(out[last_active_col]).dt.date
-            out["days_since_last"] = (
-                pd.to_datetime(ref) - pd.to_datetime(out[last_active_col])
-            ).dt.days
-        else:
-            out["days_since_last"] = np.nan
+        """Create temporal features from date columns"""
+        df = df.copy()
 
-        def _label(row: pd.Series) -> str:
-            cnt = row.get(loan_count_col, 0) or 0
-            dsl = row.get("days_since_last", np.nan)
-            if cnt <= 1:
-                return self.CUSTOMER_TYPES["NEW"]
-            if pd.notna(dsl) and dsl > 90:
-                return self.CUSTOMER_TYPES["RECOVERED"]
-            return self.CUSTOMER_TYPES["RECURRENT"]
+        try:
+            if date_column in df.columns:
+                df[date_column] = pd.to_datetime(df[date_column])
+                df["year"] = df[date_column].dt.year
+                df["month"] = df[date_column].dt.month
+                df["quarter"] = df[date_column].dt.quarter
+                df["day_of_week"] = df[date_column].dt.dayofweek
+                df["is_weekend"] = df["day_of_week"].isin([5, 6])
 
-        out["customer_type"] = out.apply(_label, axis=1)
-        return out
+            logger.info("Temporal features created successfully")
+        except Exception as e:
+            logger.error(f"Error creating temporal features: {e}")
 
-    def calculate_weighted_stats(
-        self, portfolio_data: pd.DataFrame
-    ) -> Dict[str, float]:
-        """Calculate weighted statistics for portfolio analysis"""
-        weighted_stats = {
-            "weighted_apr": 0.0,
-            "weighted_tenor": 0.0,
-            "weighted_amount": 0.0,
-        }
+        return df
 
-        if (
-            "outstanding_balance" in portfolio_data.columns
-            and "apr" in portfolio_data.columns
-        ):
-            total_balance = portfolio_data["outstanding_balance"].sum()
-            if total_balance > 0:
-                weighted_stats["weighted_apr"] = (
-                    portfolio_data["apr"] * portfolio_data["outstanding_balance"]
-                ).sum() / total_balance
+    def process_all_features(
+        self, datasets: Dict[str, pd.DataFrame]
+    ) -> Dict[str, pd.DataFrame]:
+        """Process all feature engineering for multiple datasets"""
+        processed_datasets = {}
 
-        # ...existing code for other weighted calculations...
+        try:
+            for name, df in datasets.items():
+                logger.info(f"Processing features for {name}")
 
-        return {}
+                # Apply general feature engineering
+                processed_df = df.copy()
 
-    def calculate_customer_dpd_stats(
-        self, payment_data: pd.DataFrame
-    ) -> Dict[str, Any]:
-        """Calculate customer-level DPD statistics"""
-        dpd_stats: Dict[str, Any] = {
-            "avg_dpd": 0.0,
-            "max_dpd": 0,
-            "customers_in_arrears": 0,
-            "dpd_distribution": {},
-        }
+                if "loan" in name.lower():
+                    processed_df = self.engineer_loan_features(processed_df)
+                elif "payment" in name.lower():
+                    processed_df = self.engineer_payment_features(processed_df)
 
-        # ...existing code for DPD calculations...
+                # Apply risk and temporal features
+                processed_df = self.create_risk_features(processed_df)
+                processed_df = self.classify_client_type(processed_df)
 
-        return dpd_stats
+                processed_datasets[name] = processed_df
 
-    def engineer_risk_features(self, loan_data: pd.DataFrame) -> pd.DataFrame:
-        """Engineer risk-related features for analysis"""
-        # ...existing code for risk feature creation...
+            logger.info("All feature engineering completed successfully")
+        except Exception as e:
+            logger.error(f"Error in feature engineering pipeline: {e}")
+            processed_datasets = datasets
 
-        loan_data["risk_score"] = 0.0  # Placeholder
-        loan_data["risk_category"] = "low"  # Default
-        return loan_data
+        return processed_datasets
