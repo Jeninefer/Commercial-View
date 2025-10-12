@@ -373,6 +373,9 @@ def load_abaco_data_standalone(data_type: str = "all") -> Dict[str, pd.DataFrame
         return {}
 
 
+def load_abaco_data(data_type: str = "all") -> Dict[str, pd.DataFrame]:
+    """Alias for backward compatibility: load Abaco data by type or all data."""
+    return load_abaco_data_standalone(data_type)
 def load_abaco_dataset(data_type: str = "all") -> Dict[str, pd.DataFrame]:
     """Load Abaco dataset by type or all data (module-level function, avoids name collision)."""
     return load_abaco_data_standalone(data_type)
