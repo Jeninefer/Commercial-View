@@ -1,27 +1,6 @@
 from __future__ import annotations
 
 """Commercial View Data Pipeline - Enterprise Grade Implementation."""
-    CUSTOMER_ID_COLUMN,
-)
-
-# Display a big warning if not in virtual environment
-if not hasattr(sys, "real_prefix") and not (
-    hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
-):
-    print("\n" + "=" * 80)
-    print("\033[91m⚠️  ERROR: NOT USING VIRTUAL ENVIRONMENT ⚠️\033[0m")
-    print("=" * 80)
-    print(
-        "\033[93mYou must activate the virtual environment before running any Python scripts.\033[0m"
-    )
-    print("\033[93mCopy and paste these commands:\033[0m")
-    print("\033[92m  cd /Users/jenineferderas/Documents/GitHub/Commercial-View\033[0m")
-    print("\033[92m  source .venv/bin/activate\033[0m")
-    print("\033[92m  python src/pipeline.py\033[0m")
-    print("=" * 80 + "\n")
-    sys.exit(1)  # Exit with error code to prevent further execution with wrong Python
-
-# Try importing required packages with helpful error messages
 try:
     import pandas as pd
     import numpy as np
