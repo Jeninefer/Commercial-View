@@ -26,6 +26,20 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
+import numpy as np
+import pandas as pd
+from pandas import DataFrame
+
+# Import constants to avoid string duplication (fixing SonarLint S1192)
+from .abaco_schema import (
+    DAYS_IN_DEFAULT_COLUMN,
+    OUTSTANDING_LOAN_VALUE_COLUMN,
+    DISBURSEMENT_DATE_COLUMN,
+    TRUE_PAYMENT_DATE_COLUMN,
+    DISBURSEMENT_AMOUNT_COLUMN,
+    CUSTOMER_ID_COLUMN,
+)
+
 # Display a big warning if not in virtual environment
 if not hasattr(sys, "real_prefix") and not (
     hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix
@@ -318,3 +332,65 @@ class CommercialViewPipeline:
         }
 
         return summary
+
+    def calculate_delinquency_metrics(self, loan_data: pd.DataFrame) -> Dict[str, Any]:
+        """Calculate comprehensive delinquency metrics."""
+        metrics = {}
+
+        if DAYS_IN_DEFAULT_COLUMN in loan_data.columns:
+            dpd_series = loan_data[DAYS_IN_DEFAULT_COLUMN]
+
+            # Calculate DPD buckets
+            dpd_buckets = [0, 7, 15, 30, 60, 90, 120, 150, 180]
+            loan_data["dpd_bucket"] = pd.cut(
+                dpd_series,
+                bins=[-1] + dpd_buckets + [float("inf")],
+                labels=["Current"] + [f"{b}d" for b in dpd_buckets[1:]] + ["180d+"],
+            )
+
+            # Calculate past due amounts
+            loan_data["past_due_amount"] = loan_data[OUTSTANDING_LOAN_VALUE_COLUMN] * (
+                dpd_series > 0
+            ).astype(int)
+
+            # Determine default status (>90 days)
+            loan_data["is_default"] = dpd_series > 90
+
+            metrics["dpd_distribution"] = loan_data.groupby("dpd_bucket")[
+                OUTSTANDING_LOAN_VALUE_COLUMN
+            ].sum()
+
+        return metrics
+
+    def process_dates(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Process and validate date columns."""
+        df_processed = df.copy()
+
+        # Process disbursement dates
+        if DISBURSEMENT_DATE_COLUMN in df_processed.columns:
+            df_processed[DISBURSEMENT_DATE_COLUMN] = pd.to_datetime(
+                df_processed[DISBURSEMENT_DATE_COLUMN], errors="coerce"
+            )
+
+        # Process payment dates
+        if TRUE_PAYMENT_DATE_COLUMN in df_processed.columns:
+            df_processed[TRUE_PAYMENT_DATE_COLUMN] = pd.to_datetime(
+                df_processed[TRUE_PAYMENT_DATE_COLUMN], errors="coerce"
+            )
+
+        return df_processed
+
+    def calculate_financial_metrics(self, loan_data: pd.DataFrame) -> Dict[str, Any]:
+        """Calculate financial performance metrics."""
+        metrics = {}
+
+        if DISBURSEMENT_AMOUNT_COLUMN in loan_data.columns:
+            disbursement_series = loan_data[DISBURSEMENT_AMOUNT_COLUMN]
+
+            # Calculate total disbursement amount
+            metrics["total_disbursement"] = disbursement_series.sum()
+
+            # Calculate average disbursement amount
+            metrics["average_disbursement"] = disbursement_series.mean()
+
+        return metrics

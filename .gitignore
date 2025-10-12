@@ -22,20 +22,22 @@ wheels/
 MANIFEST
 
 # Virtual environments
-.venv/
-venv/
+.env
+.venv
 env/
+venv/
 ENV/
 env.bak/
 venv.bak/
 
-# IDEs
+# IDE
 .vscode/
-.vscode/settings.json
 .idea/
 *.swp
 *.swo
 *~
+
+# OS
 .DS_Store
 .DS_Store?
 ._*
@@ -44,17 +46,14 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Testing
+# Project specific
+abaco_runtime/
+*.log
 .pytest_cache/
 .coverage
-.coverage.*
 htmlcov/
-.tox/
-.hypothesis/
-*.cover
-*.lcov
-.nyc_output
 
+<<<<<<< HEAD
 # Runtime exports - keep structure but ignore large files
 abaco_runtime/exports/*.csv
 abaco_runtime/exports/*.json
@@ -146,3 +145,9 @@ test_*.py
 
 # Project specific
 Commercial-View/
+=======
+# Keep schema and sample data
+!config/abaco_schema_autodetected.json
+!data/*sample*.csv
+!data/Abaco_Production_Sample.csv
+>>>>>>> 32d0202669e45c90a984064cf1e65437493a4acb

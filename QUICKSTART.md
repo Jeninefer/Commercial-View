@@ -21,7 +21,8 @@ python validators/schema_validator.py
 ```
 
 Expected output:
-```
+
+```text
 ✅ All validations passed!
 ```
 
@@ -37,6 +38,7 @@ nano config/column_maps.yml  # or vi, vim, code, etc.
 ```
 
 Update field mappings:
+
 ```yaml
 loan_data:
   loan_id: "your_actual_loan_id_column"
@@ -52,6 +54,7 @@ loan_data:
 3. Update paths in `config/pricing_config.yml` if needed
 
 Example pricing file structure:
+
 ```csv
 tenor_min,tenor_max,amount_min,amount_max,base_rate,margin,total_rate
 0,90,0,50000,0.0500,0.0200,0.0700
@@ -63,7 +66,7 @@ Choose your default threshold in `config/dpd_policy.yml`:
 
 ```yaml
 default_threshold:
-  days: 180  # Options: 90, 120, or 180
+  days: 180 # Options: 90, 120, or 180
 ```
 
 Review and adjust DPD buckets if needed.
@@ -113,6 +116,7 @@ pre-commit install
 ```
 
 Test pre-commit:
+
 ```bash
 pre-commit run --all-files
 ```
@@ -136,12 +140,12 @@ Before running in production:
 
 ### Configuration Files
 
-| File | Purpose | Priority |
-|------|---------|----------|
-| `config/column_maps.yml` | Map your field names | HIGH - Must customize |
-| `config/pricing_config.yml` | Pricing grid setup | HIGH - Must configure |
-| `config/dpd_policy.yml` | DPD thresholds & buckets | MEDIUM - Review required |
-| `config/export_config.yml` | Export paths & formats | LOW - Optional |
+| File                        | Purpose                  | Priority                 |
+| --------------------------- | ------------------------ | ------------------------ |
+| `config/column_maps.yml`    | Map your field names     | HIGH - Must customize    |
+| `config/pricing_config.yml` | Pricing grid setup       | HIGH - Must configure    |
+| `config/dpd_policy.yml`     | DPD thresholds & buckets | MEDIUM - Review required |
+| `config/export_config.yml`  | Export paths & formats   | LOW - Optional           |
 
 ### Commands
 
@@ -165,6 +169,7 @@ python --version  # Should be 3.8+
 ### Outputs
 
 After processing, find results in:
+
 - KPI JSON: `./abaco_runtime/exports/kpi/json/`
 - KPI CSV: `./abaco_runtime/exports/kpi/csv/`
 - DPD Frame: `./abaco_runtime/exports/dpd_frame/`
