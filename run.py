@@ -20,7 +20,7 @@ try:
     import uvicorn
 
     # Import Abaco-specific modules
-    from data_loader import DataLoader
+    from data_loader import DataLoader, ABACO_RECORDS_EXPECTED, validate_abaco_schema
 
 except ImportError as e:
     print(f"❌ Import error: {e}")
@@ -54,14 +54,11 @@ app.add_middleware(
 
 # Initialize Abaco data components
 try:
-    data_loader = DataLoader(data_path="data/raw")
+    data_loader = DataLoader(data_path="data")
     logger.info("✅ Abaco data loader initialized successfully")
 except Exception as e:
     logger.error(f"❌ Failed to initialize Abaco data loader: {e}")
     data_loader = None
-
-# Constants
-ABACO_RECORDS_EXPECTED = 48853
 
 
 # Load Abaco schema information
