@@ -67,6 +67,9 @@ class DataLoader:
         file_path = self.data_path / "Abaco - Loan Tape_Payment Schedule_Table"
         return self._load_excel_file(file_path, "payment_schedule")
 
+    def load_payment_schedule(self) -> Optional[pd.DataFrame]:
+        """Load payment schedule - wrapper for backward compatibility"""
+        return self.load_payment_schedule_old()
     def _load_excel_file(
         self, file_path: Path, data_type: str
     ) -> Optional[pd.DataFrame]:
