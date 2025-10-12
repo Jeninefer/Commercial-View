@@ -1,14 +1,17 @@
 # Commercial-View Import Test Report
 
-## Test Summary - 2025-10-12 01:59:49
+## Test Summary - 2025-10-12 02:27:13
 
 **Overall Status**: ⚠️ NEEDS ATTENTION
 
-### Core Dependencies: ✅ PASSED
-- pandas: ✅
-- numpy: ✅
-- json, pathlib, datetime: ✅
+### Core Dependencies: ❌ FAILED
+- pandas 2.2.3: ❌ ImportError: No module named 'pandas'.  
 
+
+### Standard Library Checks: ✅ PASSED
+- json: ✅
+- pathlib: ✅
+- datetime: ✅
 ### Project Structure: ✅ PASSED
 - src/ package: ✅
 - Configuration: ✅
@@ -17,7 +20,7 @@
 ### Components: ⚠️ PARTIAL
 - DataLoader: ❌
 - API: ❌
-- Metrics: ❌
+- Metrics: ✅
 
 ### Schema File: ✅ FOUND
 
