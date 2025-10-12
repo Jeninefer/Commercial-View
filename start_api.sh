@@ -8,7 +8,7 @@ echo "Features: Spanish client support, USD factoring validation"
 # Check if uvicorn is installed
 if ! python -c "import uvicorn" 2>/dev/null; then
     echo "❌ uvicorn not found. Installing..."
-    pip install "uvicorn[standard]"
+    pip install "uvicorn[standard]" || { echo "❌ Failed to install uvicorn. Exiting."; exit 1; }
 fi
 
 # Start the API server
