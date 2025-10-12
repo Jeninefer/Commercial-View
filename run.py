@@ -64,7 +64,7 @@ try:
         data_loader = DataLoader(data_dir=str(data_dir_legacy))
         logger.info("✅ Abaco data loader initialized successfully (data)")
     else:
-        logger.error("❌ Neither 'data/raw' nor 'data' directory exists. Abaco data loader not initialized.")
+        logger.error("❌ Neither 'data/raw' nor 'data' directory exists. Abaco data loader not initialized. Please create a 'data/raw' or 'data' directory in your working directory, or check your working directory path.")
         data_loader = None
 except Exception as e:
     logger.error(f"❌ Failed to initialize Abaco data loader: {e}")
