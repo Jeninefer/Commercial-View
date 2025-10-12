@@ -371,6 +371,9 @@ def load_abaco_data_standalone(data_type: str = "all") -> Dict[str, pd.DataFrame
         return {}
 
 
+def load_abaco_data(data_type: str = "all") -> Dict[str, pd.DataFrame]:
+    """Alias for backward compatibility: load Abaco data by type or all data."""
+    return load_abaco_data_standalone(data_type)
 # Data validation functions
 def validate_data_files() -> Dict[str, bool]:
     """Validate that all required data files exist"""
