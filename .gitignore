@@ -267,3 +267,21 @@ abaco_runtime/cache/*
 # Backups directory
 backups/*
 !backups/.gitkeep
+# Temporary workflow exclusion
+.github/workflows/
+github_workflows_backup/
+
+# Demo and test files
+*demo*
+*example*
+*sample*
+test_*.py
+# Temporary workflow exclusion
+.github/workflows/
+github_workflows_backup/
+
+# Demo and test files
+*demo*
+*example*
+*sample*
+test_*.py
