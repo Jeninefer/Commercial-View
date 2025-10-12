@@ -371,7 +371,7 @@ async def get_abaco_portfolio_metrics() -> Dict[str, Any]:
         payment_df = abaco_data.get("payment_history")
 
         metrics = {
-            "total_records": sum(len(df) for df in abaco_data.values() if df is not None and not df.empty),
+            "total_records": sum(len(df) for df in abaco_data.values() if isinstance(df, pd.DataFrame) and not df.empty),
             "portfolio_outstanding": (
                 float(loan_df["Outstanding Loan Value"].sum())
                 if loan_df is not None and not loan_df.empty and "Outstanding Loan Value" in loan_df.columns
