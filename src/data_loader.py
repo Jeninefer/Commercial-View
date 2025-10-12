@@ -371,10 +371,10 @@ def load_abaco_data_standalone(data_type: str = "all") -> Dict[str, pd.DataFrame
 
 
 def load_abaco_data(data_type: str = "all") -> Dict[str, pd.DataFrame]:
-    """Alias for backward compatibility: load Abaco data by type or all data."""
-    return load_abaco_data_standalone(data_type)
-def load_abaco_dataset(data_type: str = "all") -> Dict[str, pd.DataFrame]:
-    """Load Abaco dataset by type or all data (module-level function, avoids name collision)."""
+    """
+    Alias for backward compatibility: load Abaco data by type or all data.
+    Prefer using `load_abaco_data_standalone` directly for new code.
+    """
     return load_abaco_data_standalone(data_type)
 # Data validation functions
 def validate_data_files() -> Dict[str, bool]:
