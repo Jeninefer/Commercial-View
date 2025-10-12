@@ -1,12 +1,12 @@
 # Commercial-View Import Test Report
 
-## Test Summary - 2025-10-12 02:11:51
+## Test Summary - 2025-10-12 02:22:21
 
 **Overall Status**: ⚠️ NEEDS ATTENTION
 
-### Core Dependencies: ✅ PASSED
-- pandas: ✅
-- numpy: ✅
+### Core Dependencies: ❌ FAILED
+- pandas: ❌
+- numpy: ❌
 - json, pathlib, datetime: ✅
 
 ### Project Structure: ✅ PASSED
