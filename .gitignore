@@ -238,3 +238,32 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# ============================================
+# Configuration Files
+# ============================================
+# Keep main config directory, ignore backups
+config/*_backup*
+config/*.bak
+configs/*_backup*
+configs/*.bak
+
+# Keep production config, ignore local overrides
+config/local_*.yml
+config/local_*.json
+config/*_local.*
+
+# Ignore old configs directory if migrated
+# configs/
+
+# ============================================
+# Runtime Data
+# ============================================
+abaco_runtime/exports/*
+!abaco_runtime/exports/.gitkeep
+abaco_runtime/temp/*
+abaco_runtime/cache/*
+
+# Backups directory
+backups/*
+!backups/.gitkeep
