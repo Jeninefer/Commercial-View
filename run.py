@@ -65,7 +65,7 @@ try:
         logger.info("✅ Abaco data loader initialized successfully (data)")
     else:
         logger.error("Data directory not found. Please create either data/raw or data directory.")
-        data_loader = None
+        sys.exit("❌ Abaco data loader initialization failed: No data directory found. Exiting.")
 except Exception as e:
     logger.error(f"❌ Failed to initialize Abaco data loader: {e}")
     data_loader = None
