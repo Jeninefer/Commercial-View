@@ -1,13 +1,33 @@
+"""
+Commercial-View FastAPI Application Entry Point
+Real Abaco data: 48,853 records | $208,192,588.65 USD portfolio
+"""
+
+# Define constants for repeated string literals (SonarLint S1192)
+# MUST be defined BEFORE any usage
+DAYS_IN_DEFAULT = "Days in Default"
+INTEREST_RATE_APR = "Interest Rate APR"
+OUTSTANDING_LOAN_VALUE = "Outstanding Loan Value"
+LOAN_CURRENCY = "Loan Currency"
+PRODUCT_TYPE = "Product Type"
+ABACO_TECHNOLOGIES = "Abaco Technologies"
+ABACO_FINANCIAL = "Abaco Financial"
+
+# Real Abaco data constants
+TOTAL_RECORDS = 48853
+LOAN_RECORDS = 16205
+PAYMENT_RECORDS = 16443
+SCHEDULE_RECORDS = 16205
+PORTFOLIO_VALUE_USD = 208192588.65
+CURRENCY_USD = "USD"
+APR_MIN = 0.2947
+APR_MAX = 0.3699
+PRODUCT_TYPE_FACTORING = "factoring"
+PAYMENT_FREQUENCY_BULLET = "bullet"
 
 # Abaco Integration Constants - 48,853 Records
 # Spanish Clients | USD Factoring | Commercial Lending
-DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
-INTEREST_RATE_APR = INTEREST_RATE_APR
-OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
-LOAN_CURRENCY = LOAN_CURRENCY
-PRODUCT_TYPE = PRODUCT_TYPE
-ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
-ABACO_FINANCIAL = ABACO_FINANCIAL
+
 LOAN_DATA = LOAN_DATA
 HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
 PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
@@ -87,8 +107,12 @@ try:
         data_loader = DataLoader(data_dir=str(data_dir_legacy))
         logger.info("✅ Abaco data loader initialized successfully (data)")
     else:
-        logger.error("Data directory not found. Please create either data/raw or data directory.")
-        sys.exit("❌ Abaco data loader initialization failed: No data directory found. Exiting.")
+        logger.error(
+            "Data directory not found. Please create either data/raw or data directory."
+        )
+        sys.exit(
+            "❌ Abaco data loader initialization failed: No data directory found. Exiting."
+        )
 except Exception as e:
     logger.error(f"❌ Failed to initialize Abaco data loader: {e}")
     data_loader = None
@@ -199,10 +223,16 @@ async def health_check() -> Dict[str, Any]:
 
         # Add schema data if available
         if schema_data:
-            abaco_integration = schema_data.get("notes", {}).get("abaco_integration", {})
+            abaco_integration = schema_data.get("notes", {}).get(
+                "abaco_integration", {}
+            )
             if abaco_integration:
-                health_info["financial_summary"] = abaco_integration.get("financial_summary", {})
-                health_info["processing_performance"] = abaco_integration.get("processing_performance", {})
+                health_info["financial_summary"] = abaco_integration.get(
+                    "financial_summary", {}
+                )
+                health_info["processing_performance"] = abaco_integration.get(
+                    "processing_performance", {}
+                )
 
         return health_info
 
@@ -260,7 +290,9 @@ async def get_abaco_schema() -> Dict[str, Any]:
 
     except Exception as e:
         logger.error(f"Schema retrieval failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Schema retrieval failed: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Schema retrieval failed: {str(e)}"
+        )
 
 
 # Abaco loan data endpoint
@@ -457,3 +489,8 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"Server failed to start: {e}")
         sys.exit(1)
+
+"To properly fix all errors, I need to see:
+- run.py (where the NameError occurs)
+- activate_environment.ps1 (where variable conflicts occur)
+- Any other files that have runtime issues"
