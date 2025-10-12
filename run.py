@@ -54,8 +54,18 @@ app.add_middleware(
 
 # Initialize Abaco data components
 try:
-    data_loader = DataLoader(data_dir="data/raw")
-    logger.info("✅ Abaco data loader initialized successfully")
+    # Validate data directory existence and provide fallback
+    data_dir_raw = Path("data/raw")
+    data_dir_legacy = Path("data")
+    if data_dir_raw.exists() and data_dir_raw.is_dir():
+        data_loader = DataLoader(data_dir=str(data_dir_raw))
+        logger.info("✅ Abaco data loader initialized successfully (data/raw)")
+    elif data_dir_legacy.exists() and data_dir_legacy.is_dir():
+        data_loader = DataLoader(data_dir=str(data_dir_legacy))
+        logger.info("✅ Abaco data loader initialized successfully (data)")
+    else:
+        logger.error("❌ Neither 'data/raw' nor 'data' directory exists. Abaco data loader not initialized.")
+        data_loader = None
 except Exception as e:
     logger.error(f"❌ Failed to initialize Abaco data loader: {e}")
     data_loader = None
