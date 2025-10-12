@@ -23,7 +23,24 @@ ABACO_RECORDS_EXPECTED = 48853
 
 
 def validate_abaco_schema(schema: Dict[str, Any]) -> bool:
-    """Validate Abaco schema structure."""
+    """
+    Validate the structure of an Abaco schema.
+
+    Args:
+        schema (Dict[str, Any]): The Abaco schema dictionary. Expected to contain a "datasets" key,
+            whose value is a dictionary mapping dataset names to dictionaries with at least the keys:
+            - "rows" (int): Number of records in the dataset.
+            - "exists" (bool): Whether the dataset is present and should be counted.
+
+    Returns:
+        bool: True if the sum of "rows" for all datasets with "exists" set to True equals 48,853 (the expected
+            total number of Abaco records); False otherwise or if the schema is malformed.
+
+    A valid Abaco schema structure must have:
+        - A "datasets" key at the top level.
+        - Each dataset under "datasets" must be a dictionary with "rows" (int) and "exists" (bool) keys.
+        - The sum of "rows" for all datasets where "exists" is True must be exactly 48,853.
+    """
     try:
         datasets = schema.get("datasets", {})
         total_records = sum(
