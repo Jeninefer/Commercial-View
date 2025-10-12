@@ -153,7 +153,7 @@ async def health_check() -> Dict[str, Any]:
             },
             "components": {
                 "data_loader": data_status,
-                "schema_validation": "valid" if validate_abaco_schema(schema_data) else "invalid",
+                "schema_validation": "valid" if (schema_data is not None and validate_abaco_schema(schema_data)) else "invalid",
                 "spanish_processing": "enabled",
                 "usd_factoring": "enabled",
             },
