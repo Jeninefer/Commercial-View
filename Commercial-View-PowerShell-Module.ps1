@@ -603,21 +603,21 @@ function Start-CommercialViewMonitoring {
     )
 
     Write-Host "📊 Starting Commercial-View Real-Time Monitoring" -ForegroundColor Cyan
-    Write-Host "Portfolio: $Portfolio | Records: 48,853 | Value: $208,192,588.65 USD" -ForegroundColor Blue
+    Write-Host "Portfolio: $Portfolio | Records: 48,853 | Value: `$208,192,588.65 USD" -ForegroundColor Blue
 
     if ($RealTime) {
         Write-Host "⚡ Real-time monitoring enabled" -ForegroundColor Green
         
         # Simulate real-time monitoring data
         $metrics = @{
-            'CPU Usage' = '8.3%'
-            'Memory Usage' = '432MB'
+            'CPU Usage'          = '8.3%'
+            'Memory Usage'       = '432MB'
             'Active Connections' = '127'
-            'Processing Speed' = 'LIGHTNING (0.02s per 48,853 records)'
+            'Processing Speed'   = 'LIGHTNING (0.02s per 48,853 records)'
             'Spanish Processing' = '99.97% accuracy'
-            'USD Compliance' = '100% validated'
+            'USD Compliance'     = '100% validated'
             'Performance Status' = '⭐⭐⭐⭐⭐ EXCEPTIONAL'
-            'System Health' = '✅ OPTIMAL'
+            'System Health'      = '✅ OPTIMAL'
         }
 
         Write-Host "📈 Live System Metrics:" -ForegroundColor Yellow
@@ -628,7 +628,7 @@ function Start-CommercialViewMonitoring {
         Write-Host "`n🚀 Performance Summary:" -ForegroundColor Yellow
         Write-Host "   ⚡ Processing: LIGHTNING FAST (2,400x faster than target)" -ForegroundColor Green
         Write-Host "   📊 Throughput: 48,853 records in 0.02 seconds" -ForegroundColor Green
-        Write-Host "   💰 Portfolio: $208,192,588.65 USD accessible" -ForegroundColor Green
+        Write-Host "   💰 Portfolio: `$208,192,588.65 USD accessible" -ForegroundColor Green
         Write-Host "   🎯 Status: PRODUCTION READY AND OPERATIONAL" -ForegroundColor Green
     }
 
@@ -682,14 +682,14 @@ function Get-CommercialViewMetrics {
     Write-Host "Portfolio Value: $($PortfolioValue.ToString('C', [System.Globalization.CultureInfo]::GetCultureInfo('en-US')))" -ForegroundColor Green
     
     $metrics = @{
-        'Total Records' = '48,853 (PRODUCTION READY)'
-        'Spanish Clients' = '16,205+ (99.97% accuracy)'
-        'USD Factoring' = '100% compliance (PERFECT)'
-        'Processing Speed' = '0.02 seconds (LIGHTNING FAST!)'
-        'System Uptime' = '99.97% (ENTERPRISE-GRADE)'
+        'Total Records'      = '48,853 (PRODUCTION READY)'
+        'Spanish Clients'    = '16,205+ (99.97% accuracy)'
+        'USD Factoring'      = '100% compliance (PERFECT)'
+        'Processing Speed'   = '0.02 seconds (LIGHTNING FAST!)'
+        'System Uptime'      = '99.97% (ENTERPRISE-GRADE)'
         'Performance Rating' = '⭐⭐⭐⭐⭐ EXCEPTIONAL'
-        'Business Status' = '🚀 PRODUCTION DEPLOYED'
-        'Portfolio Access' = '✅ FULLY OPERATIONAL'
+        'Business Status'    = '🚀 PRODUCTION DEPLOYED'
+        'Portfolio Access'   = '✅ FULLY OPERATIONAL'
     }
 
     Write-Host "`n📊 Key Performance Indicators:" -ForegroundColor Yellow
