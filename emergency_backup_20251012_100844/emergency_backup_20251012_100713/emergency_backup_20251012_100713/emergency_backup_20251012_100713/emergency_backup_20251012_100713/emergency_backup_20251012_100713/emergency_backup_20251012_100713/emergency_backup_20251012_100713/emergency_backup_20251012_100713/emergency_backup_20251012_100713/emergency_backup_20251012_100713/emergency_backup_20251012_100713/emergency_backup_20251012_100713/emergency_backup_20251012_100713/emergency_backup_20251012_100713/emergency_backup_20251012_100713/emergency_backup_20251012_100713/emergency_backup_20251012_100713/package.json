@@ -1,0 +1,24 @@
+{
+  "name": "commercial-view-abaco",
+  "version": "1.0.0",
+  "description": "Commercial-View Abaco Integration - 48,853 record processing with Spanish client support",
+  "main": "portfolio.py",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jeninefer/Commercial-View.git"
+  },
+  "keywords": [
+    "abaco",
+    "loan-processing",
+    "spanish-clients",
+    "usd-factoring",
+    "commercial-lending"
+  ],
+  "author": "Commercial-View Team",
+  "license": "MIT",
+  "dependencies": {},
+  "scripts": {},
+  "engines": {
+    "python": ">=3.8"
+  }
+}

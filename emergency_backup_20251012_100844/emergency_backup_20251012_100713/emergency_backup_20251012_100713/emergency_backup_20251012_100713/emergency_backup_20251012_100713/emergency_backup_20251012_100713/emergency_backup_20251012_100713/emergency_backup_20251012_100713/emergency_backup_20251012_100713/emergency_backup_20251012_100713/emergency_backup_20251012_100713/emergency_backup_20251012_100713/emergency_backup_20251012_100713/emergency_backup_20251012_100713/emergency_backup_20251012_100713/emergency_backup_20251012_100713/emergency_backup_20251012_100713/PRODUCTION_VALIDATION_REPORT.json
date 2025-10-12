@@ -1,0 +1,2715 @@
+{
+  "timestamp": "2025-10-06T05:12:04.914453",
+  "english_compliance": {
+    "status": false,
+    "issues": [
+      {
+        "file": "FINAL_STATUS.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83c\udfaf",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "FINAL_STATUS.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "setup_project.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u26a0\ufe0f",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "setup_project.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "ipython_config.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udd04"
+        ]
+      },
+      {
+        "file": "ipython_config.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "I",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "PRODUCTION_STATUS.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "PRODUCTION_STATUS.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "run.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u274c",
+          "\u2705",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "run.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "requirements-drive.txt",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "I",
+          "i"
+        ]
+      },
+      {
+        "file": "SYSTEM_VERIFICATION.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83c\udfaf",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "SYSTEM_VERIFICATION.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "server_control.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "requirements.txt",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "IMPLEMENTATION_SUMMARY.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "IMPLEMENTATION_SUMMARY.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "I",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "CHANGELOG.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "is",
+          "i"
+        ]
+      },
+      {
+        "file": ".pre-commit-config.yaml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "PRODUCTION_VALIDATION_REPORT.json",
+        "issue": "Non-English language detected",
+        "matches": [
+          "deutsch",
+          "deutsch",
+          "deutsch"
+        ]
+      },
+      {
+        "file": "PRODUCTION_VALIDATION_REPORT.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "is"
+        ]
+      },
+      {
+        "file": "execute_complete_resolution.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\ude80",
+          "\u2713",
+          "\u2717"
+        ]
+      },
+      {
+        "file": "execute_complete_resolution.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "jupyter_config.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "QUICKSTART.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705"
+        ]
+      },
+      {
+        "file": "QUICKSTART.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "S",
+          "i"
+        ]
+      },
+      {
+        "file": "THIRD_PARTY_NOTICES.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "README.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705"
+        ]
+      },
+      {
+        "file": "README.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "is"
+        ]
+      },
+      {
+        "file": "DEPLOYMENT_GUIDE.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705"
+        ]
+      },
+      {
+        "file": "DEPLOYMENT_GUIDE.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "requirements-dev.txt",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "is",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "package-lock.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "si"
+        ]
+      },
+      {
+        "file": "package.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "si"
+        ]
+      },
+      {
+        "file": "PRODUCTION_READY.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\ude80",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "PRODUCTION_READY.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "PR1_CLOSURE_RATIONALE.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "isi",
+          "i"
+        ]
+      },
+      {
+        "file": "manifest.json",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u00c1",
+          "\u2264",
+          "\u2013"
+        ]
+      },
+      {
+        "file": "manifest.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "si"
+        ]
+      },
+      {
+        "file": "SYSTEM_STATUS.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "SYSTEM_STATUS.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "CODE_CITATIONS.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "mcp-servers.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u26a0\ufe0f",
+          "\u274c",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "mcp-servers.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "S",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "portfolio.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "portfolio.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": ".markdownlint.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "github_workflows_backup/commercial-view-ci.yml",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udcca",
+          "\ud83d\udc0d",
+          "\ud83c\udfa8"
+        ]
+      },
+      {
+        "file": "github_workflows_backup/commercial-view-ci.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "I"
+        ]
+      },
+      {
+        "file": "github_workflows_backup/complete-test-suite.yml",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83e\uddee",
+          "\ud83c\udfa8",
+          "\ud83e\udd16"
+        ]
+      },
+      {
+        "file": "github_workflows_backup/complete-test-suite.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "S",
+          "i"
+        ]
+      },
+      {
+        "file": "frontend/package.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "si"
+        ]
+      },
+      {
+        "file": "config/dpd_policy.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "config/google_sheets.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "config/pricing_config.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "config/export_config.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "config/column_maps.yml",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u00c3\u00ad",
+          "\u00c3\u00ad"
+        ]
+      },
+      {
+        "file": "config/column_maps.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "tests/test_data_loader.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "tests/conftest.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u26a0\ufe0f",
+          "\u26a0\ufe0f",
+          "\u26a0\ufe0f"
+        ]
+      },
+      {
+        "file": "tests/conftest.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "tests/test_figma_client.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "tests/__init__.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "tests/test_kpi_engine.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "si",
+          "I",
+          "i"
+        ]
+      },
+      {
+        "file": "tests/test_api.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "docs/versioning.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2b05"
+        ]
+      },
+      {
+        "file": "docs/versioning.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "si",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "docs/security_constraints.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "S",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "docs/TESTING.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udccb",
+          "\ud83c\udfd7\ufe0f",
+          "\ud83d\udc0d"
+        ]
+      },
+      {
+        "file": "docs/TESTING.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "docs/README.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udcda",
+          "\ud83c\udfd7\ufe0f",
+          "\ud83d\ude80"
+        ]
+      },
+      {
+        "file": "docs/README.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "docs/CLOSED_PRS_SUMMARY.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u00d7",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "docs/CLOSED_PRS_SUMMARY.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "docs/PR2_FEATURES_ARCHIVE.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u00d7"
+        ]
+      },
+      {
+        "file": "docs/PR2_FEATURES_ARCHIVE.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "docs/CLOSED_PRS_ARCHIVE.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2713",
+          "\u2713",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "docs/CLOSED_PRS_ARCHIVE.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "docs/performance_slos.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "S",
+          "s",
+          "S"
+        ]
+      },
+      {
+        "file": "configs/dpd_policy.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "configs/pricing_config.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "configs/export_config.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "configs/production_config.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "configs/column_maps.yml",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/build.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83e\uddf9",
+          "\u2705",
+          "\ud83d\udd0d"
+        ]
+      },
+      {
+        "file": "scripts/build.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/start_jupyter.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u26a0\ufe0f",
+          "\ud83d\udcdd"
+        ]
+      },
+      {
+        "file": "scripts/start_jupyter.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "scripts/excellence_validator.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83c\udfc6",
+          "\ud83d\udcca",
+          "\ud83d\udcda"
+        ]
+      },
+      {
+        "file": "scripts/excellence_validator.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/fix_figma_token.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u274c",
+          "\u2705",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "scripts/fix_figma_token.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/complete_sync.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udd27",
+          "\u2705",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "scripts/complete_sync.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/validate_test_count.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u274c",
+          "\u274c",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "scripts/validate_test_count.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "scripts/generate_complete_datasets.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udd04",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "scripts/generate_complete_datasets.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "S",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "scripts/run_coverage.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udd0d",
+          "\u2705",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "scripts/run_coverage.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "sis"
+        ]
+      },
+      {
+        "file": "scripts/validate_english_only.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u00f1",
+          "\u00e7",
+          "\u00ea"
+        ]
+      },
+      {
+        "file": "scripts/validate_english_only.py",
+        "issue": "Non-English language detected",
+        "matches": [
+          "espa\u00f1ol",
+          "fran\u00e7ais",
+          "deutsch"
+        ]
+      },
+      {
+        "file": "scripts/validate_english_only.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "is"
+        ]
+      },
+      {
+        "file": "scripts/sync_github.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u274c",
+          "\ud83d\udcca"
+        ]
+      },
+      {
+        "file": "scripts/sync_github.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/uvicorn_manager.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u274c",
+          "\u2705",
+          "\ud83d\udd12"
+        ]
+      },
+      {
+        "file": "scripts/uvicorn_manager.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/final_audit.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u00f1",
+          "\u00e7",
+          "\u00ea"
+        ]
+      },
+      {
+        "file": "scripts/final_audit.py",
+        "issue": "Non-English language detected",
+        "matches": [
+          "espa\u00f1ol",
+          "fran\u00e7ais",
+          "deutsch"
+        ]
+      },
+      {
+        "file": "scripts/final_audit.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "si",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/start_figma_mcp.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u26a0\ufe0f",
+          "\u2705",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "scripts/start_figma_mcp.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/start_ipython.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u26a0\ufe0f",
+          "\u26a0\ufe0f"
+        ]
+      },
+      {
+        "file": "scripts/start_ipython.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "I"
+        ]
+      },
+      {
+        "file": "scripts/master_orchestrator.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\ude80",
+          "\ud83c\udfc6",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "scripts/master_orchestrator.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/conflict_prevention.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udee1\ufe0f",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "scripts/conflict_prevention.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "scripts/install_kernel.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\ud83d\udce6",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "scripts/install_kernel.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/comprehensive_audit.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\ude80",
+          "\ud83d\udc0d",
+          "\ud83d\udcd8"
+        ]
+      },
+      {
+        "file": "scripts/comprehensive_audit.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "si",
+          "si",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/check_sync_status.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udcc1",
+          "\u2705",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "scripts/check_sync_status.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/manage_kernels.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83c\udfe6",
+          "\u274c",
+          "\ud83d\udca1"
+        ]
+      },
+      {
+        "file": "scripts/manage_kernels.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/install_drive_dependencies.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udc0d",
+          "\u274c",
+          "\ud83d\udca1"
+        ]
+      },
+      {
+        "file": "scripts/install_drive_dependencies.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/upload_to_drive.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udd04",
+          "\u274c",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "scripts/upload_to_drive.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "S",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/quality_enhancer.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u26a1",
+          "\u2705",
+          "\ud83d\udc0d"
+        ]
+      },
+      {
+        "file": "scripts/quality_enhancer.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "scripts/debug_server.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83c\udfe6",
+          "\ud83d\udcc1",
+          "\ud83d\udc0d"
+        ]
+      },
+      {
+        "file": "scripts/debug_server.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "scripts/refresh_production_data.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u274c",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "scripts/refresh_production_data.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "scripts/validate_production_data.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83c\udfe6",
+          "\u2705",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "scripts/validate_production_data.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "scripts/fix_workflow_issue.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udd27",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "scripts/fix_workflow_issue.py",
+        "issue": "Non-English language detected",
+        "matches": [
+          "espa\u00f1ol",
+          "fran\u00e7ais",
+          "deutsch"
+        ]
+      },
+      {
+        "file": "scripts/fix_workflow_issue.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "scripts/quick_status_check.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\ude80",
+          "\u2705",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "scripts/quick_status_check.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "scripts/final_production_validation.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udd0d",
+          "\ud83d\udcdd",
+          "\u00f1"
+        ]
+      },
+      {
+        "file": "scripts/final_production_validation.py",
+        "issue": "Non-English language detected",
+        "matches": [
+          "espa\u00f1ol",
+          "fran\u00e7ais",
+          "deutsch"
+        ]
+      },
+      {
+        "file": "scripts/final_production_validation.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "validators/schema_validator.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2713",
+          "\u2717",
+          "\u2717"
+        ]
+      },
+      {
+        "file": "validators/schema_validator.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": ".vscode/settings.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "sis"
+        ]
+      },
+      {
+        "file": "src/loan_analytics.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "src/kpi_calculator.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u00d7"
+        ]
+      },
+      {
+        "file": "src/kpi_calculator.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "I",
+          "I",
+          "i"
+        ]
+      },
+      {
+        "file": "src/csv_processor.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "S",
+          "ssi",
+          "i"
+        ]
+      },
+      {
+        "file": "src/pricing_enricher.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/data_processor.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "ss",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "src/models.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "src/feature_engineer.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "src/portfolio_optimizer.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/data_loader.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u2705",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "src/data_loader.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/customer_analytics.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "src/disbursement_optimizer.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "is",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "src/__init__.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2713",
+          "\u2717",
+          "\u2713"
+        ]
+      },
+      {
+        "file": "src/__init__.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/metrics_registry.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "is"
+        ]
+      },
+      {
+        "file": "src/process_portfolio.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\ude80",
+          "\u2705",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "src/process_portfolio.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/payment_processor.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "ss",
+          "s",
+          "sis"
+        ]
+      },
+      {
+        "file": "src/google_drive_exporter.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/evergreen.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "src/api.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/api_cleaner.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "I",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "src/pipeline.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u26a0\ufe0f",
+          "\u26a0\ufe0f",
+          "\u2713"
+        ]
+      },
+      {
+        "file": "src/pipeline.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/calculator.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "S",
+          "i",
+          "isi"
+        ]
+      },
+      {
+        "file": "src/evergreen_analytics.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "src/figma_client.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "src/dpd_analyzer.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "ssi"
+        ]
+      },
+      {
+        "file": "src/metrics_calculator.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "src/abaco_core.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/field_detector.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "src/looker_client.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "src/core/enterprise_config.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705"
+        ]
+      },
+      {
+        "file": "src/core/enterprise_config.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "is",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/core/production_data_manager.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\u274c",
+          "\u274c"
+        ]
+      },
+      {
+        "file": "src/core/production_data_manager.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "is",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/typescript/index.ts",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "src/utils/schema_converter.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "si",
+          "i"
+        ]
+      },
+      {
+        "file": "src/utils/retry.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "src/utils/schema_parser.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u2705",
+          "\ud83d\udcca"
+        ]
+      },
+      {
+        "file": "src/utils/schema_parser.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "src/analytics/kpi_engine.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\udd04",
+          "\u2705",
+          "\u2265"
+        ]
+      },
+      {
+        "file": "src/analytics/kpi_engine.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "I",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "src/analytics/enterprise_analytics_engine.py",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83d\ude80",
+          "\u2705"
+        ]
+      },
+      {
+        "file": "src/analytics/enterprise_analytics_engine.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "data/pricing/risk_based_pricing.csv",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "data/pricing/retail_loans_pricing.csv",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "data/pricing/commercial_loans_pricing.csv",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "data/pricing/risk_based_pricing_enhanced.csv",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "data/pricing/main_pricing.csv",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "abaco_runtime/exports/comprehensive_analytics.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "abaco_runtime/exports/enhanced_kpis.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "is"
+        ]
+      },
+      {
+        "file": "abaco_runtime/exports/dpd/dpd_analysis.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "sis",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "abaco_runtime/exports/kpi/json/kpi_report.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "is",
+          "i",
+          "is"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/jsconfig.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/README.md",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\u26a0\ufe0f"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/README.md",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/package-lock.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/package.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/tsconfig.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/src/components/Dashboard.tsx",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83c\udfe6",
+          "\u2022",
+          "\ud83d\udcc8"
+        ]
+      },
+      {
+        "file": "frontend/src/components/Dashboard.tsx",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "I"
+        ]
+      },
+      {
+        "file": "frontend/src/components/__tests__/Dashboard.test.tsx",
+        "issue": "Non-ASCII characters detected",
+        "matches": [
+          "\ud83c\udfe6"
+        ]
+      },
+      {
+        "file": "frontend/src/components/__tests__/Dashboard.test.tsx",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "si",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/test/is-number-object.test.js",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/test/types.d.ts",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/public/manifest.json",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "S",
+          "i"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/public/robots.txt",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/reportWebVitals.js",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/data_loader.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/index.js",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/api.py",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "i",
+          "i"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/types.ts",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/App.test.js",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/index.ts",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "i",
+          "S"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/setupTests.js",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "s",
+          "s",
+          "s"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/App.js",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "i"
+        ]
+      },
+      {
+        "file": "frontend/dashboard/src/types/tape.d.ts",
+        "issue": "Extended Latin characters detected",
+        "matches": [
+          "i",
+          "s",
+          "s"
+        ]
+      }
+    ],
+    "files_validated": 154
+  },
+  "demo_data_check": {
+    "status": false,
+    "issues": [
+      {
+        "file": "reset_test_env.sh",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "__pycache__/test_modules.cpython-311-pytest-7.4.3.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "__pycache__/test_feature_engineer.cpython-311-pytest-7.4.3.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "__pycache__/test_actual_files.cpython-311-pytest-7.4.3.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "__pycache__/test_modules_fixed.cpython-311-pytest-7.4.3.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "__pycache__/test_quick_fix.cpython-311-pytest-7.4.3.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "__pycache__/test_feature_engineer_fix.cpython-311-pytest-7.4.3.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "scripts/validate_test_count.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".git/refs/remotes/origin/codex/update-test_data_quality_endpoint-assertions",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".git/refs/remotes/origin/codex/update-import-in-test_figma_client",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".git/refs/remotes/origin/codex/refactor-test_api.py-for-dataset-mock",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".git/refs/remotes/origin/codex/update-test_figma_client-imports-and-verify",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".git/logs/refs/remotes/origin/codex/update-test_data_quality_endpoint-assertions",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".git/logs/refs/remotes/origin/codex/update-import-in-test_figma_client",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".git/logs/refs/remotes/origin/codex/refactor-test_api.py-for-dataset-mock",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".git/logs/refs/remotes/origin/codex/update-test_figma_client-imports-and-verify",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/annotated_types/test_cases.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/anyio/pytest_plugin.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/pandas/util/_test_decorators.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/test_config_parser.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/test_find_sources.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/test_ref_info.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/meta/test_parse_data.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/meta/test_diff_helper.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/meta/test_update_data.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/__pycache__/test_find_sources.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/__pycache__/test_config_parser.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/__pycache__/test_ref_info.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/meta/__pycache__/test_diff_helper.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/meta/__pycache__/test_parse_data.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypy/test/meta/__pycache__/test_update_data.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/anyio/__pycache__/pytest_plugin.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/anyio/__pycache__/pytest_plugin.cpython-313-pytest-8.4.2.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/annotated_types/__pycache__/test_cases.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_pprint.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_rarray.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_lowering.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_misc.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_cheader.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_commandline.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_annotate.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_literals.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_optimizations.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_irbuild.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_refcount.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_run.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_analysis.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_exceptions.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_ircheck.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_struct.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_typeops.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_emitclass.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_emitfunc.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_alwaysdefined.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_external.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_tuplename.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_emitwrapper.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_serialization.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_emit.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/test_namegen.py",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_alwaysdefined.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_cheader.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_emitwrapper.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_emitfunc.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_commandline.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_emit.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_typeops.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_run.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_analysis.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_serialization.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_literals.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_annotate.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_rarray.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_external.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_emitclass.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_tuplename.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_optimizations.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_irbuild.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_refcount.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_lowering.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_pprint.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_namegen.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_misc.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_exceptions.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_ircheck.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": ".venv/lib/python3.13/site-packages/mypyc/test/__pycache__/test_struct.cpython-313.pyc",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "node_modules/node-domexception/.history/test_20210527205957.js",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "node_modules/node-domexception/.history/test_20210527205603.js",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "node_modules/node-domexception/.history/test_20210527210021.js",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "frontend/dashboard/node_modules/tape/test/subtest_and_async.js",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "frontend/dashboard/node_modules/tape/test/subtest_plan.js",
+        "issue": "Demo/test file outside tests directory"
+      },
+      {
+        "file": "PRODUCTION_STATUS.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "PRODUCTION_STATUS.md",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "IMPLEMENTATION_SUMMARY.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "PRODUCTION_VALIDATION_REPORT.json",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "PRODUCTION_VALIDATION_REPORT.json",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "PRODUCTION_VALIDATION_REPORT.json",
+        "issue": "Sample data generator",
+        "pattern": "generate.*sample.*data"
+      },
+      {
+        "file": "PRODUCTION_VALIDATION_REPORT.json",
+        "issue": "Demo creator",
+        "pattern": "create.*demo.*"
+      },
+      {
+        "file": "PRODUCTION_VALIDATION_REPORT.json",
+        "issue": "Mock data generator",
+        "pattern": "mock.*generator"
+      },
+      {
+        "file": "execute_complete_resolution.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "execute_complete_resolution.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "QUICKSTART.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "README.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "DEPLOYMENT_GUIDE.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "DEPLOYMENT_GUIDE.md",
+        "issue": "Demo domains",
+        "pattern": "\\bexample\\.com\\b|\\btest\\.com\\b|\\bdemo\\.com\\b"
+      },
+      {
+        "file": "PRODUCTION_READY.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "SYSTEM_STATUS.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "tests/test_data_loader.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "tests/conftest.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "tests/test_kpi_engine.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "tests/test_api.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "docs/versioning.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "docs/security_constraints.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "docs/security_constraints.md",
+        "issue": "Demo domains",
+        "pattern": "\\bexample\\.com\\b|\\btest\\.com\\b|\\bdemo\\.com\\b"
+      },
+      {
+        "file": "docs/TESTING.md",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "configs/production_config.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/generate_complete_datasets.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/generate_complete_datasets.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "scripts/generate_complete_datasets.py",
+        "issue": "Demo domains",
+        "pattern": "\\bexample\\.com\\b|\\btest\\.com\\b|\\bdemo\\.com\\b"
+      },
+      {
+        "file": "scripts/validate_english_only.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/validate_english_only.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "scripts/validate_english_only.py",
+        "issue": "Demo names",
+        "pattern": "\\bJohn Doe\\b|\\bJane Smith\\b|\\bAcme Corp\\b"
+      },
+      {
+        "file": "scripts/final_audit.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/final_audit.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "scripts/final_audit.py",
+        "issue": "Sample data generator",
+        "pattern": "generate.*sample.*data"
+      },
+      {
+        "file": "scripts/final_audit.py",
+        "issue": "Demo creator",
+        "pattern": "create.*demo.*"
+      },
+      {
+        "file": "scripts/final_audit.py",
+        "issue": "Mock data generator",
+        "pattern": "mock.*generator"
+      },
+      {
+        "file": "scripts/start_ipython.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/install_kernel.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/install_kernel.py",
+        "issue": "Demo creator",
+        "pattern": "create.*demo.*"
+      },
+      {
+        "file": "scripts/manage_kernels.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/validate_production_data.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/validate_production_data.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "scripts/validate_production_data.py",
+        "issue": "Demo names",
+        "pattern": "\\bJohn Doe\\b|\\bJane Smith\\b|\\bAcme Corp\\b"
+      },
+      {
+        "file": "scripts/validate_production_data.py",
+        "issue": "Demo domains",
+        "pattern": "\\bexample\\.com\\b|\\btest\\.com\\b|\\bdemo\\.com\\b"
+      },
+      {
+        "file": "scripts/fix_workflow_issue.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/fix_workflow_issue.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "scripts/fix_workflow_issue.py",
+        "issue": "Demo names",
+        "pattern": "\\bJohn Doe\\b|\\bJane Smith\\b|\\bAcme Corp\\b"
+      },
+      {
+        "file": "scripts/quick_status_check.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/final_production_validation.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "scripts/final_production_validation.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "scripts/final_production_validation.py",
+        "issue": "Sample data generator",
+        "pattern": "generate.*sample.*data"
+      },
+      {
+        "file": "scripts/final_production_validation.py",
+        "issue": "Demo creator",
+        "pattern": "create.*demo.*"
+      },
+      {
+        "file": "scripts/final_production_validation.py",
+        "issue": "Mock data generator",
+        "pattern": "mock.*generator"
+      },
+      {
+        "file": "src/csv_processor.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "src/feature_engineer.py",
+        "issue": "Placeholder content",
+        "pattern": "\\b(lorem ipsum|placeholder|dummy)\\b"
+      },
+      {
+        "file": "src/__init__.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "src/process_portfolio.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "src/api_cleaner.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "src/utils/schema_parser.py",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      },
+      {
+        "file": "frontend/src/components/__tests__/Dashboard.test.tsx",
+        "issue": "Demo data reference",
+        "pattern": "\\b(demo|example|sample|mock|fake|test).*data\\b"
+      }
+    ]
+  },
+  "production_readiness": {
+    "status": true,
+    "issues": [],
+    "real_data_connected": true
+  },
+  "file_analysis": {
+    "total_files": 0,
+    "validated_files": 0
+  },
+  "overall_status": "NEEDS_FIXES"
+}

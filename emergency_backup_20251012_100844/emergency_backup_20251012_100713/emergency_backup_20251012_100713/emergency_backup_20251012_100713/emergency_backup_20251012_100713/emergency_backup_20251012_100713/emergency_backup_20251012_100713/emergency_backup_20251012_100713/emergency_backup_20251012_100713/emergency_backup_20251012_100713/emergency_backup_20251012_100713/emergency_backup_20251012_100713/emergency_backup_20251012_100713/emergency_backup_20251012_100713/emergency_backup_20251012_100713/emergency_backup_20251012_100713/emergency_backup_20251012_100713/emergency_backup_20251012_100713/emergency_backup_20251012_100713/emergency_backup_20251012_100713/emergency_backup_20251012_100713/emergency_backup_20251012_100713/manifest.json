@@ -1,0 +1,326 @@
+{
+"manifest_version": "1.0",
+"project": "Abaco Commercial-View",
+"brand": {
+"name": "Ábaco",
+"palette": {
+"dark_blue": "#030E19",
+"purple": "#221248",
+"gray_1": "#6D7D8E",
+"gray_2": "#9EA9B3",
+"gray_3": "#CED4D9",
+"white": "#FFFFFF"
+},
+"typography": {
+"primary": "Lato",
+"secondary": "Poppins"
+},
+"accessibility": { "wcag": "AA" }
+},
+"sources": {
+"files": [
+{
+"name": "loan_data",
+"glob": "/data/Abaco - Loan Tape_Loan Data_Table*.csv"
+},
+{
+"name": "payment_schedule",
+"glob": "/data/Abaco - Loan Tape_Payment Schedule_Table*.csv"
+},
+{
+"name": "historic_real_payment",
+"glob": "/data/Abaco - Loan Tape_Historic Real Payment_Table*.csv"
+},
+{
+"name": "customer_data",
+"glob": "/data/Customer Data*.csv"
+},
+{
+"name": "collateral",
+"glob": "/data/Collateral*.csv"
+}
+],
+"google_sheets": [
+{
+"id": "1Zli1oqL-_I1usmRAkOZtRTXdTWeHF6E-OTKKhgJwKPE",
+"ranges": [
+{
+"range": "DESEMBOLSOS!A1:AV5000",
+"extract": {
+"customer_name_field": "Cliente",
+"customer_id_field": "Customer ID",
+"kam_field": "KAM",
+"linea_credito_field": "LineaCredito"
+}
+},
+{
+"range": "Data!A:Z",
+"extract": {
+"customer_id_field": "Customer ID",
+"linea_credito_field": "LineaCredito"
+}
+}
+]
+}
+]
+},
+"schemas": {
+"loan_data": {
+"required_columns": [
+"Company",
+"Customer ID",
+"Cliente",
+"Pagador",
+"Application ID",
+"Loan ID",
+"Product Type",
+"Disbursement Date",
+"TPV",
+"Disbursement Amount",
+"Origination Fee",
+"Origination Fee Taxes",
+"Loan Currency",
+"Interest Rate APR",
+"Term",
+"Term Unit",
+"Payment Frequency",
+"Days in Default",
+"Pledge To",
+"Pledge Date",
+"Loan Status",
+"Outstanding Loan Value",
+"Recovery Date",
+"Recovery Value"
+]
+},
+"historic_real_payment": {
+"required_columns": [
+"Company",
+"Customer ID",
+"Cliente",
+"Pagador",
+"Loan ID",
+"True Payment Date",
+"True Total Payment",
+"True Payment Currency",
+"True Principal Payment",
+"True Interest Payment",
+"True Fee Payment"
+"True Other Payment",
+"True Tax Payment",
+"True Fee Tax Payment",
+"True Outstanding Loan Value",
+"True Payment Status"
+]
+},
+"payment_schedule": {
+"required_columns": [
+"Company",
+"Customer ID",
+"Cliente",
+"Pagador",
+"Loan ID",
+"Payment Date",
+"Total Payment",
+"Currency",
+"Principal Payment",
+"Interest Payment",
+"Fee Payment",
+"Other Payment",
+"Tax Payment",
+"All Rebates",
+"Outstanding Loan Value"
+]
+},
+"customer_data": {
+"required_columns": [
+"Customer ID",
+"Customer Name",
+"Business Year Founded",
+"Equifax Score",
+"Category",
+"CreditLine Category",
+"Subcategory",
+"CreditLine Subcategory",
+"Industry",
+"Birth Year",
+"Occupation",
+"Client Type",
+"Location City",
+"Location State/Province",
+"Location Country",
+"KAM",
+"Credit Line"
+]
+},
+"collateral": {
+"required_columns": [
+"Customer ID",
+"Customer Name",
+"Loan ID",
+"Collateral ID",
+"Collateral Original",
+"Collateral Current"
+]
+}
+},
+"dpd_buckets": ["0","7","15","21","30","60","75","90","120","150","180+"],
+"targets_2025": {
+"portfolio_eoy_usd": 8500000,
+"weighted_apr_pct": 38,
+"rotation_mix_pct": { "lte_30d": 10, "31_60d": 45, "61_90d": 40, "gt_90d": 5 },
+"default_definition": "unrecovered_12m",
+"default_target_pct": 4,
+"single_obligor_cap_pct": 4,
+"top10_cap_pct": 40
+},
+"recovery_curve_benchmarks": { "M0": 0, "M1": 10, "M2": 55, "M3": 90, "M4": 98 },
+"kpis": {
+"portfolio_outstanding": {
+"source": "payment_schedule",
+"calc": "SUM(Outstanding Loan Value) at EOM"
+},
+"active_clients": {
+"source": "loan_data",
+"calc": "COUNT_DISTINCT(Customer ID) with Outstanding > 0"
+},
+"weighted_apr": {
+"source": "loan_data|payment_schedule",
+"calc": "SUM(APROutstanding)/SUM(Outstanding)"
+},
+"turnover": {
+"source": "loan_data|payment_schedule",
+"calc": "Total Disbursements / Average Outstanding (annualized)"
+},
+"npl_180": {
+"source": "payment_schedule",
+"calc": "SUM(Outstanding where DPD>=180)"
+},
+"concentration_top10_pct": {
+"source": "payment_schedule",
+"calc": "SUM(top10_outstanding)/SUM(total_outstanding)100"
+},
+"dpd_distribution": {
+"source": "payment_schedule|historic_real_payment",
+"calc": "Outstanding grouped by DPD buckets"
+},
+"recovery_by_cohort": {
+"source": "historic_real_payment|loan_data",
+"calc": "Cumulative collections / original disbursements by origination month"
+},
+"marketing": {
+"cac": { "source": "supabase|csv", "calc": "marketing_spend/new_clients" },
+"ltv": { "source": "historic_real_payment|loan_data", "calc": "net_revenue_per_client_until_churn" },
+"mer": { "source": "supabase|csv", "calc": "revenue/marketing_spend" },
+"engagement_rate": { "source": "supabase|csv", "calc": "interactions/impressions_or_followers" }
+}
+},
+"dilution_rule": {
+"single_obligor_cap_pct": 4,
+"formula": "P = TopBorrowerOutstanding / 0.04",
+"output": "first_month_portfolio_ge_P"
+},
+"pipelines": {
+"refresh": {
+"schedule": "daily",
+"actions": [
+"ingest:files",
+"ingest:google_sheets",
+"validate:schemas",
+"compute:kpis",
+"export:csv(kpis_24m.csv)",
+"render:png(slides:executive,cohorts,risk,marketing,portfolio)",
+"publish:figma"
+]
+}
+},
+"destinations": {
+"figma": {
+"api_base": "https://api.figma.com",
+"token_env": "FIGMA_TOKEN",
+"files": {
+"brand_system_proto": "KpPun2Dv5OYdMEmDVR1z6j",
+"financial_analysis_make": "fYQ9rggeQnYwZWjBXjjXpi"
+},
+"nodes": {
+"executive_dashboard_frame": "EXECUTIVE_FRAME_NODE_ID",
+"marketing_engine_frame": "MARKETING_FRAME_NODE_ID"
+}
+},
+"looker": {
+"base_url_env": "LOOKER_BASE_URL",
+"client_id_env": "LOOKER_CLIENT_ID",
+"client_secret_env": "LOOKER_CLIENT_SECRET",
+"dashboards": [
+{ "slug_or_id": "AUM_EXECUTIVE_DASHBOARD" },
+{ "slug_or_id": "RISK_DPD_DASHBOARD" },
+{ "slug_or_id": "COHORTS_RECOVERY_DASHBOARD" },
+{ "slug_or_id": "MARKETING_ENGINE_DASHBOARD" }
+]
+}
+},
+"views": {
+"order": [
+"executive_shock",
+"sales_engine",
+"cohort_recovery",
+"risk_dpd",
+"portfolio_health",
+"marketing"
+],
+"executive_shock": {
+"cards": [
+"Portfolio Outstanding",
+"Run-rate to $24M/mo by Jun-2026",
+"Concentration cap ≤4% per client",
+"Default target &lt;4% with M0–M4 curve"
+],
+"chart": "target_monthly_disbursement_path"
+},
+"sales_engine": {
+"metrics": [
+"new_clients",
+"new_credit_lines",
+"amount_disbursed",
+"avg_ticket",
+"median_ticket",
+"sales_vs_leads_counts",
+"sector_mix_pct",
+"apr_new_book_wtd",
+"cohort_0_12m_vs_curve",
+"early_dpd_rate_30d"
+]
+},
+"cohort_recovery": { "window_months": 12 },
+"risk_dpd": {
+"bars": "dpd_buckets",
+"ratios": ["dpd_gt_30_over_portfolio", "dpd_gt_90_over_portfolio"],
+"spark_trend_months": 3
+},
+"portfolio_health": {
+"metrics": [
+"active_clients",
+"weighted_apr",
+"max_borrower_pct",
+"top10_pct"
+]
+},
+"marketing": {
+"funnel": ["reach", "leads", "sqls", "clients"],
+"targets": { "cpl_usd_max": 80, "mql_sql_conv_min_pct": 25 },
+"growth_projection": { "followers_dec_2025": 650000, "engagement_pct": 7.2 }
+}
+},
+"security": {
+"env_keys": [
+"FIGMA_TOKEN",
+"LOOKER_BASE_URL",
+"LOOKER_CLIENT_ID",
+"LOOKER_CLIENT_SECRET",
+"SUPABASE_URL",
+"SUPABASE_ANON_KEY",
+"SUPABASE_SERVICE_KEY"
+],
+"note": "store secrets in .env; never commit"
+}
+}
