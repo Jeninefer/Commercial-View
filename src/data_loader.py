@@ -26,7 +26,7 @@ class DataLoader:
     Provides both legacy methods and new Abaco-specific functionality.
     """
 
-    def __init__(self, data_dir: str = "data", data_path: str = None, config_dir: str = "config"):
+    def __init__(self, data_dir: str = "data", data_path: Optional[str] = None, config_dir: str = "config"):
         """Initialize DataLoader with Abaco-specific configuration."""
         # Support both new and legacy initialization
         self.data_dir = Path(data_dir)
