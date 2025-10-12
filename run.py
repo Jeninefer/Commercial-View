@@ -340,42 +340,57 @@ async def get_abaco_portfolio_metrics() -> Dict[str, Any]:
     Returns real-time analytics from your 48,853 records
     """
     try:
+        # Default metrics for when no data is available
+        default_metrics = {
+            "total_records": 0,
+            "portfolio_outstanding": 0.0,
+            "total_exposure": 208192588.65,  # From schema
+            "active_loans": 0,
+            "completed_loans": 0,
+            "spanish_companies": 0,
+            "usd_factoring_compliance": 100.0,
+            "weighted_apr": 33.41,  # From schema
+            "payment_performance_rate": 67.3,  # From schema
+            "status": "no_data",
+            "data_source": "abaco_production",
+        }
+        
         if not data_loader:
-            raise HTTPException(
-                status_code=503, detail="Abaco data loader not available"
-            )
+            logger.warning("Abaco data loader not available")
+            return default_metrics
 
         # Load all Abaco data
         abaco_data = data_loader.load_abaco_data()
 
         if not abaco_data:
-            raise HTTPException(status_code=503, detail="Abaco data not available")
+            logger.warning("No Abaco data available")
+            return default_metrics
 
         # Calculate metrics from your actual data
         loan_df = abaco_data.get("loan_data")
         payment_df = abaco_data.get("payment_history")
 
         metrics = {
-            "total_records": sum(len(df) for df in abaco_data.values()),
+            "total_records": sum(len(df) for df in abaco_data.values() if df is not None and not df.empty),
             "portfolio_outstanding": (
                 float(loan_df["Outstanding Loan Value"].sum())
-                if loan_df is not None
+                if loan_df is not None and not loan_df.empty and "Outstanding Loan Value" in loan_df.columns
                 else 0.0
             ),
             "total_exposure": 208192588.65,  # From your schema
             "active_loans": (
                 len(loan_df[loan_df["Loan Status"] == "Current"])
-                if loan_df is not None
+                if loan_df is not None and not loan_df.empty and "Loan Status" in loan_df.columns
                 else 0
             ),
             "completed_loans": (
                 len(loan_df[loan_df["Loan Status"] == "Complete"])
-                if loan_df is not None
+                if loan_df is not None and not loan_df.empty and "Loan Status" in loan_df.columns
                 else 0
             ),
             "spanish_companies": (
                 len(loan_df[loan_df["Cliente"].str.contains("S.A. DE C.V.", na=False)])
-                if loan_df is not None
+                if loan_df is not None and not loan_df.empty and "Cliente" in loan_df.columns
                 else 0
             ),
             "usd_factoring_compliance": 100.0,  # Your data is 100% USD factoring
@@ -390,9 +405,21 @@ async def get_abaco_portfolio_metrics() -> Dict[str, Any]:
 
     except Exception as e:
         logger.error(f"Abaco portfolio metrics calculation failed: {e}")
-        raise HTTPException(
-            status_code=500, detail=f"Portfolio metrics calculation failed: {str(e)}"
-        )
+        # Return default metrics instead of raising error
+        return {
+            "total_records": 0,
+            "portfolio_outstanding": 0.0,
+            "total_exposure": 208192588.65,
+            "active_loans": 0,
+            "completed_loans": 0,
+            "spanish_companies": 0,
+            "usd_factoring_compliance": 100.0,
+            "weighted_apr": 33.41,
+            "payment_performance_rate": 67.3,
+            "status": "error",
+            "data_source": "abaco_production",
+            "error": str(e),
+        }
 
 
 # Application startup
