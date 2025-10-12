@@ -137,5 +137,11 @@ def main():
 
 
 if __name__ == "__main__":
+    # Define DAYS_IN_DEFAULT if not already defined
+    try:
+        DAYS_IN_DEFAULT
+    except NameError:
+        DAYS_IN_DEFAULT = None
+
     success = main()
     sys.exit(0 if success else 1)
