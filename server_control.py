@@ -334,7 +334,37 @@ Examples:
         help="Skip Abaco schema validation (not recommended for production)",
     )
 
+    # Add environment argument for production deployment
+    parser.add_argument(
+        "--env",
+        type=str,
+        default="development",
+        choices=["development", "staging", "production"],
+        help="Environment mode (development, staging, production)",
+    )
+
     args = parser.parse_args()
+
+    # Set environment-specific configurations
+    if args.env == "production":
+        print("🚀 Starting Commercial-View in PRODUCTION mode")
+        print(f"📊 Configured for 48,853 record processing")
+        print(f"💰 Portfolio: $208,192,588.65 USD")
+        print(f"🌍 Platform: Cross-platform PowerShell support")
+        # Production settings
+        args.no_reload = True  # Disable reload in production
+        if args.log_level == "info":  # Only override if not explicitly set
+            args.log_level = "warning"  # Reduce log verbosity in production
+    elif args.env == "staging":
+        print("🧪 Starting Commercial-View in STAGING mode")
+        print(f"📊 Test processing: 48,853 records")
+        if args.log_level == "info":
+            args.log_level = "info"
+    else:
+        print("🔧 Starting Commercial-View in DEVELOPMENT mode")
+        print(f"📊 Development processing capability")
+        if args.log_level == "info":
+            args.log_level = "debug"
 
     print("🏦 Commercial-View Abaco Integration Server Control")
     print("48,853 Records | Spanish Clients | USD Factoring")
