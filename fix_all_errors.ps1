@@ -33,7 +33,8 @@ Get-ChildItem -Path . -Filter "*.json" -Recurse -ErrorAction SilentlyContinue | 
         # Validate it can be re-serialized
         $json | ConvertTo-Json -Depth 100 | Out-Null
         Write-Host "  ✅ Valid: $($_.Name)" -ForegroundColor Green
-    } catch {
+    }
+    catch {
         Write-Host "  ❌ Invalid JSON: $($_.FullName)" -ForegroundColor Red
         Write-Host "     Error: $($_.Exception.Message)" -ForegroundColor Yellow
         
@@ -46,7 +47,8 @@ Get-ChildItem -Path . -Filter "*.json" -Recurse -ErrorAction SilentlyContinue | 
             Set-Content $_.FullName -Value $fixed
             Write-Host "  ✅ Fixed: $($_.Name)" -ForegroundColor Green
             $ErrorsFixed++
-        } catch {
+        }
+        catch {
             Write-Host "  ⚠️  Could not auto-fix: $($_.Name)" -ForegroundColor Yellow
         }
     }
@@ -64,16 +66,18 @@ Get-ChildItem -Path . -Filter "*.py" -Recurse -ErrorAction SilentlyContinue | Wh
         $result = python -m py_compile $_.FullName 2>&1
         if ($LASTEXITCODE -eq 0) {
             # Silent success
-        } else {
+        }
+        else {
             $pythonErrors += [PSCustomObject]@{
-                File = $_.FullName
+                File  = $_.FullName
                 Error = $result
             }
             Write-Host "  ❌ Syntax error: $($_.Name)" -ForegroundColor Red
         }
-    } catch {
+    }
+    catch {
         $pythonErrors += [PSCustomObject]@{
-            File = $_.FullName
+            File  = $_.FullName
             Error = $_.Exception.Message
         }
     }
@@ -92,7 +96,8 @@ if ($pythonErrors.Count -gt 0) {
     $pythonErrors | ForEach-Object {
         Write-Host "  • $($_.File)" -ForegroundColor Yellow
     }
-} else {
+}
+else {
     Write-Host "✅ All Python files valid" -ForegroundColor Green
 }
 
