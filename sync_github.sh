@@ -101,7 +101,7 @@ COMMIT_MESSAGE="Production Abaco Integration Sync - $COMMIT_TIMESTAMP
 - Advanced server control (server_control.py) with schema validation
 - Environment fix script (fix_environment.sh) for dependency resolution  
 - Enhanced test framework (run_correctly.sh) with virtual environment
-- Complete [requirements.txt](http://_vscodecontentref_/0) with Abaco dependencies
+- Complete requirements.txt with Abaco dependencies
 - Performance SLOs with real benchmarks from actual data
 
 🎯 Production Status: FULLY OPERATIONAL
@@ -207,7 +207,7 @@ echo -e "${BLUE}📋 Sync Report: $SYNC_REPORT${NC}"
 
 echo -e "\n${YELLOW}💡 Next steps:${NC}"
 echo -e "   • Verify deployment: Visit GitHub repository"  
-echo -e "   • Test API server: [run_correctly.sh](http://_vscodecontentref_/1) server_control.py"
+echo -e "   • Test API server: ./run_correctly.sh server_control.py"
 echo -e "   • Run tests: ./run_tests.sh" 
 echo -e "   • Process portfolio: ./execute_resolution.sh"
 
