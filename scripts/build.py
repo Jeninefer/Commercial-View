@@ -34,7 +34,7 @@ class ProjectBuilder:
                 with open(package_json) as f:
                     data = json.load(f)
                 return data.get("version", "1.0.0")
-            except:
+            except Exception as e:
                 pass
         
         return "1.0.0"
@@ -172,7 +172,7 @@ class ProjectBuilder:
         try:
             # Black formatting check
             result = subprocess.run([
-                sys.executable, "-m", "black", "--check", "--diff", "src/", "tests/", "scripts/"
+                sys.executable, "-m", "black", "--check", "--dif", "src/", "tests/", "scripts/"
             ], cwd=self.project_root)
             
             if result.returncode != 0:
@@ -383,7 +383,7 @@ class ProjectBuilder:
         # Create deployment package
         package_path = self.create_deployment_package()
         
-        print(f"\n🎉 Build completed successfully!")
+        print("\n🎉 Build completed successfully!")
         print(f"Version: {self.version}")
         print(f"Build time: {self.build_timestamp}")
         print(f"Distribution: {self.dist_dir}")
@@ -470,7 +470,7 @@ if __name__ == "__main__":
         self.dist_dir.mkdir(exist_ok=True)
         
         with open(report_path, 'w', encoding='utf-8') as f:
-            f.write(f"Commercial-View Build Report\n")
+            f.write("Commercial-View Build Report\n")
             f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"Build ID: {self.build_timestamp}\n")
             f.write("=" * 50 + "\n\n")

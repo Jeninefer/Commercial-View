@@ -56,7 +56,7 @@ def setup_abaco_integration():
         datasets = schema.get('datasets', {})
         available_datasets = {name: info for name, info in datasets.items() if info.get('exists')}
         
-        print(f"   ✅ Schema loaded successfully")
+        print("   ✅ Schema loaded successfully")
         print(f"   📊 Available datasets: {len(available_datasets)}")
         
         # Display dataset details
@@ -82,7 +82,7 @@ def setup_abaco_integration():
         
         schema_info = get_abaco_schema_info()
         if schema_info.get('available'):
-            print(f"   ✅ Integration test passed")
+            print("   ✅ Integration test passed")
             print(f"   📍 Schema path: {schema_info.get('schema_path')}")
             success_steps += 1
         else:

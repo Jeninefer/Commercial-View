@@ -286,7 +286,7 @@ def generate_sync_report(
         print(f"💾 Backup Location: {backup_path}")
 
     # Recommendations
-    print(f"\n💡 Recommendations:")
+    print("\n💡 Recommendations:")
     if total_missing > 0:
         print("  1. Restore missing files from backup or repository")
     if not git_info.get("remote_accessible", False):
@@ -357,18 +357,18 @@ def main():
 
         # Final result
         if sync_success:
-            print(f"\n🎉 Commercial-View sync completed successfully!")
+            print("\n🎉 Commercial-View sync completed successfully!")
         else:
-            print(f"\n⚠️  Sync completed with warnings")
+            print("\n⚠️  Sync completed with warnings")
 
-        print(f"\n📚 Next Steps:")
+        print("\n📚 Next Steps:")
         print("1. Verify changes on GitHub web interface")
         print("2. Run: python scripts/check_sync_status.py")
         print("3. Test application: python run.py")
         print("4. Review documentation: docs/README.md")
 
     except KeyboardInterrupt:
-        print(f"\n⚠️  Sync interrupted by user")
+        print("\n⚠️  Sync interrupted by user")
         sys.exit(1)
     except Exception as e:
         print(f"\n❌ Unexpected error during sync: {str(e)}")

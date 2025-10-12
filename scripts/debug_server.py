@@ -41,7 +41,7 @@ def setup_commercial_view_environment() -> Dict[str, Any]:
     sys.path.insert(0, str(project_root / "src"))
     sys.path.insert(0, str(project_root / "scripts"))
 
-    print(f"🏦 Commercial-View environment configured")
+    print("🏦 Commercial-View environment configured")
     print(f"📁 Project root: {project_root}")
     print(f"🐍 Python paths: {len(sys.path)} entries")
 
@@ -245,7 +245,7 @@ def start_debug_server(
             profile_dir.mkdir(parents=True, exist_ok=True)
             profile_file = (
                 profile_dir
-                / f"debug_profile_{datetime.now().strftime('%Y%m%d_%H%M%S')}.prof"
+                / f"debug_profile_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pro"
             )
             profiler.dump_stats(str(profile_file))
             logger.info(f"📊 Profiling results saved to: {profile_file}")

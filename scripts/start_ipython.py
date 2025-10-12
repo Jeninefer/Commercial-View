@@ -287,7 +287,7 @@ def start_enhanced_ipython():
         user_ns = create_commercial_view_namespace()
 
         # Enhanced IPython startup banner
-        banner = f"""
+        banner = """
 🏦 Commercial-View Development Shell
 📁 Project: {project_root.name}
 🐍 Python: {sys.version.split()[0]}

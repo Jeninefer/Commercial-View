@@ -397,7 +397,7 @@ class CompleteResolutionOrchestrator:
                     if "<<<<<<< HEAD" in content or "=======" in content or ">>>>>>> " in content:
                         conflict_files.append(file_path)
                         
-                except:
+                except Exception as e:
                     continue
         
         return conflict_files
@@ -701,10 +701,10 @@ Repository achieves market-leading excellence"""
     def _handle_critical_error(self, error: Exception):
         """Handle critical error"""
         print(f"\n{'='*70}")
-        print(f"❌ CRITICAL ERROR")
+        print("❌ CRITICAL ERROR")
         print(f"{'='*70}")
         print(f"Error: {error}")
-        print(f"Execution log saved for debugging")
+        print("Execution log saved for debugging")
         
         # Save execution log
         log_file = self.repo_root / "execution_log.json"
@@ -716,22 +716,22 @@ Repository achieves market-leading excellence"""
         duration = datetime.now() - self.start_time
         
         print(f"\n{'='*70}")
-        print(f"🎉 COMPLETE RESOLUTION SUCCESS")
+        print("🎉 COMPLETE RESOLUTION SUCCESS")
         print(f"{'='*70}")
         print(f"Execution Time: {duration.total_seconds():.1f} seconds")
-        print(f"Total Phases: 7")
-        print(f"All Phases: ✅ COMPLETE")
+        print("Total Phases: 7")
+        print("All Phases: ✅ COMPLETE")
         print()
-        print(f"🏆 COMMERCIAL-VIEW STATUS:")
-        print(f"  ✅ Market-leading excellence achieved")
-        print(f"  ✅ All conflicts resolved")
-        print(f"  ✅ Code quality: Superior")
-        print(f"  ✅ Testing: Passed")
-        print(f"  ✅ Documentation: Complete")
-        print(f"  ✅ Production ready: YES")
-        print(f"  ✅ Successfully pushed to GitHub")
+        print("🏆 COMMERCIAL-VIEW STATUS:")
+        print("  ✅ Market-leading excellence achieved")
+        print("  ✅ All conflicts resolved")
+        print("  ✅ Code quality: Superior")
+        print("  ✅ Testing: Passed")
+        print("  ✅ Documentation: Complete")
+        print("  ✅ Production ready: YES")
+        print("  ✅ Successfully pushed to GitHub")
         print()
-        print(f"Repository is now market-ready for commercial lending deployment")
+        print("Repository is now market-ready for commercial lending deployment")
         print(f"{'='*70}\n")
 
     def _run_tests(self) -> Tuple[bool, str]:
@@ -758,21 +758,21 @@ Repository achieves market-leading excellence"""
         """Return human-readable string representation of orchestrator state"""
         total_issues, resolved_issues, pending_issues = self._get_issue_stats()
         return (
-            f"CompleteResolutionOrchestrator("
+            "CompleteResolutionOrchestrator("
             f"repo_root={self.repo_root}, "
             f"total_issues={total_issues}, "
             f"resolved={resolved_issues}, "
             f"pending={pending_issues}"
-            f")"
+            ")"
         )
     
     def __repr__(self) -> str:
         """Return technical string representation for debugging"""
         return (
-            f"CompleteResolutionOrchestrator("
+            "CompleteResolutionOrchestrator("
             f"repo_root='{self.repo_root}', "
             f"start_time='{self.start_time.isoformat() if hasattr(self, 'start_time') else 'not started'}'"
-            f")"
+            ")"
         )
 
 def main():

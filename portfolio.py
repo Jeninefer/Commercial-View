@@ -1,4 +1,27 @@
 #!/usr/bin/env python3
+
+# Abaco Integration Constants - 48,853 Records
+# Spanish Clients | USD Factoring | Commercial Lending
+DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
+INTEREST_RATE_APR = INTEREST_RATE_APR
+OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
+LOAN_CURRENCY = LOAN_CURRENCY
+PRODUCT_TYPE = PRODUCT_TYPE
+ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
+ABACO_FINANCIAL = ABACO_FINANCIAL
+LOAN_DATA = LOAN_DATA
+HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
+PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
+CUSTOMER_ID = CUSTOMER_ID
+LOAN_ID = LOAN_ID
+SA_DE_CV = SA_DE_CV
+TRUE_PAYMENT_STATUS = TRUE_PAYMENT_STATUS
+TRUE_PAYMENT_DATE = TRUE_PAYMENT_DATE
+DISBURSEMENT_DATE = DISBURSEMENT_DATE
+DISBURSEMENT_AMOUNT = DISBURSEMENT_AMOUNT
+PAYMENT_FREQUENCY = PAYMENT_FREQUENCY
+LOAN_STATUS = LOAN_STATUS
+
 """
 Commercial-View Portfolio Processing - Abaco Integration
 Processes 48,853 record Abaco loan tape with Spanish client names and USD factoring
@@ -108,19 +131,19 @@ def calculate_abaco_risk_score(loan_data: pd.Series) -> float:
     risk_score = 0.0
 
     # Days in Default factor (40% weight)
-    days_in_default = loan_data.get("Days in Default", 0)
+    days_in_default = loan_data.get(DAYS_IN_DEFAULT, 0)
     if pd.notna(days_in_default):
         dpd_risk = min(float(days_in_default) / 180.0, 1.0) * 0.4
         risk_score += dpd_risk
 
     # Loan Status factor (30% weight)
-    loan_status = loan_data.get("Loan Status", "Unknown")
+    loan_status = loan_data.get(LOAN_STATUS, "Unknown")
     status_risk_map = {"Current": 0.0, "Complete": 0.0, "Default": 1.0, "Unknown": 0.5}
     status_risk = status_risk_map.get(str(loan_status), 0.5) * 0.3
     risk_score += status_risk
 
     # Interest Rate factor (20% weight) - Abaco range: 29.47% - 36.99%
-    interest_rate = loan_data.get("Interest Rate APR", 0)
+    interest_rate = loan_data.get(INTEREST_RATE_APR, 0)
     if pd.notna(interest_rate) and float(interest_rate) > 0:
         rate = float(interest_rate)
         # Normalize to Abaco range (higher rates = higher risk)
@@ -129,7 +152,7 @@ def calculate_abaco_risk_score(loan_data: pd.Series) -> float:
         risk_score += rate_risk
 
     # Outstanding Amount factor (10% weight) - based on Abaco max: $77,175
-    outstanding = loan_data.get("Outstanding Loan Value", 0)
+    outstanding = loan_data.get(OUTSTANDING_LOAN_VALUE, 0)
     if pd.notna(outstanding) and float(outstanding) > 0:
         amount = float(outstanding)
         normalized_amount = min(amount / 100000, 1.0)  # Normalize to $100k
@@ -184,14 +207,14 @@ def process_abaco_portfolio(
                 if dataset_name == "loan_data" and "Cliente" in enhanced_df.columns:
                     spanish_companies = (
                         enhanced_df["Cliente"]
-                        .str.contains("S.A. DE C.V.", na=False)
+                        .str.contains(SA_DE_CV, na=False)
                         .sum()
                     )
                     print(f"   🇪🇸 Spanish companies identified: {spanish_companies}")
 
                     # Show sample Spanish names
                     spanish_samples = enhanced_df[
-                        enhanced_df["Cliente"].str.contains("S.A. DE C.V.", na=False)
+                        enhanced_df["Cliente"].str.contains(SA_DE_CV, na=False)
                     ]["Cliente"].head(3)
                     for sample in spanish_samples:
                         print(f"      • {sample}")
@@ -234,21 +257,21 @@ def validate_abaco_schema_compliance() -> bool:
             print("✅ Abaco schema compliance validated")
 
             # Validate Spanish language support
-            loan_data = datasets.get("Loan Data", {})
+            loan_data = datasets.get(LOAN_DATA, {})
             columns = {col["name"]: col for col in loan_data.get("columns", [])}
 
             cliente_col = columns.get("Cliente", {})
             if cliente_col and "sample_values" in cliente_col:
                 spanish_names = [
-                    val for val in cliente_col["sample_values"] if "S.A. DE C.V." in val
+                    val for val in cliente_col["sample_values"] if SA_DE_CV in val
                 ]
                 print(
                     f"✅ Spanish business names validated: {len(spanish_names)} found"
                 )
 
             # Validate USD factoring
-            currency_col = columns.get("Loan Currency", {})
-            product_col = columns.get("Product Type", {})
+            currency_col = columns.get(LOAN_CURRENCY, {})
+            product_col = columns.get(PRODUCT_TYPE, {})
 
             if currency_col.get("sample_values") == ["USD"]:
                 print("✅ USD currency validation passed")
@@ -276,22 +299,22 @@ def enhance_abaco_dataset(df: pd.DataFrame, dataset_name: str) -> pd.DataFrame:
 
         # Add USD factoring validation
         if (
-            "Loan Currency" in enhanced_df.columns
-            and "Product Type" in enhanced_df.columns
+            LOAN_CURRENCY in enhanced_df.columns
+            and PRODUCT_TYPE in enhanced_df.columns
         ):
             enhanced_df["is_usd_factoring"] = (
-                enhanced_df["Loan Currency"] == "USD"
-            ) & (enhanced_df["Product Type"] == "factoring")
+                enhanced_df[LOAN_CURRENCY] == "USD"
+            ) & (enhanced_df[PRODUCT_TYPE] == "factoring")
 
         # Add bullet payment validation
-        if "Payment Frequency" in enhanced_df.columns:
+        if PAYMENT_FREQUENCY in enhanced_df.columns:
             enhanced_df["is_bullet_payment"] = (
-                enhanced_df["Payment Frequency"] == "bullet"
+                enhanced_df[PAYMENT_FREQUENCY] == "bullet"
             )
 
         # Add delinquency bucketing
-        if "Days in Default" in enhanced_df.columns:
-            enhanced_df["delinquency_bucket"] = enhanced_df["Days in Default"].apply(
+        if DAYS_IN_DEFAULT in enhanced_df.columns:
+            enhanced_df["delinquency_bucket"] = enhanced_df[DAYS_IN_DEFAULT].apply(
                 get_delinquency_bucket
             )
 
@@ -301,9 +324,9 @@ def enhance_abaco_dataset(df: pd.DataFrame, dataset_name: str) -> pd.DataFrame:
         )
 
         # Add interest rate categorization for Abaco range
-        if "Interest Rate APR" in enhanced_df.columns:
+        if INTEREST_RATE_APR in enhanced_df.columns:
             enhanced_df["rate_category"] = pd.cut(
-                enhanced_df["Interest Rate APR"],
+                enhanced_df[INTEREST_RATE_APR],
                 bins=[0, 0.30, 0.35, 1.0],
                 labels=["low_rate", "medium_rate", "high_rate"],
                 include_lowest=True,
@@ -311,11 +334,11 @@ def enhance_abaco_dataset(df: pd.DataFrame, dataset_name: str) -> pd.DataFrame:
 
     elif dataset_name == "payment_history":
         # Add payment performance indicators
-        if "True Payment Status" in enhanced_df.columns:
-            enhanced_df["is_on_time"] = enhanced_df["True Payment Status"] == "On Time"
-            enhanced_df["is_late"] = enhanced_df["True Payment Status"] == "Late"
+        if TRUE_PAYMENT_STATUS in enhanced_df.columns:
+            enhanced_df["is_on_time"] = enhanced_df[TRUE_PAYMENT_STATUS] == "On Time"
+            enhanced_df["is_late"] = enhanced_df[TRUE_PAYMENT_STATUS] == "Late"
             enhanced_df["is_prepayment"] = (
-                enhanced_df["True Payment Status"] == "Prepayment"
+                enhanced_df[TRUE_PAYMENT_STATUS] == "Prepayment"
             )
 
         # Validate USD payments
@@ -326,8 +349,8 @@ def enhance_abaco_dataset(df: pd.DataFrame, dataset_name: str) -> pd.DataFrame:
 
     elif dataset_name == "payment_schedule":
         # Add completion status
-        if "Outstanding Loan Value" in enhanced_df.columns:
-            enhanced_df["is_completed"] = enhanced_df["Outstanding Loan Value"] == 0
+        if OUTSTANDING_LOAN_VALUE in enhanced_df.columns:
+            enhanced_df["is_completed"] = enhanced_df[OUTSTANDING_LOAN_VALUE] == 0
 
         # Validate USD schedules
         if "Currency" in enhanced_df.columns:
@@ -356,7 +379,7 @@ def generate_abaco_analytics_summary(
             {
                 "total_loans": len(loan_df),
                 "total_exposure": float(
-                    loan_df.get("Outstanding Loan Value", pd.Series(0)).sum()
+                    loan_df.get(OUTSTANDING_LOAN_VALUE, pd.Series(0)).sum()
                 ),
                 "avg_risk_score": float(
                     loan_df.get("abaco_risk_score", pd.Series(0)).mean()
@@ -374,8 +397,8 @@ def generate_abaco_analytics_summary(
         )
 
         # Interest rate analytics (Abaco range: 29.47% - 36.99%)
-        if "Interest Rate APR" in loan_df.columns:
-            rates = loan_df["Interest Rate APR"].dropna()
+        if INTEREST_RATE_APR in loan_df.columns:
+            rates = loan_df[INTEREST_RATE_APR].dropna()
             if not rates.empty:
                 analytics["interest_rate_stats"] = {
                     "min_rate": float(rates.min()),
@@ -487,7 +510,7 @@ def display_portfolio_summary(analytics_summary: Dict[str, Any]) -> None:
     total_payments = analytics_summary.get("total_payments", 0)
     avg_risk_score = analytics_summary.get("avg_risk_score", 0)
 
-    print(f"\n📈 Abaco Portfolio Summary:")
+    print("\n📈 Abaco Portfolio Summary:")
     print(f"   💼 Total Loans: {total_loans:,}")
     print(f"   💰 Total Exposure: ${total_exposure:,.2f} USD")
     print(f"   💸 Total Payments: {total_payments:,}")
@@ -498,7 +521,7 @@ def display_portfolio_summary(analytics_summary: Dict[str, Any]) -> None:
     usd_factoring = analytics_summary.get("usd_factoring_loans", 0)
     bullet_payments = analytics_summary.get("bullet_payments", 0)
 
-    print(f"\n🏦 Abaco Integration Metrics:")
+    print("\n🏦 Abaco Integration Metrics:")
     print(f"   🇪🇸 Spanish Companies: {spanish_companies:,}")
     print(f"   💰 USD Factoring Loans: {usd_factoring:,}")
     print(f"   🔄 Bullet Payments: {bullet_payments:,}")
@@ -604,7 +627,7 @@ def main():
         # Display comprehensive summary
         display_portfolio_summary(analytics_summary)
 
-        print(f"\n🎉 SUCCESS! Abaco integration completed successfully")
+        print("\n🎉 SUCCESS! Abaco integration completed successfully")
         print(
             f"📊 Processed {sum(len(df) for df in abaco_data.values()):,} total records"
         )

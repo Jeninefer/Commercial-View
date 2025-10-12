@@ -43,7 +43,7 @@ def setup_abaco_schema():
             print(f"💰 Total payment records: {datasets.get('Historic Real Payment', {}).get('rows', 0):,}")
             print(f"📅 Total schedule records: {datasets.get('Payment Schedule', {}).get('rows', 0):,}")
             
-            print(f"\n✅ Abaco schema integration complete!")
+            print("\n✅ Abaco schema integration complete!")
             print(f"📁 Schema available at: {dest_path}")
             
         except Exception as e:

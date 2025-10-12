@@ -108,7 +108,7 @@ def test_commercial_view_components():
     # Test src package
     try:
         import src
-        print(f"✅ src package imported successfully")
+        print("✅ src package imported successfully")
         components['src_package'] = True
     except Exception as e:
         print(f"❌ src package: {e}")
@@ -211,7 +211,7 @@ def generate_summary_report():
     
     overall_ready = core_ready and structure_ready and components_ready
     
-    report = f"""# Commercial-View Import Test Report
+    report = """# Commercial-View Import Test Report
 
 ## Test Summary - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -260,7 +260,7 @@ def main():
     system_ready = generate_summary_report()
     
     # Final summary
-    print(f"\n🎯 FINAL RESULT")
+    print("\n🎯 FINAL RESULT")
     print("=" * 30)
     
     if system_ready:

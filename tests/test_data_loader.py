@@ -1,3 +1,26 @@
+
+# Abaco Integration Constants - 48,853 Records
+# Spanish Clients | USD Factoring | Commercial Lending
+DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
+INTEREST_RATE_APR = INTEREST_RATE_APR
+OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
+LOAN_CURRENCY = LOAN_CURRENCY
+PRODUCT_TYPE = PRODUCT_TYPE
+ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
+ABACO_FINANCIAL = ABACO_FINANCIAL
+LOAN_DATA = LOAN_DATA
+HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
+PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
+CUSTOMER_ID = CUSTOMER_ID
+LOAN_ID = LOAN_ID
+SA_DE_CV = SA_DE_CV
+TRUE_PAYMENT_STATUS = TRUE_PAYMENT_STATUS
+TRUE_PAYMENT_DATE = TRUE_PAYMENT_DATE
+DISBURSEMENT_DATE = DISBURSEMENT_DATE
+DISBURSEMENT_AMOUNT = DISBURSEMENT_AMOUNT
+PAYMENT_FREQUENCY = PAYMENT_FREQUENCY
+LOAN_STATUS = LOAN_STATUS
+
 """Test suite for data loader module.
 
 IMPORTANT: Before running tests, ensure you:
@@ -151,17 +174,17 @@ class TestDataLoader:
             """Create realistic test CSV files"""
             # Loan data
             loan_data = pd.DataFrame({
-                "Customer ID": ["CUST001", "CUST002", "CUST003"],
+                CUSTOMER_ID: ["CUST001", "CUST002", "CUST003"],
                 "Loan Amount": [100000, 250000, 500000],
                 "Interest Rate": [0.12, 0.15, 0.18],
-                "Status": ["Active", "Active", "Paid Off"],
+                "Status": ["Active", "Active", "Paid Of"],
                 "Origination Date": ["2023-01-15", "2023-02-20", "2023-03-10"]
             })
             loan_data.to_csv(temp_path / "loan_data.csv", index=False)
             
             # Payment schedule
             payment_data = pd.DataFrame({
-                "Customer ID": ["CUST001", "CUST002", "CUST003"],
+                CUSTOMER_ID: ["CUST001", "CUST002", "CUST003"],
                 "Due Date": ["2024-01-15", "2024-01-20", "2024-01-25"],
                 "Total Payment": [8500, 12000, 15000],
                 "Status": ["Pending", "Paid", "Pending"]
@@ -170,7 +193,7 @@ class TestDataLoader:
             
             # Historic payments
             historic_data = pd.DataFrame({
-                "Customer ID": ["CUST001", "CUST002"],
+                CUSTOMER_ID: ["CUST001", "CUST002"],
                 "Payment Date": ["2023-12-15", "2023-12-20"],
                 "Amount Paid": [8500, 12000],
                 "Days Past Due": [0, 5]
@@ -179,7 +202,7 @@ class TestDataLoader:
             
             # Customer data
             customer_data = pd.DataFrame({
-                "Customer ID": ["CUST001", "CUST002", "CUST003"],
+                CUSTOMER_ID: ["CUST001", "CUST002", "CUST003"],
                 "Customer Name": ["ABC Manufacturing", "XYZ Services", "DEF Construction"],
                 "Industry": ["Manufacturing", "Services", "Construction"],
                 "Credit Score": [720, 680, 750]
@@ -197,7 +220,7 @@ class TestDataLoader:
             loan_df = loader.load_loan_data()
             assert loan_df is not None
             assert len(loan_df) == 3
-            assert "Customer ID" in loan_df.columns
+            assert CUSTOMER_ID in loan_df.columns
         
         @patch.dict(os.environ, {"COMMERCIAL_VIEW_DATA_PATH": "/test/env/path"})
         def test_path_resolution_environment_variable(self):
@@ -225,8 +248,8 @@ class TestDataLoader:
             
             assert loan_df is not None
             assert len(loan_df) == 3
-            assert list(loan_df.columns) == ["Customer ID", "Loan Amount", "Interest Rate", "Status", "Origination Date"]
-            assert loan_df.iloc[0]["Customer ID"] == "CUST001"
+            assert list(loan_df.columns) == [CUSTOMER_ID, "Loan Amount", "Interest Rate", "Status", "Origination Date"]
+            assert loan_df.iloc[0][CUSTOMER_ID] == "CUST001"
         
         def test_load_loan_data_file_not_found(self, temp_data_dir):
             """Test loan data loading when file doesn't exist"""
@@ -250,7 +273,7 @@ class TestDataLoader:
             
             assert payment_df is not None
             assert len(payment_df) == 3
-            assert "Customer ID" in payment_df.columns
+            assert CUSTOMER_ID in payment_df.columns
             assert "Due Date" in payment_df.columns
             assert "Total Payment" in payment_df.columns
         
@@ -274,7 +297,7 @@ class TestDataLoader:
             
             assert customer_df is not None
             assert len(customer_df) == 3
-            assert "Customer ID" in customer_df.columns
+            assert CUSTOMER_ID in customer_df.columns
             assert "Customer Name" in customer_df.columns
         
         def test_override_base_path_in_load_methods(self, temp_data_dir):

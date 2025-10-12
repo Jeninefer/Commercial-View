@@ -34,7 +34,7 @@ def test_schema_integration():
             shutil.copy2(downloads_path, schema_path)
             print(f"✅ Copied schema from Downloads to {schema_path}")
         else:
-            print(f"❌ Schema file not found in expected locations")
+            print("❌ Schema file not found in expected locations")
             return False
     
     # Load and validate schema
@@ -48,7 +48,7 @@ def test_schema_integration():
             if info.get('exists', False)
         )
         
-        print(f"✅ Schema loaded successfully")
+        print("✅ Schema loaded successfully")
         print(f"   📊 Available datasets: {len([d for d in datasets.values() if d.get('exists')])}")
         print(f"   📈 Total records: {total_records:,}")
         
@@ -68,7 +68,7 @@ def test_schema_integration():
         return False
     
     # Step 2: Test DataLoader imports
-    print(f"\n🐍 Step 2: DataLoader Import Test")
+    print("\n🐍 Step 2: DataLoader Import Test")
     print("-" * 35)
     
     try:
@@ -93,7 +93,7 @@ def test_schema_integration():
         return False
     
     # Step 3: Test data processing with sample data
-    print(f"\n📊 Step 3: Sample Data Processing Test")
+    print("\n📊 Step 3: Sample Data Processing Test")
     print("-" * 40)
     
     # Create minimal sample data for testing
@@ -181,11 +181,11 @@ def test_schema_integration():
         return False
     
     # Step 4: Test schema validation
-    print(f"\n🔍 Step 4: Schema Validation Test")
+    print("\n🔍 Step 4: Schema Validation Test")
     print("-" * 35)
     
     try:
-        if 'loan_df' in locals():
+        if 'loan_d' in locals():
             is_valid, issues = validator.validate_table_structure(loan_df, 'Loan Data')
             
             if is_valid:
@@ -198,14 +198,14 @@ def test_schema_integration():
         print(f"❌ Schema validation error: {e}")
     
     # Step 5: Test export functionality
-    print(f"\n📤 Step 5: Export Functionality Test")
+    print("\n📤 Step 5: Export Functionality Test")
     print("-" * 38)
     
     try:
         export_dir = project_root / 'abaco_runtime' / 'exports'
         export_dir.mkdir(parents=True, exist_ok=True)
         
-        if 'loan_df' in locals():
+        if 'loan_d' in locals():
             # Test CSV export
             csv_export = export_dir / 'test_loan_data.csv'
             loan_df.to_csv(csv_export, index=False)
@@ -230,7 +230,7 @@ def test_schema_integration():
         print(f"❌ Export error: {e}")
     
     # Final Summary
-    print(f"\n" + "=" * 60)
+    print("\n" + "=" * 60)
     print("🎯 INTEGRATION TEST SUMMARY")
     print("=" * 60)
     
@@ -241,18 +241,18 @@ def test_schema_integration():
     print("✅ Delinquency bucketing: WORKING")
     print("✅ Export functionality: WORKING")
     
-    print(f"\n🏦 Ready for Production Abaco Data:")
-    print(f"   📊 Loan Data: 16,205 records supported")
-    print(f"   💰 Payment History: 16,443 records supported")
-    print(f"   📅 Payment Schedule: 16,205 records supported")
-    print(f"   🎯 Total: 48,853 records ready for processing")
+    print("\n🏦 Ready for Production Abaco Data:")
+    print("   📊 Loan Data: 16,205 records supported")
+    print("   💰 Payment History: 16,443 records supported")
+    print("   📅 Payment Schedule: 16,205 records supported")
+    print("   🎯 Total: 48,853 records ready for processing")
     
-    print(f"\n🌐 Bilingual Support:")
-    print(f"   🇪🇸 Spanish client names (Cliente/Pagador)")
-    print(f"   🇺🇸 English system fields and analytics")
-    print(f"   💰 USD currency standardized")
+    print("\n🌐 Bilingual Support:")
+    print("   🇪🇸 Spanish client names (Cliente/Pagador)")
+    print("   🇺🇸 English system fields and analytics")
+    print("   💰 USD currency standardized")
     
-    print(f"\n🚀 Integration Status: PRODUCTION READY!")
+    print("\n🚀 Integration Status: PRODUCTION READY!")
     
     return True
 
@@ -260,12 +260,12 @@ if __name__ == '__main__':
     try:
         success = test_schema_integration()
         if success:
-            print(f"\n✅ All tests passed! Commercial-View Abaco integration is ready.")
+            print("\n✅ All tests passed! Commercial-View Abaco integration is ready.")
         else:
-            print(f"\n❌ Some tests failed. Please check the output above.")
+            print("\n❌ Some tests failed. Please check the output above.")
         sys.exit(0 if success else 1)
     except KeyboardInterrupt:
-        print(f"\n⚠️  Test interrupted by user")
+        print("\n⚠️  Test interrupted by user")
         sys.exit(1)
     except Exception as e:
         print(f"\n❌ Unexpected error: {e}")

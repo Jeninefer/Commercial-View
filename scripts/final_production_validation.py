@@ -207,7 +207,7 @@ class CommercialViewProductionValidator:
                     if google_drive_url in content:
                         has_real_data_connection = True
                         break
-            except:
+            except Exception as e:
                 continue
 
         if not has_real_data_connection:

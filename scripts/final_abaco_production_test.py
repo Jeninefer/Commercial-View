@@ -1,3 +1,26 @@
+
+# Abaco Integration Constants - 48,853 Records
+# Spanish Clients | USD Factoring | Commercial Lending
+DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
+INTEREST_RATE_APR = INTEREST_RATE_APR
+OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
+LOAN_CURRENCY = LOAN_CURRENCY
+PRODUCT_TYPE = PRODUCT_TYPE
+ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
+ABACO_FINANCIAL = ABACO_FINANCIAL
+LOAN_DATA = LOAN_DATA
+HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
+PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
+CUSTOMER_ID = CUSTOMER_ID
+LOAN_ID = LOAN_ID
+SA_DE_CV = SA_DE_CV
+TRUE_PAYMENT_STATUS = TRUE_PAYMENT_STATUS
+TRUE_PAYMENT_DATE = TRUE_PAYMENT_DATE
+DISBURSEMENT_DATE = DISBURSEMENT_DATE
+DISBURSEMENT_AMOUNT = DISBURSEMENT_AMOUNT
+PAYMENT_FREQUENCY = PAYMENT_FREQUENCY
+LOAN_STATUS = LOAN_STATUS
+
 """
 Final Abaco Production Test using the exact schema from Downloads
 This test validates your Commercial-View platform against the real 48,853 record structure
@@ -68,10 +91,10 @@ def validate_exact_schema():
 
     # Your EXACT structure validation based on the provided schema
     exact_validation = {
-        "Loan Data": {
+        LOAN_DATA: {
             "rows": 16205,
             "columns": 28,
-            "companies": ["Abaco Technologies", "Abaco Financial"],
+            "companies": [ABACO_TECHNOLOGIES, ABACO_FINANCIAL],
             "spanish_clients": [
                 "SERVICIOS TECNICOS MEDICOS, S.A. DE C.V.",
                 "PRODUCTOS DE CONCRETO, S.A. DE C.V.",
@@ -88,10 +111,10 @@ def validate_exact_schema():
             "dpd_samples": [0, 1, 3],
             "loan_statuses": ["Current", "Complete", "Default"],
         },
-        "Historic Real Payment": {
+        HISTORIC_REAL_PAYMENT: {
             "rows": 16443,
             "columns": 18,
-            "companies": ["Abaco Financial", "Abaco Technologies"],
+            "companies": [ABACO_FINANCIAL, ABACO_TECHNOLOGIES],
             "payment_statuses": ["Late", "On Time", "Prepayment"],
             "currency": ["USD"],
             "clients": [
@@ -103,10 +126,10 @@ def validate_exact_schema():
                 "OPERADORA Y PROCESADORA DE PRODUCTOS MARINOS S.A.",
             ],
         },
-        "Payment Schedule": {
+        PAYMENT_SCHEDULE: {
             "rows": 16205,
             "columns": 16,
-            "companies": ["Abaco Technologies", "Abaco Financial"],
+            "companies": [ABACO_TECHNOLOGIES, ABACO_FINANCIAL],
             "currency": ["USD"],
             "clients": [
                 "MYRNA DEL CARMEN GARCIA DE ARAUJO",
@@ -171,11 +194,11 @@ def validate_dataset_details(actual_data, expected_data, dataset_name):
         print(f"      🏢 Companies: {companies} ({'✅' if companies_match else '❌'})")
 
     # Dataset-specific validations
-    if dataset_name == "Loan Data":
+    if dataset_name == LOAN_DATA:
         validate_loan_data_specifics(columns, expected_data)
-    elif dataset_name == "Historic Real Payment":
+    elif dataset_name == HISTORIC_REAL_PAYMENT:
         validate_payment_data_specifics(columns, expected_data)
-    elif dataset_name == "Payment Schedule":
+    elif dataset_name == PAYMENT_SCHEDULE:
         validate_schedule_data_specifics(columns, expected_data)
 
 
@@ -183,7 +206,7 @@ def validate_loan_data_specifics(columns, expected_data):
     """Validate Loan Data specific fields."""
     # Validate Spanish client names
     cliente_samples = columns["Cliente"]["sample_values"]
-    spanish_companies = [name for name in cliente_samples if "S.A. DE C.V." in name]
+    spanish_companies = [name for name in cliente_samples if SA_DE_CV in name]
     print(f"      🇪🇸 Spanish Companies: ({'✅' if spanish_companies else '❌'})")
     for sample in cliente_samples:
         print(f"         • {sample}")
@@ -195,17 +218,17 @@ def validate_loan_data_specifics(columns, expected_data):
         print(f"         • {sample}")
 
     # Validate currency
-    currency = columns["Loan Currency"]["sample_values"]
+    currency = columns[LOAN_CURRENCY]["sample_values"]
     currency_match = currency == expected_data["currency"]
     print(f"      💰 Currency: {currency} ({'✅' if currency_match else '❌'})")
 
     # Validate product type
-    product = columns["Product Type"]["sample_values"]
+    product = columns[PRODUCT_TYPE]["sample_values"]
     product_match = product == expected_data["product"]
     print(f"      📋 Product: {product} ({'✅' if product_match else '❌'})")
 
     # Validate payment frequency
-    frequency = columns["Payment Frequency"]["sample_values"]
+    frequency = columns[PAYMENT_FREQUENCY]["sample_values"]
     frequency_match = frequency == expected_data["frequency"]
     print(
         f"      🔄 Payment Frequency: {frequency} ({'✅' if frequency_match else '❌'})"
@@ -213,7 +236,7 @@ def validate_loan_data_specifics(columns, expected_data):
 
     # Validate interest rates
     interest_samples = [
-        float(rate) for rate in columns["Interest Rate APR"]["sample_values"]
+        float(rate) for rate in columns[INTEREST_RATE_APR]["sample_values"]
     ]
     min_rate, max_rate = min(interest_samples), max(interest_samples)
     rate_range_valid = (
@@ -232,14 +255,14 @@ def validate_loan_data_specifics(columns, expected_data):
     )
 
     # Validate Days in Default samples
-    dpd_samples = [int(dpd) for dpd in columns["Days in Default"]["sample_values"]]
+    dpd_samples = [int(dpd) for dpd in columns[DAYS_IN_DEFAULT]["sample_values"]]
     dpd_valid = all(dpd in expected_data["dpd_samples"] for dpd in dpd_samples)
     print(
         f"      📊 Days in Default: {sorted(set(dpd_samples))} ({'✅' if dpd_valid else '❌'})"
     )
 
     # Validate Loan Status
-    status_samples = columns["Loan Status"]["sample_values"]
+    status_samples = columns[LOAN_STATUS]["sample_values"]
     status_valid = all(
         status in expected_data["loan_statuses"] for status in status_samples
     )
@@ -256,7 +279,7 @@ def validate_payment_data_specifics(columns, expected_data):
     print(f"      💰 Payment Currency: {currency} ({'✅' if currency_match else '❌'})")
 
     # Validate payment statuses
-    payment_statuses = columns["True Payment Status"]["sample_values"]
+    payment_statuses = columns[TRUE_PAYMENT_STATUS]["sample_values"]
     status_valid = all(
         status in expected_data["payment_statuses"] for status in payment_statuses
     )
@@ -266,7 +289,7 @@ def validate_payment_data_specifics(columns, expected_data):
 
     # Show client samples
     cliente_samples = columns["Cliente"]["sample_values"]
-    print(f"      👥 Client Samples:")
+    print("      👥 Client Samples:")
     for sample in cliente_samples:
         print(f"         • {sample}")
 
@@ -280,7 +303,7 @@ def validate_schedule_data_specifics(columns, expected_data):
 
     # Show client samples
     cliente_samples = columns["Cliente"]["sample_values"]
-    print(f"      👥 Schedule Client Samples:")
+    print("      👥 Schedule Client Samples:")
     for sample in cliente_samples:
         print(f"         • {sample}")
 
@@ -292,8 +315,8 @@ def create_loan_data_from_schema(loan_schema, data_dir):
 
     # Extract exact values from your schema using modern numpy generator
     loan_data = {
-        "Company": rng.choice(["Abaco Technologies", "Abaco Financial"], sample_size),
-        "Customer ID": [
+        "Company": rng.choice([ABACO_TECHNOLOGIES, ABACO_FINANCIAL], sample_size),
+        CUSTOMER_ID: [
             f"CLIAB{str(i).zfill(6)}" for i in range(198, 198 + sample_size)
         ],
         "Cliente": create_spanish_client_names_from_schema(sample_size),
@@ -301,27 +324,27 @@ def create_loan_data_from_schema(loan_schema, data_dir):
         "Application ID": [
             f"DSB{1700+i}-{str(j+1).zfill(3)}" for i, j in enumerate(range(sample_size))
         ],
-        "Loan ID": [
+        LOAN_ID: [
             f"DSB{1700+i}-{str(j+1).zfill(3)}" for i, j in enumerate(range(sample_size))
         ],
-        "Product Type": ["factoring"] * sample_size,
-        "Disbursement Date": rng.choice(
+        PRODUCT_TYPE: ["factoring"] * sample_size,
+        DISBURSEMENT_DATE: rng.choice(
             ["2025-09-30", "2025-09-29", "2025-09-26"], sample_size
         ),
         "TPV": rng.uniform(88.48, 77175.0, sample_size).round(2),
-        "Disbursement Amount": rng.uniform(87.47, 74340.75, sample_size).round(2),
+        DISBURSEMENT_AMOUNT: rng.uniform(87.47, 74340.75, sample_size).round(2),
         "Origination Fee": rng.uniform(0.89, 2508.19, sample_size).round(2),
         "Origination Fee Taxes": rng.uniform(0.12, 326.06, sample_size).round(2),
-        "Loan Currency": ["USD"] * sample_size,
-        "Interest Rate APR": rng.uniform(0.2947, 0.3699, sample_size).round(4),
+        LOAN_CURRENCY: ["USD"] * sample_size,
+        INTEREST_RATE_APR: rng.uniform(0.2947, 0.3699, sample_size).round(4),
         "Term": rng.choice([30, 90, 120], sample_size),
         "Term Unit": ["days"] * sample_size,
-        "Payment Frequency": ["bullet"] * sample_size,
-        "Days in Default": rng.choice([0, 1, 3], sample_size),
+        PAYMENT_FREQUENCY: ["bullet"] * sample_size,
+        DAYS_IN_DEFAULT: rng.choice([0, 1, 3], sample_size),
         "Pledge To": [None] * sample_size,
         "Pledge Date": [None] * sample_size,
-        "Loan Status": rng.choice(["Current", "Complete", "Default"], sample_size),
-        "Outstanding Loan Value": rng.uniform(88.48, 77175.0, sample_size).round(2),
+        LOAN_STATUS: rng.choice(["Current", "Complete", "Default"], sample_size),
+        OUTSTANDING_LOAN_VALUE: rng.uniform(88.48, 77175.0, sample_size).round(2),
         "Other": [None] * sample_size,
         "New Loan ID": [None] * sample_size,
         "New Loan Date": [None] * sample_size,
@@ -341,7 +364,7 @@ def create_loan_data_from_schema(loan_schema, data_dir):
     print(f"   📁 Saved to: {loan_file}")
 
     # Verify Spanish names
-    spanish_count = sum(1 for name in loan_df["Cliente"] if "S.A. DE C.V." in str(name))
+    spanish_count = sum(1 for name in loan_df["Cliente"] if SA_DE_CV in str(name))
     print(f"   🇪🇸 Spanish business names: {spanish_count}/{len(loan_df)}")
 
 
@@ -350,18 +373,18 @@ def create_payment_history_from_schema(data_dir):
     sample_size = 110
 
     payment_data = {
-        "Company": rng.choice(["Abaco Financial", "Abaco Technologies"], sample_size),
-        "Customer ID": [
+        "Company": rng.choice([ABACO_FINANCIAL, ABACO_TECHNOLOGIES], sample_size),
+        CUSTOMER_ID: [
             f"CLI{2006+i}" if i < 25 else f"CLIAB{str(223+i).zfill(6)}"
             for i in range(sample_size)
         ],
         "Cliente": create_payment_client_names_from_schema(sample_size),
         "Pagador": create_payment_payer_names_from_schema(sample_size),
-        "Loan ID": [
+        LOAN_ID: [
             f"DSB{rng.integers(1000, 4000)}-{str(j+1).zfill(3)}"
             for j in range(sample_size)
         ],
-        "True Payment Date": rng.choice(
+        TRUE_PAYMENT_DATE: rng.choice(
             ["2025-09-30", "2025-09-29", "2025-09-27"], sample_size
         ),
         "True Devolution": rng.choice([0.0, 658.45, 0.01], sample_size),
@@ -375,7 +398,7 @@ def create_payment_history_from_schema(data_dir):
         "True Fee Tax Payment": rng.uniform(0.53, 201.57, sample_size).round(2),
         "True Rabates": [0] * sample_size,
         "True Outstanding Loan Value": rng.uniform(0.0, 8054.78, sample_size).round(2),
-        "True Payment Status": rng.choice(
+        TRUE_PAYMENT_STATUS: rng.choice(
             ["Late", "On Time", "Prepayment"], sample_size
         ),
     }
@@ -395,11 +418,11 @@ def create_payment_schedule_from_schema(schedule_schema, data_dir):
     sample_size = 100
 
     schedule_data = {
-        "Company": rng.choice(["Abaco Technologies", "Abaco Financial"], sample_size),
-        "Customer ID": [f"CLIAB{str(78+i).zfill(6)}" for i in range(sample_size)],
+        "Company": rng.choice([ABACO_TECHNOLOGIES, ABACO_FINANCIAL], sample_size),
+        CUSTOMER_ID: [f"CLIAB{str(78+i).zfill(6)}" for i in range(sample_size)],
         "Cliente": create_schedule_client_names_from_schema(sample_size),
         "Pagador": create_schedule_payer_names_from_schema(sample_size),
-        "Loan ID": [
+        LOAN_ID: [
             f"DSB{rng.integers(600, 2000)}-{str(j+1).zfill(3)}"
             for j in range(sample_size)
         ],
@@ -415,7 +438,7 @@ def create_payment_schedule_from_schema(schedule_schema, data_dir):
         "Other Payment": [None] * sample_size,
         "Tax Payment": rng.uniform(3.9195, 348.854376, sample_size).round(6),
         "All Rebates": [None] * sample_size,
-        "Outstanding Loan Value": [0] * sample_size,
+        OUTSTANDING_LOAN_VALUE: [0] * sample_size,
     }
 
     schedule_df = pd.DataFrame(schedule_data)
@@ -439,7 +462,7 @@ def create_spanish_client_names_from_schema(count):
     result = []
     for i in range(count):
         base_name = rng.choice(schema_samples)
-        if "S.A. DE C.V." in base_name:
+        if SA_DE_CV in base_name:
             # Modify company name while preserving structure
             modified = base_name.replace("SERVICIOS", f"SERVICIOS {i+1:03d}")
             modified = modified.replace("PRODUCTOS", f"PRODUCTOS {i+1:03d}")
@@ -481,7 +504,7 @@ def create_payment_client_names_from_schema(count):
 
     result = []
     for i in range(count):
-        base_name = np.random.choice(schema_samples)
+        base_name = rng.choice(schema_samples)
         modified = base_name.replace("RAFAEL", f"CLIENTE {i+1:03d}")
         modified = modified.replace("SUPER", f"SUPER {i+1:03d}")
         result.append(modified)
@@ -499,7 +522,7 @@ def create_payment_payer_names_from_schema(count):
 
     result = []
     for i in range(count):
-        base_name = np.random.choice(schema_samples)
+        base_name = rng.choice(schema_samples)
         modified = base_name.replace("ALUMA", f"ALUMA {i+1:03d}")
         modified = modified.replace("OPERADORA", f"OPERADORA {i+1:03d}")
         modified = modified.replace("CTE", f"CTE {i+1:03d}")
@@ -518,7 +541,7 @@ def create_schedule_client_names_from_schema(count):
 
     result = []
     for i in range(count):
-        base_name = np.random.choice(schema_samples)
+        base_name = rng.choice(schema_samples)
         modified = base_name.replace("MYRNA", f"CLIENTE {i+1:03d}")
         modified = modified.replace("TRES DE TRES", f"TRANSPORTES {i+1:03d}")
         modified = modified.replace("ARTISTA", f"ARTISTA {i+1:03d}")
@@ -537,7 +560,7 @@ def create_schedule_payer_names_from_schema(count):
 
     result = []
     for i in range(count):
-        base_name = np.random.choice(schema_samples)
+        base_name = rng.choice(schema_samples)
         modified = base_name.replace("OSCAR", f"PAYER {i+1:03d}")
         modified = modified.replace("ADQUISICIONES", f"ADQUISICIONES {i+1:03d}")
         modified = modified.replace("CASA", f"CASA {i+1:03d}")
@@ -578,17 +601,17 @@ def test_core_algorithms():
             else:
                 return "npl"
 
-        df["delinquency_bucket"] = df["Days in Default"].apply(get_delinquency_bucket)
+        df["delinquency_bucket"] = df[DAYS_IN_DEFAULT].apply(get_delinquency_bucket)
         buckets = df["delinquency_bucket"].value_counts()
         print(f"✅ Delinquency bucketing: {dict(buckets)}")
 
         # Test risk scoring
         def calculate_risk_score(row):
-            days_risk = min(row["Days in Default"] / 180.0, 1.0) * 0.4
+            days_risk = min(row[DAYS_IN_DEFAULT] / 180.0, 1.0) * 0.4
             status_risk = {"Current": 0.0, "Complete": 0.0, "Default": 1.0}.get(
-                row["Loan Status"], 0.5
+                row[LOAN_STATUS], 0.5
             ) * 0.3
-            rate_risk = min(row["Interest Rate APR"] / 0.5, 1.0) * 0.3
+            rate_risk = min(row[INTEREST_RATE_APR] / 0.5, 1.0) * 0.3
             return min(days_risk + status_risk + rate_risk, 1.0)
 
         df["risk_score"] = df.apply(calculate_risk_score, axis=1)
@@ -597,19 +620,19 @@ def test_core_algorithms():
         print(f"✅ Risk scoring: avg={avg_risk:.3f}, high_risk={high_risk}")
 
         # Test Spanish name validation
-        spanish_names = df["Cliente"].str.contains("S.A. DE C.V.", na=False).sum()
+        spanish_names = df["Cliente"].str.contains(SA_DE_CV, na=False).sum()
         print(f"✅ Spanish names: {spanish_names}/{len(df)} companies")
 
         # Test currency validation
-        usd_count = (df["Loan Currency"] == "USD").sum()
+        usd_count = (df[LOAN_CURRENCY] == "USD").sum()
         print(f"✅ USD currency: {usd_count}/{len(df)} loans")
 
         # Test factoring validation
-        factoring_count = (df["Product Type"] == "factoring").sum()
+        factoring_count = (df[PRODUCT_TYPE] == "factoring").sum()
         print(f"✅ Factoring products: {factoring_count}/{len(df)} loans")
 
         # Test bullet payment validation
-        bullet_count = (df["Payment Frequency"] == "bullet").sum()
+        bullet_count = (df[PAYMENT_FREQUENCY] == "bullet").sum()
         print(f"✅ Bullet payments: {bullet_count}/{len(df)} loans")
 
         return True

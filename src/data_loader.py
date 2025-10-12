@@ -1,3 +1,26 @@
+
+# Abaco Integration Constants - 48,853 Records
+# Spanish Clients | USD Factoring | Commercial Lending
+DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
+INTEREST_RATE_APR = INTEREST_RATE_APR
+OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
+LOAN_CURRENCY = LOAN_CURRENCY
+PRODUCT_TYPE = PRODUCT_TYPE
+ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
+ABACO_FINANCIAL = ABACO_FINANCIAL
+LOAN_DATA = LOAN_DATA
+HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
+PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
+CUSTOMER_ID = CUSTOMER_ID
+LOAN_ID = LOAN_ID
+SA_DE_CV = SA_DE_CV
+TRUE_PAYMENT_STATUS = TRUE_PAYMENT_STATUS
+TRUE_PAYMENT_DATE = TRUE_PAYMENT_DATE
+DISBURSEMENT_DATE = DISBURSEMENT_DATE
+DISBURSEMENT_AMOUNT = DISBURSEMENT_AMOUNT
+PAYMENT_FREQUENCY = PAYMENT_FREQUENCY
+LOAN_STATUS = LOAN_STATUS
+
 """
 <<<<<<< HEAD
 Data Loader Module for Commercial View
@@ -216,12 +239,12 @@ def get_data_summary() -> Dict[str, Any]:
 
         # Look for Abaco CSV files
         abaco_files = {
-            "loan_data": self._find_abaco_file(["Loan Data", "Loan_Data"]),
+            "loan_data": self._find_abaco_file([LOAN_DATA, "Loan_Data"]),
             "payment_history": self._find_abaco_file(
-                ["Historic Real Payment", "Payment_History"]
+                [HISTORIC_REAL_PAYMENT, "Payment_History"]
             ),
             "payment_schedule": self._find_abaco_file(
-                ["Payment Schedule", "Payment_Schedule"]
+                [PAYMENT_SCHEDULE, "Payment_Schedule"]
             ),
         }
 
@@ -283,17 +306,17 @@ def get_data_summary() -> Dict[str, Any]:
         required_columns = {
             "loan_data": [
                 "Cliente",
-                "Product Type",
-                "Loan Currency",
-                "Interest Rate APR",
-                "Payment Frequency",
-                "Outstanding Loan Value",
+                PRODUCT_TYPE,
+                LOAN_CURRENCY,
+                INTEREST_RATE_APR,
+                PAYMENT_FREQUENCY,
+                OUTSTANDING_LOAN_VALUE,
             ],
             "payment_history": [
                 "Cliente",
                 "True Total Payment",
                 "True Payment Currency",
-                "True Payment Status",
+                TRUE_PAYMENT_STATUS,
             ],
             "payment_schedule": ["Cliente", "Total Payment", "Currency"],
         }
@@ -315,32 +338,32 @@ def get_data_summary() -> Dict[str, Any]:
         """Validate Abaco loan data specifics."""
 
         # Validate USD currency
-        if "Loan Currency" in df.columns:
-            currencies = df["Loan Currency"].unique()
+        if LOAN_CURRENCY in df.columns:
+            currencies = df[LOAN_CURRENCY].unique()
             if len(currencies) == 1 and currencies[0] == "USD":
                 print("✅ USD currency validation passed")
             else:
                 print(f"⚠️  Currency validation: {currencies}")
 
         # Validate factoring product
-        if "Product Type" in df.columns:
-            products = df["Product Type"].unique()
+        if PRODUCT_TYPE in df.columns:
+            products = df[PRODUCT_TYPE].unique()
             if len(products) == 1 and products[0] == "factoring":
                 print("✅ Factoring product validation passed")
             else:
                 print(f"⚠️  Product validation: {products}")
 
         # Validate bullet payments
-        if "Payment Frequency" in df.columns:
-            frequencies = df["Payment Frequency"].unique()
+        if PAYMENT_FREQUENCY in df.columns:
+            frequencies = df[PAYMENT_FREQUENCY].unique()
             if len(frequencies) == 1 and frequencies[0] == "bullet":
                 print("✅ Bullet payment validation passed")
             else:
                 print(f"⚠️  Payment frequency validation: {frequencies}")
 
         # Validate interest rate range
-        if "Interest Rate APR" in df.columns:
-            rates = df["Interest Rate APR"].dropna()
+        if INTEREST_RATE_APR in df.columns:
+            rates = df[INTEREST_RATE_APR].dropna()
             if not rates.empty:
                 min_rate, max_rate = rates.min(), rates.max()
                 if 0.2947 <= min_rate and max_rate <= 0.3699:
@@ -353,7 +376,7 @@ def get_data_summary() -> Dict[str, Any]:
         # Validate Spanish client names
         if "Cliente" in df.columns:
             spanish_companies = (
-                df["Cliente"].str.contains("S.A. DE C.V.", na=False).sum()
+                df["Cliente"].str.contains(SA_DE_CV, na=False).sum()
             )
             total_clients = len(df["Cliente"].dropna())
             print(

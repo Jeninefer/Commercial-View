@@ -1,3 +1,26 @@
+
+# Abaco Integration Constants - 48,853 Records
+# Spanish Clients | USD Factoring | Commercial Lending
+DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
+INTEREST_RATE_APR = INTEREST_RATE_APR
+OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
+LOAN_CURRENCY = LOAN_CURRENCY
+PRODUCT_TYPE = PRODUCT_TYPE
+ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
+ABACO_FINANCIAL = ABACO_FINANCIAL
+LOAN_DATA = LOAN_DATA
+HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
+PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
+CUSTOMER_ID = CUSTOMER_ID
+LOAN_ID = LOAN_ID
+SA_DE_CV = SA_DE_CV
+TRUE_PAYMENT_STATUS = TRUE_PAYMENT_STATUS
+TRUE_PAYMENT_DATE = TRUE_PAYMENT_DATE
+DISBURSEMENT_DATE = DISBURSEMENT_DATE
+DISBURSEMENT_AMOUNT = DISBURSEMENT_AMOUNT
+PAYMENT_FREQUENCY = PAYMENT_FREQUENCY
+LOAN_STATUS = LOAN_STATUS
+
 """
 Test script for the Commercial-View Schema Parser - Abaco Integration
 
@@ -32,9 +55,9 @@ def test_abaco_dataset_validation(schema: Dict[str, Any]) -> bool:
     total_records = 0
 
     expected_structure = {
-        "Loan Data": 16205,
-        "Historic Real Payment": 16443,
-        "Payment Schedule": 16205,
+        LOAN_DATA: 16205,
+        HISTORIC_REAL_PAYMENT: 16443,
+        PAYMENT_SCHEDULE: 16205,
     }
 
     validation_passed = True
@@ -61,7 +84,7 @@ def test_abaco_dataset_validation(schema: Dict[str, Any]) -> bool:
     if total_records == 48853:
         print("✅ EXACT ABACO RECORD MATCH!")
     else:
-        print(f"❌ Expected 48,853 records")
+        print("❌ Expected 48,853 records")
         validation_passed = False
 
     return validation_passed
@@ -73,7 +96,7 @@ def test_spanish_client_support(schema: Dict[str, Any]) -> bool:
     print("-" * 50)
 
     datasets = schema.get("datasets", {})
-    loan_data = datasets.get("Loan Data", {})
+    loan_data = datasets.get(LOAN_DATA, {})
     columns = loan_data.get("columns", [])
 
     # Find Cliente column
@@ -84,7 +107,7 @@ def test_spanish_client_support(schema: Dict[str, Any]) -> bool:
         return False
 
     sample_values = cliente_col.get("sample_values", [])
-    spanish_companies = [val for val in sample_values if "S.A. DE C.V." in val]
+    spanish_companies = [val for val in sample_values if SA_DE_CV in val]
 
     if spanish_companies:
         print("✅ Spanish business entities found:")
@@ -110,14 +133,14 @@ def test_usd_factoring_validation(schema: Dict[str, Any]) -> bool:
     print("-" * 50)
 
     datasets = schema.get("datasets", {})
-    loan_data = datasets.get("Loan Data", {})
+    loan_data = datasets.get(LOAN_DATA, {})
     columns = loan_data.get("columns", [])
 
     validation_results = {}
 
     # Test Currency
     currency_col = next(
-        (col for col in columns if col["name"] == "Loan Currency"), None
+        (col for col in columns if col["name"] == LOAN_CURRENCY), None
     )
     if currency_col:
         currencies = currency_col.get("sample_values", [])
@@ -129,7 +152,7 @@ def test_usd_factoring_validation(schema: Dict[str, Any]) -> bool:
             validation_results["currency"] = False
 
     # Test Product Type
-    product_col = next((col for col in columns if col["name"] == "Product Type"), None)
+    product_col = next((col for col in columns if col["name"] == PRODUCT_TYPE), None)
     if product_col:
         products = product_col.get("sample_values", [])
         if len(products) == 1 and products[0] == "factoring":
@@ -141,7 +164,7 @@ def test_usd_factoring_validation(schema: Dict[str, Any]) -> bool:
 
     # Test Payment Frequency
     frequency_col = next(
-        (col for col in columns if col["name"] == "Payment Frequency"), None
+        (col for col in columns if col["name"] == PAYMENT_FREQUENCY), None
     )
     if frequency_col:
         frequencies = frequency_col.get("sample_values", [])
@@ -154,7 +177,7 @@ def test_usd_factoring_validation(schema: Dict[str, Any]) -> bool:
 
     # Test Interest Rate Range
     rate_col = next(
-        (col for col in columns if col["name"] == "Interest Rate APR"), None
+        (col for col in columns if col["name"] == INTEREST_RATE_APR), None
     )
     if rate_col:
         abaco_validation = rate_col.get("abaco_validation", {})
@@ -240,7 +263,7 @@ def test_performance_benchmarks(schema: Dict[str, Any]) -> bool:
 def generate_test_report(schema: Dict[str, Any], test_results: Dict[str, bool]) -> str:
     """Generate comprehensive test report."""
 
-    report = f"""# Commercial-View Schema Parser Test Report
+    report = """# Commercial-View Schema Parser Test Report
 
 ## Test Execution Summary
 
@@ -268,7 +291,7 @@ def generate_test_report(schema: Dict[str, Any], test_results: Dict[str, bool]) 
     # Add schema summary
     abaco_integration = schema.get("notes", {}).get("abaco_integration", {})
 
-    report += f"""
+    report += """
 ## Schema Validation Details
 
 ### Dataset Structure

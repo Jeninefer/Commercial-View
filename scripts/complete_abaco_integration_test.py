@@ -29,13 +29,13 @@ def setup_and_test_abaco_integration():
     if downloads_schema.exists():
         config_schema.parent.mkdir(exist_ok=True)
         shutil.copy2(downloads_schema, config_schema)
-        print(f"✅ Schema copied from Downloads to config/")
+        print("✅ Schema copied from Downloads to config/")
         
         # Load and validate the exact schema
         with open(config_schema, 'r') as f:
             schema = json.load(f)
         
-        print(f"✅ Schema loaded and validated")
+        print("✅ Schema loaded and validated")
         print(f"   📊 Generation Time: {schema['notes']['generation_time']}")
         
         # Validate the exact Abaco structure
@@ -47,7 +47,7 @@ def setup_and_test_abaco_integration():
             'Payment Schedule': {'rows': 16205, 'expected_columns': 16}
         }
         
-        print(f"\n📊 Abaco Dataset Validation:")
+        print("\n📊 Abaco Dataset Validation:")
         total_records = 0
         all_valid = True
         
@@ -64,23 +64,23 @@ def setup_and_test_abaco_integration():
                 
                 # Check for exact match
                 if actual_rows == expected['rows'] and actual_cols == expected['expected_columns']:
-                    print(f"      🎯 Perfect match!")
+                    print("      🎯 Perfect match!")
                 else:
-                    print(f"      ⚠️  Minor variance detected")
+                    print("      ⚠️  Minor variance detected")
             else:
                 print(f"   ❌ {dataset_name}: Missing")
                 all_valid = False
         
         print(f"\n🎯 Total Records: {total_records:,}")
         if total_records == 48853:
-            print(f"✅ Exact 48,853 record count confirmed!")
+            print("✅ Exact 48,853 record count confirmed!")
         
     else:
         print(f"❌ Schema file not found at: {downloads_schema}")
         return False
     
     # Step 2: Fix import issues and test DataLoader
-    print(f"\n🔧 Step 2: Fixing Import Issues")
+    print("\n🔧 Step 2: Fixing Import Issues")
     print("-" * 35)
     
     # Fix the syntax error in process_portfolio.py first
@@ -129,7 +129,7 @@ def setup_and_test_abaco_integration():
             return False
     
     # Step 3: Create and test sample data matching exact schema
-    print(f"\n📊 Step 3: Testing with Schema-Matched Sample Data")
+    print("\n📊 Step 3: Testing with Schema-Matched Sample Data")
     print("-" * 50)
     
     # Only proceed if loader was successfully initialized
@@ -146,7 +146,7 @@ def setup_and_test_abaco_integration():
         
         sample_file = data_dir / 'Abaco - Loan Tape_Loan Data_Table.csv'
         sample_data.to_csv(sample_file, index=False)
-        print(f"✅ Created sample data matching exact Abaco schema")
+        print("✅ Created sample data matching exact Abaco schema")
         print(f"   📊 Columns: {len(sample_data.columns)} (matches schema)")
         print(f"   📈 Rows: {len(sample_data)} sample records")
         
@@ -155,7 +155,7 @@ def setup_and_test_abaco_integration():
         
         if result_data and 'loan_data' in result_data:
             loan_df = result_data['loan_data']
-            print(f"✅ Sample data processed successfully")
+            print("✅ Sample data processed successfully")
             print(f"   📊 Processed: {len(loan_df)} records")
             
             # Validate against schema if validator is available
@@ -163,7 +163,7 @@ def setup_and_test_abaco_integration():
                 is_valid, issues = validator.validate_table_structure(loan_df, 'Loan Data')
                 
                 if is_valid:
-                    print(f"✅ Schema validation: PASSED")
+                    print("✅ Schema validation: PASSED")
                 else:
                     print(f"⚠️  Schema validation issues: {issues[:3]}...")  # Show first 3 issues
             
@@ -191,7 +191,7 @@ def setup_and_test_abaco_integration():
         return False
     
     # Step 4: Validate bilingual support
-    print(f"\n🌐 Step 4: Validating Bilingual Support")
+    print("\n🌐 Step 4: Validating Bilingual Support")
     print("-" * 40)
     
     try:
@@ -207,12 +207,12 @@ def setup_and_test_abaco_integration():
                 pagador_samples = col.get('sample_values', [])
         
         if cliente_samples:
-            print(f"✅ Spanish Client Names (Cliente) detected:")
+            print("✅ Spanish Client Names (Cliente) detected:")
             for sample in cliente_samples[:2]:
                 print(f"      • {sample}")
         
         if pagador_samples:
-            print(f"✅ Spanish Payer Names (Pagador) detected:")
+            print("✅ Spanish Payer Names (Pagador) detected:")
             for sample in pagador_samples[:2]:
                 print(f"      • {sample}")
         
@@ -230,7 +230,7 @@ def setup_and_test_abaco_integration():
         print(f"⚠️  Bilingual validation error: {e}")
     
     # Final Summary
-    print(f"\n" + "=" * 65)
+    print("\n" + "=" * 65)
     print("🎯 ABACO INTEGRATION TEST RESULTS")
     print("=" * 65)
     
@@ -240,20 +240,20 @@ def setup_and_test_abaco_integration():
     print("✅ Schema Validation: INTEGRATED")
     print("✅ Bilingual Support: CONFIRMED")
     
-    print(f"\n🏦 Production Abaco Data Ready:")
-    print(f"   📊 Loan Data: 16,205 records × 28 columns")
-    print(f"   💰 Payment History: 16,443 records × 18 columns")
-    print(f"   📅 Payment Schedule: 16,205 records × 16 columns")
-    print(f"   🎯 Total: 48,853 records")
+    print("\n🏦 Production Abaco Data Ready:")
+    print("   📊 Loan Data: 16,205 records × 28 columns")
+    print("   💰 Payment History: 16,443 records × 18 columns")
+    print("   📅 Payment Schedule: 16,205 records × 16 columns")
+    print("   🎯 Total: 48,853 records")
     
-    print(f"\n🌐 Language & Business Features:")
-    print(f"   🇪🇸 Spanish: Cliente & Pagador names")
-    print(f"   🇺🇸 English: System fields & analytics")
-    print(f"   💰 Currency: USD factoring products")
-    print(f"   🏢 Companies: Abaco Technologies & Abaco Financial")
-    print(f"   📋 Product: Factoring with bullet payments")
+    print("\n🌐 Language & Business Features:")
+    print("   🇪🇸 Spanish: Cliente & Pagador names")
+    print("   🇺🇸 English: System fields & analytics")
+    print("   💰 Currency: USD factoring products")
+    print("   🏢 Companies: Abaco Technologies & Abaco Financial")
+    print("   📋 Product: Factoring with bullet payments")
     
-    print(f"\n🚀 STATUS: READY FOR PRODUCTION ABACO DATA!")
+    print("\n🚀 STATUS: READY FOR PRODUCTION ABACO DATA!")
     
     return True
 
@@ -293,6 +293,7 @@ def create_exact_abaco_sample_data(schema):
     """Create sample data matching the exact Abaco schema structure."""
     import pandas as pd
     import numpy as np
+rng = np.random.default_rng(seed=42)  # Modern NumPy random generator
     from datetime import datetime, timedelta
     
     # Get exact column structure from schema
@@ -312,7 +313,7 @@ def create_exact_abaco_sample_data(schema):
             sample_values = col_info.get('sample_values', [])
             
             if col_name == 'Company':
-                sample_data[col_name] = np.random.choice(['Abaco Technologies', 'Abaco Financial'], sample_size)
+                sample_data[col_name] = rng.choice(['Abaco Technologies', 'Abaco Financial'], sample_size)
             elif col_name == 'Customer ID':
                 sample_data[col_name] = [f'CLIAB{str(i).zfill(6)}' for i in range(1000, 1000 + sample_size)]
             elif col_name == 'Cliente':
@@ -322,7 +323,7 @@ def create_exact_abaco_sample_data(schema):
                     "PRODUCTOS DE CONCRETO, S.A. DE C.V.",
                     "TRANSPORTES MODERNOS, S.A. DE C.V."
                 ]
-                sample_data[col_name] = [f"{np.random.choice(base_names)} {i}" for i in range(sample_size)]
+                sample_data[col_name] = [f"{rng.choice(base_names)} {i}" for i in range(sample_size)]
             elif col_name == 'Pagador':
                 # Spanish payer names
                 base_payers = [
@@ -330,7 +331,7 @@ def create_exact_abaco_sample_data(schema):
                     "EMPRESA TRANSMISORA DE EL SALVADOR, S.A. DE C.V.",
                     "ASSA COMPAÑIA DE SEGUROS, S.A."
                 ]
-                sample_data[col_name] = [f"{np.random.choice(base_payers)} {i}" for i in range(sample_size)]
+                sample_data[col_name] = [f"{rng.choice(base_payers)} {i}" for i in range(sample_size)]
             elif col_name in ['Application ID', 'Loan ID']:
                 sample_data[col_name] = [f'DSB{1700+i}-{str(j+1).zfill(3)}' for i, j in enumerate(range(sample_size))]
             elif col_name == 'Product Type':
@@ -339,26 +340,26 @@ def create_exact_abaco_sample_data(schema):
                 base_date = datetime(2025, 9, 30)
                 sample_data[col_name] = [(base_date - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(sample_size)]
             elif col_name in ['TPV', 'Disbursement Amount', 'Outstanding Loan Value']:
-                sample_data[col_name] = np.random.uniform(1000, 100000, sample_size).round(2)
+                sample_data[col_name] = rng.uniform(1000, 100000, sample_size).round(2)
             elif col_name in ['Origination Fee', 'Origination Fee Taxes']:
-                sample_data[col_name] = np.random.uniform(10, 5000, sample_size).round(2)
+                sample_data[col_name] = rng.uniform(10, 5000, sample_size).round(2)
             elif col_name == 'Loan Currency':
                 sample_data[col_name] = ['USD'] * sample_size
             elif col_name == 'Interest Rate APR':
-                sample_data[col_name] = np.random.uniform(0.15, 0.40, sample_size).round(4)
+                sample_data[col_name] = rng.uniform(0.15, 0.40, sample_size).round(4)
             elif col_name == 'Term':
-                sample_data[col_name] = np.random.choice([30, 60, 90, 120, 180], sample_size)
+                sample_data[col_name] = rng.choice([30, 60, 90, 120, 180], sample_size)
             elif col_name == 'Term Unit':
                 sample_data[col_name] = ['days'] * sample_size
             elif col_name == 'Payment Frequency':
                 sample_data[col_name] = ['bullet'] * sample_size
             elif col_name == 'Days in Default':
-                sample_data[col_name] = np.random.choice([0, 0, 0, 1, 3, 5, 10, 30], sample_size)
+                sample_data[col_name] = rng.choice([0, 0, 0, 1, 3, 5, 10, 30], sample_size)
             elif col_name == 'Loan Status':
-                sample_data[col_name] = np.random.choice(['Current', 'Complete', 'Default'], sample_size, p=[0.7, 0.25, 0.05])
+                sample_data[col_name] = rng.choice(['Current', 'Complete', 'Default'], sample_size, p=[0.7, 0.25, 0.05])
             else:
                 # Default to numeric if we don't have specific handling
-                sample_data[col_name] = np.random.uniform(100, 1000, sample_size).round(2)
+                sample_data[col_name] = rng.uniform(100, 1000, sample_size).round(2)
         else:
             # Null columns (like Pledge To, Other, etc.)
             sample_data[col_name] = [None] * sample_size
@@ -390,15 +391,15 @@ if __name__ == '__main__':
         exit_code = 0 if success else 1
         
         if success:
-            print(f"\n✅ COMPLETE SUCCESS! Abaco integration is production-ready.")
-            print(f"🎯 Ready to process 48,853 real Abaco loan tape records!")
+            print("\n✅ COMPLETE SUCCESS! Abaco integration is production-ready.")
+            print("🎯 Ready to process 48,853 real Abaco loan tape records!")
         else:
-            print(f"\n❌ Test failed - check output above for issues.")
+            print("\n❌ Test failed - check output above for issues.")
         
         sys.exit(exit_code)
         
     except KeyboardInterrupt:
-        print(f"\n⚠️  Test interrupted by user")
+        print("\n⚠️  Test interrupted by user")
         sys.exit(1)
     except Exception as e:
         print(f"\n❌ Unexpected error: {e}")

@@ -98,7 +98,7 @@ def setup_abaco_data():
                 print(f"❌ Error copying {file_type}: {e}")
     
     # Summary
-    print(f"\n📋 Setup Summary:")
+    print("\n📋 Setup Summary:")
     print(f"   • Files copied: {len(copied_files)}")
     print(f"   • Target directory: {data_dir}")
     

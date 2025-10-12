@@ -39,7 +39,7 @@ def main():
     test_script = project_root / 'scripts' / 'complete_abaco_integration_test.py'
     
     if test_script.exists():
-        print(f"🚀 Running comprehensive Abaco test...")
+        print("🚀 Running comprehensive Abaco test...")
         result = subprocess.run([sys.executable, str(test_script)], 
                               capture_output=False, text=True)
         return result.returncode == 0

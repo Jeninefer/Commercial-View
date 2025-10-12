@@ -329,8 +329,8 @@ encryption_in_transit: true
 security_level: "confidential"
 pii_masking_required: true
 masking_rules:
-  - customer_id: "hash"
-  - customer_name: "partial"
+    - customer_id: "hash"
+    - customer_name: "partial"
 access_control: "role_based"
 audit_logging: true
 retention_period_days: 90
@@ -345,7 +345,7 @@ retention_period_days: 90
 security_level: "internal"
 pii_masking_required: true
 masking_rules:
-  - customer_id: "hash"
+    - customer_id: "hash"
 aggregation_required: false
 access_control: "role_based"
 ```
@@ -429,10 +429,10 @@ The system should comply with:
 - Use synthetic data generation
 - Never use production data in development
 - If production data is required, apply full anonymization:
-  - Remove all direct identifiers
-  - Generalize quasi-identifiers
-  - Add noise to numeric values
-  - Shuffle linkable attributes
+    - Remove all direct identifiers
+    - Generalize quasi-identifiers
+    - Add noise to numeric values
+    - Shuffle linkable attributes
 
 ### Data Sharing with Third Parties
 - Sign Data Processing Agreement (DPA)

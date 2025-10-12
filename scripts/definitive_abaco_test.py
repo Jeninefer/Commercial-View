@@ -35,11 +35,11 @@ def run_definitive_abaco_test():
     with open(downloads_schema, 'r') as f:
         schema = json.load(f)
     
-    print(f"✅ Real Abaco schema loaded successfully")
+    print("✅ Real Abaco schema loaded successfully")
     print(f"   📅 Generated: {schema['notes']['generation_time']}")
     
     # Step 2: Validate EXACT structure
-    print(f"\n🎯 Step 2: Validating EXACT Abaco Structure")
+    print("\n🎯 Step 2: Validating EXACT Abaco Structure")
     print("-" * 50)
     
     datasets = schema.get('datasets', {})
@@ -91,13 +91,13 @@ def run_definitive_abaco_test():
             
             if row_match and col_match:
                 perfect_matches += 1
-                print(f"      🎯 PERFECT MATCH!")
+                print("      🎯 PERFECT MATCH!")
             
             # Validate specific business data
             columns = actual.get('columns', [])
             
             if dataset_name == 'Loan Data':
-                print(f"      🔍 Business Data Validation:")
+                print("      🔍 Business Data Validation:")
                 
                 # Companies validation
                 company_col = next((col for col in columns if col['name'] == 'Company'), None)
@@ -163,9 +163,9 @@ def run_definitive_abaco_test():
             print(f"\n   ❌ {dataset_name}: NOT FOUND OR MISSING")
     
     # Step 3: Final validation
-    print(f"\n🎯 FINAL VALIDATION:")
+    print("\n🎯 FINAL VALIDATION:")
     print(f"   📊 Total Records: {total_records:,}")
-    print(f"   🎯 Expected: 48,853")
+    print("   🎯 Expected: 48,853")
     
     exact_count_match = total_records == 48853
     print(f"   {'✅ EXACT COUNT MATCH' if exact_count_match else '❌ COUNT MISMATCH'}")
@@ -173,7 +173,7 @@ def run_definitive_abaco_test():
     print(f"   📋 Perfect Dataset Matches: {perfect_matches}/3")
     
     # Step 4: Business Logic Validation
-    print(f"\n💼 BUSINESS LOGIC VALIDATION:")
+    print("\n💼 BUSINESS LOGIC VALIDATION:")
     print("-" * 35)
     
     business_validations = {
@@ -194,42 +194,42 @@ def run_definitive_abaco_test():
             passed_validations += 1
     
     # Step 5: Production Readiness Assessment
-    print(f"\n🚀 PRODUCTION READINESS ASSESSMENT:")
+    print("\n🚀 PRODUCTION READINESS ASSESSMENT:")
     print("-" * 45)
     
     readiness_score = passed_validations / len(business_validations)
     print(f"📊 Validation Score: {passed_validations}/{len(business_validations)} ({readiness_score:.1%})")
     
     if readiness_score >= 0.85:  # 85% or higher
-        print(f"\n🎉 PRODUCTION READY!")
-        print(f"✅ Schema perfectly matches real Abaco structure")
-        print(f"✅ All business logic validations passed")
-        print(f"✅ Ready to process REAL 48,853 Abaco records")
+        print("\n🎉 PRODUCTION READY!")
+        print("✅ Schema perfectly matches real Abaco structure")
+        print("✅ All business logic validations passed")
+        print("✅ Ready to process REAL 48,853 Abaco records")
         
-        print(f"\n🌟 CONFIRMED FEATURES:")
-        print(f"   🏦 16,205 Loan Data records (28 columns)")
-        print(f"   💰 16,443 Historic Payment records (18 columns)")
-        print(f"   📅 16,205 Payment Schedule records (16 columns)")
-        print(f"   🇪🇸 Spanish business names (Cliente/Pagador)")
-        print(f"   💵 USD factoring products exclusively")
-        print(f"   🔄 Bullet payment frequency")
-        print(f"   🏢 Abaco Technologies & Abaco Financial")
-        print(f"   📊 Interest rates: 29.47% - 36.99% APR")
-        print(f"   📅 Terms: 30-120 days")
+        print("\n🌟 CONFIRMED FEATURES:")
+        print("   🏦 16,205 Loan Data records (28 columns)")
+        print("   💰 16,443 Historic Payment records (18 columns)")
+        print("   📅 16,205 Payment Schedule records (16 columns)")
+        print("   🇪🇸 Spanish business names (Cliente/Pagador)")
+        print("   💵 USD factoring products exclusively")
+        print("   🔄 Bullet payment frequency")
+        print("   🏢 Abaco Technologies & Abaco Financial")
+        print("   📊 Interest rates: 29.47% - 36.99% APR")
+        print("   📅 Terms: 30-120 days")
         
         return True
     else:
         print(f"\n⚠️  NEEDS ATTENTION ({readiness_score:.1%} ready)")
-        print(f"   Review failed validations above")
+        print("   Review failed validations above")
         return False
 
 if __name__ == '__main__':
     success = run_definitive_abaco_test()
     
     if success:
-        print(f"\n✅ SUCCESS: Ready for REAL Abaco loan tape processing!")
-        print(f"🎯 Your Commercial-View platform can now handle the actual 48,853 records!")
+        print("\n✅ SUCCESS: Ready for REAL Abaco loan tape processing!")
+        print("🎯 Your Commercial-View platform can now handle the actual 48,853 records!")
     else:
-        print(f"\n❌ Issues detected - review validation results above")
+        print("\n❌ Issues detected - review validation results above")
     
     sys.exit(0 if success else 1)

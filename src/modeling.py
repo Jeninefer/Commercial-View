@@ -1,3 +1,26 @@
+
+# Abaco Integration Constants - 48,853 Records
+# Spanish Clients | USD Factoring | Commercial Lending
+DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
+INTEREST_RATE_APR = INTEREST_RATE_APR
+OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
+LOAN_CURRENCY = LOAN_CURRENCY
+PRODUCT_TYPE = PRODUCT_TYPE
+ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
+ABACO_FINANCIAL = ABACO_FINANCIAL
+LOAN_DATA = LOAN_DATA
+HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
+PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
+CUSTOMER_ID = CUSTOMER_ID
+LOAN_ID = LOAN_ID
+SA_DE_CV = SA_DE_CV
+TRUE_PAYMENT_STATUS = TRUE_PAYMENT_STATUS
+TRUE_PAYMENT_DATE = TRUE_PAYMENT_DATE
+DISBURSEMENT_DATE = DISBURSEMENT_DATE
+DISBURSEMENT_AMOUNT = DISBURSEMENT_AMOUNT
+PAYMENT_FREQUENCY = PAYMENT_FREQUENCY
+LOAN_STATUS = LOAN_STATUS
+
 """
 Commercial-View Modeling Module - Abaco Integration
 Risk scoring calibrated for exact Abaco schema: 29.47%-36.99% APR, Spanish clients, USD factoring
@@ -39,14 +62,14 @@ class AbacoRiskModel:
 
         # Spanish entity patterns from schema samples
         self.spanish_patterns = [
-            "S.A. DE C.V.",
+            SA_DE_CV,
             "S.A.",
             "S.R.L.",
             "HOSPITAL NACIONAL",
         ]
 
         # Abaco companies from schema
-        self.abaco_companies = ["Abaco Technologies", "Abaco Financial"]
+        self.abaco_companies = [ABACO_TECHNOLOGIES, ABACO_FINANCIAL]
 
     def calculate_abaco_risk_score(self, loan_record: pd.Series) -> float:
         """
@@ -61,14 +84,14 @@ class AbacoRiskModel:
         risk_score = 0.0
 
         # Days in Default component (40% weight)
-        days_default = loan_record.get("Days in Default", 0)
+        days_default = loan_record.get(DAYS_IN_DEFAULT, 0)
         if pd.notna(days_default) and days_default > 0:
             # Normalize to 180 days (6 months for factoring)
             dpd_risk = min(float(days_default) / 180.0, 1.0) * 0.4
             risk_score += dpd_risk
 
         # Loan Status component (30% weight)
-        loan_status = loan_record.get("Loan Status", "Unknown")
+        loan_status = loan_record.get(LOAN_STATUS, "Unknown")
         status_risk_map = {
             "Current": 0.0,  # Active factoring
             "Complete": 0.0,  # Successfully completed
@@ -79,7 +102,7 @@ class AbacoRiskModel:
         risk_score += status_risk
 
         # Interest Rate component (20% weight) - exact Abaco range
-        interest_rate = loan_record.get("Interest Rate APR", 0)
+        interest_rate = loan_record.get(INTEREST_RATE_APR, 0)
         if pd.notna(interest_rate) and float(interest_rate) > 0:
             rate = float(interest_rate)
             # Validate within Abaco range first
@@ -92,7 +115,7 @@ class AbacoRiskModel:
                 risk_score += rate_risk
 
         # Outstanding Amount component (10% weight)
-        outstanding = loan_record.get("Outstanding Loan Value", 0)
+        outstanding = loan_record.get(OUTSTANDING_LOAN_VALUE, 0)
         if pd.notna(outstanding) and float(outstanding) > 0:
             # Normalize to schema max: 77,175.0
             amount_normalized = min(float(outstanding) / 77175.0, 1.0)
@@ -119,7 +142,7 @@ class AbacoRiskModel:
         for pattern in self.spanish_patterns:
             if pattern in name_upper:
                 entity_types = {
-                    "S.A. DE C.V.": "sociedad_anonima_cv",
+                    SA_DE_CV: "sociedad_anonima_cv",
                     "S.A.": "sociedad_anonima",
                     "S.R.L.": "sociedad_limitada",
                     "HOSPITAL NACIONAL": "hospital_publico",
@@ -158,9 +181,9 @@ class AbacoRiskModel:
         """Validate complete USD factoring compliance per Abaco schema."""
 
         validations = {
-            "currency_usd": loan_record.get("Loan Currency") == "USD",
-            "product_factoring": loan_record.get("Product Type") == "factoring",
-            "payment_bullet": loan_record.get("Payment Frequency") == "bullet",
+            "currency_usd": loan_record.get(LOAN_CURRENCY) == "USD",
+            "product_factoring": loan_record.get(PRODUCT_TYPE) == "factoring",
+            "payment_bullet": loan_record.get(PAYMENT_FREQUENCY) == "bullet",
             "rate_in_range": self._validate_interest_rate(loan_record),
             "company_abaco": self._validate_abaco_company(loan_record),
         }
@@ -169,7 +192,7 @@ class AbacoRiskModel:
 
     def _validate_interest_rate(self, loan_record: pd.Series) -> bool:
         """Validate rate within exact Abaco range: 29.47%-36.99%."""
-        rate = loan_record.get("Interest Rate APR")
+        rate = loan_record.get(INTEREST_RATE_APR)
         if pd.notna(rate):
             rate_val = float(rate)
             return (
@@ -198,8 +221,8 @@ class AbacoRiskModel:
         }
 
         # Financial analysis using schema benchmarks
-        if "Outstanding Loan Value" in loan_data.columns:
-            outstanding = loan_data["Outstanding Loan Value"].fillna(0)
+        if OUTSTANDING_LOAN_VALUE in loan_data.columns:
+            outstanding = loan_data[OUTSTANDING_LOAN_VALUE].fillna(0)
             metrics["financial_analysis"] = {
                 "current_exposure": float(outstanding.sum()),
                 "schema_total_exposure": self.total_exposure,
@@ -225,7 +248,7 @@ class AbacoRiskModel:
         # Compliance validation
         if all(
             col in loan_data.columns
-            for col in ["Loan Currency", "Product Type", "Payment Frequency"]
+            for col in [LOAN_CURRENCY, PRODUCT_TYPE, PAYMENT_FREQUENCY]
         ):
             compliance_results = loan_data.apply(
                 self.validate_usd_factoring_compliance, axis=1

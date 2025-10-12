@@ -233,3 +233,102 @@ jobs:
       run: python -c "print('✅ 48,853 records validated')"
     - name: Deploy to production
       run: echo "Deploying $208M+ USD portfolio processing"
+
+# [run_correctly.sh](file:///Users/jenineferderas/Documents/GitHub/Commercial-View/run_correctly.sh)
+
+Update your existing script to include UV upgrade functionality:
+
+
+#!/bin/bash
+
+# ANSI color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+# Navigate to project root
+cd "$(dirname "$0")"
+echo -e "${BLUE}${BOLD}Navigated to:${NC} $(pwd)"
+
+# Check for UV upgrade request
+if [ "$1" == "--upgrade-uv" ] || [ "$1" == "--uv-upgrade" ]; then
+    echo -e "${YELLOW}🔧 Running UV environment upgrade...${NC}"
+    chmod +x upgrade_uv_environment.sh
+    ./upgrade_uv_environment.sh
+    exit $?
+fi
+
+# Check if virtual environment exists
+if [ ! -d ".venv" ]; then
+    echo -e "${RED}${BOLD}Virtual environment not found!${NC}"
+    echo -e "${YELLOW}Creating new virtual environment...${NC}"
+    
+    # Try UV first, then fall back to standard Python
+    if command -v uv &> /dev/null; then
+        echo -e "${BLUE}Using UV to create virtual environment...${NC}"
+        uv venv .venv
+    else
+        echo -e "${BLUE}Using standard Python venv...${NC}"
+        python3 -m venv .venv
+    fi
+    
+    echo -e "${GREEN}Virtual environment created${NC}"
+fi
+
+# Activate virtual environment
+echo -e "${YELLOW}Activating virtual environment...${NC}"
+source .venv/bin/activate
+
+# Check if environment activated successfully
+if [ "$VIRTUAL_ENV" = "" ]; then
+    echo -e "${RED}${BOLD}Failed to activate virtual environment!${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}${BOLD}✓ Virtual environment activated successfully${NC}"
+
+# Check for required packages and install if needed
+echo -e "${YELLOW}Checking required packages for Abaco integration...${NC}"
+python -c "import pandas, numpy, fastapi" 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo -e "${YELLOW}Installing required packages for 48,853 records...${NC}"
+    
+    # Use UV if available for faster installation
+    if command -v uv &> /dev/null; then
+        echo -e "${BLUE}Using UV for fast package installation...${NC}"
+        uv pip install pandas numpy fastapi uvicorn pydantic pyyaml requests
+    else
+        echo -e "${BLUE}Using pip for package installation...${NC}"
+        pip install pandas numpy fastapi uvicorn pydantic pyyaml requests
+    fi
+fi
+
+# Check for requirements.txt and install if exists
+if [ -f "requirements.txt" ]; then
+    echo -e "${YELLOW}Installing dependencies from requirements.txt...${NC}"
+    
+    if command -v uv &> /dev/null; then
+        uv pip install -r requirements.txt
+    else
+        pip install -r requirements.txt
+    fi
+fi
+
+echo -e "${GREEN}${BOLD}✓ Environment is ready for Abaco integration!${NC}"
+
+# Execute the requested Python file
+if [ "$1" != "" ] && [ "$1" != "--upgrade-uv" ]; then
+    echo -e "${BLUE}${BOLD}Running:${NC} python $1"
+    python "$1"
+else
+    echo -e "${YELLOW}${BOLD}Available Python scripts for Abaco integration:${NC}"
+    find . -name "*.py" -not -path "*/\.*" | sort
+    echo ""
+    echo -e "${YELLOW}Commands available:${NC}"
+    echo -e "  ./run_correctly.sh server_control.py    # Start Abaco API server"
+    echo -e "  ./run_correctly.sh --upgrade-uv         # Upgrade UV environment"
+    echo -e "  ./run_correctly.sh path/to/script.py    # Run specific script"
+fi

@@ -1,3 +1,26 @@
+
+# Abaco Integration Constants - 48,853 Records
+# Spanish Clients | USD Factoring | Commercial Lending
+DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
+INTEREST_RATE_APR = INTEREST_RATE_APR
+OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
+LOAN_CURRENCY = LOAN_CURRENCY
+PRODUCT_TYPE = PRODUCT_TYPE
+ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
+ABACO_FINANCIAL = ABACO_FINANCIAL
+LOAN_DATA = LOAN_DATA
+HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
+PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
+CUSTOMER_ID = CUSTOMER_ID
+LOAN_ID = LOAN_ID
+SA_DE_CV = SA_DE_CV
+TRUE_PAYMENT_STATUS = TRUE_PAYMENT_STATUS
+TRUE_PAYMENT_DATE = TRUE_PAYMENT_DATE
+DISBURSEMENT_DATE = DISBURSEMENT_DATE
+DISBURSEMENT_AMOUNT = DISBURSEMENT_AMOUNT
+PAYMENT_FREQUENCY = PAYMENT_FREQUENCY
+LOAN_STATUS = LOAN_STATUS
+
 """Commercial View Data Pipeline - Enterprise Grade Implementation.
 
 ⚠️ ENVIRONMENT SETUP INSTRUCTIONS ⚠️
@@ -132,18 +155,18 @@ class CommercialViewPipeline:
         # Compute DPD buckets
         dpd_buckets = [0, 7, 15, 21, 30, 60, 75, 90, 120, 150, 180]
         loan_data["dpd_bucket"] = pd.cut(
-            loan_data["Days in Default"],
-            bins=[-1] + dpd_buckets + [float("inf")],
+            loan_data[DAYS_IN_DEFAULT],
+            bins=[-1] + dpd_buckets + [float("in")],
             labels=["Current"] + [f"{b}d" for b in dpd_buckets[1:]] + ["180d+"],
         )
 
         # Calculate past due amounts
-        loan_data["past_due_amount"] = loan_data["Outstanding Loan Value"] * (
-            loan_data["Days in Default"] > 0
+        loan_data["past_due_amount"] = loan_data[OUTSTANDING_LOAN_VALUE] * (
+            loan_data[DAYS_IN_DEFAULT] > 0
         ).astype(int)
 
         # Determine default status (>90 days)
-        loan_data["is_default"] = loan_data["Days in Default"] > 90
+        loan_data["is_default"] = loan_data[DAYS_IN_DEFAULT] > 90
 
         # Add reference date
         loan_data["reference_date"] = datetime.now().date()
@@ -160,23 +183,23 @@ class CommercialViewPipeline:
 
             # Portfolio Outstanding
             metrics["portfolio_outstanding"] = float(
-                loan_data["Outstanding Loan Value"].sum()
+                loan_data[OUTSTANDING_LOAN_VALUE].sum()
             )
 
             # Active Clients
             metrics["active_clients"] = int(
-                loan_data[loan_data["Outstanding Loan Value"] > 0][
-                    "Customer ID"
+                loan_data[loan_data[OUTSTANDING_LOAN_VALUE] > 0][
+                    CUSTOMER_ID
                 ].nunique()
             )
 
             # Weighted APR
-            outstanding_mask = loan_data["Outstanding Loan Value"] > 0
+            outstanding_mask = loan_data[OUTSTANDING_LOAN_VALUE] > 0
             if outstanding_mask.any():
                 metrics["weighted_apr"] = float(
                     np.average(
-                        loan_data[outstanding_mask]["Interest Rate APR"],
-                        weights=loan_data[outstanding_mask]["Outstanding Loan Value"],
+                        loan_data[outstanding_mask][INTEREST_RATE_APR],
+                        weights=loan_data[outstanding_mask][OUTSTANDING_LOAN_VALUE],
                     )
                 )
             else:
@@ -184,14 +207,14 @@ class CommercialViewPipeline:
 
             # NPL (Non-Performing Loans) > 180 days
             metrics["npl_180"] = float(
-                loan_data[loan_data["Days in Default"] >= 180][
-                    "Outstanding Loan Value"
+                loan_data[loan_data[DAYS_IN_DEFAULT] >= 180][
+                    OUTSTANDING_LOAN_VALUE
                 ].sum()
             )
 
             # Concentration metrics
-            customer_outstanding = loan_data.groupby("Customer ID")[
-                "Outstanding Loan Value"
+            customer_outstanding = loan_data.groupby(CUSTOMER_ID)[
+                OUTSTANDING_LOAN_VALUE
             ].sum()
             top_10_outstanding = customer_outstanding.nlargest(10).sum()
             metrics["concentration_top10_pct"] = float(
@@ -214,7 +237,7 @@ class CommercialViewPipeline:
             dpd_data = self.compute_dpd_metrics()
             if not dpd_data.empty:
                 dpd_dist = dpd_data.groupby("dpd_bucket")[
-                    "Outstanding Loan Value"
+                    OUTSTANDING_LOAN_VALUE
                 ].sum()
                 metrics["dpd_distribution"] = {
                     str(k): float(v) for k, v in dpd_dist.items()
@@ -238,22 +261,22 @@ class CommercialViewPipeline:
 
         try:
             # Convert dates
-            loan_data["Disbursement Date"] = pd.to_datetime(
-                loan_data["Disbursement Date"]
+            loan_data[DISBURSEMENT_DATE] = pd.to_datetime(
+                loan_data[DISBURSEMENT_DATE]
             )
-            payments["True Payment Date"] = pd.to_datetime(
-                payments["True Payment Date"]
+            payments[TRUE_PAYMENT_DATE] = pd.to_datetime(
+                payments[TRUE_PAYMENT_DATE]
             )
 
             # Create cohort based on disbursement month
-            loan_data["cohort"] = loan_data["Disbursement Date"].dt.to_period("M")
+            loan_data["cohort"] = loan_data[DISBURSEMENT_DATE].dt.to_period("M")
 
             # Merge payments with loan data
             recovery_data = payments.merge(
                 loan_data[
-                    ["Loan ID", "Disbursement Amount", "cohort", "Disbursement Date"]
+                    [LOAN_ID, DISBURSEMENT_AMOUNT, "cohort", DISBURSEMENT_DATE]
                 ],
-                on="Loan ID",
+                on=LOAN_ID,
                 how="left",
             )
 
@@ -261,8 +284,8 @@ class CommercialViewPipeline:
             recovery_data["months_since_disbursement"] = (
                 (
                     (
-                        recovery_data["True Payment Date"]
-                        - recovery_data["Disbursement Date"]
+                        recovery_data[TRUE_PAYMENT_DATE]
+                        - recovery_data[DISBURSEMENT_DATE]
                     ).dt.days
                     / 30.44
                 )
@@ -273,14 +296,14 @@ class CommercialViewPipeline:
             # Aggregate recovery by cohort and month
             recovery_summary = (
                 recovery_data.groupby(["cohort", "months_since_disbursement"])
-                .agg({"True Principal Payment": "sum", "Disbursement Amount": "first"})
+                .agg({"True Principal Payment": "sum", DISBURSEMENT_AMOUNT: "first"})
                 .reset_index()
             )
 
             # Calculate cumulative recovery percentage
             recovery_summary["recovery_pct"] = (
                 recovery_summary.groupby("cohort")["True Principal Payment"].cumsum()
-                / recovery_summary["Disbursement Amount"]
+                / recovery_summary[DISBURSEMENT_AMOUNT]
                 * 100
             )
 
@@ -344,7 +367,7 @@ class CommercialViewPipeline:
             dpd_buckets = [0, 7, 15, 30, 60, 90, 120, 150, 180]
             loan_data["dpd_bucket"] = pd.cut(
                 dpd_series,
-                bins=[-1] + dpd_buckets + [float("inf")],
+                bins=[-1] + dpd_buckets + [float("in")],
                 labels=["Current"] + [f"{b}d" for b in dpd_buckets[1:]] + ["180d+"],
             )
 

@@ -47,7 +47,7 @@ def example_1_basic_loading():
 
     # Validate Abaco-specific structure
     print("\n🏦 Abaco Integration Validation:")
-    print(f"   📊 Expected records: 48,853")
+    print("   📊 Expected records: 48,853")
 
     # Check for Spanish client names
     cliente_col = next(
@@ -161,7 +161,7 @@ def example_3_data_quality_check():
     # Final validation summary
     expected_total = 48853
     total_match = total_actual_records == expected_total
-    print(f"\n🎯 TOTAL VALIDATION:")
+    print("\n🎯 TOTAL VALIDATION:")
     print(
         f"   📊 Records: {total_actual_records:,} ({'✅ EXACT MATCH' if total_match else '❌ MISMATCH'} expected {expected_total:,})"
     )

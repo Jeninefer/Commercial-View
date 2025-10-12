@@ -115,7 +115,7 @@ def check_project_structure() -> Dict[str, List[str]]:
 
 def validate_configuration_files() -> Dict[str, bool]:
     """Validate commercial lending configuration files"""
-    print(f"\n🔍 Validating Configuration Files:")
+    print("\n🔍 Validating Configuration Files:")
     validation_results = {}
 
     config_files = {
@@ -146,7 +146,7 @@ def validate_configuration_files() -> Dict[str, bool]:
 
 def check_git_health() -> Dict[str, str]:
     """Comprehensive Git repository health check"""
-    print(f"\n🔍 Git Repository Health Check:")
+    print("\n🔍 Git Repository Health Check:")
 
     git_info = {}
 
@@ -178,7 +178,7 @@ def check_git_health() -> Dict[str, str]:
     # Check remote repositories
     remotes = run_git_command(["git", "remote", "-v"])
     git_info["remotes"] = remotes
-    print(f"  🔗 Remote repositories:")
+    print("  🔗 Remote repositories:")
     for line in remotes.split("\n"):
         if line.strip():
             print(f"    {line}")
@@ -204,7 +204,7 @@ def check_git_health() -> Dict[str, str]:
                 print(f"  ⬇️  {behind} commits behind origin/main")
             if int(ahead) == 0 and int(behind) == 0:
                 print("  ✅ In sync with origin/main")
-    except:
+    except Exception as e:
         print("  ⚠️  Could not check sync status with remote")
 
     return git_info
@@ -212,7 +212,7 @@ def check_git_health() -> Dict[str, str]:
 
 def analyze_project_health() -> Dict[str, any]:
     """Analyze overall Commercial-View project health"""
-    print(f"\n🏥 Project Health Analysis:")
+    print("\n🏥 Project Health Analysis:")
 
     health_metrics = {
         "python_files": len(glob.glob("**/*.py", recursive=True)),
@@ -230,7 +230,7 @@ def analyze_project_health() -> Dict[str, any]:
         try:
             with open(py_file, "r", encoding="utf-8") as f:
                 health_metrics["total_lines_of_code"] += len(f.readlines())
-        except:
+        except Exception as e:
             pass
 
     print(f"  📊 Python files: {health_metrics['python_files']}")
@@ -248,7 +248,7 @@ def generate_sync_report(
     project_structure: Dict, git_info: Dict, health_metrics: Dict
 ) -> None:
     """Generate comprehensive synchronization report"""
-    print(f"\n📋 Synchronization Report")
+    print("\n📋 Synchronization Report")
     print("=" * 50)
 
     # Calculate missing files
@@ -273,7 +273,7 @@ def generate_sync_report(
     print(f"🌿 Current Branch: {git_info.get('current_branch', 'Unknown')}")
 
     if total_missing > 0:
-        print(f"\n⚠️  Missing Files by Category:")
+        print("\n⚠️  Missing Files by Category:")
         for category, files in project_structure.items():
             if files["missing"]:
                 print(
@@ -287,7 +287,7 @@ def generate_sync_report(
 
 def suggest_actions(project_structure: Dict, git_info: Dict) -> None:
     """Suggest actions based on project state"""
-    print(f"\n🔧 Recommended Actions:")
+    print("\n🔧 Recommended Actions:")
 
     # Check for missing critical files
     critical_missing = []
@@ -347,9 +347,9 @@ def main():
         # Provide actionable suggestions
         suggest_actions(project_structure, git_info)
 
-        print(f"\n✅ Analysis completed successfully!")
-        print(f"💡 For detailed project setup, see: setup_guide.ipynb")
-        print(f"📚 For documentation, see: docs/README.md")
+        print("\n✅ Analysis completed successfully!")
+        print("💡 For detailed project setup, see: setup_guide.ipynb")
+        print("📚 For documentation, see: docs/README.md")
 
     except Exception as e:
         print(f"\n❌ Error during analysis: {str(e)}")

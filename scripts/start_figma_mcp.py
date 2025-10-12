@@ -201,7 +201,7 @@ def create_commercial_view_figma_server() -> str:
 
     config = load_figma_config()
 
-    server_script = f"""
+    server_script = """
 const express = require('express');
 const cors = require('cors');
 const {{ createServer }} = require('http');

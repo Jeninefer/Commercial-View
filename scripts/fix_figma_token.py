@@ -80,7 +80,7 @@ def test_commercial_view_access(
 
         if response.status_code == 200:
             file_info = response.json()
-            print(f"✅ Commercial-View dashboard access: OK")
+            print("✅ Commercial-View dashboard access: OK")
             print(f"   File name: {file_info.get('name', 'Unknown')}")
             print(f"   Last modified: {file_info.get('lastModified', 'Unknown')}")
 
@@ -168,7 +168,7 @@ def find_token_references() -> List[Path]:
                 content = file_path.read_text(encoding="utf-8", errors="ignore")
                 if "figd_" in content or "figma" in content.lower():
                     token_files.append(file_path)
-            except:
+            except Exception as e:
                 pass
 
     return token_files

@@ -71,7 +71,7 @@ def verify_complete_integration():
             print(f"   ✅ Abaco integration detected: {abaco_records:,} records")
             verification_results["package_init"] = True
         else:
-            print(f"   ⚠️  Abaco integration may be incomplete")
+            print("   ⚠️  Abaco integration may be incomplete")
             
     except Exception as e:
         print(f"   ❌ Package import error: {e}")
@@ -82,14 +82,14 @@ def verify_complete_integration():
         from src.data_loader import DataLoader
         
         loader = DataLoader()
-        print(f"   ✅ DataLoader initialized successfully")
+        print("   ✅ DataLoader initialized successfully")
         
         # Check if Abaco methods exist
         if hasattr(loader, 'load_abaco_data'):
-            print(f"   ✅ Abaco integration methods available")
+            print("   ✅ Abaco integration methods available")
             verification_results["data_loader"] = True
         else:
-            print(f"   ⚠️  Abaco methods not found in DataLoader")
+            print("   ⚠️  Abaco methods not found in DataLoader")
             
     except Exception as e:
         print(f"   ❌ DataLoader error: {e}")
@@ -133,7 +133,7 @@ def verify_complete_integration():
                     updated_docs += 1
                 else:
                     print(f"   ⚠️  {doc_file} may need Abaco updates")
-            except:
+            except Exception as e:
                 print(f"   ⚠️  Could not read {doc_file}")
         else:
             print(f"   ❌ Missing: {doc_file}")
@@ -173,14 +173,14 @@ def verify_complete_integration():
         print("⚠️  NEEDS WORK! Several components need attention")
         print("🛠️  Review failed checks and address issues")
     
-    print(f"\n📊 Abaco Data Summary:")
-    print(f"   • Total Records: 48,853")
-    print(f"   • Loan Data: 16,205 records")  
-    print(f"   • Payment History: 16,443 records")
-    print(f"   • Payment Schedule: 16,205 records")
-    print(f"   • Companies: Abaco Technologies & Abaco Financial")
-    print(f"   • Currency: USD (factoring products)")
-    print(f"   • Language: English + Spanish client names")
+    print("\n📊 Abaco Data Summary:")
+    print("   • Total Records: 48,853")
+    print("   • Loan Data: 16,205 records")  
+    print("   • Payment History: 16,443 records")
+    print("   • Payment Schedule: 16,205 records")
+    print("   • Companies: Abaco Technologies & Abaco Financial")
+    print("   • Currency: USD (factoring products)")
+    print("   • Language: English + Spanish client names")
     
     return total_score >= 4
 

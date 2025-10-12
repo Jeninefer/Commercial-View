@@ -26,12 +26,12 @@ def main():
     # Step 3: Create streamlined sync
     create_streamlined_sync()
     
-    print(f"\n✅ ALL ISSUES FIXED!")
-    print(f"🚀 Your Commercial-View platform is ready for GitHub")
+    print("\n✅ ALL ISSUES FIXED!")
+    print("🚀 Your Commercial-View platform is ready for GitHub")
 
 def fix_virtual_environment():
     """Fix virtual environment activation."""
-    print(f"\n🐍 STEP 1: FIXING VIRTUAL ENVIRONMENT")
+    print("\n🐍 STEP 1: FIXING VIRTUAL ENVIRONMENT")
     print("-" * 40)
     
     venv_path = Path('.venv')
@@ -86,13 +86,13 @@ echo "✅ Environment ready for Commercial-View processing!"
 
 def fix_git_issues():
     """Fix Git repository issues."""
-    print(f"\n🔄 STEP 2: FIXING GIT ISSUES")
+    print("\n🔄 STEP 2: FIXING GIT ISSUES")
     print("-" * 30)
     
     # Check current status
     result = subprocess.run(['git', 'status', '--porcelain'], capture_output=True, text=True)
     if result.stdout.strip():
-        print(f"📁 Git changes detected, need to manage large files")
+        print("📁 Git changes detected, need to manage large files")
         
         # Create .gitattributes for large files
         gitattributes_content = """# Git LFS (Large File Storage) configuration
@@ -134,7 +134,7 @@ logs/
 
 def create_streamlined_sync():
     """Create streamlined GitHub sync process."""
-    print(f"\n🚀 STEP 3: STREAMLINED SYNC")
+    print("\n🚀 STEP 3: STREAMLINED SYNC")
     print("-" * 30)
     
     # Create simple sync script

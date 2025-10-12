@@ -56,7 +56,7 @@ def quick_status_check():
                 if google_drive_url in content:
                     has_real_data = True
                     break
-    except:
+    except Exception as e:
         pass
 
     if has_real_data:

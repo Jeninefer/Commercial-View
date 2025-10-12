@@ -137,7 +137,7 @@ def install_google_drive_dependencies() -> bool:
             failed_packages.append(package)
 
     # Install additional Commercial-View specific packages
-    print(f"\n🏦 Installing Commercial-View specific packages...")
+    print("\n🏦 Installing Commercial-View specific packages...")
 
     commercial_packages = [
         ("pyyaml", "6.0.1", "yaml"),
@@ -166,7 +166,7 @@ def install_google_drive_dependencies() -> bool:
     total_packages = len(all_packages) + len(commercial_packages)
 
     # Generate installation report
-    print(f"\n📊 Installation Summary:")
+    print("\n📊 Installation Summary:")
     print(f"   Successful: {success_count}/{total_packages}")
     print(f"   Failed: {len(failed_packages)}")
 
@@ -231,7 +231,7 @@ google_drive:
   # Commercial lending specific settings
   commercial_lending:
     # Supported export formats
-    formats: ["csv", "xlsx", "json", "pdf"]
+    formats: ["csv", "xlsx", "json", "pd"]
     
     # Data validation before upload
     validate_before_upload: true

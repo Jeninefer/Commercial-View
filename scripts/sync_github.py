@@ -150,7 +150,7 @@ def validate_loan_data_specifics(actual_data, expected_data):
     # Validate Spanish payers
     if 'Pagador' in columns:
         payer_samples = columns['Pagador']['sample_values']
-        print(f"      🏥 Spanish Payers: ✅")
+        print("      🏥 Spanish Payers: ✅")
         for sample in payer_samples:
             print(f"         • {sample}")
     
@@ -278,7 +278,7 @@ htmlcov/
 def create_comprehensive_readme():
     """Create comprehensive README based on exact Abaco schema."""
     
-    readme_content = f'''# Commercial-View Abaco Integration
+    readme_content = '''# Commercial-View Abaco Integration
 
 ## 🏦 Production-Validated Commercial Lending Analytics Platform
 
@@ -529,7 +529,7 @@ def update_documentation():
     print("-" * 35)
     
     # Create CHANGELOG based on exact schema
-    changelog_content = f"""# Changelog - Commercial-View Abaco Integration
+    changelog_content = """# Changelog - Commercial-View Abaco Integration
 
 All notable changes to the Commercial-View Abaco integration project.
 
@@ -743,7 +743,7 @@ def perform_git_sync():
             print("✅ Files staged for commit")
             
             # Create comprehensive commit message
-            commit_message = f"""Commercial-View Abaco Integration - Production Ready
+            commit_message = """Commercial-View Abaco Integration - Production Ready
 
 ✅ Validated against exact 48,853 record Abaco schema
 🇪🇸 Spanish client names: SERVICIOS TECNICOS MEDICOS, S.A. DE C.V.
@@ -764,7 +764,7 @@ Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"""
             
             # Commit changes
             subprocess.run(['git', 'commit', '-m', commit_message], check=True)
-            print(f"✅ Changes committed successfully")
+            print("✅ Changes committed successfully")
             
             # Check for remote and push
             remote_result = subprocess.run(['git', 'remote', '-v'], 

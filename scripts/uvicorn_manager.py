@@ -71,7 +71,7 @@ class UvicornManager:
                 missing_configs.append(str(config))
 
         if missing_configs:
-            print(f"❌ Missing required configuration files:")
+            print("❌ Missing required configuration files:")
             for config in missing_configs:
                 print(f"   - {config}")
             return False
@@ -128,7 +128,7 @@ class UvicornManager:
         """Get security headers for commercial lending compliance"""
         return [
             "--header",
-            "X-Content-Type-Options:nosniff",
+            "X-Content-Type-Options:nosnif",
             "--header",
             "X-Frame-Options:DENY",
             "--header",
@@ -136,7 +136,7 @@ class UvicornManager:
             "--header",
             "Strict-Transport-Security:max-age=31536000; includeSubDomains",
             "--header",
-            "Content-Security-Policy:default-src 'self'",
+            "Content-Security-Policy:default-src 'sel'",
             "--header",
             "Referrer-Policy:strict-origin-when-cross-origin",
         ]
@@ -480,7 +480,7 @@ def main():
     )
     parser.add_argument(
         "action",
-        choices=["dev", "prod", "perf", "kill", "health", "status"],
+        choices=["dev", "prod", "per", "kill", "health", "status"],
         help="Action to perform",
     )
     parser.add_argument("--host", default="0.0.0.0", help="Host to bind to")
@@ -497,7 +497,7 @@ def main():
         manager.start_development_server()
     elif args.action == "prod":
         manager.start_production_server()
-    elif args.action == "perf":
+    elif args.action == "per":
         manager.start_high_performance_server()
     elif args.action == "kill":
         killed = manager.kill_server_on_port(args.port)

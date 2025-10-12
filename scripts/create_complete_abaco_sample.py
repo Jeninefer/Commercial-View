@@ -5,6 +5,7 @@ This generates all three required files based on your JSON schema structure
 
 import pandas as pd
 import numpy as np
+rng = np.random.default_rng(seed=42)  # Modern NumPy random generator
 from pathlib import Path
 from datetime import datetime, timedelta
 import json
@@ -50,7 +51,7 @@ def create_loan_data_sample(loan_schema, data_dir):
         if col_info.get('non_null', 0) > 0:
             # Non-null columns with real data
             if col_name == 'Company':
-                loan_data[col_name] = np.random.choice(['Abaco Technologies', 'Abaco Financial'], sample_size)
+                loan_data[col_name] = rng.choice(['Abaco Technologies', 'Abaco Financial'], sample_size)
             elif col_name == 'Customer ID':
                 loan_data[col_name] = [f'CLIAB{str(i).zfill(6)}' for i in range(198, 198 + sample_size)]
             elif col_name == 'Cliente':
@@ -64,30 +65,30 @@ def create_loan_data_sample(loan_schema, data_dir):
             elif col_name == 'Disbursement Date':
                 loan_data[col_name] = [(datetime(2025, 9, 30) - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(sample_size)]
             elif col_name in ['TPV', 'Outstanding Loan Value']:
-                loan_data[col_name] = np.random.uniform(88.48, 77175.0, sample_size).round(2)
+                loan_data[col_name] = rng.uniform(88.48, 77175.0, sample_size).round(2)
             elif col_name == 'Disbursement Amount':
-                loan_data[col_name] = np.random.uniform(87.47, 74340.75, sample_size).round(2)
+                loan_data[col_name] = rng.uniform(87.47, 74340.75, sample_size).round(2)
             elif col_name == 'Origination Fee':
-                loan_data[col_name] = np.random.uniform(0.89, 2508.19, sample_size).round(2)
+                loan_data[col_name] = rng.uniform(0.89, 2508.19, sample_size).round(2)
             elif col_name == 'Origination Fee Taxes':
-                loan_data[col_name] = np.random.uniform(0.12, 326.06, sample_size).round(2)
+                loan_data[col_name] = rng.uniform(0.12, 326.06, sample_size).round(2)
             elif col_name == 'Loan Currency':
                 loan_data[col_name] = ['USD'] * sample_size
             elif col_name == 'Interest Rate APR':
-                loan_data[col_name] = np.random.uniform(0.2947, 0.3699, sample_size).round(4)
+                loan_data[col_name] = rng.uniform(0.2947, 0.3699, sample_size).round(4)
             elif col_name == 'Term':
-                loan_data[col_name] = np.random.choice([30, 90, 120], sample_size)
+                loan_data[col_name] = rng.choice([30, 90, 120], sample_size)
             elif col_name == 'Term Unit':
                 loan_data[col_name] = ['days'] * sample_size
             elif col_name == 'Payment Frequency':
                 loan_data[col_name] = ['bullet'] * sample_size
             elif col_name == 'Days in Default':
-                loan_data[col_name] = np.random.choice([0, 1, 3], sample_size)
+                loan_data[col_name] = rng.choice([0, 1, 3], sample_size)
             elif col_name == 'Loan Status':
-                loan_data[col_name] = np.random.choice(['Current', 'Complete', 'Default'], sample_size, p=[0.7, 0.25, 0.05])
+                loan_data[col_name] = rng.choice(['Current', 'Complete', 'Default'], sample_size, p=[0.7, 0.25, 0.05])
             else:
                 # Default numeric values for other columns
-                loan_data[col_name] = np.random.uniform(100, 1000, sample_size).round(2)
+                loan_data[col_name] = rng.uniform(100, 1000, sample_size).round(2)
         else:
             # Null columns (Pledge To, Other, etc.)
             loan_data[col_name] = [None] * sample_size
@@ -112,7 +113,7 @@ def create_payment_history_sample(payment_schema, data_dir):
     for col_name, col_info in columns.items():
         if col_info.get('non_null', 0) > 0:
             if col_name == 'Company':
-                payment_data[col_name] = np.random.choice(['Abaco Financial', 'Abaco Technologies'], sample_size)
+                payment_data[col_name] = rng.choice(['Abaco Financial', 'Abaco Technologies'], sample_size)
             elif col_name == 'Customer ID':
                 # Mix of CLIAB and CLI formats as in real data
                 cli_ids = [f'CLI{2000+i}' for i in range(sample_size//4)]
@@ -127,27 +128,27 @@ def create_payment_history_sample(payment_schema, data_dir):
             elif col_name == 'True Payment Date':
                 payment_data[col_name] = [(datetime(2025, 9, 30) - timedelta(days=i)).strftime('%Y-%m-%d') for i in range(sample_size)]
             elif col_name == 'True Devolution':
-                payment_data[col_name] = np.random.choice([0.0, 658.45, 0.01], sample_size)
+                payment_data[col_name] = rng.choice([0.0, 658.45, 0.01], sample_size)
             elif col_name == 'True Total Payment':
-                payment_data[col_name] = np.random.uniform(461.33, 62115.89, sample_size).round(2)
+                payment_data[col_name] = rng.uniform(461.33, 62115.89, sample_size).round(2)
             elif col_name == 'True Payment Currency':
                 payment_data[col_name] = ['USD'] * sample_size
             elif col_name == 'True Principal Payment':
-                payment_data[col_name] = np.random.uniform(448.04, 60270.32, sample_size).round(2)
+                payment_data[col_name] = rng.uniform(448.04, 60270.32, sample_size).round(2)
             elif col_name == 'True Interest Payment':
-                payment_data[col_name] = np.random.uniform(7.69, 94.48, sample_size).round(2)
+                payment_data[col_name] = rng.uniform(7.69, 94.48, sample_size).round(2)
             elif col_name == 'True Fee Payment':
-                payment_data[col_name] = np.random.uniform(4.07, 1550.56, sample_size).round(2)
+                payment_data[col_name] = rng.uniform(4.07, 1550.56, sample_size).round(2)
             elif col_name == 'True Tax Payment':
-                payment_data[col_name] = np.random.uniform(1.0, 12.28, sample_size).round(2)
+                payment_data[col_name] = rng.uniform(1.0, 12.28, sample_size).round(2)
             elif col_name == 'True Fee Tax Payment':
-                payment_data[col_name] = np.random.uniform(0.53, 201.57, sample_size).round(2)
+                payment_data[col_name] = rng.uniform(0.53, 201.57, sample_size).round(2)
             elif col_name == 'True Rabates':
                 payment_data[col_name] = [0] * sample_size
             elif col_name == 'True Outstanding Loan Value':
-                payment_data[col_name] = np.random.uniform(0.0, 8054.78, sample_size).round(2)
+                payment_data[col_name] = rng.uniform(0.0, 8054.78, sample_size).round(2)
             elif col_name == 'True Payment Status':
-                payment_data[col_name] = np.random.choice(['Late', 'On Time', 'Prepayment'], sample_size, p=[0.3, 0.6, 0.1])
+                payment_data[col_name] = rng.choice(['Late', 'On Time', 'Prepayment'], sample_size, p=[0.3, 0.6, 0.1])
         else:
             # Null columns (True Other Payment)
             payment_data[col_name] = [None] * sample_size
@@ -172,7 +173,7 @@ def create_payment_schedule_sample(schedule_schema, data_dir):
     for col_name, col_info in columns.items():
         if col_info.get('non_null', 0) > 0:
             if col_name == 'Company':
-                schedule_data[col_name] = np.random.choice(['Abaco Technologies', 'Abaco Financial'], sample_size)
+                schedule_data[col_name] = rng.choice(['Abaco Technologies', 'Abaco Financial'], sample_size)
             elif col_name == 'Customer ID':
                 schedule_data[col_name] = [f'CLIAB{str(i).zfill(6)}' for i in range(78, 78 + sample_size)]
             elif col_name == 'Cliente':
@@ -185,19 +186,19 @@ def create_payment_schedule_sample(schedule_schema, data_dir):
                 # Future dates for schedules
                 schedule_data[col_name] = [(datetime(2025, 10, 2) + timedelta(days=i*30)).strftime('%Y-%m-%d') for i in range(sample_size)]
             elif col_name == 'TPV':
-                schedule_data[col_name] = np.random.uniform(1731.5, 21784.0, sample_size).round(2)
+                schedule_data[col_name] = rng.uniform(1731.5, 21784.0, sample_size).round(2)
             elif col_name == 'Total Payment':
-                schedule_data[col_name] = np.random.uniform(1558.35, 21889.957376, sample_size).round(6)
+                schedule_data[col_name] = rng.uniform(1558.35, 21889.957376, sample_size).round(6)
             elif col_name == 'Currency':
                 schedule_data[col_name] = ['USD'] * sample_size
             elif col_name == 'Principal Payment':
-                schedule_data[col_name] = np.random.uniform(1524.28, 18857.61, sample_size).round(2)
+                schedule_data[col_name] = rng.uniform(1524.28, 18857.61, sample_size).round(2)
             elif col_name == 'Interest Payment':
-                schedule_data[col_name] = np.random.uniform(0.0, 2021.5552, sample_size).round(4)
+                schedule_data[col_name] = rng.uniform(0.0, 2021.5552, sample_size).round(4)
             elif col_name == 'Fee Payment':
-                schedule_data[col_name] = np.random.uniform(17.55, 661.94, sample_size).round(2)
+                schedule_data[col_name] = rng.uniform(17.55, 661.94, sample_size).round(2)
             elif col_name == 'Tax Payment':
-                schedule_data[col_name] = np.random.uniform(3.9195, 348.854376, sample_size).round(6)
+                schedule_data[col_name] = rng.uniform(3.9195, 348.854376, sample_size).round(6)
             elif col_name == 'Outstanding Loan Value':
                 schedule_data[col_name] = [0] * sample_size  # All paid off as per schema
         else:
@@ -223,8 +224,8 @@ def create_spanish_clients(count):
     
     result = []
     for i in range(count):
-        if np.random.random() > 0.2:  # 80% companies
-            company = np.random.choice(companies)
+        if rng.random() > 0.2:  # 80% companies
+            company = rng.choice(companies)
             result.append(company.replace('MEDICOS', f'MEDICOS {i+1}'))
         else:
             result.append(f'KEVIN ENRIQUE CLIENTE {i+1:03d} MORALES')
@@ -240,7 +241,7 @@ def create_spanish_payers(count):
     
     result = []
     for i in range(count):
-        payer = np.random.choice(payers)
+        payer = rng.choice(payers)
         result.append(payer.replace('NACIONAL', f'NACIONAL {i+1:03d}'))
     return result
 
@@ -254,7 +255,7 @@ def create_payment_clients(count):
     
     result = []
     for i in range(count):
-        client = np.random.choice(clients)
+        client = rng.choice(clients)
         result.append(client.replace('RAFAEL', f'CLIENTE {i+1:03d}'))
     return result
 
@@ -268,7 +269,7 @@ def create_payment_payers(count):
     
     result = []
     for i in range(count):
-        payer = np.random.choice(payers)
+        payer = rng.choice(payers)
         result.append(payer.replace('ALUMA', f'PAGADOR {i+1:03d}'))
     return result
 
@@ -282,7 +283,7 @@ def create_schedule_clients(count):
     
     result = []
     for i in range(count):
-        client = np.random.choice(clients)
+        client = rng.choice(clients)
         result.append(client.replace('MYRNA', f'SCHEDULE {i+1:03d}'))
     return result
 
@@ -296,7 +297,7 @@ def create_schedule_payers(count):
     
     result = []
     for i in range(count):
-        payer = np.random.choice(payers)
+        payer = rng.choice(payers)
         result.append(payer.replace('OSCAR', f'PAYER {i+1:03d}'))
     return result
 

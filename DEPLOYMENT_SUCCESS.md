@@ -6,9 +6,9 @@
 
 **Dataset Validation:**
 - Total Records: 48,853 (EXACT MATCH)
-  - Loan Data: 16,205 records × 28 columns
-  - Historic Real Payment: 16,443 records × 18 columns  
-  - Payment Schedule: 16,205 records × 16 columns
+    - Loan Data: 16,205 records × 28 columns
+    - Historic Real Payment: 16,443 records × 18 columns  
+    - Payment Schedule: 16,205 records × 16 columns
 
 **Spanish Language Support:**
 - Client Names: "SERVICIOS TECNICOS MEDICOS, S.A. DE C.V."

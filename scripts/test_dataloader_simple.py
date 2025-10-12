@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 import pandas as pd
 import numpy as np
+rng = np.random.default_rng(seed=42)  # Modern NumPy random generator
 from datetime import datetime, timedelta
 
 def create_minimal_abaco_sample():
@@ -37,7 +38,7 @@ def create_minimal_abaco_sample():
     
     loan_data = {
         # Required non-null columns from your schema
-        'Company': np.random.choice(['Abaco Technologies', 'Abaco Financial'], sample_size),
+        'Company': rng.choice(['Abaco Technologies', 'Abaco Financial'], sample_size),
         'Customer ID': [f'CLIAB{str(i).zfill(6)}' for i in range(198, 198 + sample_size)],
         'Cliente': cliente_extended,
         'Pagador': pagador_extended,
@@ -45,18 +46,18 @@ def create_minimal_abaco_sample():
         'Loan ID': [f'DSB{1710+i}-{str(j+1).zfill(3)}' for i, j in enumerate(range(sample_size))],
         'Product Type': ['factoring'] * sample_size,
         'Disbursement Date': ['2025-09-30'] * sample_size,
-        'TPV': np.random.uniform(1000, 80000, sample_size).round(2),
-        'Disbursement Amount': np.random.uniform(900, 75000, sample_size).round(2),
-        'Origination Fee': np.random.uniform(10, 2500, sample_size).round(2),
-        'Origination Fee Taxes': np.random.uniform(1, 350, sample_size).round(2),
+        'TPV': rng.uniform(1000, 80000, sample_size).round(2),
+        'Disbursement Amount': rng.uniform(900, 75000, sample_size).round(2),
+        'Origination Fee': rng.uniform(10, 2500, sample_size).round(2),
+        'Origination Fee Taxes': rng.uniform(1, 350, sample_size).round(2),
         'Loan Currency': ['USD'] * sample_size,
-        'Interest Rate APR': np.random.uniform(0.2947, 0.3699, sample_size).round(4),
-        'Term': np.random.choice([30, 90, 120], sample_size),
+        'Interest Rate APR': rng.uniform(0.2947, 0.3699, sample_size).round(4),
+        'Term': rng.choice([30, 90, 120], sample_size),
         'Term Unit': ['days'] * sample_size,
         'Payment Frequency': ['bullet'] * sample_size,
-        'Days in Default': np.random.choice([0, 0, 0, 1, 3], sample_size),  # Mostly current
-        'Loan Status': np.random.choice(['Current', 'Complete', 'Default'], sample_size, p=[0.7, 0.25, 0.05]),
-        'Outstanding Loan Value': np.random.uniform(0, 80000, sample_size).round(2),
+        'Days in Default': rng.choice([0, 0, 0, 1, 3], sample_size),  # Mostly current
+        'Loan Status': rng.choice(['Current', 'Complete', 'Default'], sample_size, p=[0.7, 0.25, 0.05]),
+        'Outstanding Loan Value': rng.uniform(0, 80000, sample_size).round(2),
         
         # Null columns from your schema
         'Pledge To': [None] * sample_size,
@@ -96,7 +97,7 @@ def test_basic_functionality():
     print(f"✅ Saved sample data to: {sample_file}")
     
     # Test basic pandas operations (simulating DataLoader functionality)
-    print(f"\n📊 Testing Data Operations:")
+    print("\n📊 Testing Data Operations:")
     
     # Test delinquency bucketing
     def get_delinquency_bucket(days):
@@ -152,19 +153,19 @@ def main():
         # Test basic functionality
         test_basic_functionality()
         
-        print(f"\n🎯 CORE FUNCTIONALITY TEST RESULTS:")
-        print(f"✅ Data creation: WORKING")
-        print(f"✅ File operations: WORKING") 
-        print(f"✅ Delinquency bucketing: WORKING")
-        print(f"✅ Risk scoring: WORKING")
-        print(f"✅ Spanish name validation: WORKING")
-        print(f"✅ Currency validation: WORKING")
-        print(f"✅ Product validation: WORKING")
+        print("\n🎯 CORE FUNCTIONALITY TEST RESULTS:")
+        print("✅ Data creation: WORKING")
+        print("✅ File operations: WORKING") 
+        print("✅ Delinquency bucketing: WORKING")
+        print("✅ Risk scoring: WORKING")
+        print("✅ Spanish name validation: WORKING")
+        print("✅ Currency validation: WORKING")
+        print("✅ Product validation: WORKING")
         
-        print(f"\n🚀 READY FOR REAL ABACO DATA!")
-        print(f"   The core algorithms work correctly")
-        print(f"   Schema structure is validated")
-        print(f"   Business logic is operational")
+        print("\n🚀 READY FOR REAL ABACO DATA!")
+        print("   The core algorithms work correctly")
+        print("   Schema structure is validated")
+        print("   Business logic is operational")
         
         return True
         
@@ -178,8 +179,8 @@ if __name__ == '__main__':
     success = main()
     
     if success:
-        print(f"\n✅ Simple test PASSED! Core functionality verified.")
+        print("\n✅ Simple test PASSED! Core functionality verified.")
     else:
-        print(f"\n❌ Simple test FAILED - check errors above.")
+        print("\n❌ Simple test FAILED - check errors above.")
     
     sys.exit(0 if success else 1)

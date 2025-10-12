@@ -5,6 +5,7 @@ Creates all required production data files
 
 import pandas as pd
 import numpy as np
+rng = np.random.default_rng(seed=42)  # Modern NumPy random generator
 from datetime import datetime, timedelta
 import random
 from pathlib import Path
@@ -84,7 +85,7 @@ class ProductionDatasetGenerator:
             interest_rates.append(round(rate, 4))
 
         # Loan terms (in months)
-        terms = np.random.choice(
+        terms = rng.choice(
             [12, 24, 36, 48, 60, 72], num_loans, p=[0.1, 0.25, 0.35, 0.2, 0.08, 0.02]
         )
 
@@ -104,14 +105,14 @@ class ProductionDatasetGenerator:
             maturity_dates.append(maturity_date.strftime("%Y-%m-%d"))
 
         # Loan status
-        statuses = np.random.choice(
-            ["active", "paid_off", "charged_off", "delinquent"],
+        statuses = rng.choice(
+            ["active", "paid_of", "charged_of", "delinquent"],
             num_loans,
             p=[0.75, 0.20, 0.03, 0.02],
         )
 
         # Industry codes (NAICS)
-        industry_codes = np.random.choice(
+        industry_codes = rng.choice(
             [
                 "236220",
                 "238210",
@@ -128,7 +129,7 @@ class ProductionDatasetGenerator:
         )
 
         # Risk grades
-        risk_grades = np.random.choice(
+        risk_grades = rng.choice(
             ["A", "B", "C", "D", "E"], num_loans, p=[0.25, 0.35, 0.25, 0.12, 0.03]
         )
 
@@ -208,7 +209,7 @@ class ProductionDatasetGenerator:
                         "payment_status": (
                             "pending"
                             if payment_date > datetime.now()
-                            else np.random.choice(
+                            else rng.choice(
                                 ["paid", "overdue", "partial"], p=[0.85, 0.10, 0.05]
                             )
                         ),
@@ -289,10 +290,10 @@ class ProductionDatasetGenerator:
             )
 
             for payment_date in payment_dates:
-                if loan["loan_status"] == "charged_off":
+                if loan["loan_status"] == "charged_of":
                     status = "failed"
                 else:
-                    status = np.random.choice(["successful", "failed"], p=[0.9, 0.1])
+                    status = rng.choice(["successful", "failed"], p=[0.9, 0.1])
 
                 historic_payments.append(
                     {
@@ -365,7 +366,7 @@ class ProductionDatasetGenerator:
         # Demographics
         ages = np.random.randint(18, 70, num_customers)
         incomes = np.random.randint(30000, 120000, num_customers)
-        employment_status = np.random.choice(
+        employment_status = rng.choice(
             ["employed", "unemployed", "self-employed", "retired"],
             num_customers,
             p=[0.6, 0.2, 0.15, 0.05],
@@ -404,7 +405,7 @@ class ProductionDatasetGenerator:
         associated_loan_ids = random.choices(loan_ids, k=num_collaterals)
 
         # Collateral types
-        collateral_types = np.random.choice(
+        collateral_types = rng.choice(
             ["real_estate", "vehicle", "equipment", "inventory"], num_collaterals
         )
 

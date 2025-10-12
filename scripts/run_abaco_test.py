@@ -38,7 +38,7 @@ def run_complete_abaco_test():
         with open(schema_path, 'r') as f:
             schema = json.load(f)
         
-        print(f"✅ Schema validation successful")
+        print("✅ Schema validation successful")
         
         # Expected Abaco structure validation
         expected_tables = {
@@ -48,7 +48,7 @@ def run_complete_abaco_test():
         }
         
         datasets = schema.get('datasets', {})
-        print(f"\n📊 Abaco Data Structure Validation:")
+        print("\n📊 Abaco Data Structure Validation:")
         
         all_present = True
         total_actual_records = 0
@@ -79,7 +79,7 @@ def run_complete_abaco_test():
         return False
     
     # Step 3: Test DataLoader imports
-    print(f"\n🐍 Testing DataLoader Integration:")
+    print("\n🐍 Testing DataLoader Integration:")
     try:
         from src.data_loader import DataLoader, AbacoSchemaValidator
         from src.data_loader import (
@@ -100,7 +100,7 @@ def run_complete_abaco_test():
         return False
     
     # Step 4: Test with sample data that matches real schema
-    print(f"\n📊 Testing Data Processing (Sample Data):")
+    print("\n📊 Testing Data Processing (Sample Data):")
     try:
         import pandas as pd
         
@@ -147,7 +147,7 @@ def run_complete_abaco_test():
         return False
     
     # Final Summary
-    print(f"\n" + "=" * 60)
+    print("\n" + "=" * 60)
     print("🎯 ABACO INTEGRATION TEST COMPLETE")
     print("=" * 60)
     
@@ -157,19 +157,19 @@ def run_complete_abaco_test():
     print("✅ Risk scoring: OPERATIONAL")
     print("✅ Delinquency bucketing: OPERATIONAL")
     
-    print(f"\n🏦 Ready for Production Abaco Data:")
+    print("\n🏦 Ready for Production Abaco Data:")
     print(f"   📊 Loan Data: {expected_tables['Loan Data']:,} records supported")
     print(f"   💰 Payment History: {expected_tables['Historic Real Payment']:,} records supported")
     print(f"   📅 Payment Schedule: {expected_tables['Payment Schedule']:,} records supported")
-    print(f"   🎯 Total: 48,853 records ready for processing")
+    print("   🎯 Total: 48,853 records ready for processing")
     
-    print(f"\n🌐 Production Features:")
-    print(f"   🇪🇸 Spanish client names (Cliente/Pagador)")
-    print(f"   🇺🇸 English system fields and analytics")
-    print(f"   💰 USD factoring products")
-    print(f"   🏢 Abaco Technologies & Abaco Financial")
+    print("\n🌐 Production Features:")
+    print("   🇪🇸 Spanish client names (Cliente/Pagador)")
+    print("   🇺🇸 English system fields and analytics")
+    print("   💰 USD factoring products")
+    print("   🏢 Abaco Technologies & Abaco Financial")
     
-    print(f"\n🚀 Status: PRODUCTION READY FOR ABACO DATA!")
+    print("\n🚀 Status: PRODUCTION READY FOR ABACO DATA!")
     
     return True
 

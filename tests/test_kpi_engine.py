@@ -6,6 +6,7 @@ Comprehensive KPI Engine Test Suite
 import pytest
 import pandas as pd
 import numpy as np
+rng = np.random.default_rng(seed=42)  # Modern NumPy random generator
 from datetime import datetime, timedelta
 from unittest.mock import Mock, patch, MagicMock
 from src.analytics.kpi_engine import CommercialLendingKPIEngine, KPIResult
@@ -46,10 +47,10 @@ class TestCommercialLendingKPIEngine:
             'loan_id': [f'CL{i:06d}' for i in range(1, num_loans + 1)],
             'customer_id': [f'CUST{(i % 30) + 1:04d}' for i in range(num_loans)],
             'principal_amount': np.random.lognormal(13, 0.8, num_loans),
-            'interest_rate': np.random.normal(0.18, 0.05, num_loans).clip(0.08, 0.35),
-            'loan_status': np.random.choice(['active', 'paid_off', 'delinquent'], num_loans, p=[0.8, 0.15, 0.05]),
+            'interest_rate': rng.normal(0.18, 0.05, num_loans).clip(0.08, 0.35),
+            'loan_status': rng.choice(['active', 'paid_of', 'delinquent'], num_loans, p=[0.8, 0.15, 0.05]),
             'origination_date': pd.date_range(start='2023-01-01', periods=num_loans, freq='D').strftime('%Y-%m-%d'),
-            'risk_grade': np.random.choice(['A', 'B', 'C', 'D', 'E'], num_loans, p=[0.3, 0.3, 0.25, 0.1, 0.05])
+            'risk_grade': rng.choice(['A', 'B', 'C', 'D', 'E'], num_loans, p=[0.3, 0.3, 0.25, 0.1, 0.05])
         })
     
     # Test Case 1-5: Outstanding Portfolio Calculations
@@ -148,7 +149,7 @@ class TestCommercialLendingKPIEngine:
             'loan_id': ['CL000001'],
             'principal_amount': [1000000],
             'interest_rate': [0.15],
-            'loan_status': ['paid_off'],
+            'loan_status': ['paid_of'],
             'customer_id': ['CUST001']
         })
         

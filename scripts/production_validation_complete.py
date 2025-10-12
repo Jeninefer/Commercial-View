@@ -6,6 +6,7 @@ Validates against the exact 48,853 record structure from your Downloads
 import json
 import pandas as pd
 import numpy as np
+rng = np.random.default_rng(seed=42)  # Modern NumPy random generator
 from pathlib import Path
 from datetime import datetime
 
@@ -23,13 +24,13 @@ def validate_production_readiness():
     with open(schema_path, 'r') as f:
         schema = json.load(f)
     
-    print(f"✅ Real Abaco schema loaded")
+    print("✅ Real Abaco schema loaded")
     print(f"   📅 Generated: {schema['notes']['generation_time']}")
     
     datasets = schema['datasets']
     
     # EXACT VALIDATION against your real structure
-    print(f"\n🎯 EXACT STRUCTURE VALIDATION:")
+    print("\n🎯 EXACT STRUCTURE VALIDATION:")
     print("-" * 40)
     
     loan_data = datasets['Loan Data']
@@ -45,19 +46,19 @@ def validate_production_readiness():
     
     total_records = sum(exact_counts.values())
     
-    print(f"📊 EXACT RECORD COUNTS:")
+    print("📊 EXACT RECORD COUNTS:")
     for dataset, count in exact_counts.items():
         print(f"   ✅ {dataset}: {count:,} records")
     print(f"   🎯 TOTAL: {total_records:,} records")
     
     if total_records == 48853:
-        print(f"   ✅ PERFECT MATCH: Exactly 48,853 records!")
+        print("   ✅ PERFECT MATCH: Exactly 48,853 records!")
     else:
         print(f"   ❌ Mismatch: Expected 48,853, got {total_records:,}")
         return False
     
     # BUSINESS LOGIC VALIDATION using real data
-    print(f"\n💼 BUSINESS LOGIC VALIDATION:")
+    print("\n💼 BUSINESS LOGIC VALIDATION:")
     print("-" * 35)
     
     # Extract real business values from schema
@@ -110,7 +111,7 @@ def validate_production_readiness():
     print(f"   📋 Loan Statuses: {statuses}")
     
     # PAYMENT DATA VALIDATION
-    print(f"\n💰 PAYMENT DATA VALIDATION:")
+    print("\n💰 PAYMENT DATA VALIDATION:")
     print("-" * 30)
     
     payment_columns = {col['name']: col for col in payment_data['columns']}
@@ -121,7 +122,7 @@ def validate_production_readiness():
     print(f"   💰 Payment Currency: {payment_currency}")
     
     # PRODUCTION READINESS SCORE
-    print(f"\n🚀 PRODUCTION READINESS ASSESSMENT:")
+    print("\n🚀 PRODUCTION READINESS ASSESSMENT:")
     print("-" * 45)
     
     validations = {
@@ -140,7 +141,7 @@ def validate_production_readiness():
     total = len(validations)
     score = passed / total
     
-    print(f"📊 Validation Results:")
+    print("📊 Validation Results:")
     for validation, result in validations.items():
         status = "✅" if result else "❌"
         print(f"   {status} {validation}")
@@ -148,21 +149,21 @@ def validate_production_readiness():
     print(f"\n🎯 FINAL SCORE: {passed}/{total} ({score:.1%})")
     
     if score >= 0.9:  # 90% or higher
-        print(f"\n🎉 PRODUCTION READY!")
-        print(f"✅ Your Commercial-View platform is validated for REAL Abaco data")
-        print(f"✅ All critical business logic checks passed")
-        print(f"✅ Schema structure matches exactly")
+        print("\n🎉 PRODUCTION READY!")
+        print("✅ Your Commercial-View platform is validated for REAL Abaco data")
+        print("✅ All critical business logic checks passed")
+        print("✅ Schema structure matches exactly")
         
-        print(f"\n🌟 READY TO PROCESS:")
-        print(f"   🏦 16,205 Loan records with Spanish client names")
-        print(f"   💰 16,443 Payment records with status tracking") 
-        print(f"   📅 16,205 Payment schedules")
-        print(f"   💵 USD factoring products (29.47% - 36.99% APR)")
-        print(f"   🔄 Bullet payment terms (30-120 days)")
-        print(f"   🏢 Abaco Technologies & Abaco Financial companies")
+        print("\n🌟 READY TO PROCESS:")
+        print("   🏦 16,205 Loan records with Spanish client names")
+        print("   💰 16,443 Payment records with status tracking") 
+        print("   📅 16,205 Payment schedules")
+        print("   💵 USD factoring products (29.47% - 36.99% APR)")
+        print("   🔄 Bullet payment terms (30-120 days)")
+        print("   🏢 Abaco Technologies & Abaco Financial companies")
         
         # Generate sample data for final test
-        print(f"\n📊 Generating Production Sample Data:")
+        print("\n📊 Generating Production Sample Data:")
         sample_df = create_production_sample(schema)
         
         # Save sample for testing
@@ -200,19 +201,19 @@ def create_production_sample(schema):
         
         if non_null > 0:  # Non-null columns
             if col_name == 'Company':
-                sample_data[col_name] = np.random.choice(sample_values, sample_size)
+                sample_data[col_name] = rng.choice(sample_values, sample_size)
             elif col_name == 'Customer ID':
                 # Based on your real pattern: CLIAB000198, CLIAB000237, etc.
                 sample_data[col_name] = [f'CLIAB{str(i).zfill(6)}' for i in range(198, 198 + sample_size)]
             elif col_name == 'Cliente':
                 # Use your real Spanish business names
-                sample_data[col_name] = np.random.choice(sample_values + [
+                sample_data[col_name] = rng.choice(sample_values + [
                     'EMPRESA EJEMPLO, S.A. DE C.V.',
                     'SERVICIOS PROFESIONALES, S.A. DE C.V.'
                 ], sample_size)
             elif col_name == 'Pagador':  
                 # Use your real Spanish payer names
-                sample_data[col_name] = np.random.choice(sample_values + [
+                sample_data[col_name] = rng.choice(sample_values + [
                     'HOSPITAL EJEMPLO, S.A. DE C.V.',
                     'EMPRESA PAGADORA, S.A. DE C.V.'
                 ], sample_size)
@@ -223,31 +224,31 @@ def create_production_sample(schema):
                 sample_data[col_name] = ['factoring'] * sample_size
             elif col_name == 'Disbursement Date':
                 # Based on your real dates: 2025-09-30, 2025-09-29, etc.
-                sample_data[col_name] = np.random.choice(['2025-09-30', '2025-09-29', '2025-09-28'], sample_size)
+                sample_data[col_name] = rng.choice(['2025-09-30', '2025-09-29', '2025-09-28'], sample_size)
             elif col_name in ['TPV', 'Disbursement Amount', 'Outstanding Loan Value']:
                 # Based on your real ranges
-                sample_data[col_name] = np.random.uniform(88.48, 77175.0, sample_size).round(2)
+                sample_data[col_name] = rng.uniform(88.48, 77175.0, sample_size).round(2)
             elif col_name == 'Loan Currency':
                 sample_data[col_name] = ['USD'] * sample_size
             elif col_name == 'Interest Rate APR':
                 # Based on your real rates: 0.2947, 0.3699, 0.295
-                sample_data[col_name] = np.random.uniform(0.2947, 0.3699, sample_size).round(4)
+                sample_data[col_name] = rng.uniform(0.2947, 0.3699, sample_size).round(4)
             elif col_name == 'Term':
                 # Based on your real terms: 90, 30, 120
-                sample_data[col_name] = np.random.choice([30, 90, 120], sample_size)
+                sample_data[col_name] = rng.choice([30, 90, 120], sample_size)
             elif col_name == 'Term Unit':
                 sample_data[col_name] = ['days'] * sample_size
             elif col_name == 'Payment Frequency':
                 sample_data[col_name] = ['bullet'] * sample_size
             elif col_name == 'Days in Default':
                 # Based on your real values: 0, 1, 3
-                sample_data[col_name] = np.random.choice([0, 1, 3], sample_size)
+                sample_data[col_name] = rng.choice([0, 1, 3], sample_size)
             elif col_name == 'Loan Status':
                 # Based on your real statuses
-                sample_data[col_name] = np.random.choice(sample_values, sample_size)
+                sample_data[col_name] = rng.choice(sample_values, sample_size)
             else:
                 # Generate numeric data for other columns
-                sample_data[col_name] = np.random.uniform(10, 1000, sample_size).round(2)
+                sample_data[col_name] = rng.uniform(10, 1000, sample_size).round(2)
         else:
             # Null columns
             sample_data[col_name] = [None] * sample_size
@@ -258,12 +259,12 @@ if __name__ == '__main__':
     success = validate_production_readiness()
     
     if success:
-        print(f"\n✅ COMPLETE SUCCESS!")
-        print(f"🎯 Commercial-View is 100% ready for REAL Abaco loan tape data!")
-        print(f"🚀 You can now process the actual 48,853 records with confidence!")
+        print("\n✅ COMPLETE SUCCESS!")
+        print("🎯 Commercial-View is 100% ready for REAL Abaco loan tape data!")
+        print("🚀 You can now process the actual 48,853 records with confidence!")
     else:
-        print(f"\n❌ Validation issues detected")
-        print(f"Review the failed checks above")
+        print("\n❌ Validation issues detected")
+        print("Review the failed checks above")
     
     # Fixed: Use sys.exit instead of exit for IPython compatibility
     import sys

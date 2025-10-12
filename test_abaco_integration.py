@@ -155,7 +155,7 @@ def test_abaco_integration():
         DataLoader()
         print("✅ Module imports: SUCCESS")
         passed_checks += 1
-    except:
+    except Exception as e:
         print("❌ Module imports: FAILED")
     
     # Schema check
@@ -177,7 +177,7 @@ def test_abaco_integration():
             else:
                 print("⚠️  Data processing: PARTIAL")
                 passed_checks += 0.5
-        except:
+        except Exception as e:
             print("❌ Data processing: FAILED")
     else:
         print("➖ Data processing: SKIPPED (missing files)")

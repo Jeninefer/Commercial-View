@@ -218,7 +218,7 @@ class ConfigValidator:
                 print(f"  Status: {'✓ PASSED' if valid else '✗ FAILED'}")
             else:
                 all_valid = False
-                print(f"  Status: ✗ FAILED (could not load file)")
+                print("  Status: ✗ FAILED (could not load file)")
         else:
             print(f"\n[1/4] WARNING: {column_maps_path} not found")
             self.warnings.append(f"Configuration file not found: {column_maps_path}")
@@ -234,7 +234,7 @@ class ConfigValidator:
                 print(f"  Status: {'✓ PASSED' if valid else '✗ FAILED'}")
             else:
                 all_valid = False
-                print(f"  Status: ✗ FAILED (could not load file)")
+                print("  Status: ✗ FAILED (could not load file)")
         else:
             print(f"\n[2/4] WARNING: {pricing_config_path} not found")
             self.warnings.append(f"Configuration file not found: {pricing_config_path}")
@@ -250,7 +250,7 @@ class ConfigValidator:
                 print(f"  Status: {'✓ PASSED' if valid else '✗ FAILED'}")
             else:
                 all_valid = False
-                print(f"  Status: ✗ FAILED (could not load file)")
+                print("  Status: ✗ FAILED (could not load file)")
         else:
             print(f"\n[3/4] WARNING: {dpd_policy_path} not found")
             self.warnings.append(f"Configuration file not found: {dpd_policy_path}")
@@ -266,7 +266,7 @@ class ConfigValidator:
                 print(f"  Status: {'✓ PASSED' if valid else '✗ FAILED'}")
             else:
                 all_valid = False
-                print(f"  Status: ✗ FAILED (could not load file)")
+                print("  Status: ✗ FAILED (could not load file)")
         else:
             print(f"\n[4/4] WARNING: {export_config_path} not found")
             self.warnings.append(f"Configuration file not found: {export_config_path}")

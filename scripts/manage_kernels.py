@@ -67,7 +67,7 @@ class CommercialViewKernelManager:
                 str(python_exe),
                 "-m",
                 "ipykernel_launcher",
-                "-f",
+                "-",
                 "{connection_file}",
             ],
             "display_name": "Commercial-View (Commercial Lending)",
@@ -331,7 +331,7 @@ class CommercialViewKernelManager:
                 "kernelspec",
                 "remove",
                 self.kernel_name,
-                "-f",
+                "-",
             ]
 
             print(f"🗑️ Removing {self.kernel_name} kernel...")

@@ -328,7 +328,7 @@ class FinalRepositoryAuditor:
                 start = max(0, match.start() - context_length // 2)
                 end = min(len(content), match.end() + context_length // 2)
                 return f"...{content[start:end]}..."
-        except:
+        except Exception as e:
             pass
         return ""
 
@@ -337,7 +337,7 @@ class FinalRepositoryAuditor:
         try:
             with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
                 return sum(1 for _ in f)
-        except:
+        except Exception as e:
             return 0
 
     def _generate_audit_summary(self, audit_results: Dict) -> Dict[str, any]:

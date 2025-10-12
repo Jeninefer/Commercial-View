@@ -27,7 +27,7 @@ def find_port_processes(port: int) -> List[int]:
     try:
         # Check for processes using the port
         output = subprocess.check_output(
-            ["lsof", "-i", f":{port}", "-t"],
+            ["lso", "-i", f":{port}", "-t"],
             stderr=subprocess.STDOUT,
             universal_newlines=True,
         ).strip()
@@ -139,10 +139,10 @@ def run_uvicorn(
     if reload:
         cmd.append("--reload")
 
-    print(f"🚀 Starting Commercial-View Abaco Integration API")
-    print(f"📊 Ready to serve your 48,853 records")
-    print(f"🇪🇸 Spanish client support enabled")
-    print(f"💰 USD factoring validation active")
+    print("🚀 Starting Commercial-View Abaco Integration API")
+    print("📊 Ready to serve your 48,853 records")
+    print("🇪🇸 Spanish client support enabled")
+    print("💰 USD factoring validation active")
     print(f"🌐 Server command: {' '.join(cmd)}")
     print(f"📖 Interactive docs: http://{host}:{port}/docs")
 

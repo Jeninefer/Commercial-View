@@ -13,8 +13,8 @@ This document summarizes the complete implementation of the Commercial-View anal
 **Implementation**:
 - ✅ Input field mappings (loan_data, payment_data, customer_data)
 - ✅ Contract-compliant output fields:
-  - **DPD Frame**: past_due_amount, days_past_due, first_arrears_date, last_payment_date, last_due_date, is_default, reference_date
-  - **Buckets**: dpd_bucket, dpd_bucket_value, dpd_bucket_description, default_flag
+    - **DPD Frame**: past_due_amount, days_past_due, first_arrears_date, last_payment_date, last_due_date, is_default, reference_date
+    - **Buckets**: dpd_bucket, dpd_bucket_value, dpd_bucket_description, default_flag
 
 **Usage**: Customize right-side values to match your dataset field names.
 
@@ -76,10 +76,10 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **Implementation**:
 - ✅ Default base path: `./abaco_runtime/exports`
 - ✅ Subdirectories configured:
-  - KPI JSON: `./abaco_runtime/exports/kpi/json`
-  - KPI CSV: `./abaco_runtime/exports/kpi/csv`
-  - DPD Frame: `./abaco_runtime/exports/dpd_frame`
-  - Buckets: `./abaco_runtime/exports/buckets`
+    - KPI JSON: `./abaco_runtime/exports/kpi/json`
+    - KPI CSV: `./abaco_runtime/exports/kpi/csv`
+    - DPD Frame: `./abaco_runtime/exports/dpd_frame`
+    - Buckets: `./abaco_runtime/exports/buckets`
 - ✅ File naming conventions with timestamps
 - ✅ Multiple export formats (CSV, JSON, Parquet)
 - ✅ Archival settings (30-day rotation, 365-day retention)
@@ -94,10 +94,10 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 
 **Implementation**:
 - ✅ Portfolio size expectations:
-  - Small (< 10K loans): < 5 min, < 2GB
-  - Medium (10K-100K loans): < 15 min, 2-8GB, chunking recommended
-  - Large (100K-1M loans): < 60 min, 8-16GB, chunking required
-  - Extra-large (> 1M loans): < 2 hours, 16-32GB, distributed processing
+    - Small (< 10K loans): < 5 min, < 2GB
+    - Medium (10K-100K loans): < 15 min, 2-8GB, chunking recommended
+    - Large (100K-1M loans): < 60 min, 8-16GB, chunking required
+    - Extra-large (> 1M loans): < 2 hours, 16-32GB, distributed processing
 - ✅ Memory management with chunking strategy (10K or 5K records per chunk)
 - ✅ Performance optimization techniques
 - ✅ Benchmarking guidelines
@@ -114,11 +114,11 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **Implementation**:
 - ✅ PII identification and classification
 - ✅ Masking strategies before export:
-  - Customer IDs: SHA-256 hashing
-  - Customer names: Partial masking
-  - Email addresses: Domain-preserving masking
-  - Phone numbers: Middle-digit masking
-  - Account numbers: Last-4-digits retention
+    - Customer IDs: SHA-256 hashing
+    - Customer names: Partial masking
+    - Email addresses: Domain-preserving masking
+    - Phone numbers: Middle-digit masking
+    - Account numbers: Last-4-digits retention
 - ✅ Data classification levels (Public, Internal, Confidential, Highly Confidential)
 - ✅ Export security controls by output type
 - ✅ Compliance framework (GDPR, SOX, PCI DSS)
@@ -137,15 +137,15 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 - ✅ Tag format: `v{MAJOR}.{MINOR}.{PATCH}[-{PRERELEASE}]`
 - ✅ Examples: `v1.0.0`, `v1.2.3`, `v2.0.0-beta.1`
 - ✅ Release workflow:
-  - Regular releases from release branches
-  - Hotfixes from main branch
-  - Semantic versioning (MAJOR.MINOR.PATCH)
+    - Regular releases from release branches
+    - Hotfixes from main branch
+    - Semantic versioning (MAJOR.MINOR.PATCH)
 - ✅ Branch strategy:
-  - `main`: Production-ready code
-  - `develop`: Integration branch
-  - `feature/*`: Feature development
-  - `release/*`: Release preparation
-  - `hotfix/*`: Emergency fixes
+    - `main`: Production-ready code
+    - `develop`: Integration branch
+    - `feature/*`: Feature development
+    - `release/*`: Release preparation
+    - `hotfix/*`: Emergency fixes
 - ✅ CI/CD integration with automated version validation
 - ✅ Changelog management (Keep a Changelog format)
 

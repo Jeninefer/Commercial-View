@@ -30,7 +30,7 @@ def validate_english_only():
             for pattern in non_english_patterns:
                 if re.search(pattern, content, re.IGNORECASE):
                     issues.append(f"Non-English content in {file_path}")
-        except:
+        except Exception as e:
             continue
 
     if issues:
@@ -74,7 +74,7 @@ def validate_no_demo_data():
                     if re.search(pattern, content):
                         issues.append(f"Demo data pattern '{pattern}' in {file_path}")
                         break
-            except:
+            except Exception as e:
                 continue
 
     if issues:

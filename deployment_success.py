@@ -51,7 +51,7 @@ def confirm_github_deployment():
 def validate_abaco_integration_complete():
     """Final validation that all Abaco integration components are in place."""
 
-    print(f"\n🏦 FINAL ABACO INTEGRATION VALIDATION")
+    print("\n🏦 FINAL ABACO INTEGRATION VALIDATION")
     print("=" * 45)
 
     # Check key files exist
@@ -120,7 +120,7 @@ def validate_abaco_integration_complete():
 def create_deployment_summary():
     """Create final deployment summary document."""
 
-    summary_content = f"""# Commercial-View Abaco Integration - Deployment Summary
+    summary_content = """# Commercial-View Abaco Integration - Deployment Summary
 
 ## 🎉 Successful GitHub Deployment - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
@@ -244,7 +244,7 @@ def main():
     summary_path = create_deployment_summary()
 
     if deployment_confirmed and integration_validated:
-        print(f"\n🎉 COMMERCIAL-VIEW ABACO INTEGRATION COMPLETE!")
+        print("\n🎉 COMMERCIAL-VIEW ABACO INTEGRATION COMPLETE!")
         print("=" * 55)
         print("🏆 Successfully deployed to GitHub")
         print("📊 48,853 records validated")
@@ -259,7 +259,7 @@ def main():
 
         return True
     else:
-        print(f"\n⚠️  Some validation steps need attention")
+        print("\n⚠️  Some validation steps need attention")
         return False
 
 

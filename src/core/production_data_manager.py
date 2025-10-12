@@ -318,7 +318,7 @@ class ProductionDataManager:
             for col in date_columns:
                 try:
                     pd.to_datetime(df[col].dropna())
-                except:
+                except Exception as e:
                     consistency -= 10
                     issues.append(f"Inconsistent date format in {col}")
 
@@ -392,7 +392,7 @@ class ProductionDataManager:
             "principal_amount": {"min": 1000, "max": 50000000},
             "interest_rate": {"min": 0.01, "max": 0.50},
             "loan_status": {
-                "allowed_values": ["active", "paid_off", "charged_off", "delinquent"]
+                "allowed_values": ["active", "paid_of", "charged_of", "delinquent"]
             },
             "industry_code": {"pattern": r"^\d{6}$"},  # NAICS format
         }

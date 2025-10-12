@@ -10,6 +10,7 @@ import shutil
 from pathlib import Path
 import pandas as pd
 import numpy as np
+rng = np.random.default_rng(seed=42)  # Modern NumPy random generator
 from datetime import datetime
 
 def main():
@@ -148,7 +149,7 @@ def create_production_sample():
         sample_size = 100
         
         loan_data = {
-            'Company': np.random.choice(['Abaco Technologies', 'Abaco Financial'], sample_size),
+            'Company': rng.choice(['Abaco Technologies', 'Abaco Financial'], sample_size),
             'Customer ID': [f'CLIAB{str(i).zfill(6)}' for i in range(198, 298)],
             'Cliente': create_spanish_names(sample_size),
             'Pagador': create_spanish_payers(sample_size),
@@ -156,18 +157,18 @@ def create_production_sample():
             'Loan ID': [f'DSB{1700+i}-{str(j+1).zfill(3)}' for i, j in enumerate(range(sample_size))],
             'Product Type': ['factoring'] * sample_size,
             'Disbursement Date': ['2025-09-30'] * sample_size,
-            'TPV': np.random.uniform(88.48, 77175.0, sample_size).round(2),
-            'Disbursement Amount': np.random.uniform(87.47, 74340.75, sample_size).round(2),
-            'Origination Fee': np.random.uniform(0.89, 2508.19, sample_size).round(2),
-            'Origination Fee Taxes': np.random.uniform(0.12, 326.06, sample_size).round(2),
+            'TPV': rng.uniform(88.48, 77175.0, sample_size).round(2),
+            'Disbursement Amount': rng.uniform(87.47, 74340.75, sample_size).round(2),
+            'Origination Fee': rng.uniform(0.89, 2508.19, sample_size).round(2),
+            'Origination Fee Taxes': rng.uniform(0.12, 326.06, sample_size).round(2),
             'Loan Currency': ['USD'] * sample_size,
-            'Interest Rate APR': np.random.uniform(0.2947, 0.3699, sample_size).round(4),
-            'Term': np.random.choice([30, 90, 120], sample_size),
+            'Interest Rate APR': rng.uniform(0.2947, 0.3699, sample_size).round(4),
+            'Term': rng.choice([30, 90, 120], sample_size),
             'Term Unit': ['days'] * sample_size,
             'Payment Frequency': ['bullet'] * sample_size,
-            'Days in Default': np.random.choice([0, 1, 3], sample_size),
-            'Loan Status': np.random.choice(['Current', 'Complete', 'Default'], sample_size),
-            'Outstanding Loan Value': np.random.uniform(88.48, 77175.0, sample_size).round(2),
+            'Days in Default': rng.choice([0, 1, 3], sample_size),
+            'Loan Status': rng.choice(['Current', 'Complete', 'Default'], sample_size),
+            'Outstanding Loan Value': rng.uniform(88.48, 77175.0, sample_size).round(2),
             # Null columns as per schema
             'Pledge To': [None] * sample_size,
             'Pledge Date': [None] * sample_size,
@@ -214,11 +215,11 @@ def create_spanish_names(count):
     
     result = []
     for i in range(count):
-        if np.random.random() > 0.3:  # 70% companies
-            company = np.random.choice(companies)
+        if rng.random() > 0.3:  # 70% companies
+            company = rng.choice(companies)
             result.append(company.replace('MEDICOS', f'MEDICOS {i+1}'))
         else:  # 30% individuals
-            individual = np.random.choice(individuals)
+            individual = rng.choice(individuals)
             result.append(individual.replace('KEVIN', f'CLIENTE {i+1:03d}'))
     
     return result
@@ -235,7 +236,7 @@ def create_spanish_payers(count):
     
     result = []
     for i in range(count):
-        payer = np.random.choice(payers)
+        payer = rng.choice(payers)
         result.append(payer.replace('NACIONAL', f'NACIONAL {i+1:03d}'))
     
     return result
@@ -257,34 +258,34 @@ def display_production_readiness():
     print("   ✅ Risk scoring algorithm")
     print("   ✅ Sample data generation")
     
-    print(f"\n🌟 READY TO PROCESS:")
-    print(f"   🏦 16,205 Loan Data records (28 columns)")
-    print(f"   💰 16,443 Historic Payment records (18 columns)")
-    print(f"   📅 16,205 Payment Schedule records (16 columns)")
-    print(f"   📊 Total: 48,853 records")
+    print("\n🌟 READY TO PROCESS:")
+    print("   🏦 16,205 Loan Data records (28 columns)")
+    print("   💰 16,443 Historic Payment records (18 columns)")
+    print("   📅 16,205 Payment Schedule records (16 columns)")
+    print("   📊 Total: 48,853 records")
     
-    print(f"\n🚀 NEXT STEPS:")
-    print(f"1. 📂 Place your real Abaco CSV files in data/ directory")
-    print(f"2. 🔧 Run: python portfolio.py --abaco-only")
-    print(f"3. 📊 Check exports in abaco_runtime/exports/")
-    print(f"4. 📈 Review analytics and risk scoring results")
+    print("\n🚀 NEXT STEPS:")
+    print("1. 📂 Place your real Abaco CSV files in data/ directory")
+    print("2. 🔧 Run: python portfolio.py --abaco-only")
+    print("3. 📊 Check exports in abaco_runtime/exports/")
+    print("4. 📈 Review analytics and risk scoring results")
 
 if __name__ == '__main__':
     try:
         success = main()
         
         if success:
-            print(f"\n✅ FINAL SUCCESS!")
-            print(f"🎯 Commercial-View is 100% PRODUCTION READY!")
-            print(f"🚀 Ready to process your real 48,853 Abaco loan tape records!")
+            print("\n✅ FINAL SUCCESS!")
+            print("🎯 Commercial-View is 100% PRODUCTION READY!")
+            print("🚀 Ready to process your real 48,853 Abaco loan tape records!")
         else:
-            print(f"\n⚠️  Some issues detected - review output above")
+            print("\n⚠️  Some issues detected - review output above")
         
         # Proper exit for script execution
         if __name__ == '__main__':
             sys.exit(0 if success else 1)
         
     except KeyboardInterrupt:
-        print(f"\n⚠️  Test interrupted by user")
+        print("\n⚠️  Test interrupted by user")
         if __name__ == '__main__':
             sys.exit(1)

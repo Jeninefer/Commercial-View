@@ -364,9 +364,9 @@ class CommercialLendingSchemaConverter:
             "from pydantic import BaseModel, Field",
             "",
             f"class {class_name}(BaseModel):",
-            f'    """',
+            '    """',
             f'    {schema.get("description", "Commercial lending data model")}',
-            f'    """',
+            '    """',
         ]
 
         for prop_name, prop_def in properties.items():

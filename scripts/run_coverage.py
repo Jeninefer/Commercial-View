@@ -368,11 +368,11 @@ def run_coverage_analysis():
     create_coverage_summary_report(analysis, reports)
 
     # Display results
-    print(f"\n📊 Coverage Analysis Results:")
+    print("\n📊 Coverage Analysis Results:")
     if "total_coverage" in analysis:
         print(f"   Total Coverage: {analysis['total_coverage']:.1f}%")
 
-        print(f"\n🏦 Commercial Lending Module Coverage:")
+        print("\n🏦 Commercial Lending Module Coverage:")
         for module, data in analysis.get("module_coverage", {}).items():
             status = (
                 "✅"
@@ -383,7 +383,7 @@ def run_coverage_analysis():
                 f"   {status} {module}: {data['average']:.1f}% ({data['file_count']} files)"
             )
 
-    print(f"\n📁 Generated Reports:")
+    print("\n📁 Generated Reports:")
     for report_type, location in reports.items():
         print(f"   {report_type.upper()}: {location}")
 

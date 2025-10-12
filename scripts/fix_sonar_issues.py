@@ -87,7 +87,7 @@ from .abaco_schema import (
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(updated_content)
         
-        print(f"   ✅ Updated string literals to constants")
+        print("   ✅ Updated string literals to constants")
         
     except Exception as e:
         print(f"   ❌ Error updating {file_path}: {e}")
@@ -95,10 +95,10 @@ from .abaco_schema import (
 if __name__ == '__main__':
     fix_string_duplications()
     
-    print(f"\n🎯 SonarLint Issues Fixed:")
-    print(f"   ✅ String literal duplications resolved")
-    print(f"   ✅ Floating point comparisons fixed") 
-    print(f"   ✅ Unused parameters utilized")
-    print(f"   ✅ Constants properly exported")
+    print("\n🎯 SonarLint Issues Fixed:")
+    print("   ✅ String literal duplications resolved")
+    print("   ✅ Floating point comparisons fixed") 
+    print("   ✅ Unused parameters utilized")
+    print("   ✅ Constants properly exported")
     
-    print(f"\n🚀 Code quality improvements complete!")
+    print("\n🚀 Code quality improvements complete!")

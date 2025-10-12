@@ -26,7 +26,7 @@ def run_simple_abaco_test():
     config_schema = project_root / 'config' / 'abaco_schema_autodetected.json'
     
     if not downloads_schema.exists():
-        print(f"❌ Schema not found in Downloads")
+        print("❌ Schema not found in Downloads")
         return False
     
     # Copy schema
@@ -37,7 +37,7 @@ def run_simple_abaco_test():
     with open(config_schema, 'r') as f:
         schema = json.load(f)
     
-    print(f"✅ Schema loaded successfully")
+    print("✅ Schema loaded successfully")
     
     # Validate exact structure from your JSON
     datasets = schema.get('datasets', {})
@@ -63,7 +63,7 @@ def run_simple_abaco_test():
         }
     }
     
-    print(f"\n📊 Detailed Validation:")
+    print("\n📊 Detailed Validation:")
     total_records = 0
     all_perfect = True
     
@@ -118,20 +118,20 @@ def run_simple_abaco_test():
                     print(f"      🔄 Payment Frequency: {frequency}")
             
             if actual_rows == expected['rows'] and actual_cols == expected['columns']:
-                print(f"      🎯 Perfect match!")
+                print("      🎯 Perfect match!")
             else:
                 all_perfect = False
-                print(f"      ⚠️  Variance detected")
+                print("      ⚠️  Variance detected")
     
     print(f"\n🎯 TOTAL RECORDS: {total_records:,}")
     
     if total_records == 48853:
-        print(f"✅ EXACT MATCH: 48,853 records confirmed!")
+        print("✅ EXACT MATCH: 48,853 records confirmed!")
     else:
         print(f"⚠️  Expected 48,853, got {total_records:,}")
     
     # Step 2: Business Logic Validation
-    print(f"\n💼 Step 2: Business Logic Validation")
+    print("\n💼 Step 2: Business Logic Validation")
     print("-" * 40)
     
     business_checks = {
@@ -148,7 +148,7 @@ def run_simple_abaco_test():
         print(f"   {status} {check}")
     
     # Step 3: Production Readiness
-    print(f"\n🚀 Step 3: Production Readiness")
+    print("\n🚀 Step 3: Production Readiness")
     print("-" * 35)
     
     readiness_score = sum(business_checks.values())
@@ -157,18 +157,18 @@ def run_simple_abaco_test():
     print(f"📊 Readiness Score: {readiness_score}/{max_score}")
     
     if readiness_score == max_score:
-        print(f"🎉 PRODUCTION READY!")
-        print(f"✅ All validation checks passed")
-        print(f"✅ Schema matches expected structure exactly")
-        print(f"✅ Business logic validates correctly")
-        print(f"✅ Ready for 48,853 Abaco loan records")
+        print("🎉 PRODUCTION READY!")
+        print("✅ All validation checks passed")
+        print("✅ Schema matches expected structure exactly")
+        print("✅ Business logic validates correctly")
+        print("✅ Ready for 48,853 Abaco loan records")
         
-        print(f"\n🌟 KEY FEATURES CONFIRMED:")
-        print(f"   🏦 Factoring loans in USD")
-        print(f"   🇪🇸 Spanish client names (Cliente/Pagador)")
-        print(f"   🏢 Abaco Technologies & Abaco Financial")
-        print(f"   📋 Bullet payment frequency")
-        print(f"   📊 16,205 loans + 16,443 payments + 16,205 schedules")
+        print("\n🌟 KEY FEATURES CONFIRMED:")
+        print("   🏦 Factoring loans in USD")
+        print("   🇪🇸 Spanish client names (Cliente/Pagador)")
+        print("   🏢 Abaco Technologies & Abaco Financial")
+        print("   📋 Bullet payment frequency")
+        print("   📊 16,205 loans + 16,443 payments + 16,205 schedules")
         
         return True
     else:
@@ -179,8 +179,8 @@ if __name__ == '__main__':
     success = run_simple_abaco_test()
     
     if success:
-        print(f"\n🎯 SUCCESS: Abaco integration validated and production-ready!")
+        print("\n🎯 SUCCESS: Abaco integration validated and production-ready!")
     else:
-        print(f"\n❌ Issues detected - review output above")
+        print("\n❌ Issues detected - review output above")
     
     sys.exit(0 if success else 1)

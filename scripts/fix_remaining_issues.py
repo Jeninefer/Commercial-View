@@ -31,7 +31,7 @@ def fix_yaml_files():
             if problem_mark:
                 print(f"   📍 Line {problem_mark.line + 1}")
             else:
-                print(f"   📍 Location unknown")
+                print("   📍 Location unknown")
             fixed_files.append(yaml_file.name)
         except Exception as e:
             print(f"⚠️  {yaml_file.name}: Could not read - {e}")

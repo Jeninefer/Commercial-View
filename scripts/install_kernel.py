@@ -63,7 +63,7 @@ def create_enhanced_kernel_spec() -> Dict:
             str(python_exe),
             "-m",
             "ipykernel_launcher",
-            "-f",
+            "-",
             "{connection_file}",
         ],
         "display_name": "Commercial-View (Commercial Lending)",

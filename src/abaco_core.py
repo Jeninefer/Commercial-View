@@ -329,8 +329,8 @@ class AbacoCore:
     def __repr__(self) -> str:
         """Return string representation of AbacoCore instance"""
         return (
-            f"AbacoCore("
+            "AbacoCore("
             f"config={self.config}, "
             f"snapshots_count={len(self.snapshots)}"
-            f")"
+            ")"
         )

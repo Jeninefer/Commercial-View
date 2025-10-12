@@ -79,9 +79,9 @@ def validate_abaco_schema_formatting():
             if dataset.get("exists", False)
         )
 
-        print(f"📊 Schema validation:")
+        print("📊 Schema validation:")
         print(f"   Total records: {total_records:,}")
-        print(f"   Expected: 48,853")
+        print("   Expected: 48,853")
 
         if total_records == 48853:
             print("✅ EXACT ABACO RECORD MATCH")
@@ -163,7 +163,7 @@ def format_python_files():
 def create_final_commit_message():
     """Create comprehensive final commit message."""
 
-    return f"""Commercial-View Abaco Integration - Final Production Release
+    return """Commercial-View Abaco Integration - Final Production Release
 
 ✅ COMPLETE 48,853 RECORD VALIDATION & FORMATTING
 📊 Production-Ready Dataset Structure:
@@ -249,14 +249,14 @@ def main():
     python_count = format_python_files()
 
     # Step 4: Final status summary
-    print(f"\n🎯 FORMATTING SUMMARY")
+    print("\n🎯 FORMATTING SUMMARY")
     print("=" * 25)
     print(f"✅ JSON files formatted: {json_count}")
     print(f"✅ Python files validated: {python_count}")
     print(f"✅ Schema validation: {'PASSED' if schema_valid else 'NEEDS ATTENTION'}")
 
     if schema_valid:
-        print(f"\n📋 READY FOR FINAL COMMIT")
+        print("\n📋 READY FOR FINAL COMMIT")
         print("=" * 30)
 
         # Show the commit message
@@ -266,21 +266,21 @@ def main():
         print(commit_msg[:500] + "..." if len(commit_msg) > 500 else commit_msg)
         print("-" * 40)
 
-        print(f"\n🚀 FINAL DEPLOYMENT STEPS:")
+        print("\n🚀 FINAL DEPLOYMENT STEPS:")
         print("1. git add .")
         print(
             '2. git commit -F <(echo "' + commit_msg.replace('"', '\\"')[:100] + '...")'
         )
         print("3. git push origin main")
 
-        print(f"\n✅ COMMERCIAL-VIEW ABACO INTEGRATION COMPLETE!")
+        print("\n✅ COMMERCIAL-VIEW ABACO INTEGRATION COMPLETE!")
         print("🎯 Production-ready for 48,853 records")
         print("🇪🇸 Spanish client names fully supported")
         print("💰 USD factoring products validated")
         print("🎨 Prettier formatting applied")
 
     else:
-        print(f"\n⚠️  SCHEMA VALIDATION ISSUES DETECTED")
+        print("\n⚠️  SCHEMA VALIDATION ISSUES DETECTED")
         print("Please resolve schema issues before final deployment")
 
     return schema_valid

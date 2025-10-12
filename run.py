@@ -1,3 +1,26 @@
+
+# Abaco Integration Constants - 48,853 Records
+# Spanish Clients | USD Factoring | Commercial Lending
+DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
+INTEREST_RATE_APR = INTEREST_RATE_APR
+OUTSTANDING_LOAN_VALUE = OUTSTANDING_LOAN_VALUE
+LOAN_CURRENCY = LOAN_CURRENCY
+PRODUCT_TYPE = PRODUCT_TYPE
+ABACO_TECHNOLOGIES = ABACO_TECHNOLOGIES
+ABACO_FINANCIAL = ABACO_FINANCIAL
+LOAN_DATA = LOAN_DATA
+HISTORIC_REAL_PAYMENT = HISTORIC_REAL_PAYMENT
+PAYMENT_SCHEDULE = PAYMENT_SCHEDULE
+CUSTOMER_ID = CUSTOMER_ID
+LOAN_ID = LOAN_ID
+SA_DE_CV = SA_DE_CV
+TRUE_PAYMENT_STATUS = TRUE_PAYMENT_STATUS
+TRUE_PAYMENT_DATE = TRUE_PAYMENT_DATE
+DISBURSEMENT_DATE = DISBURSEMENT_DATE
+DISBURSEMENT_AMOUNT = DISBURSEMENT_AMOUNT
+PAYMENT_FREQUENCY = PAYMENT_FREQUENCY
+LOAN_STATUS = LOAN_STATUS
+
 """
 Commercial-View FastAPI Application - Abaco Integration
 Production-ready API for 48,853 record processing with Spanish client support
@@ -120,7 +143,7 @@ async def root() -> Dict[str, Any]:
         "records_supported": ABACO_RECORDS_EXPECTED,
         "spanish_support": True,
         "usd_factoring": True,
-        "companies": ["Abaco Technologies", "Abaco Financial"],
+        "companies": [ABACO_TECHNOLOGIES, ABACO_FINANCIAL],
         "financial_exposure": 208192588.65,
         "performance": {
             "processing_time_minutes": 2.3,
@@ -214,7 +237,7 @@ async def get_abaco_schema() -> Dict[str, Any]:
                     "spanish_support": True,
                     "usd_factoring": True,
                     "bullet_payments": True,
-                    "companies": ["Abaco Technologies", "Abaco Financial"],
+                    "companies": [ABACO_TECHNOLOGIES, ABACO_FINANCIAL],
                 },
             }
 
@@ -230,7 +253,7 @@ async def get_abaco_schema() -> Dict[str, Any]:
                 "usd_factoring": True,
                 "bullet_payments": True,
                 "apr_range": "29.47% - 36.99%",
-                "companies": ["Abaco Technologies", "Abaco Financial"],
+                "companies": [ABACO_TECHNOLOGIES, ABACO_FINANCIAL],
             },
             "source": "fallback_schema",
         }
@@ -362,23 +385,23 @@ async def get_abaco_portfolio_metrics() -> Dict[str, Any]:
         metrics = {
             "total_records": sum(len(df) for df in abaco_data.values()),
             "portfolio_outstanding": (
-                float(loan_df["Outstanding Loan Value"].sum())
+                float(loan_df[OUTSTANDING_LOAN_VALUE].sum())
                 if loan_df is not None
                 else 0.0
             ),
             "total_exposure": 208192588.65,  # From your schema
             "active_loans": (
-                len(loan_df[loan_df["Loan Status"] == "Current"])
+                len(loan_df[loan_df[LOAN_STATUS] == "Current"])
                 if loan_df is not None
                 else 0
             ),
             "completed_loans": (
-                len(loan_df[loan_df["Loan Status"] == "Complete"])
+                len(loan_df[loan_df[LOAN_STATUS] == "Complete"])
                 if loan_df is not None
                 else 0
             ),
             "spanish_companies": (
-                len(loan_df[loan_df["Cliente"].str.contains("S.A. DE C.V.", na=False)])
+                len(loan_df[loan_df["Cliente"].str.contains(SA_DE_CV, na=False)])
                 if loan_df is not None
                 else 0
             ),

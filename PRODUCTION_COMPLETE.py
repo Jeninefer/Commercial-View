@@ -76,7 +76,7 @@ def create_production_summary():
     with open("PRODUCTION_COMPLETE.json", "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 
-    print(f"\n📋 PRODUCTION SUMMARY")
+    print("\n📋 PRODUCTION SUMMARY")
     print(
         f"✅ Dataset: {summary['dataset_validation']['total_records']:,} records validated"
     )
@@ -319,21 +319,21 @@ def main():
     production_ready = validate_production_ready()
 
     if production_ready:
-        print(f"\n🎊 ALL FILES CREATED - PRODUCTION READY!")
+        print("\n🎊 ALL FILES CREATED - PRODUCTION READY!")
         print("=" * 45)
         print("🏆 Commercial-View Abaco Integration Complete")
         print("📊 48,853 record processing files created")
         print("🇪🇸 Spanish client name support implemented")
         print("💰 USD factoring validation ready")
 
-        print(f"\n📚 NOW YOU CAN USE:")
+        print("\n📚 NOW YOU CAN USE:")
         print("🔹 from src.data_loader import DataLoader")
         print("🔹 from src.modeling import create_abaco_models")
         print("🔹 python portfolio.py --abaco-only")
 
         return True
     else:
-        print(f"\n⚠️  Some files still missing")
+        print("\n⚠️  Some files still missing")
         return False
 
 

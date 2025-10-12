@@ -23,7 +23,7 @@ def setup_abaco_schema_integration():
     if downloads_schema.exists():
         config_schema.parent.mkdir(exist_ok=True)
         shutil.copy2(downloads_schema, config_schema)
-        print(f"✅ Copied schema from Downloads to config/")
+        print("✅ Copied schema from Downloads to config/")
         
         # Validate the schema content
         with open(config_schema, 'r') as f:
@@ -33,7 +33,7 @@ def setup_abaco_schema_integration():
         available_datasets = [name for name, info in datasets.items() if info.get('exists', False)]
         total_records = sum(info.get('rows', 0) for info in datasets.values() if info.get('exists'))
         
-        print(f"📊 Schema loaded successfully:")
+        print("📊 Schema loaded successfully:")
         print(f"   • Available datasets: {len(available_datasets)}")
         print(f"   • Total records: {total_records:,}")
         
@@ -51,8 +51,8 @@ def setup_abaco_schema_integration():
 if __name__ == '__main__':
     success = setup_abaco_schema_integration()
     if success:
-        print(f"\n🎉 Abaco schema integration ready!")
-        print(f"Now you can run: python scripts/complete_integration_test.py")
+        print("\n🎉 Abaco schema integration ready!")
+        print("Now you can run: python scripts/complete_integration_test.py")
     else:
-        print(f"\n❌ Setup failed. Please check file locations.")
+        print("\n❌ Setup failed. Please check file locations.")
     sys.exit(0 if success else 1)

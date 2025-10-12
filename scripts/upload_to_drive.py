@@ -476,7 +476,7 @@ def create_upload_summary(
 
     # Print summary
     if stats:
-        print(f"\n📊 Upload Statistics:")
+        print("\n📊 Upload Statistics:")
         print(f"   Files uploaded: {stats['total_files']}")
         print(f"   Total size: {stats['total_size_mb']:.2f} MB")
         print(f"   Total time: {stats['total_time_seconds']:.1f} seconds")
@@ -521,7 +521,7 @@ def perform_file_uploads(
             if uploader.upload_file_with_retry(file_path, target_folder_id):
                 success_count += 1
             else:
-                print(f"⚠️  Continuing with remaining files...")
+                print("⚠️  Continuing with remaining files...")
         else:
             print(f"⏭️  Skipping {file_type} (not in upload_types)")
 
