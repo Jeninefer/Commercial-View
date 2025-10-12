@@ -46,14 +46,6 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Project specific
-abaco_runtime/
-*.log
-.pytest_cache/
-.coverage
-htmlcov/
-
-<<<<<<< HEAD
 # Runtime exports - keep structure but ignore large files
 abaco_runtime/exports/*.csv
 abaco_runtime/exports/*.json
@@ -132,6 +124,11 @@ data/temp/
 .dmypy.json
 dmypy.json
 
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
 # Temporary workflow exclusion
 .github/workflows/
 github_workflows_backup/
@@ -145,9 +142,11 @@ test_*.py
 
 # Project specific
 Commercial-View/
-=======
+
 # Keep schema and sample data
 !config/abaco_schema_autodetected.json
 !data/*sample*.csv
 !data/Abaco_Production_Sample.csv
->>>>>>> 32d0202669e45c90a984064cf1e65437493a4acb
+
+# Clean up malformed files from requirements
+=*
