@@ -20,7 +20,7 @@ try:
     import uvicorn
 
     # Import Abaco-specific modules
-    from data_loader import DataLoader
+    from data_loader import DataLoader, validate_abaco_schema
 
 except ImportError as e:
     print(f"❌ Import error: {e}")
