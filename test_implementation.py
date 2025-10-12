@@ -7,9 +7,9 @@ Tests all endpoints without requiring pytest or virtual environment
 import sys
 import os
 from pathlib import Path
-
+import warnings
 # Suppress data loader output during tests
-os.environ['PYTHONWARNINGS'] = 'ignore'
+warnings.filterwarnings("ignore", category=UserWarning)
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
