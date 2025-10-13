@@ -75,13 +75,7 @@ class DataLoader:
             Use `data_dir` to specify the data directory. `data_path` is deprecated and should not be used in new code.
         """
         # Support both data_dir and data_path for backwards compatibility
-        if data_dir is not None and data_path is not None:
-            # Both provided: data_path takes precedence
-            self.data_dir = Path(data_path)
-        elif data_path is not None:
-            self.data_dir = Path(data_path)
-        else:
-            self.data_dir = Path(data_dir)
+        self.data_dir = Path(data_path) if data_path is not None else Path(data_dir)
         
         self.config_dir = Path(config_dir)
 
