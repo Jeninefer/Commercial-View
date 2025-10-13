@@ -63,8 +63,6 @@ class AbacoSampleDataGenerator:
         self.terms = [30, 90, 120]  # days
         
         # Interest rate range from schema: 29.47% - 36.99%
-
-
     # Class-level constants for APR rates
     MIN_APR_RATE = 0.2947
     MAX_APR_RATE = 0.3699
