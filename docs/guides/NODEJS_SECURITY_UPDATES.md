@@ -39,11 +39,11 @@ This document outlines the scheduled Node.js dependency updates to address secur
 1. **Backup Current Environment**
 
    ```bash
-   # Create backup branch
+## Create backup branch
    git checkout -b backup/pre-nodejs-security-update
    git push origin backup/pre-nodejs-security-update
    
-   # Backup package files
+## Backup package files
    cp package.json package.json.backup
    cp package-lock.json package-lock.json.backup
    ```
@@ -51,10 +51,10 @@ This document outlines the scheduled Node.js dependency updates to address secur
 2. **Update Storybook Dependencies**
 
    ```bash
-   # Update to latest stable Storybook v7.x
+## Update to latest stable Storybook v7.x
    npx storybook@latest upgrade
    
-   # Manual package updates
+## Manual package updates
    npm update @storybook/addon-essentials
    npm update @storybook/addon-interactions
    npm update @storybook/addon-links
@@ -67,12 +67,12 @@ This document outlines the scheduled Node.js dependency updates to address secur
 3. **Update Webpack and Related Packages**
 
    ```bash
-   # Update webpack to latest patched version
+## Update webpack to latest patched version
    npm update webpack
    npm update webpack-cli
    npm update webpack-dev-server
    
-   # Update loaders and plugins
+## Update loaders and plugins
    npm update css-loader
    npm update style-loader
    npm update file-loader
@@ -82,11 +82,11 @@ This document outlines the scheduled Node.js dependency updates to address secur
 4. **Security Audit and Verification**
 
    ```bash
-   # Run security audit
+## Run security audit
    npm audit
    npm audit fix --force
    
-   # Verify no critical vulnerabilities remain
+## Verify no critical vulnerabilities remain
    npm audit --audit-level=critical
    ```
 
@@ -133,21 +133,21 @@ This document outlines the scheduled Node.js dependency updates to address secur
 1. **Remove Unused Dependencies**
 
    ```bash
-   # Analyze unused packages
+## Analyze unused packages
    npx depcheck
    
-   # Remove identified unused packages
+## Remove identified unused packages
    npm uninstall [unused-packages]
    ```
 
 2. **Consolidate and Optimize**
 
    ```bash
-   # Clean install to ensure lockfile consistency
+## Clean install to ensure lockfile consistency
    rm -rf node_modules package-lock.json
    npm install
    
-   # Dedupe dependencies
+## Dedupe dependencies
    npm dedupe
    ```
 
@@ -156,12 +156,12 @@ This document outlines the scheduled Node.js dependency updates to address secur
 ### Automated Testing
 
 ```bash
-# Run full test suite after each update phase
+## Run full test suite after each update phase
 npm test
 npm run test:coverage
 npm run test:e2e
 
-# Storybook verification
+## Storybook verification
 npm run storybook
 npm run test-storybook
 ```
@@ -195,18 +195,18 @@ npm run test-storybook
 ### Rollback Process
 
 ```bash
-# 1. Switch to backup branch
+## 1. Switch to backup branch
 git checkout backup/pre-nodejs-security-update
 
-# 2. Restore package files
+## 2. Restore package files
 cp package.json.backup package.json
 cp package-lock.json.backup package-lock.json
 
-# 3. Reinstall previous dependencies
+## 3. Reinstall previous dependencies
 rm -rf node_modules
 npm install
 
-# 4. Verify functionality
+## 4. Verify functionality
 npm test
 npm run dev
 ```

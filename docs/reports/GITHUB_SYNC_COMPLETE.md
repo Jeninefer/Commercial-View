@@ -13,7 +13,7 @@ This project uses:
 
 ```bash
 
-# Example commands for this project
+## Example commands for this project
 
 npm install
 pip install -r requirements.txt

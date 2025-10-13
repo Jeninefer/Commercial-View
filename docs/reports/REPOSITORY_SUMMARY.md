@@ -62,7 +62,7 @@
 
 ## 🏗️ Core Components
 
-### 1. DataLoader (`src/data_loader.py`)
+### 1. DataLoader (`src/dataloader.py`)
 
 - Complete schema validation against 48,853 record structure
 
@@ -92,7 +92,7 @@
 
 - Portfolio-level analytics and reporting
 
-### 4. Schema Management (`config/abaco_schema_autodetected.json`)  
+### 4. Schema Management (`config/abacoschemaautodetected.json`)  
 
 - Complete schema definition for 48,853 records
 

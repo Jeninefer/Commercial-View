@@ -423,24 +423,24 @@ Validation Summary
 
 ```bash
 
-# Install dependencies
+## Install dependencies
 
 pip install -r requirements.txt
 
-# Validate configuration
+## Validate configuration
 
 python validators/schema_validator.py
 
-# Set up pre-commit hooks
+## Set up pre-commit hooks
 
 pip install pre-commit
 pre-commit install
 
-# Run pre-commit checks
+## Run pre-commit checks
 
 pre-commit run --all-files
 
-# Create export directories
+## Create export directories
 
 mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archive}
 
