@@ -139,7 +139,7 @@ if __name__ == "__main__":
         print("✨ IMPLEMENTATION VERIFIED - ALL TESTS PASSED ✨")
         print("=" * 60)
         print("\n📊 Abaco Integration Summary:")
-        print("  - 48,853 records supported (16,205 + 16,443 + 16,205)")
+        print("  - 48,853 records supported (16,205 + 16,443 + 16,205)")  # Update this line if the third dataset size is different
         print("  - Spanish client support enabled")
         print("  - USD factoring validation active")
         print("  - 16 API endpoints implemented")
