@@ -287,7 +287,7 @@ class AbacoSampleDataGenerator:
         print("   • Currency: USD exclusively")
         print("   • Product: factoring exclusively")
         print("   • Payment Type: bullet exclusively")
-        print(f"   • Interest Rates: {self.min_apr*100:.2f}% - {self.max_apr*100:.2f}% APR")
+        print(f"   • Interest Rates: {self.MIN_APR_RATE*100:.2f}% - {self.MAX_APR_RATE*100:.2f}% APR")
         print("   • Spanish client names included")
         print("   • Terms: 30, 90, 120 days")
         print()
