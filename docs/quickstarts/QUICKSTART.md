@@ -6,11 +6,11 @@
 
 ```bash
 
-# Basic installation
+## Basic installation
 
 pip install -r requirements.txt
 
-# For development (includes testing and linting tools)
+## For development (includes testing and linting tools)
 
 pip install -r requirements-dev.txt
 
@@ -40,7 +40,7 @@ Edit `config/column_maps.yml` to match your data schema:
 
 ```bash
 
-# Open in your editor
+## Open in your editor
 
 nano config/column_maps.yml  # or vi, vim, code, etc.
 
@@ -54,7 +54,7 @@ loan_data:
   customer_id: "your_customer_id_column"
   loan_amount: "your_amount_column"
 
-  # ... etc
+## ... etc
 
 ```bash
 
@@ -92,7 +92,7 @@ Default export path is `./abaco_runtime/exports`. To change:
 
 ```yaml
 
-# In config/export_config.yml
+# In config/exportconfig.yml
 
 export_paths:
   base_path: "/your/preferred/path"
@@ -123,10 +123,10 @@ Once your processing code is implemented:
 
 ```bash
 
-# Example command structure
+## Example command structure
 
 
-# python src/process_portfolio.py --config config/
+# python src/processportfolio.py --config config/
 
 ```bash
 
@@ -186,23 +186,23 @@ Before running in production:
 
 ```bash
 
-# Validate configuration
+## Validate configuration
 
 python validators/schema_validator.py
 
-# Install dependencies
+## Install dependencies
 
 pip install -r requirements.txt
 
-# Install dev dependencies
+## Install dev dependencies
 
 pip install -r requirements-dev.txt
 
-# Run pre-commit checks
+## Run pre-commit checks
 
 pre-commit run --all-files
 
-# Check Python version
+## Check Python version
 
 python --version  # Should be 3.8+
 

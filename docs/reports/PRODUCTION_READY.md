@@ -40,23 +40,23 @@ Commercial-View/
 
 ```bash
 
-# Configuration validation - ✅ PASS
+## Configuration validation - ✅ PASS
 
 python validators/schema_validator.py
 
-# ✓ All validations passed!
+## ✓ All validations passed!
 
-# System processing - ✅ PASS  
+## System processing - ✅ PASS  
 
 python src/process_portfolio.py --config config/
 
-# ✅ Processing completed successfully!
+## ✅ Processing completed successfully!
 
-# Output verification - ✅ PASS
+## Output verification - ✅ PASS
 
 ls -la abaco_runtime/exports/
 
-# All directories and files created properly
+## All directories and files created properly
 
 ```bash
 

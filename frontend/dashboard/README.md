@@ -16,15 +16,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ```bash
 
-# Install dependencies
+## Install dependencies
 
 npm install
 
-# Start development server
+## Start development server
 
 npm start
 
-# Open http://localhost:3000 in your browser
+## Open http://localhost:3000 in your browser
 
 ```bash
 
@@ -120,15 +120,15 @@ DEBUG=True
 
 ```bash
 
-# Run test suite
+## Run test suite
 
 npm test
 
-# Run tests with coverage
+## Run tests with coverage
 
 npm test -- --coverage
 
-# Run tests in CI mode (single run)
+## Run tests in CI mode (single run)
 
 npm test -- --ci --coverage --watchAll=false
 
@@ -140,12 +140,12 @@ Ensure the Commercial-View API is running before testing API integrations:
 
 ```bash
 
-# Start the backend API first
+## Start the backend API first
 
 cd ..  # Navigate to project root
 python server_control.py --port 8000
 
-# Then run frontend tests
+## Then run frontend tests
 
 cd frontend/dashboard
 npm test
@@ -162,12 +162,12 @@ For cloud development and testing:
 
 ```python
 
-# Install Node.js in Colab
+## Install Node.js in Colab
 
 !curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 !sudo apt-get install -y nodejs
 
-# Clone and setup
+## Clone and setup
 
 !git clone https://github.com/Jeninefer/Commercial-View.git
 %cd Commercial-View/frontend/dashboard
@@ -179,19 +179,19 @@ For cloud development and testing:
 
 ```python
 
-# Start development server (background process)
+## Start development server (background process)
 
 import subprocess
 import time
 
-# Start the React development server
+## Start the React development server
 
 react_server = subprocess.Popen(['npm', 'start'], 
                                stdout=subprocess.PIPE, 
                                stderr=subprocess.PIPE)
 time.sleep(10)  # Wait for startup
 
-# Use ngrok or Colab's built-in tunneling to expose port 3000
+## Use ngrok or Colab's built-in tunneling to expose port 3000
 
 print("Dashboard server starting on port 3000")
 print("Use Colab's port forwarding or ngrok for external access")
@@ -202,15 +202,15 @@ print("Use Colab's port forwarding or ngrok for external access")
 
 ```python
 
-# Build production assets
+## Build production assets
 
 !npm run build
 
-# Export build artifacts
+## Export build artifacts
 
 !zip -r dashboard-build.zip build/
 
-# Download or save to Google Drive
+## Download or save to Google Drive
 
 from google.colab import files
 files.download('dashboard-build.zip')
@@ -221,7 +221,7 @@ files.download('dashboard-build.zip')
 
 ```python
 
-# Terminate long-running servers to avoid idle sessions
+## Terminate long-running servers to avoid idle sessions
 
 try:
     react_server.terminate()

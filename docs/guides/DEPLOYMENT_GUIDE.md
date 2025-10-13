@@ -56,7 +56,7 @@ loan_data:
   customer_id: "YOUR_CUSTOMER_FIELD"  # Update this
   loan_amount: "YOUR_AMOUNT_FIELD"    # Update this
 
-  # Keep left side unchanged, update right side
+## Keep left side unchanged, update right side
 
 ```bash
 

@@ -6,15 +6,15 @@
 
 ```bash
 
-# Install Figma MCP Server
+## Install Figma MCP Server
 
 npm install @figma/mcp-server-figma
 
-# Server Command
+## Server Command
 
 npx @figma/mcp-server-figma
 
-# GitHub Repository
+## GitHub Repository
 
 https://github.com/figma/mcp-server-figma
 
@@ -56,13 +56,13 @@ https://github.com/figma/mcp-server-figma
 
    ```bash
 
-   # Valid token format: figd_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+   # Valid token format: figdXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
-   # Length: approximately 45-50 characters
+## Length: approximately 45-50 characters
 
 
-   # Starts with: figd_
+   # Starts with: figd
 
 ```text
 
@@ -70,14 +70,14 @@ https://github.com/figma/mcp-server-figma
 
    ```bash
 
-   # Replace YOUR_NEW_TOKEN with the actual new token
+   # Replace YOURNEWTOKEN with the actual new token
 
    curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
    
-   # Expected success response:
+## Expected success response:
 
 
-   # {"id":"123456789","email":"your-email@domain.com","handle":"YourName"}
+## {"id":"123456789","email":"your-email@domain.com","handle":"YourName"}
 
 ```text
 
@@ -116,16 +116,16 @@ https://github.com/figma/mcp-server-figma
 
 ```bash
 
-# OLD TOKEN (403 Forbidden - DO NOT USE)
+## OLD TOKEN (403 Forbidden - DO NOT USE)
 
 
-# FIGMA_PERSONAL_ACCESS_TOKEN=figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK
+# FIGMAPERSONALACCESSTOKEN=figdeh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK
 
-# NEW TOKEN (Replace with your new token)
+## NEW TOKEN (Replace with your new token)
 
 FIGMA_PERSONAL_ACCESS_TOKEN=REPLACE_WITH_NEW_FIGMA_TOKEN
 
-# Commercial View API Configuration
+## Commercial View API Configuration
 
 COMMERCIAL_VIEW_API_URL=http://localhost:8000
 COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
@@ -136,11 +136,11 @@ COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
 
 ```bash
 
-# Test your new token (replace with actual token)
+## Test your new token (replace with actual token)
 
 curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
 
-# If successful, update all configurations:
+## If successful, update all configurations:
 
 export FIGMA_PERSONAL_ACCESS_TOKEN="YOUR_NEW_TOKEN"
 
@@ -188,19 +188,19 @@ export FIGMA_PERSONAL_ACCESS_TOKEN="YOUR_NEW_TOKEN"
 
 ```bash
 
-# Set production Figma token
+## Set production Figma token
 
 export FIGMA_PERSONAL_ACCESS_TOKEN="figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK"
 
-# Start Commercial-View API server
+## Start Commercial-View API server
 
 python server_control.py --port 8000
 
-# Start Figma MCP server
+## Start Figma MCP server
 
 npx @figma/mcp-server-figma
 
-# Verify all endpoints
+## Verify all endpoints
 
 curl http://localhost:8000/health
 
@@ -210,24 +210,24 @@ curl http://localhost:8000/health
 
 ```bash
 
-# REQUIRED: Activate virtual environment first
+## REQUIRED: Activate virtual environment first
 
 source .venv/bin/activate
 
-# Test current token (will show 403)
+## Test current token (will show 403)
 
 curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://api.figma.com/v1/me
 
-# After getting new token, test it:
+## After getting new token, test it:
 
 
-# curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
+# curl -H "X-Figma-Token: YOURNEWTOKEN" https://api.figma.com/v1/me
 
-# Check Commercial-View API status
+## Check Commercial-View API status
 
 python server_control.py --check-only --port 8000
 
-# Monitor SSE stream
+## Monitor SSE stream
 
 curl -N http://localhost:8000/sse
 
@@ -261,7 +261,7 @@ curl -N http://localhost:8000/sse
 npm install @modelcontextprotocol/server-github
 npx @modelcontextprotocol/server-github
 
-# GitHub also uses Personal Access Tokens, not OAuth for MCP
+## GitHub also uses Personal Access Tokens, not OAuth for MCP
 
 ```bash
 
@@ -288,18 +288,18 @@ npx @modelcontextprotocol/server-github
 
 ```bash
 
-# 1. Remove any OAuth configuration from your MCP setup
+## 1. Remove any OAuth configuration from your MCP setup
 
 
-# 2. Use only Personal Access Tokens
+## 2. Use only Personal Access Tokens
 
 
-# 3. Verify token format and permissions
+## 3. Verify token format and permissions
 
 
-# 4. Restart MCP server with token-based config
+## 4. Restart MCP server with token-based config
 
-# Example working configuration:
+## Example working configuration:
 
 export FIGMA_PERSONAL_ACCESS_TOKEN="figd_your_actual_token"
 npx @figma/mcp-server-figma
@@ -310,15 +310,15 @@ npx @figma/mcp-server-figma
 
 ```bash
 
-# Export your token
+## Export your token
 
 export FIGMA_PERSONAL_ACCESS_TOKEN="figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK"
 
-# Start Figma MCP server
+## Start Figma MCP server
 
 npx @figma/mcp-server-figma
 
-# Test connection
+## Test connection
 
 python scripts/mcp_server.py test-figma
 
@@ -328,15 +328,15 @@ python scripts/mcp_server.py test-figma
 
 ```bash
 
-# Test Figma token
+## Test Figma token
 
 python scripts/mcp_server.py test-figma
 
-# Test all MCP connections
+## Test all MCP connections
 
 python scripts/mcp_server.py test-all
 
-# Debug OAuth issues
+## Debug OAuth issues
 
 python scripts/mcp_server.py debug-auth
 
@@ -350,7 +350,7 @@ python scripts/mcp_server.py debug-auth
 
 ```bash
 
-# Direct test - just run this one command:
+## Direct test - just run this one command:
 
 curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://api.figma.com/v1/me
 
@@ -414,11 +414,11 @@ curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://a
 
 ```bash
 
-# Replace with your new token
+## Replace with your new token
 
 FIGMA_PERSONAL_ACCESS_TOKEN=YOUR_NEW_TOKEN_HERE
 
-# Commercial View API Configuration
+## Commercial View API Configuration
 
 COMMERCIAL_VIEW_API_URL=http://localhost:8000
 COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
@@ -439,18 +439,18 @@ COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
 
 ```bash
 
-# 1. Test current (expired) token
+## 1. Test current (expired) token
 
 curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://api.figma.com/v1/me
 
-# 2. Test Commercial-View API (should work)
+## 2. Test Commercial-View API (should work)
 
 curl http://localhost:8000/health
 
-# 3. After getting new Figma token, test it
+## 3. After getting new Figma token, test it
 
 
-# curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
+# curl -H "X-Figma-Token: YOURNEWTOKEN" https://api.figma.com/v1/me
 
 ```bash
 
@@ -467,11 +467,11 @@ curl http://localhost:8000/health
 
 ```bash
 
-# Replace with your new token
+## Replace with your new token
 
 FIGMA_PERSONAL_ACCESS_TOKEN=YOUR_NEW_TOKEN_HERE
 
-# Commercial View API Configuration
+## Commercial View API Configuration
 
 COMMERCIAL_VIEW_API_URL=http://localhost:8000
 COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
@@ -492,17 +492,17 @@ COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
 
 ```bash
 
-# 1. Test current (expired) token
+## 1. Test current (expired) token
 
 curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://api.figma.com/v1/me
 
-# 2. Test Commercial-View API (should work)
+## 2. Test Commercial-View API (should work)
 
 curl http://localhost:8000/health
 
-# 3. After getting new Figma token, test it
+## 3. After getting new Figma token, test it
 
 
-# curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
+# curl -H "X-Figma-Token: YOURNEWTOKEN" https://api.figma.com/v1/me
 
 ```bash

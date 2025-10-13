@@ -129,27 +129,27 @@ graph TD
 
 ```bash
 
-# 1. Activate
+## 1. Activate
 
 source scripts/activate_project.sh
 
-# 2. Setup
+## 2. Setup
 
 python scripts/setup_abaco_integration.py
 
-# 3. Test
+## 3. Test
 
 python scripts/final_abaco_production_test.py
 
-# 4. Validate
+## 4. Validate
 
 python scripts/excellence_validator.py
 
-# 5. Build
+## 5. Build
 
 python scripts/master_orchestrator.py
 
-# 6. Sync
+## 6. Sync
 
 python scripts/sync_github.py
 
