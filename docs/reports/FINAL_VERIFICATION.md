@@ -163,11 +163,11 @@ Commercial-View/                           ✅ Root directory
 
 ```powershell
 
-# Check git status
+## Check git status
 
 git status
 
-# Expected: Clean working tree or ready to commit
+## Expected: Clean working tree or ready to commit
 
 ```bash
 
@@ -190,19 +190,19 @@ git status
 
 ```powershell
 
-# Activate environment
+## Activate environment
 
 ./activate_environment.ps1
 
-# Run Python scripts
+## Run Python scripts
 
 & "./.venv/bin/python" script.py
 
-# Install packages
+## Install packages
 
 & "./.venv/bin/pip" install package
 
-# Run tests
+## Run tests
 
 & "./.venv/bin/pytest" tests/
 
@@ -212,7 +212,7 @@ git status
 
 ```powershell
 
-# These DON'T work on macOS PowerShell:
+## These DON'T work on macOS PowerShell:
 
 source .venv/bin/activate           # Bash command
 .\.venv\Scripts\Activate.ps1        # Windows path
@@ -321,53 +321,53 @@ Run these commands to verify everything works:
 
 ```powershell
 
-# 1. Check location
+## 1. Check location
 
 Get-Location
 
-# Should be: /Users/jenineferderas/Documents/GitHub/Commercial-View
+## Should be: /Users/jenineferderas/Documents/GitHub/Commercial-View
 
-# 2. Check virtual environment
+## 2. Check virtual environment
 
 Test-Path "./.venv/bin/python"
 
-# Should output: True
+## Should output: True
 
-# 3. Check schema
+## 3. Check schema
 
 Test-Path "config/abaco_schema_autodetected.json"
 
-# Should output: True
+## Should output: True
 
-# 4. Activate environment
+## 4. Activate environment
 
 ./activate_environment.ps1
 
-# Should activate without errors
+## Should activate without errors
 
-# 5. Verify Python
+## 5. Verify Python
 
 & "./.venv/bin/python" --version
 
-# Should output: Python 3.13.x
+## Should output: Python 3.13.x
 
-# 6. Run validator
+## 6. Run validator
 
 & "./.venv/bin/python" validate_repository.py
 
-# Should complete with 0 errors
+## Should complete with 0 errors
 
-# 7. Check git status
+## 7. Check git status
 
 git status
 
-# Should show clean working tree
+## Should show clean working tree
 
-# 8. Test imports
+## 8. Test imports
 
 & "./.venv/bin/python" -c "import pandas; import numpy; import fastapi; print('✅ All imports work')"
 
-# Should output: ✅ All imports work
+## Should output: ✅ All imports work
 
 ```bash
 
@@ -375,7 +375,7 @@ git status
 
 ## 🎉 Final Status
 
-### ✅ **REPOSITORY 100% PRODUCTION READY**
+### ✅ REPOSITORY 100% PRODUCTION READY
 
 **All Systems**: ✅ Operational  
 **Schema**: ✅ Validated (48,853 records)  
@@ -409,7 +409,7 @@ from datetime import datetime
 class ProductionStatus:
 """Display production status for Commercial-View platform."""
 
-    # ANSI color codes for terminal output
+## ANSI color codes for terminal output
 
     COLORS = {
         'CYAN': '\033[96m',

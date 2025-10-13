@@ -664,28 +664,28 @@ training_matrix:
 
 This comprehensive security framework ensures the Commercial-View platform meets the stringent security requirements of commercial lending operations while maintaining regulatory compliance and protecting sensitive financial data.
 
-# Go to repository root
+## Go to repository root
 
 cd /Users/jenineferderas/Documents/GitHub/Commercial-View
 
-# Remove old venv
+## Remove old venv
 
 rm -rf .venv
 
-# Create new one
+## Create new one
 
 python3 -m venv .venv
 
-# Activate for tcsh
+## Activate for tcsh
 
 source .venv/bin/activate.csh
 
-# Install packages (use full paths to be safe)
+## Install packages (use full paths to be safe)
 
 .venv/bin/pip install --upgrade pip
 .venv/bin/pip install fastapi pandas numpy pydantic
 .venv/bin/pip install "uvicorn[standard]"
 
-# Verify
+## Verify
 
 .venv/bin/python -c "import fastapi, pandas, numpy; print('✅ All packages installed')"

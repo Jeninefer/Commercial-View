@@ -28,7 +28,7 @@ The following projects are licensed under the MIT License:
 **Purpose**: Development environment setup  
 **Source**: <https://github.com/nvm-sh/nvm/blob/811c039e2b6fb305e6eb2269d7aa0d21eb067586/LICENSE.md>
 
-### jamesgolick/enum_field
+### jamesgolick/enumfield
 
 **Usage**: Enumeration field handling  
 **Purpose**: Loan status and payment frequency validation  
@@ -357,7 +357,7 @@ For questions regarding license compliance or to report license issues, please c
 
 ## Step 4: Create Quick Run Script
 
-### [run_integration_summary.sh](file:///Users/jenineferderas/Documents/GitHub/Commercial-View/run_integration_summary.sh)
+### [runintegrationsummary.sh](file:///Users/jenineferderas/Documents/GitHub/Commercial-View/runintegrationsummary.sh)
 
 Create a quick run script for future use:
 
@@ -366,25 +366,25 @@ Create a quick run script for future use:
 #!/bin/bash
 
 
-# filepath: /Users/jenineferderas/Documents/GitHub/Commercial-View/run_integration_summary.sh
+# filepath: /Users/jenineferderas/Documents/GitHub/Commercial-View/runintegrationsummary.sh
 
 echo "🎉 Running Commercial-View Integration Summary"
 echo "48,853 Records | $208,192,588.65 USD Portfolio | Ultimate Success"
 echo "================================================================"
 
-# Change to project directory
+## Change to project directory
 
 cd "$(dirname "$0")"
 
-# Activate Python environment
+## Activate Python environment
 
 source ../venv/bin/activate
 
-# Run the integration summary script
+## Run the integration summary script
 
 python3 integration_summary.py
 
-# Deactivate Python environment
+## Deactivate Python environment
 
 deactivate
 

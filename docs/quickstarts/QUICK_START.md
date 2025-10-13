@@ -10,7 +10,7 @@
 
 ```bash
 
-# Make activation script executable and run
+## Make activation script executable and run
 
 chmod +x activate_commercial_view.sh
 ./activate_commercial_view.sh
@@ -45,11 +45,11 @@ python scripts/production_validation_complete.py
 
 ```bash
 
-# Create sample data
+## Create sample data
 
 python scripts/create_complete_abaco_sample.py
 
-# Process portfolio
+## Process portfolio
 
 python portfolio.py --config config
 
@@ -98,7 +98,7 @@ python portfolio.py --config config --abaco-only
 
 ```bash
 
-# Recreate virtual environment
+## Recreate virtual environment
 
 rm -rf .venv
 python -m venv .venv
@@ -111,7 +111,7 @@ pip install -r requirements.txt
 
 ```bash
 
-# Reset if needed
+## Reset if needed
 
 git reset --soft HEAD~1
 ./sync_github.sh
@@ -122,7 +122,7 @@ git reset --soft HEAD~1
 
 ```bash
 
-# Fix Python path
+## Fix Python path
 
 export PYTHONPATH="${PWD}/src:${PYTHONPATH}"
 python -c "import src.data_loader; print('✅ DataLoader working')"

@@ -50,17 +50,17 @@
 
 ```bash
 
-# Configuration validation
+## Configuration validation
 
 python validators/schema_validator.py
 ✓ All validations passed!
 
-# System processing
+## System processing
 
 python src/process_portfolio.py --config config/
 ✅ Processing completed successfully!
 
-# Output verification
+## Output verification
 
 ls -la abaco_runtime/exports/
 ✅ All directories and files created properly
@@ -109,7 +109,7 @@ The system is now ready for production use with proper configuration and data in
 
 - ✓ No conflicts remaining
 
-# Directory Structure
+## Directory Structure
 
 Commercial-View/
 
