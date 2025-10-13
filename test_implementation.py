@@ -139,7 +139,14 @@ if __name__ == "__main__":
         print("✨ IMPLEMENTATION VERIFIED - ALL TESTS PASSED ✨")
         print("=" * 60)
         print("\n📊 Abaco Integration Summary:")
-        print("  - 48,853 records supported (16,205 + 16,443 + 16,205)")  # Update this line if the third dataset size is different
+        if ABACO_RECORDS_EXPECTED is not None:
+            if ABACO_DATASET_SIZES:
+                breakdown = " + ".join(f"{n:,}" for n in ABACO_DATASET_SIZES)
+                print(f"  - {ABACO_RECORDS_EXPECTED:,} records supported ({breakdown})")
+            else:
+                print(f"  - {ABACO_RECORDS_EXPECTED:,} records supported")
+        else:
+            print("  - [Unknown] records supported")
         print("  - Spanish client support enabled")
         print("  - USD factoring validation active")
         print("  - 16 API endpoints implemented")
