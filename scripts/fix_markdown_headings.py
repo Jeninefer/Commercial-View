@@ -82,7 +82,13 @@ def fix_markdown_file(file_path: Path) -> bool:
         space = heading_match.group("space")
         content = heading_match.group("content")
         content_leading_stripped = content.lstrip()
-        is_h1_candidate = bool(content_leading_stripped) and not content_leading_stripped[0].islower()
+        is_h1_candidate = (
+            bool(content_leading_stripped)
+            and (
+                not content_leading_stripped[0].isalpha()
+                or not content_leading_stripped[0] == content_leading_stripped[0].casefold()
+            )
+        )
 
         current_hashes = hashes
         line_modified = False
