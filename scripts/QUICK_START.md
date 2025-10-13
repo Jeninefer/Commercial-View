@@ -9,42 +9,42 @@
 ### 1. Activate Environment
 
 ```bash
+
 # Make activation script executable and run
+
 chmod +x activate_commercial_view.sh
 ./activate_commercial_view.sh
-```
-
+```bash
 ### 2. Install Dependencies (in activated environment)
 
 ```bash
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
-```
-
+```bash
 1. Run setup script
 
 ```bash
 python setup_project.py
-```
-
+```bash
 ### 4. Validate Production Readiness
 
 ```bash
 python scripts/production_validation_complete.py
-```
-
+```bash
 ## 📊 Process Abaco Data
 
 ### With Sample Data
 
 ```bash
+
 # Create sample data
+
 python scripts/create_complete_abaco_sample.py
 
 # Process portfolio
-python portfolio.py --config config
-```
 
+python portfolio.py --config config
+```bash
 ### With Real Abaco Data
 
 1. Place your CSV files in `data/` directory:
@@ -57,8 +57,7 @@ python portfolio.py --config config
 
 ```bash
 python portfolio.py --config config --abaco-only
-```
-
+```bash
 3. Check results in `abaco_runtime/exports/`
 
 ## ✅ Validated Features
@@ -77,29 +76,32 @@ python portfolio.py --config config --abaco-only
 ### Environment Issues
 
 ```bash
+
 # Recreate virtual environment
+
 rm -rf .venv
 python -m venv .venv
 ./activate_commercial_view.sh
 pip install -r requirements.txt
-```
-
+```bash
 ### Git Issues
 
 ```bash
+
 # Reset if needed
+
 git reset --soft HEAD~1
 ./sync_github.sh
-```
-
+```bash
 ### Import Issues
 
 ```bash
+
 # Fix Python path
+
 export PYTHONPATH="${PWD}/src:${PYTHONPATH}"
 python -c "import src.data_loader; print('✅ DataLoader working')"
-```
-
+```bash
 ## 🎯 Production Ready
 
 Your Commercial-View platform is **validated and ready** for processing the complete Abaco loan tape with 48,853 records featuring Spanish client names and USD factoring products.

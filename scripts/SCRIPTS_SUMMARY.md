@@ -22,8 +22,7 @@ scripts/
 ├── Build & Deployment (6)                 # Build & orchestration
 ├── Maintenance & Utilities (8)            # System maintenance
 └── External Integrations (4)              # Figma, Drive, etc.
-```
-
+```bash
 ---
 
 ## ✅ Scripts by Category
@@ -105,30 +104,35 @@ graph TD
     G --> C
     F --> H[Sync GitHub]
     H --> I[Deploy Production]
-```
-
+```bash
 **Commands**:
 
 ```bash
+
 # 1. Activate
+
 source scripts/activate_project.sh
 
 # 2. Setup
+
 python scripts/setup_abaco_integration.py
 
 # 3. Test
+
 python scripts/final_abaco_production_test.py
 
 # 4. Validate
+
 python scripts/excellence_validator.py
 
 # 5. Build
+
 python scripts/master_orchestrator.py
 
 # 6. Sync
-python scripts/sync_github.py
-```
 
+python scripts/sync_github.py
+```bash
 ---
 
 ## 🏆 Production Status

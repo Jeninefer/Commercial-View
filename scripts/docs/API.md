@@ -9,6 +9,7 @@
 Handles loading and validation of Abaco loan tape data.
 
 **Features:**
+
 - Validates against exact 48,853 record schema
 - Spanish client name support
 - USD factoring product processing
@@ -19,6 +20,7 @@ Handles loading and validation of Abaco loan tape data.
 Main processing pipeline for Abaco data.
 
 **Capabilities:**
+
 - Delinquency bucketing (7 tiers)
 - Risk scoring (0.0-1.0 scale)
 - Export to CSV and JSON formats
@@ -30,15 +32,17 @@ Main processing pipeline for Abaco data.
 from src.data_loader import DataLoader
 
 # Initialize with Abaco support
+
 loader = DataLoader(data_dir="data")
 
 # Load complete dataset
+
 abaco_data = loader.load_abaco_data()
 
 # Process with portfolio script
-python portfolio.py --config config --abaco-only
-```
 
+python portfolio.py --config config --abaco-only
+```bash
 ### Validation Status
 
 - Schema: 48,853 records (16,205 + 16,443 + 16,205)

@@ -43,6 +43,6 @@ test('Numbers', function (t) {
   t.ok(isNumber(Infinity), 'Infinity is Number');
   t.end();
 });
-```
+```bash
 
 This pattern has been adapted in our test implementation to validate similar behavior in our number detection utilities.

@@ -10,30 +10,30 @@
 
 ### Configuration Validation ✅
 
-```
+```bash
 ✓ column_maps.yml - PASSED
 ✓ pricing_config.yml - PASSED
 ✓ dpd_policy.yml - PASSED
 ✓ export_config.yml - PASSED
-```
+```bash
 
 ### Processing Pipeline ✅
 
-```
+```bash
 ✓ src/process_portfolio.py - OPERATIONAL
 ✓ Export directories created automatically
 ✓ Sample KPI reports generated
 ✓ JSON output files working
-```
+```bash
 
 ### Git Integration ✅
 
-```
+```bash
 ✓ Pull request #66 merged successfully
 ✓ Feature branch cleaned up
 ✓ Main branch updated with all changes
 ✓ No conflicts remaining
-```
+```bash
 
 ## ✅ **Production-Ready Import Testing Complete**
 
@@ -57,10 +57,14 @@ Your Commercial-View Abaco integration now has bulletproof import and dependency
 ### 🎯 **Ready for Production**
 
 ```bash
+
 # Complete validation suite
+
 python test_imports.py
+
 # Expected: All tests ✅ + Production ready for 48,853 records
-```
+
+```bash
 
 ## Ready for Production Use
 

@@ -65,7 +65,9 @@ This change implements cross-platform PowerShell support for the Commercial-View
 **Cross-Platform Detection Logic**:
 
 ```powershell
+
 # PowerShell environment detection for Commercial-View
+
 function Get-CommercialViewEnvironment {
     $env = @{
         IsMacOS = $PSVersionTable.OS -like "*Darwin*"
@@ -87,12 +89,13 @@ function Get-CommercialViewEnvironment {
     }
     return $env
 }
-```
-
+```bash
 **Abaco Integration Preservation**:
 
 ```powershell
+
 # Validate 48,853 record processing capability
+
 function Test-AbacoProcessingCapability {
     param($PythonPath)
 
@@ -101,6 +104,7 @@ import pandas as pd
 import numpy as np
 
 # Simulate Abaco dataset structure
+
 rng = np.random.default_rng(seed=42)
 abaco_data = pd.DataFrame({
     'Cliente': ['SERVICIOS TECNICOS MEDICOS, S.A. DE C.V.'] * 48853,
@@ -110,6 +114,7 @@ abaco_data = pd.DataFrame({
 })
 
 # Performance validation
+
 import time
 start = time.time()
 processed = abaco_data.groupby('Cliente').agg({
@@ -127,8 +132,7 @@ print(f'✅ Performance: {"PASSED" if end-start < 5.0 else "REVIEW"}')
     & $PythonPath -c $testScript
     return $LASTEXITCODE -eq 0
 }
-```
-
+```bash
 ### 📋 **Files Modified**
 
 1. **Commercial-View-PowerShell-Setup.ps1** (New)
@@ -154,7 +158,9 @@ print(f'✅ Performance: {"PASSED" if end-start < 5.0 else "REVIEW"}')
 **1. Cross-Platform Environment Testing**
 
 ```powershell
+
 # Test matrix for Commercial-View PowerShell support
+
 $TestMatrix = @(
     @{ Platform = "Windows 10"; PowerShell = "5.1"; Status = "✅ PASSED" },
     @{ Platform = "Windows 11"; PowerShell = "7.3"; Status = "✅ PASSED" },
@@ -162,8 +168,7 @@ $TestMatrix = @(
     @{ Platform = "macOS Ventura"; PowerShell = "7.4"; Status = "✅ PASSED" },
     @{ Platform = "Ubuntu 22.04"; PowerShell = "7.3"; Status = "✅ PASSED" }
 )
-```
-
+```bash
 **2. Abaco Integration Validation**
 
 - ✅ **Schema Compliance**: 3.2 seconds (target: <5s) - PASSED
@@ -175,7 +180,9 @@ $TestMatrix = @(
 **3. Performance Regression Testing**
 
 ```powershell
+
 # Performance benchmark validation
+
 function Test-AbacoPerformanceBenchmark {
     $benchmark = @{
         SchemaValidation = @{ Target = 5.0; Actual = 3.2; Status = "✅ PASSED" }
@@ -194,8 +201,7 @@ function Test-AbacoPerformanceBenchmark {
 
     return $allPassed
 }
-```
-
+```bash
 ### 🔄 **Previous Testing Gaps Addressed**
 
 **Identified Gaps**:
@@ -238,7 +244,9 @@ function Test-AbacoPerformanceBenchmark {
 **1. Comprehensive Testing**
 
 ```powershell
+
 # Automated risk validation pipeline
+
 function Test-ChangeRiskMitigation {
     $riskTests = @{
         'Data Integrity' = { Test-AbacoDataProcessing }
@@ -253,23 +261,28 @@ function Test-ChangeRiskMitigation {
         Write-Host "$($test.Key): $(if($result){'✅ PASSED'}else{'❌ FAILED'})"
     }
 }
-```
-
+```bash
 **2. Rollback Procedures**
 
 ```powershell
+
 # Emergency rollback to Windows-only PowerShell
+
 function Invoke-EmergencyRollback {
     Write-Host "🚨 Initiating emergency rollback..." -ForegroundColor Red
 
     # Backup current state
+
     $backupPath = "./rollback_backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
     Copy-Item "." $backupPath -Recurse -Force
 
     # Restore Windows-only PowerShell scripts
+
+
     # Implementation details here
 
     # Validate rollback
+
     $validation = Test-WindowsPowerShellOnly
 
     if ($validation) {
@@ -278,8 +291,7 @@ function Invoke-EmergencyRollback {
         Write-Host "❌ Rollback failed - Manual intervention required" -ForegroundColor Red
     }
 }
-```
-
+```bash
 **3. Monitoring and Alerting**
 
 - **Real-time Setup Success Rate Monitoring**
@@ -399,19 +411,24 @@ function Invoke-EmergencyRollback {
 **Rollback Procedure**:
 
 ```powershell
+
 # Automated rollback to previous stable state
+
 function Start-ChangeRollback {
     param([string]$RollbackReason)
 
     Write-Host "🔄 ROLLBACK INITIATED: $RollbackReason" -ForegroundColor Yellow
 
     # Step 1: Stop new deployments
+
     Write-Host "🛑 Stopping new deployments..." -ForegroundColor Red
 
     # Step 2: Restore previous PowerShell scripts
+
     Write-Host "📦 Restoring Windows-only PowerShell scripts..." -ForegroundColor Blue
 
     # Step 3: Validate core functionality
+
     Write-Host "🧪 Validating core 48,853 record processing..." -ForegroundColor Blue
     $validation = Test-AbacoProcessingCapability -PythonPath ".\.venv\Scripts\python.exe"
 
@@ -424,10 +441,10 @@ function Start-ChangeRollback {
     }
 
     # Step 4: Notify stakeholders
+
     Write-Host "📧 Notifying change control board..." -ForegroundColor Blue
 }
-```
-
+```bash
 **Recovery Time Objectives**:
 
 - **Detection Time**: <15 minutes (automated monitoring)
@@ -525,13 +542,26 @@ I've created a comprehensive change management system for your Commercial-View A
 ### 🎯 **Quick Usage**
 
 ```powershell
+
 # Download and run the production setup script
+
 .\Commercial-View-PowerShell-Setup.ps1 -Validate
 
 # This will:
+
+
 # ✅ Detect your platform automatically
+
+
 # ✅ Setup the correct Python environment
+
+
 # ✅ Install Abaco dependencies
+
+
 # ✅ Validate 48,853 record processing capability
+
+
 # ✅ Generate a comprehensive setup report
-```
+
+```bash

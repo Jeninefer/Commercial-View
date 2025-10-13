@@ -7,42 +7,51 @@ The Commercial-View analytics system is fully functional and ready for productio
 ## Working Components
 
 ### Core Processing ✅
+
 - **Configuration System**: All YAML files validated successfully
 - **Processing Pipeline**: `src/process_portfolio.py` working correctly  
 - **Export Generation**: JSON and directory structure created
 - **Sample Data**: Demo output generated successfully
 
 ### Dependencies ✅
+
 - **Python Environment**: Virtual environment configured (.venv)
 - **Required Packages**: PyYAML, jsonschema installed and working
 - **Development Tools**: All dev dependencies available
 
 ### File Structure ✅
-```
+
+```bash
 Commercial-View/
 ├── config/           # ✅ Configuration files (validated)
 ├── src/             # ✅ Processing scripts (working)
 ├── abaco_runtime/   # ✅ Export directories (created)
 ├── validators/      # ✅ Schema validation (passing)
 └── .venv/          # ✅ Python environment (active)
-```
-
+```bash
 ## Recent Test Results
 
 ```bash
+
 # Configuration validation - ✅ PASS
+
 python validators/schema_validator.py
+
 # ✓ All validations passed!
 
 # System processing - ✅ PASS  
+
 python src/process_portfolio.py --config config/
+
 # ✅ Processing completed successfully!
 
 # Output verification - ✅ PASS
-ls -la abaco_runtime/exports/
-# All directories and files created properly
-```
 
+ls -la abaco_runtime/exports/
+
+# All directories and files created properly
+
+```bash
 ## Next Steps for Customization
 
 1. **Data Integration**: Connect your actual portfolio data files

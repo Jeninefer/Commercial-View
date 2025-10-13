@@ -28,27 +28,30 @@
 **1. Cross-Shell Testing**
 
 ```bash
+
 # Tested on multiple shell environments
+
 bash setup_commercial_view.sh     ✅ PASSED
 zsh setup_commercial_view.sh      ✅ PASSED
 csh setup_commercial_view.sh      ✅ PASSED
 PowerShell .\run_correctly.ps1    ✅ PASSED
-```
-
+```bash
 **2. Environment Detection Testing**
 
 ```bash
+
 # OS Detection validation
+
 macOS (darwin): ✅ PASSED
 Linux (linux-gnu): ✅ PASSED
 Windows (msys/cygwin): ✅ PASSED
 
 # Shell Detection validation
+
 bash: ✅ PASSED
 zsh: ✅ PASSED
 csh/tcsh: ✅ PASSED
-```
-
+```bash
 **3. Abaco Integration Testing**
 
 - ✅ **Schema Validation**: 3.2 seconds (maintained)
@@ -102,7 +105,9 @@ csh/tcsh: ✅ PASSED
 **Environment Detection:**
 
 ```bash
+
 # Universal shell/OS detection
+
 detect_environment() {
     case "$OSTYPE" in
         darwin*) OS="macOS"; PYTHON_CMD="python3" ;;
@@ -114,12 +119,13 @@ detect_environment() {
     CURRENT_SHELL=$(basename "$SHELL")
     echo "✅ Detected: $OS with $CURRENT_SHELL shell"
 }
-```
-
+```bash
 **Virtual Environment Handling:**
 
 ```bash
+
 # Cross-platform virtual environment setup
+
 setup_venv() {
     if [[ "$OS" == "Windows" ]]; then
         VENV_BIN=".venv/Scripts"
@@ -131,12 +137,13 @@ setup_venv() {
         PIP_EXEC=".venv/bin/pip"
     fi
 }
-```
-
+```bash
 **Abaco Integration Validation:**
 
 ```bash
+
 # Universal environment validation for 48,853 records
+
 validate_abaco_environment() {
     $PYTHON_EXEC -c "
 import pandas as pd
@@ -144,6 +151,7 @@ import numpy as np
 import fastapi
 
 # Test with Abaco record simulation
+
 df = pd.DataFrame({
     'record_id': range(48853),
     'client_name': ['SERVICIOS TECNICOS MEDICOS, S.A. DE C.V.'] * 48853,
@@ -155,8 +163,7 @@ print('✅ Spanish client support validated')
 print('✅ USD factoring compliance ready')
 "
 }
-```
-
+```bash
 ## Performance Impact
 
 ### **Abaco Integration Performance** (Validated)
@@ -233,18 +240,21 @@ This change provides universal shell compatibility while maintaining all existin
 ### **Quick Commands Reference**
 
 ```bash
+
 # Universal setup (works in any shell)
+
 ./setup_commercial_view.sh
 
 # Activate environment (shell-specific)
+
 source .venv/bin/activate        # bash/zsh
 source .venv/bin/activate.csh    # csh/tcsh
 
 # Run Abaco processing (universal)
+
 python run.py                    # API server
 python process_abaco_data.py     # Process 48,853 records
-```
-
+```bash
 **🎯 CHANGE STATUS: PRODUCTION READY ✅**
 
 Your Commercial-View system now supports:

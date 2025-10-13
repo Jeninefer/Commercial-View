@@ -54,6 +54,10 @@ import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
+# FastAPI imports
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+
 # Add src to Python path for imports
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 

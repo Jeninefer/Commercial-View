@@ -37,37 +37,43 @@ Welcome to the comprehensive Commercial-View documentation. This enterprise-grad
 ### For Developers
 
 ```bash
+
 # Quick setup
+
 docs/QUICKSTART.md → docs/ARCHITECTURE.md → docs/TESTING.md
 
 # Integration setup
+
 docs/SECRETS.md → docs/AI_INTEGRATIONS.md → docs/INTEGRATIONS.md
 
 # Abaco loan tape integration
-docs/ABACO_INTEGRATION.md → config/abaco_column_maps.yml
-```
 
+docs/ABACO_INTEGRATION.md → config/abaco_column_maps.yml
+```bash
 ### For DevOps/Deployment
 
 ```bash
-# Production deployment
-docs/DEPLOYMENT.md → docs/SECRETS.md → docs/TROUBLESHOOTING.md
-```
 
+# Production deployment
+
+docs/DEPLOYMENT.md → docs/SECRETS.md → docs/TROUBLESHOOTING.md
+```bash
 ### For Business Users
 
 ```bash
-# Understanding the platform
-docs/BUSINESS_OVERVIEW.md → docs/USER_GUIDE.md
-```
 
+# Understanding the platform
+
+docs/BUSINESS_OVERVIEW.md → docs/USER_GUIDE.md
+```bash
 ### For Abaco Users
 
 ```bash
-# Loan tape integration
-docs/ABACO_INTEGRATION.md → src/data_loader.py → config/abaco_column_maps.yml
-```
 
+# Loan tape integration
+
+docs/ABACO_INTEGRATION.md → src/data_loader.py → config/abaco_column_maps.yml
+```bash
 ## 🔍 **Documentation Standards**
 
 All documentation follows enterprise-grade standards:

@@ -19,6 +19,7 @@
 | **TOTAL** | **48,853** | **62** | ✅ **EXACT MATCH** |
 
 ### 🇪🇸 **Spanish Language Support Confirmed**
+
 - **Client Names**: "SERVICIOS TECNICOS MEDICOS, S.A. DE C.V."
 - **Client Names**: "PRODUCTOS DE CONCRETO, S.A. DE C.V."
 - **Individual Names**: "KEVIN ENRIQUE CABEZAS MORALES"
@@ -27,6 +28,7 @@
 - **Payer Names**: "EMPRESA TRANSMISORA DE EL SALVADOR, S.A. DE C.V. ETESAL, S.A. DE C.V."
 
 ### 💰 **USD Factoring Products Validated**
+
 - **Currency**: USD exclusively across all tables
 - **Product Type**: factoring exclusively
 - **Payment Frequency**: bullet payments exclusively
@@ -35,6 +37,7 @@
 - **Companies**: Abaco Technologies & Abaco Financial
 
 ### 📊 **Payment Processing Validated**
+
 - **Payment Statuses**: Late, On Time, Prepayment
 - **Payment Currency**: USD exclusively
 - **Outstanding Balances**: $0 to $77,175 range
@@ -43,58 +46,79 @@
 ## 🚀 Quick Start
 
 ### 1. Environment Setup
+
 ```bash
+
 # Clone repository
+
 git clone https://github.com/Jeninefer/Commercial-View.git
 cd Commercial-View
 
 # Set up virtual environment
+
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install dependencies
-pip install -r requirements.txt
-```
 
+pip install -r requirements.txt
+```bash
 ### 2. Process Abaco Data
 
 #### With Sample Data (for testing)
+
 ```bash
+
 # Create sample data matching exact schema
+
 python scripts/create_complete_abaco_sample.py
 
 # Process portfolio
-python portfolio.py --config config
-```
 
-#### With Real Abaco Data
+python portfolio.py --config config
 ```bash
+#### With Real Abaco Data
+
+```bash
+
 # Place your CSV files in data/ directory:
+
+
 #   - Abaco - Loan Tape_Loan Data_Table.csv (16,205 records)
+
+
 #   - Abaco - Loan Tape_Historic Real Payment_Table.csv (16,443 records)  
+
+
 #   - Abaco - Loan Tape_Payment Schedule_Table.csv (16,205 records)
 
 # Process real data
+
 python portfolio.py --config config --abaco-only
 
 # Check results
-ls abaco_runtime/exports/
-```
 
+ls abaco_runtime/exports/
+```bash
 ## 📊 Exact Data Structure Validation
 
 ### Loan Data Table (16,205 records × 28 columns)
+
 ```yaml
 Companies: [Abaco Technologies, Abaco Financial]
 Customer_IDs: [CLIAB000198, CLIAB000237, CLIAB000225]
 Spanish_Clients:
+
     - "SERVICIOS TECNICOS MEDICOS, S.A. DE C.V."
     - "PRODUCTOS DE CONCRETO, S.A. DE C.V."
     - "KEVIN ENRIQUE CABEZAS MORALES"
+
 Spanish_Payers:
+
     - "HOSPITAL NACIONAL \"SAN JUAN DE DIOS\" SAN MIGUEL"
     - "ASSA COMPAÑIA DE SEGUROS, S.A."
     - "EMPRESA TRANSMISORA DE EL SALVADOR, S.A. DE C.V. ETESAL, S.A. DE C.V."
+
 Product_Type: [factoring]
 Currency: [USD]
 Interest_Rate_APR: [0.2947, 0.3699, 0.295]
@@ -102,9 +126,9 @@ Terms: [90, 30, 120] # days
 Payment_Frequency: [bullet]
 Days_in_Default: [0, 1, 3]
 Loan_Status: [Current, Complete, Default]
-```
-
+```bash
 ### Historic Real Payment Table (16,443 records × 18 columns)
+
 ```yaml
 Companies: [Abaco Financial, Abaco Technologies]  
 Customer_IDs: [CLI2006, CLIAB000223, CLIAB000225]
@@ -112,32 +136,34 @@ Payment_Status: [Late, "On Time", Prepayment]
 Payment_Currency: [USD]
 Total_Payment_Range: [$461.33, $62,115.89]
 Outstanding_Range: [$0.0, $8,054.78]
-```
-
+```bash
 ### Payment Schedule Table (16,205 records × 16 columns)
+
 ```yaml
 Companies: [Abaco Technologies, Abaco Financial]
 Currency: [USD]
 TPV_Range: [$1,731.5, $21,784.0]
 Total_Payment_Range: [$1,558.35, $21,889.957376]
 Outstanding_Loan_Value: [0] # All completed
-```
-
+```bash
 ## 🔧 Key Features
 
 ### ✅ **Exact Schema Integration**
+
 - **Schema Validation**: Validates against exact 48,853 record structure
 - **Spanish Language Support**: Full UTF-8 support for Spanish business names
 - **Currency Handling**: USD factoring product specialization
 - **Abaco Company Processing**: Handles both Abaco Technologies & Abaco Financial
 
 ### ✅ **Advanced Analytics**
+
 - **Risk Scoring**: Multi-factor risk assessment (0.0-1.0 scale)
 - **Delinquency Bucketing**: 7-tier classification system
 - **Interest Rate Analysis**: Validated for exact 29.47%-36.99% APR range
 - **Payment Performance**: Complete Late/On Time/Prepayment tracking
 
 ### ✅ **Production Export System**
+
 - **CSV Exports**: Complete datasets with derived analytics fields
 - **JSON Analytics**: Dashboard-ready structured summaries
 - **Timestamped Files**: Automatic versioning and audit trail
@@ -146,27 +172,33 @@ Outstanding_Loan_Value: [0] # All completed
 ## 🧪 Validation & Testing
 
 ```bash
+
 # Validate exact schema compliance
+
 python scripts/final_abaco_production_test.py
 
 # Test with sample data matching exact structure
+
 python scripts/create_complete_abaco_sample.py
 python portfolio.py --config config
 
 # Run comprehensive production validation
-python scripts/production_validation_complete.py
-```
 
+python scripts/production_validation_complete.py
+```bash
 ## 📈 Business Logic - Abaco Specialized
 
 ### Risk Scoring Algorithm (Abaco-Optimized)
+
 Multi-factor risk assessment calibrated for Abaco factoring products:
+
 - **Days in Default** (40% weight): 0-180+ days past due
 - **Loan Status** (30% weight): Current, Complete, Default
 - **Interest Rate** (20% weight): Normalized to 29.47%-36.99% APR range
 - **Outstanding Amount** (10% weight): Based on $0-$77,175 range
 
 ### Delinquency Classification (Factoring-Specific)
+
 - **Current**: 0 days past due
 - **Early Delinquent**: 1-30 days (factoring grace period)
 - **Moderate Delinquent**: 31-60 days
@@ -178,6 +210,7 @@ Multi-factor risk assessment calibrated for Abaco factoring products:
 ## 🌍 Spanish Language & Cultural Support
 
 ### Business Entity Recognition
+
 - **S.A. DE C.V.**: Sociedad Anónima de Capital Variable
 - **S.A.**: Sociedad Anónima
 - **S.R.L.**: Sociedad de Responsabilidad Limitada
@@ -185,6 +218,7 @@ Multi-factor risk assessment calibrated for Abaco factoring products:
 - **Individual Names**: Spanish naming conventions support
 
 ### Geographic Coverage
+
 - **El Salvador**: Primary market (Hospital Nacional references)
 - **Regional Coverage**: Central America factoring markets
 - **UTF-8 Encoding**: Full Spanish character support including ñ, á, é, í, ó, ú
@@ -213,8 +247,7 @@ Multi-factor risk assessment calibrated for Abaco factoring products:
     "late_delinquent": 25
   }
 }
-```
-
+```bash
 ## 🏆 Production Readiness Checklist
 
 - ✅ **Schema Structure**: 48,853 records validated exactly

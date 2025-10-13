@@ -19,8 +19,7 @@ Your Commercial-View repository has been cleaned of all duplicates and optimized
 ✅ Repository Size: Optimized and reduced
 
 🚀 PRODUCTION STATUS: DUPLICATE-FREE AND PRODUCTION OPTIMIZED
-```
-
+```bash
 ### 🔍 **DUPLICATE DETECTION CATEGORIES**
 
 The cleanup script identifies and removes these types of duplicates:
@@ -59,12 +58,13 @@ The cleanup script identifies and removes these types of duplicates:
 ### **Automated Prevention**
 
 ```powershell
+
 # Run duplicate detection regularly
+
 ./cleanup_duplicates.ps1 -DryRun    # Preview mode
 ./cleanup_duplicates.ps1             # Execution mode
 ./cleanup_duplicates.ps1 -Verbose   # Detailed output
-```
-
+```bash
 ### **Development Practices**
 
 1. **Before Creating Backups**: Check if backup already exists
@@ -76,8 +76,12 @@ The cleanup script identifies and removes these types of duplicates:
 ### **Git Hooks Prevention**
 
 ```bash
+
 # Pre-commit hook to detect duplicates
+
+
 #!/bin/bash
+
 if [ -f "./cleanup_duplicates.ps1" ]; then
     pwsh -File "./cleanup_duplicates.ps1" -DryRun
     if [ $? -ne 0 ]; then
@@ -85,8 +89,7 @@ if [ -f "./cleanup_duplicates.ps1" ]; then
         exit 1
     fi
 fi
-```
-
+```bash
 ## 📋 **MAINTENANCE SCHEDULE**
 
 ### **Weekly Cleanup**
@@ -131,8 +134,7 @@ Track repository health with these metrics:
 ✅ Performance: Lightning Fast (0.02s for 48,853 records)
 
 🏆 STATUS: DUPLICATE-FREE AND PRODUCTION OPTIMIZED
-```
-
+```bash
 ## Step 2: Update MCP Status Checker with GitHub Success Confirmation
 
 ### [check_mcp_status.ps1](file:///Users/jenineferderas/Documents/GitHub/Commercial-View/check_mcp_status.ps1)
@@ -140,12 +142,14 @@ Track repository health with these metrics:
 Add GitHub deployment success confirmation:
 
 ```powershell
+
 # ...existing code...
 
 Write-Host "`n🎯 YOU CAN NOW CONFIDENTLY CONTINUE TO ITERATE AND DEVELOP! 🎉" -ForegroundColor Yellow -BackgroundColor DarkGreen
 Write-Host "🚀 Ready for advanced development with enterprise-grade capabilities!" -ForegroundColor Cyan
 
 # Add GitHub deployment success confirmation
+
 Write-Host "`n🌐 GITHUB DEPLOYMENT SUCCESS CONFIRMED:" -ForegroundColor Green -BackgroundColor DarkBlue
 Write-Host "   ✅ Commit: f202f08 (ULTIMATE PLATFORM COMPLETION)" -ForegroundColor Green
 Write-Host "   ✅ Repository: Successfully pushed to GitHub" -ForegroundColor Green
@@ -155,8 +159,7 @@ Write-Host "   ✅ Status: PRODUCTION DEPLOYED AND OPERATIONAL" -ForegroundColor
 
 Write-Host "`n🏆 ULTIMATE SUCCESS: PLATFORM COMPLETION ACHIEVED!" -ForegroundColor Cyan -BackgroundColor DarkGreen
 Write-Host "🎯 100% operational, GitHub deployed, development ready!" -ForegroundColor Yellow
-```
-
+```bash
 **🎯 DUPLICATE PREVENTION: ACTIVE AND EFFECTIVE**
 
 _Your Commercial-View repository is now optimally organized and protected against future duplicate accumulation!_

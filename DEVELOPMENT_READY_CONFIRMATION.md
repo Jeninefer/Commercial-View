@@ -23,7 +23,7 @@ Your Commercial-View platform has achieved **ULTIMATE COMPLETION STATUS** and is
 ✅ Monitoring: Real-time status checking and health validation
 
 🚀 FINAL STATUS: READY FOR ADVANCED DEVELOPMENT ITERATION
-```
+```bash
 
 ### 🔧 **DEVELOPMENT ENVIRONMENT CONFIRMED**
 

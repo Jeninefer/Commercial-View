@@ -190,3 +190,34 @@ def validate_portfolio_data(
     logger.info(f"Portfolio validation: {validation['total_records']} records, valid={validation['is_valid']}")
 
     return validation
+
+
+class DataLoader:
+    """DataLoader class wrapper for Abaco data loading functions."""
+    
+    def __init__(self, schema_path=None):
+        self.schema_path = schema_path
+        self.records_loaded = 0
+        
+    def load_abaco_dataset(self, records=48853, base_path=None):
+        """Load Abaco dataset."""
+        from pathlib import Path
+        df = load_loan_data(base_path)
+        self.records_loaded = len(df)
+        return df
+    
+    def load_abaco_data(self, base_path=None):
+        """Load all Abaco data tables."""
+        return {
+            'loan_data': load_loan_data(base_path),
+            'payment_history': load_historic_real_payment(base_path),
+            'payment_schedule': load_payment_schedule(base_path)
+        }
+    
+    def get_processing_stats(self):
+        """Get processing statistics."""
+        return {'records_loaded': self.records_loaded}
+
+__all__ = ['DataLoader', 'load_loan_data', 'load_historic_real_payment', 
+           'load_payment_schedule', 'load_customer_data', 'load_collateral',
+           'load_abaco_schema', 'validate_portfolio_data']

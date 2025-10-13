@@ -58,8 +58,7 @@ method: "first_and_last_initial"
 example:
   original: "John Smith"
   masked: "J*** S****"
-```
-
+```bash
 #### 2. Customer IDs
 
 ```yaml
@@ -69,8 +68,7 @@ salt_required: true
 example:
   original: "CUST-12345"
   masked: "HSH-89AB4F2E"
-```
-
+```bash
 #### 3. Email Addresses
 
 ```yaml
@@ -79,8 +77,7 @@ method: "preserve_domain"
 example:
   original: "john.smith@example.com"
   masked: "j***@example.com"
-```
-
+```bash
 #### 4. Phone Numbers
 
 ```yaml
@@ -89,8 +86,7 @@ method: "mask_middle_digits"
 example:
   original: "+1-555-123-4567"
   masked: "+1-555-XXX-XX67"
-```
-
+```bash
 #### 5. Account Numbers
 
 ```yaml
@@ -99,8 +95,7 @@ method: "last_four_digits"
 example:
   original: "1234567890123456"
   masked: "************3456"
-```
-
+```bash
 #### 6. Business Tax ID / EIN
 
 ```yaml
@@ -109,8 +104,7 @@ method: "mask_middle_digits"
 example:
   original: "12-3456789"
   masked: "12-****789"
-```
-
+```bash
 #### 7. DUNS Numbers
 
 ```yaml
@@ -120,8 +114,7 @@ salt_required: true
 example:
   original: "123456789"
   masked: "HSH-45A7B9C2"
-```
-
+```bash
 #### 8. Collateral Addresses
 
 ```yaml
@@ -130,8 +123,7 @@ method: "zip_code_only"
 example:
   original: "123 Main Street, Anytown, CA 90210"
   masked: "*** *** ******, *******, CA 90210"
-```
-
+```bash
 #### 9. Financial Ratios (Sensitive Business Data)
 
 ```yaml
@@ -140,8 +132,7 @@ method: "categorical_ranges"
 example:
   original: "DSCR: 1.47"
   masked: "DSCR: 1.25-1.50"
-```
-
+```bash
 #### 10. Loan Amounts (Large Commercial Loans)
 
 ```yaml
@@ -150,8 +141,7 @@ method: "logarithmic_ranges"
 example:
   original: "$2,450,000"
   masked: "$2M-$5M"
-```
-
+```bash
 ## Enhanced Data Classification Levels
 
 ### Level 0: Public (Regulatory Reporting)
@@ -219,8 +209,7 @@ access_control: "pricing_committee_only"
 encryption_at_rest: true
 encryption_in_transit: true
 watermarking: true
-```
-
+```bash
 #### Risk Assessment Reports (Highly Confidential)
 
 ```yaml
@@ -234,8 +223,7 @@ access_control: "credit_committee_only"
 audit_logging: true
 retention_period_days: 2555 # 7 years for regulatory compliance
 digital_signatures: required
-```
-
+```bash
 #### Regulatory Reporting Exports (Restricted)
 
 ```yaml
@@ -248,8 +236,7 @@ encryption_at_rest: true
 encryption_in_transit: true
 regulatory_approval_required: true
 transmission_controls: "secure_regulatory_portal_only"
-```
-
+```bash
 #### KPI JSON/CSV Exports (Public/Internal)
 
 ```yaml
@@ -264,32 +251,33 @@ masking_rules:
 access_control: "role_based"
 encryption_at_rest: true
 encryption_in_transit: true
-```
-
+```bash
 #### DPD Frame Exports (Internal/Confidential)
 
 ```yaml
 security_level: "confidential"
 pii_masking_required: true
 masking_rules:
+
   - customer_id: "hash"
   - customer_name: "partial"
+
 access_control: "role_based"
 audit_logging: true
 retention_period_days: 90
-```
-
+```bash
 #### Buckets Exports (Internal)
 
 ```yaml
 security_level: "internal"
 pii_masking_required: true
 masking_rules:
+
   - customer_id: "hash"
+
 aggregation_required: false
 access_control: "role_based"
-```
-
+```bash
 ## Access Control
 
 ### Role-Based Access Control (RBAC)
@@ -465,18 +453,20 @@ bcdr_requirements:
   recovery_point_objective: 15_minutes # Maximum data loss acceptable
 
   backup_strategy:
+
     - real_time_replication_to_secondary_site
     - daily_encrypted_backups_to_cloud
     - weekly_full_system_snapshots
     - monthly_disaster_recovery_testing
 
   incident_communication:
+
     - automated_stakeholder_notification
     - regulatory_authority_alert_system
     - customer_communication_templates
     - media_relations_protocol
-```
 
+```bash
 ## Enhanced Security Training and Awareness
 
 ### Role-Specific Training Programs
@@ -484,27 +474,31 @@ bcdr_requirements:
 ```yaml
 training_matrix:
   all_users:
+
     - annual_security_awareness
     - phishing_simulation_quarterly
     - password_hygiene_training
 
   privileged_users:
+
     - advanced_threat_recognition
     - social_engineering_prevention
     - incident_response_procedures
 
   developers:
+
     - secure_coding_practices
     - owasp_top_10_training
     - threat_modeling_workshops
 
   commercial_lending_staff:
+
     - financial_privacy_regulations
     - fair_lending_compliance
     - customer_data_protection
     - regulatory_examination_preparation
-```
 
+```bash
 This comprehensive security framework ensures the Commercial-View platform meets the stringent security requirements of commercial lending operations while maintaining regulatory compliance and protecting sensitive financial data.
 
 # Go to repository root
