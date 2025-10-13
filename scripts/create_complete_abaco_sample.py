@@ -47,7 +47,7 @@ class AbacoSampleDataGenerator:
         ]
         
         self.spanish_payers = [
-            'HOSPITAL NACIONAL "SAN JUAN DE DIOS" SAN MIGUEL',
+            "HOSPITAL NACIONAL \"SAN JUAN DE DIOS\" SAN MIGUEL",
             "ASSA COMPAÑIA DE SEGUROS, S.A.",
             "EMPRESA TRANSMISORA DE EL SALVADOR, S.A. DE C.V. ETESAL, S.A. DE C.V.",
             "MINISTERIO DE SALUD PUBLICA Y ASISTENCIA SOCIAL",
