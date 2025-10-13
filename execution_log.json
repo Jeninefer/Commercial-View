@@ -1,7 +1,11 @@
 [
   {
     "phase": "Phase 1: Environment Setup & Validation",
+<<<<<<< Updated upstream
     "timestamp": "2025-10-12 22:26:19.853962"
+=======
+    "timestamp": "2025-10-12 13:41:45.784504"
+>>>>>>> Stashed changes
   },
   {
     "success": "Python version: 3.13.7"
@@ -23,7 +27,11 @@
   },
   {
     "phase": "Phase 2: Comprehensive Repository Audit",
+<<<<<<< Updated upstream
     "timestamp": "2025-10-12 22:26:20.940527"
+=======
+    "timestamp": "2025-10-12 13:41:46.504294"
+>>>>>>> Stashed changes
   },
   {
     "info": "Auditing Python files..."
@@ -35,29 +43,45 @@
     "info": "Auditing configuration files..."
   },
   {
+<<<<<<< Updated upstream
     "info": "Total issues found: 202"
+=======
+    "info": "Total issues found: 81"
+>>>>>>> Stashed changes
   },
   {
-    "info": "  Critical: 0"
+    "info": "  Critical: 1"
   },
   {
     "info": "  High: 0"
   },
   {
+<<<<<<< Updated upstream
     "info": "  Medium: 202"
+=======
+    "info": "  Medium: 80"
+>>>>>>> Stashed changes
   },
   {
     "info": "  Low: 0"
   },
   {
     "phase": "Phase 3: Conflict Resolution",
+<<<<<<< Updated upstream
     "timestamp": "2025-10-12 22:26:22.958430"
+=======
+    "timestamp": "2025-10-12 13:41:47.227706"
+>>>>>>> Stashed changes
   },
   {
     "info": "Uncommitted changes detected, handling..."
   },
   {
+<<<<<<< Updated upstream
     "warning": "Found 89 files with conflicts"
+=======
+    "warning": "Found 31 files with conflicts"
+>>>>>>> Stashed changes
   },
   {
     "info": "Resolving conflicts in run_resolution.sh..."
@@ -118,6 +142,12 @@
   },
   {
     "success": "Resolved conflicts in execute_complete_resolution.py"
+  },
+  {
+    "info": "Resolving conflicts in temp_execute.py..."
+  },
+  {
+    "success": "Resolved conflicts in temp_execute.py"
   },
   {
     "info": "Resolving conflicts in upgrade_uv_environment.sh..."
@@ -595,10 +625,17 @@
   },
   {
     "phase": "Phase 4: Code Quality Enhancement",
+<<<<<<< Updated upstream
     "timestamp": "2025-10-12 22:26:25.826195"
+=======
+    "timestamp": "2025-10-12 13:41:48.390278"
+>>>>>>> Stashed changes
   },
   {
-    "info": "Resolving 0 critical issues..."
+    "info": "Resolving 1 critical issues..."
+  },
+  {
+    "warning": "Manual fix required for syntax error in /Users/jenineferderas/Commercial-View/missing_methods.py"
   },
   {
     "info": "Resolving 0 high priority issues..."
