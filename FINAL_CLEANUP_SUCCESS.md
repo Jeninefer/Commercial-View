@@ -10,7 +10,6 @@ Your Commercial-View platform has been thoroughly cleaned and validated with **1
 
 ```bash
 🏆 REAL DATA USAGE CONFIRMED:
-============================
 ✅ Portfolio Value: $208,192,588.65 USD
    • Found in: 510+ file locations
    • Usage: 100% accurate across platform

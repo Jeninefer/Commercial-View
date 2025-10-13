@@ -138,7 +138,6 @@ $commitMessage = @"
 Production-Optimized PowerShell Abaco Integration - $timestamp
 
 🏦 Commercial-View Abaco Integration - Production Optimized Repository
-======================================================================
 
 ✅ Repository Optimization: Cleanup completed (64→1 backup directories)
 ✅ Dependencies Resolved: psutil, python-dotenv, colorama added
@@ -238,7 +237,6 @@ git status
 $syncReport = "cross_platform_sync_report_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
 $reportContent = @"
 Cross-Platform PowerShell GitHub Synchronization Report
-======================================================
 Sync Date: $timestamp
 Repository: https://github.com/Jeninefer/Commercial-View
 Platform: $(if($isMacOS){'macOS'}else{'Windows'}) PowerShell

@@ -280,7 +280,6 @@ generate_success_report() {
     SETUP_REPORT="setup_report_$(date +%Y%m%d_%H%M%S).log"
     cat > "$SETUP_REPORT" << EOF
 Commercial-View Abaco Integration Setup Report
-============================================
 Setup Date: $(date "+%Y-%m-%d %H:%M:%S")
 Operating System: $OS
 Shell: $CURRENT_SHELL

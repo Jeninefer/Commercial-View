@@ -45,7 +45,6 @@ $commitMessage = @"
 Complete PowerShell Integration for Abaco Processing - $timestamp
 
 🏦 Commercial-View PowerShell Ecosystem - Production Ready
-=========================================================
 
 🚀 PowerShell Integration Features Added:
 ✅ Cross-Platform PowerShell Module (Windows/macOS/Linux)  

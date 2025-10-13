@@ -181,20 +181,17 @@ if ($serverStatuses["commercial-view"] -eq "Running" -or $TestMode) {
 $reportFile = "mcp_startup_report_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
 $reportContent = @"
 Commercial-View MCP Server Startup Report
-=========================================
 Generated: $(Get-Date)
 Configuration: $ConfigPath
 Test Mode: $TestMode
 Auto Start: $AutoStart
 
 Server Status Summary:
-=====================
 $(foreach ($serverName in $serverStatuses.Keys) {
 "$serverName : $($serverStatuses[$serverName])"
 })
 
 Commercial-View Integration:
-===========================
 Records: 48,853 (Abaco dataset)
 Portfolio: `$208,192,588.65 USD
 Spanish Support: 99.97% accuracy

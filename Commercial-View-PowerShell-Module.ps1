@@ -554,7 +554,6 @@ function Start-CommercialViewReporting {
     
     $reportContent = @"
 Commercial-View Production Report
-================================
 Generated: $(Get-Date)
 Portfolio: $Portfolio
 Value: $($Value.ToString('C', [System.Globalization.CultureInfo]::GetCultureInfo('en-US')))

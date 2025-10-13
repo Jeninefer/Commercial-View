@@ -220,7 +220,6 @@ echo -e "\n${YELLOW}🔍 Step 8: Generating environment report...${NC}"
 ENV_REPORT="uv_upgrade_report_$(date +%Y%m%d_%H%M%S).log"
 cat > "$ENV_REPORT" << EOF
 UV Environment Upgrade Report
-============================
 Upgrade Date: $(date "+%Y-%m-%d %H:%M:%S")
 Project: Commercial-View Abaco Integration
 

@@ -167,12 +167,10 @@ Write-Host "`n📊 Step 6: Generating cleanup report..." -ForegroundColor Blue
 $reportFile = "duplicate_cleanup_report_$(Get-Date -Format 'yyyyMMdd_HHmmss').log"
 $reportContent = @"
 Commercial-View Repository Duplicate Cleanup Report
-==================================================
 Generated: $(Get-Date)
 Mode: $(if ($DryRun) { "DRY RUN (Preview)" } else { "EXECUTION (Changes Made)" })
 
 Duplicate Detection Results:
-===========================
 Total Duplicates Found: $($duplicatesFound.Count)
 Total Space Saved: $([math]::Round($totalSpaceSaved / 1KB, 2)) KB
 Files Processed: $($filesProcessed)
@@ -183,7 +181,6 @@ $(foreach ($type in ($duplicatesFound | Group-Object Type)) {
 })
 
 Detailed Results:
-================
 $(foreach ($item in $duplicatesFound) {
 "File: $($item.File)
 Type: $($item.Type)  
@@ -194,7 +191,6 @@ $(if ($item.Original) { "Original: $($item.Original)" })
 })
 
 Repository Optimization Status:
-==============================
 ✅ Package Backups: Cleaned up obsolete backup files
 ✅ Log Files: Removed duplicate log entries  
 ✅ Virtual Environment: Cleaned venv backup files

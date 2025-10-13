@@ -337,7 +337,6 @@ function New-SetupReport {
     
     $reportContent = @"
 Commercial-View Abaco Integration Setup Report
-===========================================
 Setup Date: $timestamp
 PowerShell Version: $($PSVersionTable.PSVersion)
 Operating System: $($PSVersionTable.OS)

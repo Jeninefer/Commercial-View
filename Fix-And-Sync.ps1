@@ -77,7 +77,6 @@ $commitMessage = @"
 fix: Resolve all syntax errors across repository - Production ready
 
 🔧 COMPLETE SYNTAX FIX - October 12, 2024
-=========================================
 
 ✅ Fixed run.py - Critical NameError:
    • DAYS_IN_DEFAULT and all constants now defined BEFORE usage

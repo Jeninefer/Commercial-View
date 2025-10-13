@@ -78,7 +78,6 @@ COMMIT_TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
 COMMIT_MESSAGE="Complete PowerShell Integration for Abaco Processing - $COMMIT_TIMESTAMP
 
 🏦 Commercial-View PowerShell Ecosystem - Production Ready
-=========================================================
 
 🚀 PowerShell Integration Features Added:
 ✅ Cross-Platform PowerShell Module (Windows/macOS/Linux)
@@ -158,7 +157,6 @@ echo -e "\n${YELLOW}🔍 Step 7: Generating PowerShell integration report...${NC
 INTEGRATION_REPORT="powershell_integration_report_$(date +%Y%m%d_%H%M%S).log"
 cat > "$INTEGRATION_REPORT" << EOF
 Commercial-View PowerShell Integration Report
-============================================
 Integration Date: $COMMIT_TIMESTAMP
 Repository: https://github.com/Jeninefer/Commercial-View
 

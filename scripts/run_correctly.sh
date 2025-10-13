@@ -82,7 +82,6 @@ COMMIT_TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
 COMMIT_MESSAGE="Production Abaco Integration Sync - $COMMIT_TIMESTAMP
 
 🏦 Commercial-View Abaco Integration - Complete Production System
-================================================================
 
 ✅ Schema Integration: 48,853 records (16,205 + 16,443 + 16,205)
 ✅ Financial Portfolio: \$208,192,588.65 USD total exposure
@@ -166,7 +165,6 @@ echo -e "\n${YELLOW}🔍 Step 7: Generating sync report...${NC}"
 SYNC_REPORT="sync_report_$(date +%Y%m%d_%H%M%S).log"
 cat > "$SYNC_REPORT" << EOF
 GitHub Synchronization Report
-============================
 Sync Date: $COMMIT_TIMESTAMP
 Repository: https://github.com/Jeninefer/Commercial-View
 
