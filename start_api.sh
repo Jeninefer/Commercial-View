@@ -1,8 +1,9 @@
 #!/bin/bash
 # Commercial-View API Startup Script
 
+PORTFOLIO_VALUE="\$208,192,588.65"
 echo "🚀 Starting Commercial-View API..."
-echo "Portfolio: $208M+ Abaco dataset (48,853 records)"
+echo "Portfolio: ${PORTFOLIO_VALUE} Abaco dataset (48,853 records)"
 echo "Features: Spanish client support, USD factoring validation"
 
 # Check if uvicorn is installed
