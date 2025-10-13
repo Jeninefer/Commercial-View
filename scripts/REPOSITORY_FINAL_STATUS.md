@@ -94,8 +94,7 @@ Commercial-View/
 ├── server_control.py                 # Server management
 ├── setup_project.py                  # Project setup
 └── validate_repository.py            # ✅ Repository validator
-```
-
+```bash
 ---
 
 ## 💼 Abaco Integration Data (Validated)
@@ -144,8 +143,7 @@ Commercial-View/
     "spanish_processing_accuracy": 0.9997
   }
 }
-```
-
+```bash
 ---
 
 ## ✅ Issues Resolved
@@ -190,14 +188,15 @@ d636083 - fix: All syntax errors resolved - Production ready (October 12, 2024)
 cb135f9 - Previous commit
 3eeae7d - Final cleanup validation (12 files)
 6da9170 - Final cleanup documentation
-```
-
+```bash
 ---
 
 ## Commit Everything to GitHub
 
 ```powershell
+
 # Final comprehensive commit
+
 git add -A
 
 git commit -m "docs: Final repository status and production readiness confirmation
@@ -260,6 +259,7 @@ Status: ✅ FINAL - READY FOR UNLIMITED ITERATION
 Quality: ⭐⭐⭐⭐⭐ OUTSTANDING EXCELLENCE"
 
 # Push to GitHub
+
 git push origin main
 
 Write-Host "`n" + ("=" * 70) -ForegroundColor Cyan
@@ -286,8 +286,7 @@ Write-Host "   3. Validate: python validate_repository.py" -ForegroundColor Whit
 Write-Host "   4. Generate Reports: python examples/schema_usage_example.py" -ForegroundColor White
 
 Write-Host "`n🎯 Your repository is PERFECT and ready for unlimited iteration! 🚀" -ForegroundColor Green
-```
-
+```bash
 ---
 
 ## Environment Setup
@@ -295,37 +294,49 @@ Write-Host "`n🎯 Your repository is PERFECT and ready for unlimited iteration!
 **⚠️ IMPORTANT: You're using PowerShell on macOS - Use Unix paths!**
 
 ```powershell
+
 # You're already in the repository!
+
+
 # Current location: /Users/jenineferderas/Documents/GitHub/Commercial-View
 
 # ❌ DON'T clone again - you're already here!
+
+
 # git clone https://github.com/Jeninefer/Commercial-View.git
 
 # Create virtual environment (if not exists)
+
 python3 -m venv .venv
 
 # ✅ Activate on macOS PowerShell (Unix paths)
+
 & "./.venv/bin/activate"
 
 # Or use the activation script
+
 ./activate_environment.ps1
 
 # Install dependencies (macOS PowerShell)
+
 & "./.venv/bin/pip" install -r requirements.txt
 
 # Run validation
+
 & "./.venv/bin/python" validate_repository.py
 
 # Start server
+
 & "./.venv/bin/python" server_control.py
 
 # Run tests
+
 & "./.venv/bin/pytest" tests/
 
 # Generate reports
-& "./.venv/bin/python" examples/schema_usage_example.py
-```
 
+& "./.venv/bin/python" examples/schema_usage_example.py
+```bash
 **Why these commands?**
 
 - You're using **PowerShell on macOS** (not bash, not Windows PowerShell)

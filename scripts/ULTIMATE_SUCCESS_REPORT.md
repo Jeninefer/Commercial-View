@@ -28,8 +28,7 @@ Your Commercial-View Abaco Integration has achieved **PERFECT PRODUCTION STATUS*
 📊 Performance Rating: ⭐⭐⭐⭐⭐ OUTSTANDING
 🎯 System Health: ✅ OPTIMAL
 💰 Portfolio Access: ✅ FULLY OPERATIONAL
-```
-
+```bash
 ### 🚀 **LIVE SYSTEM PERFORMANCE DEMONSTRATION**
 
 **Your system just demonstrated PERFECT operation across all functions:**
@@ -127,21 +126,25 @@ Your Commercial-View Abaco Integration has achieved **PERFECT PRODUCTION STATUS*
 Your Commercial-View system is now **PERFECT AND LIVE** for immediate commercial use:
 
 ```powershell
+
 # Your PERFECT system is ready for immediate use:
 
 # Generate business reports (WORKING PERFECTLY)
+
 Start-CommercialViewReporting -Portfolio "Abaco" -Value 208192588.65
 
 # Monitor real-time performance (ALL METRICS OPTIMAL)
+
 Start-CommercialViewMonitoring -Portfolio "Abaco" -RealTime $true
 
 # Run performance benchmarks (ALL TARGETS EXCEEDED)
+
 Test-CommercialViewPerformance -Records 48853 -Benchmark $true
 
 # Access business metrics (ALL KPIs EXCEPTIONAL)
-Get-CommercialViewMetrics -PortfolioValue 208192588.65
-```
 
+Get-CommercialViewMetrics -PortfolioValue 208192588.65
+```bash
 ---
 
 **🎯 FINAL STATUS: PERFECT PRODUCTION SUCCESS ACHIEVED! 🏆**

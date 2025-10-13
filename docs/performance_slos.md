@@ -83,8 +83,7 @@ memory_thresholds:
   warning_threshold_percent: 75
   critical_threshold_percent: 90
   enable_memory_monitoring: true
-```
-
+```bash
 ### Memory Optimization Techniques
 
 1. **Lazy loading**: Load data in chunks as needed
@@ -361,8 +360,7 @@ Commercial-View/
 ├── scripts/          # Utility and processing scripts
 ├── docs/             # Documentation including this SLO document
 └── tests/            # Test suites for validation
-```
-
+```bash
 ## Code Quality and Compliance Standards
 
 ### SonarQube Compliance (Production Ready)
@@ -374,7 +372,9 @@ Your Commercial-View system now includes comprehensive code quality standards to
 **Constants Definition Requirements:**
 
 ```python
+
 # Define constants for repeated string literals (SonarLint S1192)
+
 DAYS_IN_DEFAULT = "Days in Default"
 INTEREST_RATE_APR = "Interest Rate APR"
 OUTSTANDING_LOAN_VALUE = "Outstanding Loan Value"
@@ -384,71 +384,92 @@ ABACO_TECHNOLOGIES = "Abaco Technologies"
 ABACO_FINANCIAL = "Abaco Financial"
 
 # Usage in your Abaco integration
+
 def calculate_risk_metrics(loan_data):
     days_default = loan_data.get(DAYS_IN_DEFAULT, 0)
     interest_rate = loan_data.get(INTEREST_RATE_APR, 0)
     outstanding = loan_data.get(OUTSTANDING_LOAN_VALUE, 0)
-```
-
+```bash
 **F-String Optimization (SonarLint S3457):**
 
 ```python
+
 # Replace empty f-strings with regular strings
+
+
 # Before: print(f"Processing Abaco data...")
+
+
 # After: print("Processing Abaco data...")
 
 # Use f-strings only with actual formatting
+
 portfolio_value = 208192588.65
 print(f"Portfolio exposure: ${portfolio_value:,.2f} USD")
-```
-
+```bash
 **Cognitive Complexity Reduction (SonarLint S3776):**
 
 ```python
+
 # Break down complex functions into smaller, focused methods
+
 def process_abaco_portfolio(self, data):
     """Process complete Abaco portfolio with reduced complexity."""
+
     # Extract validation logic
+
     validation_results = self._validate_schema(data)
     if not validation_results.is_valid:
         return validation_results
 
     # Extract Spanish client processing
+
     spanish_clients = self._process_spanish_clients(data)
 
     # Extract USD factoring validation
+
     usd_validation = self._validate_usd_factoring(data)
 
     # Combine results
+
     return self._combine_processing_results(
         validation_results, spanish_clients, usd_validation
     )
 
 def _validate_schema(self, data):
     """Focused schema validation method."""
+
     # Simplified validation logic
 
 def _process_spanish_clients(self, data):
     """Focused Spanish client processing."""
+
     # Simplified Spanish processing logic
 
 def _validate_usd_factoring(self, data):
     """Focused USD factoring validation."""
-    # Simplified USD validation logic
-```
 
+    # Simplified USD validation logic
+
+```bash
 #### **Modern Python Standards (SonarLint S6711)**
 
 **NumPy Random Generator Migration:**
 
 ```python
+
 # Replace legacy numpy.random functions
+
+
 # Before: np.random.choice(values)
+
+
 # After: Use modern Generator approach
 
 import numpy as np
 
 # Create generator instance
+
 rng = np.random.default_rng(seed=42)
 
 def generate_test_data(self, size):
@@ -459,14 +480,15 @@ def generate_test_data(self, size):
         'rates': rng.uniform(0.2947, 0.3699, size=size),  # Your APR range
         'client_names': rng.choice(self.spanish_client_names, size=size)
     }
-```
-
+```bash
 #### **Exception Handling Improvements (SonarLint S5754)**
 
 **Specific Exception Classes:**
 
 ```python
+
 # Replace bare except clauses with specific exceptions
+
 def load_abaco_schema(self, schema_path):
     """Load Abaco schema with proper exception handling."""
     try:
@@ -481,8 +503,7 @@ def load_abaco_schema(self, schema_path):
     except PermissionError as e:
         logger.error(f"Permission denied accessing schema: {e}")
         raise AbacoSchemaError(f"Schema access denied: {e}")
-```
-
+```bash
 #### **Variable Usage Optimization (SonarLint S1481)**
 
 **Remove Unused Variables:**
@@ -490,12 +511,16 @@ def load_abaco_schema(self, schema_path):
 ```python
 def process_portfolio_data(self, data):
     """Process portfolio data with clean variable usage."""
+
     # Remove unused variables
+
     loan_data = data.get('Loan Data', [])
     payment_history = data.get('Historic Real Payment', [])
+
     # Don't declare variables you won't use
 
     # Process only what you need
+
     processed_loans = self._process_loans(loan_data)
     processed_payments = self._process_payments(payment_history)
 
@@ -504,8 +529,7 @@ def process_portfolio_data(self, data):
         'payments': processed_payments,
         'total_records': len(processed_loans) + len(processed_payments)
     }
-```
-
+```bash
 ### JavaScript/TypeScript Standards
 
 #### **Modern Variable Declarations (SonarLint S3504):**
@@ -518,8 +542,7 @@ def process_portfolio_data(self, data):
 const isNumberObject = require("./is-number-object");
 const testValues = [1, 2, 3, "test"];
 let dynamicValue = calculateValue();
-```
-
+```bash
 #### **Regular Expression Optimization (SonarLint S6325):**
 
 ```javascript
@@ -529,8 +552,7 @@ let dynamicValue = calculateValue();
 
 const numberPattern = /^\d+$/;
 const spanishNamePattern = /S\.A\.\s+DE\s+C\.V\./i;
-```
-
+```bash
 ### Production Code Quality Metrics
 
 #### **Achieved Compliance Standards**
@@ -548,7 +570,9 @@ Your Commercial-View system achieves the following code quality metrics:
 #### **Abaco-Specific Quality Validations**
 
 ```python
+
 # Quality validation for your 48,853 records
+
 class AbacoQualityValidator:
     """Quality validation for Abaco integration."""
 
@@ -569,23 +593,25 @@ class AbacoQualityValidator:
             quality_report['total_records'] += 1
 
             # Validate Spanish client naming
+
             client_name = record.get('Cliente', '')
             if self.SPANISH_CLIENT_PATTERN.search(client_name):
                 quality_report['spanish_clients_validated'] += 1
 
             # Validate USD factoring
+
             currency = record.get(LOAN_CURRENCY, '')
             product = record.get(PRODUCT_TYPE, '')
             if currency == self.USD_CURRENCY_CODE and product == self.FACTORING_PRODUCT_TYPE:
                 quality_report['usd_factoring_validated'] += 1
 
         # Calculate compliance rate
+
         total_validations = quality_report['spanish_clients_validated'] + quality_report['usd_factoring_validated']
         quality_report['compliance_rate'] = total_validations / (quality_report['total_records'] * 2)
 
         return quality_report
-```
-
+```bash
 ### Enhanced Code Quality Integration
 
 **Quality Gates for Production Deployment:**
@@ -632,7 +658,9 @@ See the [sync_github.sh script](../scripts/sync_github.sh) for the complete sync
 **Note**: This workflow should be saved as: `/Users/jenineferderas/Documents/GitHub/Commercial-View/.github/workflows/abaco-deploy.yml`
 
 ```yaml
+
 # filepath: .github/workflows/abaco-deploy.yml
+
 name: Abaco Integration Deployment
 on:
   push:
@@ -641,23 +669,27 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+
       - uses: actions/checkout@v3
 
       - name: Setup Python
+
         uses: actions/setup-python@v3
         with:
           python-version: "3.9"
 
       - name: Install dependencies
+
         run: pip install -r requirements.txt
 
       - name: Validate Abaco schema
+
         run: python -c "print('✅ 48,853 records validated')"
 
       - name: Deploy to production
-        run: echo "Deploying $208M+ USD portfolio processing"
-```
 
+        run: echo "Deploying $208M+ USD portfolio processing"
+```bash
 ## Windows PowerShell Environment Setup
 
 ### PowerShell-Specific Commands for Abaco Integration
@@ -667,38 +699,49 @@ Your Commercial-View system requires PowerShell-compatible commands for Windows 
 #### **PowerShell Environment Activation**
 
 ```powershell
+
 # Windows PowerShell activation
+
 .\.venv\Scripts\Activate.ps1
 
 # Alternative if execution policy restricts
+
 & ".\.venv\Scripts\Activate.ps1"
 
 # Run Python commands with full path (Windows)
+
 .\.venv\Scripts\python.exe server_control.py
 
 # Install packages with PowerShell (Windows)
-.\.venv\Scripts\pip.exe install fastapi uvicorn pandas numpy
-```
 
+.\.venv\Scripts\pip.exe install fastapi uvicorn pandas numpy
+```bash
 #### **macOS PowerShell Activation (Critical Difference)**
 
 ```powershell
+
 # macOS uses Unix paths - this is CRITICAL
+
 & "./.venv/bin/python" server_control.py
 
 # Install packages on macOS
+
 & "./.venv/bin/pip" install fastapi uvicorn pandas numpy
 
 # Cross-platform detection
+
 if (Test-Path "./.venv/bin/python") {
+
     # macOS/Linux
+
     & "./.venv/bin/python" server_control.py
 } elseif (Test-Path ".\.venv\Scripts\python.exe") {
+
     # Windows
+
     & ".\.venv\Scripts\python.exe" server_control.py
 }
-```
-
+```bash
 ## Repository Optimization Status
 
 ### ✅ **Cleanup Successfully Completed**
@@ -717,8 +760,7 @@ Your Commercial-View repository has been successfully optimized:
 ✅ Business Value: $208,192,588.65 USD portfolio validated
 ✅ Development Status: READY FOR UNLIMITED ITERATION
 ✅ Quality Rating: ⭐⭐⭐⭐⭐ OUTSTANDING EXCELLENCE
-```
-
+```bash
 ### Production Repository Structure (Optimized)
 
 After successful cleanup, your Commercial-View repository now has this clean structure:
@@ -744,8 +786,7 @@ Commercial-View/
 ├── run.py
 ├── requirements.txt
 └── .gitignore
-```
-
+```bash
 ## Document Status
 
 **🎯 PERFORMANCE SLOs DOCUMENT: VALIDATED AND PRODUCTION-READY ✅**
@@ -776,10 +817,13 @@ Commercial-View/
 ## Commit This Success Document
 
 ```powershell
+
 # Add the success document
+
 git add GITHUB_SYNC_SUCCESS.md
 
 # Commit
+
 git commit -m "docs: Add GitHub sync success documentation
 
 ✅ Complete sync confirmation
@@ -791,6 +835,7 @@ git commit -m "docs: Add GitHub sync success documentation
 🎯 STATUS: PRODUCTION DEPLOYMENT COMPLETE"
 
 # Push
+
 git push origin main
 
 Write-Host "`n🎉 🏆 ULTIMATE SUCCESS! 🏆 🎉" -ForegroundColor Green
@@ -800,4 +845,4 @@ Write-Host "  ✅ Real Data Validated (48,853 records)" -ForegroundColor Green
 Write-Host "  ✅ GitHub Synchronized" -ForegroundColor Green
 Write-Host "  ✅ Production Ready" -ForegroundColor Green
 Write-Host "`n🌐 https://github.com/Jeninefer/Commercial-View" -ForegroundColor Blue
-```
+```bash

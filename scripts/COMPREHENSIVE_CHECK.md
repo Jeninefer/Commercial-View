@@ -46,8 +46,7 @@
 ✅ config/README.md - Valid Markdown
 ✅ .vscode/settings.json - Valid JSON (cleaned)
 ✅ .gitignore - Comprehensive exclusions
-```
-
+```bash
 ### 4. **Scripts Validation** ✅
 
 **Directory**: `scripts/`  
@@ -61,15 +60,23 @@
 ### 5. **Git Repository Status** ✅
 
 ```powershell
+
 # Check current status
+
 git status
 
 # Expected output:
-# On branch main
-# Your branch is up to date with 'origin/main'
-# nothing to commit, working tree clean
-```
 
+
+# On branch main
+
+
+# Your branch is up to date with 'origin/main'
+
+
+# nothing to commit, working tree clean
+
+```bash
 **Latest Commit**: d636083 ✅  
 **GitHub Sync**: Current ✅  
 **No Uncommitted Changes**: Clean ✅
@@ -77,19 +84,26 @@ git status
 ### 6. **Virtual Environment** ✅
 
 ```powershell
+
 # Check if virtual environment exists
+
 Test-Path "./.venv/bin/python"
+
 # Output: True ✅
 
 # Check Python version
+
 & "./.venv/bin/python" --version
+
 # Expected: Python 3.13.x ✅
 
 # Check installed packages
-& "./.venv/bin/pip" list
-# Should include: fastapi, uvicorn, pandas, numpy, etc. ✅
-```
 
+& "./.venv/bin/pip" list
+
+# Should include: fastapi, uvicorn, pandas, numpy, etc. ✅
+
+```bash
 ### 7. **File Structure** ✅
 
 ```text
@@ -123,8 +137,7 @@ Commercial-View/
 ├── ✅ run.py
 ├── ✅ server_control.py
 └── ✅ validate_repository.py
-```
-
+```bash
 ---
 
 ## 📊 Abaco Data Validation
@@ -144,8 +157,7 @@ Commercial-View/
     "max": 0.3699                            ✅ 36.99%
   }
 }
-```
-
+```bash
 ### Data Consistency Check ✅
 
 | Metric               | Schema Value    | Config Value    | Status   |
@@ -166,17 +178,19 @@ Commercial-View/
 ### macOS PowerShell (Your Platform) ✅
 
 ```powershell
+
 # ✅ Correct commands for macOS PowerShell:
+
 ./activate_environment.ps1
 & "./.venv/bin/python" script.py
 & "./.venv/bin/pip" install package
 
 # ❌ WRONG (these don't work on macOS):
+
 source .venv/bin/activate        # Bash command
 .\.venv\Scripts\Activate.ps1     # Windows path
 python script.py                 # Not in PATH
-```
-
+```bash
 **Documentation Status**: ✅ All corrected in QUICK_START_MACOS_POWERSHELL.md
 
 ---
@@ -234,35 +248,50 @@ python script.py                 # Not in PATH
 Run these to verify everything works:
 
 ```powershell
+
 # 1. Check you're in the right directory
+
 Get-Location
+
 # Should output: /Users/jenineferderas/Documents/GitHub/Commercial-View ✅
 
 # 2. Check virtual environment
+
 Test-Path "./.venv/bin/python"
+
 # Should output: True ✅
 
 # 3. Activate environment
+
 ./activate_environment.ps1
+
 # Should activate without errors ✅
 
 # 4. Check Python version
+
 & "./.venv/bin/python" --version
+
 # Should output: Python 3.13.x ✅
 
 # 5. Run validation
+
 & "./.venv/bin/python" validate_repository.py
+
 # Should complete with 0 errors ✅
 
 # 6. Check Git status
+
 git status
+
 # Should show clean working tree ✅
 
 # 7. Test imports
-& "./.venv/bin/python" -c "import pandas; import numpy; import fastapi; print('✅ All imports work')"
-# Should output: ✅ All imports work ✅
-```
 
+& "./.venv/bin/python" -c "import pandas; import numpy; import fastapi; print('✅ All imports work')"
+
+# Should output: ✅ All imports work ✅
+
+```bash
 ---
 
 ## 📋 Summary Report

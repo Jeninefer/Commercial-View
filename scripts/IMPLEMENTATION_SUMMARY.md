@@ -11,6 +11,7 @@ This document summarizes the complete implementation of the Commercial-View anal
 **File**: `config/column_maps.yml`
 
 **Implementation**:
+
 - ✅ Input field mappings (loan_data, payment_data, customer_data)
 - ✅ Contract-compliant output fields:
     - **DPD Frame**: past_due_amount, days_past_due, first_arrears_date, last_payment_date, last_due_date, is_default, reference_date
@@ -23,10 +24,12 @@ This document summarizes the complete implementation of the Commercial-View anal
 ### 2. Pricing Files with Interval Bands
 
 **Files**: 
+
 - `config/pricing_config.yml` (configuration)
 - `data/pricing/*.csv` (pricing data)
 
 **Band Keys Implementation** (as specified):
+
 ```yaml
 band_keys:
   tenor_days:
@@ -35,11 +38,11 @@ band_keys:
   amount:
     lower_bound: "amount_min"
     upper_bound: "amount_max"
-```
-
+```bash
 This matches the required format: `{feature: (low_col, high_col)}`
 
 **Example Files Provided**:
+
 - ✅ `main_pricing.csv` - Primary pricing grid
 - ✅ `commercial_loans_pricing.csv` - Commercial loan pricing
 - ✅ `retail_loans_pricing.csv` - Retail loan pricing  
@@ -54,6 +57,7 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **File**: `config/dpd_policy.yml`
 
 **Implementation**:
+
 - ✅ Default threshold: 180 days (configurable to 90 or 120)
 - ✅ Alternative thresholds documented: 90 (conservative), 120 (moderate), 180 (standard)
 - ✅ 7 DPD buckets defined:
@@ -74,6 +78,7 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **File**: `config/export_config.yml`
 
 **Implementation**:
+
 - ✅ Default base path: `./abaco_runtime/exports`
 - ✅ Subdirectories configured:
     - KPI JSON: `./abaco_runtime/exports/kpi/json`
@@ -93,6 +98,7 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **File**: `docs/performance_slos.md`
 
 **Implementation**:
+
 - ✅ Portfolio size expectations:
     - Small (< 10K loans): < 5 min, < 2GB
     - Medium (10K-100K loans): < 15 min, 2-8GB, chunking recommended
@@ -112,6 +118,7 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **File**: `docs/security_constraints.md`
 
 **Implementation**:
+
 - ✅ PII identification and classification
 - ✅ Masking strategies before export:
     - Customer IDs: SHA-256 hashing
@@ -134,6 +141,7 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **File**: `docs/versioning.md`
 
 **Implementation**:
+
 - ✅ Tag format: `v{MAJOR}.{MINOR}.{PATCH}[-{PRERELEASE}]`
 - ✅ Examples: `v1.0.0`, `v1.2.3`, `v2.0.0-beta.1`
 - ✅ Release workflow:
@@ -156,9 +164,11 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 ## Bonus Deliverables
 
 ### CI/CD Pipeline
+
 **File**: `.github/workflows/ci.yml`
 
 Features:
+
 - ✅ Version validation
 - ✅ Code linting (Black, isort, Flake8, Pylint)
 - ✅ Configuration validation
@@ -169,9 +179,11 @@ Features:
 - ✅ GitHub release creation
 
 ### Pre-commit Configuration
+
 **File**: `.pre-commit-config.yaml`
 
 Features:
+
 - ✅ Python formatting (Black, isort)
 - ✅ Linting (Flake8)
 - ✅ Security checks (Bandit)
@@ -182,9 +194,11 @@ Features:
 - ✅ Secret detection
 
 ### Schema Validator
+
 **File**: `validators/schema_validator.py`
 
 Features:
+
 - ✅ Validates all configuration files
 - ✅ Checks required fields
 - ✅ Validates data types
@@ -197,6 +211,7 @@ Features:
 ### Documentation
 
 **Files Created**:
+
 - ✅ `README.md` - Comprehensive project documentation
 - ✅ `QUICKSTART.md` - Immediate setup guide
 - ✅ `DEPLOYMENT_GUIDE.md` - Direct answers to configuration questions
@@ -214,7 +229,7 @@ Features:
 
 ## Project Structure
 
-```
+```bash
 Commercial-View/
 ├── config/                          # Configuration files
 │   ├── column_maps.yml             # Field mappings
@@ -245,15 +260,14 @@ Commercial-View/
 ├── VERSION                         # Version number
 ├── requirements.txt                # Dependencies
 └── requirements-dev.txt            # Dev dependencies
-```
-
+```bash
 ---
 
 ## Validation Results
 
 All configuration files have been validated:
 
-```
+```bash
 $ python validators/schema_validator.py
 
 ======================================================================
@@ -278,8 +292,7 @@ Validation Summary
 
 ✅ All validations passed!
 ======================================================================
-```
-
+```bash
 ---
 
 ## Quick Reference
@@ -298,6 +311,7 @@ Validation Summary
 ### Contract Output Fields (Do Not Change)
 
 **DPD Frame**:
+
 - past_due_amount
 - days_past_due
 - first_arrears_date
@@ -307,6 +321,7 @@ Validation Summary
 - reference_date
 
 **Buckets**:
+
 - dpd_bucket
 - dpd_bucket_value
 - dpd_bucket_description
@@ -315,23 +330,28 @@ Validation Summary
 ### Commands
 
 ```bash
+
 # Install dependencies
+
 pip install -r requirements.txt
 
 # Validate configuration
+
 python validators/schema_validator.py
 
 # Set up pre-commit hooks
+
 pip install pre-commit
 pre-commit install
 
 # Run pre-commit checks
+
 pre-commit run --all-files
 
 # Create export directories
-mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archive}
-```
 
+mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archive}
+```bash
 ---
 
 ## Next Steps

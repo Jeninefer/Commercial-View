@@ -38,18 +38,22 @@
 ## Recent Test Results
 
 ```bash
+
 # Configuration validation
+
 python validators/schema_validator.py
 ✓ All validations passed!
 
 # System processing
+
 python src/process_portfolio.py --config config/
 ✅ Processing completed successfully!
 
 # Output verification
+
 ls -la abaco_runtime/exports/
 ✅ All directories and files created properly
-```
+```bash
 
 ## Next Steps for Production
 

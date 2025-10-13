@@ -36,7 +36,7 @@ New Protection Added:
 ✅ DUPLICATE_PREVENTION.md: Comprehensive guide
 ✅ Enhanced .gitignore: Future prevention
 ✅ Multiple optimization documents created
-```
+```bash
 
 ### 🚀 **POST-CLEANUP VALIDATION**
 
@@ -64,7 +64,7 @@ Commercial-View/ (OPTIMIZED)
 ├── server_control.py (UPDATED)
 ├── requirements.txt (CLEAN)
 └── .gitignore (ENHANCED)
-```
+```bash
 
 ## 🎉 **ULTIMATE ACHIEVEMENT STATUS**
 

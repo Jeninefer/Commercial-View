@@ -3,10 +3,12 @@
 ## System Requirements
 
 ### Python Version
+
 - Python 3.11 or higher (recommended for optimal performance)
 - Virtual environment recommended
 
 ### Hardware Requirements (for 48,853 records)
+
 - RAM: 8GB minimum (16GB recommended for full dataset processing)
 - Storage: 2GB available space (includes exports and runtime data)
 - CPU: Multi-core recommended for large dataset processing
@@ -14,26 +16,27 @@
 ## Core Dependencies
 
 ### Production Dependencies (requirements.txt)
+
 ```txt
 pandas>=2.0.0          # Data processing (Abaco dataset handling)
 numpy>=1.24.0          # Numerical computing (risk calculations)
 PyYAML>=6.0            # Configuration file processing
 jsonschema>=4.0.0      # Schema validation (Abaco schema compliance)
 python-dateutil>=2.8.0 # Date processing (payment dates, schedules)
-```
-
+```bash
 ### Development Dependencies (requirements-dev.txt)
+
 ```txt
 pytest>=7.0.0          # Testing framework
 black>=23.0.0          # Code formatting
 flake8>=6.0.0          # Code linting
 mypy>=1.0.0            # Type checking
 jupyter>=1.0.0         # Data analysis notebooks
-```
-
+```bash
 ## Abaco Data Requirements
 
 ### Required CSV Files (Exact Schema)
+
 The platform expects three CSV files with the exact structure:
 
 1. **Abaco - Loan Tape_Loan Data_Table.csv** (16,205 records, 28 columns)
@@ -53,7 +56,9 @@ The platform expects three CSV files with the exact structure:
    - Outstanding loan values (typically $0 for completed)
 
 ### Schema Validation
+
 The platform validates against the exact schema file:
+
 - `config/abaco_schema_autodetected.json` - Complete schema definition
 - Total records must equal 48,853 (16,205 + 16,443 + 16,205)
 - All Spanish names and USD currency validated
@@ -61,24 +66,30 @@ The platform validates against the exact schema file:
 ## Installation & Setup
 
 ### Quick Installation
+
 ```bash
+
 # Clone repository
+
 git clone https://github.com/Jeninefer/Commercial-View.git
 cd Commercial-View
 
 # Set up environment
+
 python -m venv .venv
 source .venv/bin/activate
 
 # Install dependencies
+
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 
 # Validate installation
-python setup_project.py
-```
 
+python setup_project.py
+```bash
 ### Configuration Files Required
+
 - `config/abaco_column_maps.yml` - Abaco column mapping
 - `config/pricing_config.yml` - Interest rate and pricing settings
 - `config/dpd_policy.yml` - Delinquency policy (factoring-specific)
@@ -98,11 +109,13 @@ python setup_project.py
 ## Performance Considerations
 
 ### Memory Usage (48,853 records)
+
 - **Minimum**: 4GB RAM for basic processing
 - **Recommended**: 8GB RAM for optimal performance
 - **Large datasets**: 16GB RAM for multiple concurrent processing
 
 ### Processing Time Estimates
+
 - **Schema validation**: < 1 minute
 - **Data loading**: 2-5 minutes (depending on hardware)
 - **Risk scoring**: 3-8 minutes for full dataset

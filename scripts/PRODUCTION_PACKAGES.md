@@ -20,8 +20,7 @@ Your Commercial-View system uses these validated production packages:
 ✅ colorama>=0.4.6          # Terminal color support (NEW - production added)
 ✅ pyyaml>=6.0.0            # Configuration file support
 ✅ requests>=2.31.0         # HTTP client library
-```
-
+```bash
 ### **Production Performance Metrics**
 
 Your package configuration delivers:
@@ -42,27 +41,33 @@ Your package configuration delivers:
 ✅ Removed: venv_packages_backup_20251012_064811.txt (old backup)
 ✅ Consolidated: All packages into production requirements.txt
 ✅ Validated: All dependencies working perfectly
-```
-
+```bash
 ## 🚀 **PRODUCTION PACKAGE INSTALLATION**
 
 For fresh installations, use:
 
 ```powershell
+
 # Create virtual environment
+
 python3 -m venv .venv
 
 # Activate (platform-specific)
+
+
 # Windows: .\.venv\Scripts\Activate.ps1
+
+
 # macOS/Linux: source .venv/bin/activate
 
 # Install production packages
+
 pip install -r requirements.txt
 
 # Verify installation
-pip list
-```
 
+pip list
+```bash
 ## 📊 **PACKAGE VALIDATION RESULTS**
 
 Your production packages have been validated:

@@ -9,39 +9,45 @@ Your Commercial-View system package cleanup with proper PowerShell syntax:
 ### **Step 1: Remove Old Backup Files**
 
 ```powershell
+
 # Remove old package backup files (PowerShell compatible)
+
 Remove-Item "venv_packages_backup_*.txt" -Force -ErrorAction SilentlyContinue
 Remove-Item "requirements_backup_*.txt" -Force -ErrorAction SilentlyContinue
 
 # Verify cleanup
+
 Get-ChildItem "*.txt" | Where-Object { $_.Name -like "*backup*" }
 
 Write-Host "🎉 OLD BACKUP FILES CLEANED UP!" -ForegroundColor Green
-```
-
+```bash
 ### **Step 2: Validate Production Environment**
 
 ```powershell
+
 # Use correct macOS PowerShell paths for virtual environment
+
 & "./.venv/bin/pip" install -r requirements.txt
 
 # Verify all packages installed
+
 & "./.venv/bin/pip" list
 
 # Display current production requirements
+
 Write-Host "📦 PRODUCTION PACKAGES:" -ForegroundColor Cyan
 Get-Content "requirements.txt"
-```
-
+```bash
 ### **Step 3: Validate System Performance**
 
 ```powershell
+
 # Test all PowerShell functions working perfectly
+
 Test-CommercialViewPerformance -Records 48853 -Benchmark $true
 Get-CommercialViewMetrics -PortfolioValue 208192588.65
 Start-CommercialViewReporting -Portfolio "Abaco" -Value 208192588.65
-```
-
+```bash
 ## 🏆 **CLEANUP RESULTS: PERFECT SUCCESS**
 
 Your package cleanup has achieved:
@@ -57,8 +63,7 @@ Your package cleanup has achieved:
 ✅ Business Value: $208,192,588.65 USD accessible
 
 🚀 FINAL STATUS: PERFECTLY CLEAN AND OPERATIONAL
-```
-
+```bash
 ### **Production Package List (Validated)**
 
 Your Commercial-View system uses these optimized packages:

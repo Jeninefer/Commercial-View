@@ -30,7 +30,7 @@ Your Commercial-View platform has been thoroughly cleaned and validated with **1
 ✅ Performance Metrics: 2.3 minutes processing time
    • Found in: Multiple documentation files
    • Accuracy: 99.97% validated
-```
+```bash
 
 ### 🧹 **CLEANUP RESULTS**
 

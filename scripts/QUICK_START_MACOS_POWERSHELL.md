@@ -9,17 +9,20 @@
 ## ⚠️ Common Mistakes (Don't Do This!)
 
 ```powershell
+
 # ❌ DON'T use bash commands in PowerShell
+
 source .venv/bin/activate          # This is bash, not PowerShell!
 
 # ❌ DON'T use Windows paths on macOS
+
 .\.venv\Scripts\Activate.ps1       # Windows path doesn't exist on macOS!
 
 # ❌ DON'T use bare commands (they won't work)
+
 python validate_repository.py      # 'python' not in PATH
 pip install -r requirements.txt    # 'pip' not in PATH
-```
-
+```bash
 ---
 
 ## ✅ Correct Commands for macOS PowerShell
@@ -27,58 +30,71 @@ pip install -r requirements.txt    # 'pip' not in PATH
 ### 1. Activate Virtual Environment
 
 ```powershell
+
 # Option 1: Use the activation script (Recommended)
+
 ./activate_environment.ps1
 
 # Option 2: Direct activation
+
 & "./.venv/bin/activate"
 
 # Verify activation
-& "./.venv/bin/python" --version
-```
 
+& "./.venv/bin/python" --version
+```bash
 ### 2. Install Dependencies
 
 ```powershell
+
 # Install all requirements
+
 & "./.venv/bin/pip" install -r requirements.txt
 
 # Install specific package
-& "./.venv/bin/pip" install fastapi uvicorn pandas numpy
-```
 
+& "./.venv/bin/pip" install fastapi uvicorn pandas numpy
+```bash
 ### 3. Run Scripts
 
 ```powershell
+
 # Run validation
+
 & "./.venv/bin/python" validate_repository.py
 
 # Start server
+
 & "./.venv/bin/python" server_control.py
 
 # Run tests
+
 & "./.venv/bin/pytest" tests/
 
 # Generate reports
+
 & "./.venv/bin/python" examples/schema_usage_example.py
 
 # Run Abaco test
-& "./.venv/bin/python" scripts/final_abaco_production_test.py
-```
 
+& "./.venv/bin/python" scripts/final_abaco_production_test.py
+```bash
 ### 4. Check Status
 
 ```powershell
+
 # Quick status check
+
 & "./.venv/bin/python" scripts/quick_status_check.py
 
 # Repository validation
+
 & "./.venv/bin/python" validate_repository.py
 
 # Git status
-git status
-```
 
+git status
+```bash
 ---
 
 ## 🎯 Common Tasks
@@ -86,62 +102,76 @@ git status
 ### Fresh Start
 
 ```powershell
+
 # 1. Activate environment
+
 ./activate_environment.ps1
 
 # 2. Install/Update dependencies
+
 & "./.venv/bin/pip" install -r requirements.txt --upgrade
 
 # 3. Validate repository
+
 & "./.venv/bin/python" validate_repository.py
 
 # 4. Run tests
-& "./.venv/bin/pytest" tests/
-```
 
+& "./.venv/bin/pytest" tests/
+```bash
 ### Development Workflow
 
 ```powershell
+
 # 1. Activate environment
+
 ./activate_environment.ps1
 
 # 2. Start development server
+
 & "./.venv/bin/python" server_control.py
 
 # In another terminal, run tests
-& "./.venv/bin/pytest" tests/ -v
-```
 
+& "./.venv/bin/pytest" tests/ -v
+```bash
 ### Production Validation
 
 ```powershell
+
 # 1. Run comprehensive validation
+
 & "./.venv/bin/python" scripts/validate_production_data.py
 
 # 2. Run production test
+
 & "./.venv/bin/python" scripts/final_abaco_production_test.py
 
 # 3. Generate production summary
-& "./.venv/bin/python" scripts/final_production_summary.py
-```
 
+& "./.venv/bin/python" scripts/final_production_summary.py
+```bash
 ### Git Operations
 
 ```powershell
+
 # Check status
+
 git status
 
 # Add and commit
+
 git add .
 git commit -m "Your commit message"
 
 # Push to GitHub
+
 git push origin main
 
 # Pull latest
-git pull origin main
-```
 
+git pull origin main
+```bash
 ---
 
 ## 💡 PowerShell on macOS - Key Differences
@@ -160,56 +190,69 @@ git pull origin main
 ## 🔧 Environment Variables
 
 ```powershell
+
 # Set environment variables for Abaco
+
 $env:ABACO_RECORDS = "48853"
 $env:PORTFOLIO_VALUE = "208192588.65"
 $env:PROCESSING_TARGET = "2.3"
 
 # Verify
+
 Write-Host "Records: $env:ABACO_RECORDS"
 Write-Host "Portfolio: `$$env:PORTFOLIO_VALUE USD"
 Write-Host "Target: $env:PROCESSING_TARGET minutes"
-```
-
+```bash
 ---
 
 ## 🎯 Quick Reference
 
 ```powershell
+
 # Activate environment
+
 ./activate_environment.ps1
 
 # Run ANY Python script (template)
+
 & "./.venv/bin/python" <script_name>.py
 
 # Run ANY Python module (template)
+
 & "./.venv/bin/python" -m <module_name>
 
 # Install ANY package (template)
-& "./.venv/bin/pip" install <package_name>
-```
 
+& "./.venv/bin/pip" install <package_name>
+```bash
 ---
 
 ## ✅ Verification
 
 ```powershell
+
 # Check if you're in the right directory
+
 Get-Location
+
 # Should output: /Users/jenineferderas/Documents/GitHub/Commercial-View
 
 # Check if virtual environment exists
+
 Test-Path "./.venv/bin/python"
+
 # Should output: True
 
 # Check Python version
+
 & "./.venv/bin/python" --version
+
 # Should output: Python 3.13.7 (or similar)
 
 # Check if dependencies are installed
-& "./.venv/bin/pip" list
-```
 
+& "./.venv/bin/pip" list
+```bash
 ---
 
 ## 🚨 Troubleshooting
@@ -217,27 +260,36 @@ Test-Path "./.venv/bin/python"
 ### Problem: Commands not recognized
 
 ```powershell
-# ❌ Error: The term 'python' is not recognized
-# ✅ Solution: Use full path with &
-& "./.venv/bin/python" script.py
-```
 
+# ❌ Error: The term 'python' is not recognized
+
+
+# ✅ Solution: Use full path with &
+
+& "./.venv/bin/python" script.py
+```bash
 ### Problem: Can't activate environment
 
 ```powershell
-# ❌ Error: .\.venv\Scripts\Activate.ps1 not found
-# ✅ Solution: Use Unix path
-./activate_environment.ps1
-```
 
+# ❌ Error: .\.venv\Scripts\Activate.ps1 not found
+
+
+# ✅ Solution: Use Unix path
+
+./activate_environment.ps1
+```bash
 ### Problem: Module not found
 
 ```powershell
-# ❌ Error: No module named 'fastapi'
-# ✅ Solution: Install dependencies
-& "./.venv/bin/pip" install -r requirements.txt
-```
 
+# ❌ Error: No module named 'fastapi'
+
+
+# ✅ Solution: Install dependencies
+
+& "./.venv/bin/pip" install -r requirements.txt
+```bash
 ---
 
 ## 🎉 Success Checklist

@@ -25,8 +25,7 @@
   "product_type": "factoring (exclusive)",
   "payment_frequency": "bullet (exclusive)"
 }
-```
-
+```bash
 ### 2. Configuration Files ✅
 
 ```text
@@ -35,8 +34,7 @@
 ✅ config/README.md - Complete documentation
 ✅ .vscode/settings.json - Cleaned (no Abaco data)
 ✅ .gitignore - Comprehensive exclusions
-```
-
+```bash
 ### 3. Documentation Files ✅
 
 ```text
@@ -46,8 +44,7 @@
 ✅ QUICK_START_MACOS_POWERSHELL.md - Platform-specific guide
 ✅ COMPREHENSIVE_CHECK.md - Validation results
 ✅ scripts/README.md - Complete scripts documentation
-```
-
+```bash
 ### 4. Core Application Files ✅
 
 ```text
@@ -56,8 +53,7 @@
 ✅ validate_repository.py - Repository validator functional
 ✅ activate_environment.ps1 - Cross-platform activation
 ✅ requirements.txt - All dependencies listed
-```
-
+```bash
 ### 5. Scripts Directory ✅
 
 ```text
@@ -65,8 +61,7 @@
 ✅ scripts/README.md - Complete documentation
 ✅ All categories documented (8 categories)
 ✅ Usage examples provided for all scripts
-```
-
+```bash
 ---
 
 ## 📊 Data Validation Results
@@ -149,19 +144,20 @@ Commercial-View/                           ✅ Root directory
 ├── run.py                               ✅ Entry point (fixed)
 ├── server_control.py                    ✅ Server management
 └── validate_repository.py               ✅ Validator
-```
-
+```bash
 ---
 
 ## ✅ Git Repository Status
 
 ```powershell
+
 # Check git status
+
 git status
 
 # Expected: Clean working tree or ready to commit
-```
 
+```bash
 **Latest Commits**:
 
 - d636083 - All syntax errors resolved ✅
@@ -179,29 +175,34 @@ git status
 **✅ Correct Commands**:
 
 ```powershell
+
 # Activate environment
+
 ./activate_environment.ps1
 
 # Run Python scripts
+
 & "./.venv/bin/python" script.py
 
 # Install packages
+
 & "./.venv/bin/pip" install package
 
 # Run tests
-& "./.venv/bin/pytest" tests/
-```
 
+& "./.venv/bin/pytest" tests/
+```bash
 **❌ Incorrect Commands** (Don't use these):
 
 ```powershell
+
 # These DON'T work on macOS PowerShell:
+
 source .venv/bin/activate           # Bash command
 .\.venv\Scripts\Activate.ps1        # Windows path
 python script.py                    # Not in PATH
 pip install package                 # Not in PATH
-```
-
+```bash
 ---
 
 ## 🚀 Production Readiness Checklist
@@ -269,39 +270,56 @@ pip install package                 # Not in PATH
 Run these commands to verify everything works:
 
 ```powershell
+
 # 1. Check location
+
 Get-Location
+
 # Should be: /Users/jenineferderas/Documents/GitHub/Commercial-View
 
 # 2. Check virtual environment
+
 Test-Path "./.venv/bin/python"
+
 # Should output: True
 
 # 3. Check schema
+
 Test-Path "config/abaco_schema_autodetected.json"
+
 # Should output: True
 
 # 4. Activate environment
+
 ./activate_environment.ps1
+
 # Should activate without errors
 
 # 5. Verify Python
+
 & "./.venv/bin/python" --version
+
 # Should output: Python 3.13.x
 
 # 6. Run validator
+
 & "./.venv/bin/python" validate_repository.py
+
 # Should complete with 0 errors
 
 # 7. Check git status
+
 git status
+
 # Should show clean working tree
 
 # 8. Test imports
-& "./.venv/bin/python" -c "import pandas; import numpy; import fastapi; print('✅ All imports work')"
-# Should output: ✅ All imports work
-```
 
+& "./.venv/bin/python" -c "import pandas; import numpy; import fastapi; print('✅ All imports work')"
+
+# Should output: ✅ All imports work
+
+```bash
 ---
 
 ## 🎉 Final Status
@@ -341,6 +359,7 @@ class ProductionStatus:
 """Display production status for Commercial-View platform."""
 
     # ANSI color codes for terminal output
+
     COLORS = {
         'CYAN': '\033[96m',
         'GREEN': '\033[92m',

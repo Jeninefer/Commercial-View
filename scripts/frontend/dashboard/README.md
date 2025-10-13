@@ -13,15 +13,18 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Quick Start
 
 ```bash
+
 # Install dependencies
+
 npm install
 
 # Start development server
+
 npm start
 
 # Open http://localhost:3000 in your browser
-```
 
+```bash
 ## Available Scripts
 
 ### `npm start`
@@ -79,15 +82,13 @@ Create a `.env` file in this directory:
 ```env
 REACT_APP_API_BASE_URL=http://localhost:8000
 REACT_APP_ENVIRONMENT=development
-```
-
+```bash
 For production:
 
 ```env
 REACT_APP_API_BASE_URL=https://your-api-domain.com
 REACT_APP_ENVIRONMENT=production
-```
-
+```bash
 ### Additional Environment Variables
 
 For local development, you may also set up a `.env.local` file with the following content:
@@ -96,37 +97,41 @@ For local development, you may also set up a `.env.local` file with the followin
 DATABASE_URL=postgresql://localhost/mydb
 API_KEY=your-api-key-here
 DEBUG=True
-```
-
+```bash
 ## Testing
 
 ### Local Testing
 
 ```bash
+
 # Run test suite
+
 npm test
 
 # Run tests with coverage
+
 npm test -- --coverage
 
 # Run tests in CI mode (single run)
-npm test -- --ci --coverage --watchAll=false
-```
 
+npm test -- --ci --coverage --watchAll=false
+```bash
 ### Backend Integration Testing
 
 Ensure the Commercial-View API is running before testing API integrations:
 
 ```bash
+
 # Start the backend API first
+
 cd ..  # Navigate to project root
 python server_control.py --port 8000
 
 # Then run frontend tests
+
 cd frontend/dashboard
 npm test
-```
-
+```bash
 ⚠️ **Note**: `pytest -q` (backend tests) should not be run in read-only QA environments. Use dedicated development or testing environments for full test suite execution.
 
 ## Google Colab Integration
@@ -136,59 +141,68 @@ For cloud development and testing:
 ### Setup in Colab
 
 ```python
+
 # Install Node.js in Colab
+
 !curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 !sudo apt-get install -y nodejs
 
 # Clone and setup
+
 !git clone https://github.com/Jeninefer/Commercial-View.git
 %cd Commercial-View/frontend/dashboard
 !npm install
-```
-
+```bash
 ### Development in Colab
 
 ```python
+
 # Start development server (background process)
+
 import subprocess
 import time
 
 # Start the React development server
+
 react_server = subprocess.Popen(['npm', 'start'], 
                                stdout=subprocess.PIPE, 
                                stderr=subprocess.PIPE)
 time.sleep(10)  # Wait for startup
 
 # Use ngrok or Colab's built-in tunneling to expose port 3000
+
 print("Dashboard server starting on port 3000")
 print("Use Colab's port forwarding or ngrok for external access")
-```
-
+```bash
 ### Export and Persistence
 
 ```python
+
 # Build production assets
+
 !npm run build
 
 # Export build artifacts
+
 !zip -r dashboard-build.zip build/
 
 # Download or save to Google Drive
+
 from google.colab import files
 files.download('dashboard-build.zip')
-```
-
+```bash
 ### Cleanup (Important for Colab)
 
 ```python
+
 # Terminate long-running servers to avoid idle sessions
+
 try:
     react_server.terminate()
     print("React server stopped")
 except:
     print("Server was not running")
-```
-
+```bash
 ## Project Structure
 
 ```text
@@ -208,8 +222,7 @@ except:
 .gitignore
 package.json
 README.md
-```
-
+```bash
 ## Development Workflow
 
 ### With Commercial-View Backend
