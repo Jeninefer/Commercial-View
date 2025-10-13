@@ -14,6 +14,8 @@ UVICORN_VERSION=$(pip show uvicorn 2>/dev/null | grep ^Version: | awk '{print $2
 python -c "import uvicorn; import watchgod" 2>/dev/null
 UVICORN_STANDARD=$?
 
+# Ensure 'packaging' module is installed for version comparison
+python -c "import packaging" 2>/dev/null || pip install packaging
 # Use Python's packaging.version to compare versions (allows newer versions)
 python -c "import sys; from packaging.version import Version; sys.exit(0 if not '$UVICORN_VERSION' or Version('$UVICORN_VERSION') < Version('$REQUIRED_UVICORN_VERSION') else 1)" 2>/dev/null
 UVICORN_VERSION_OLD=$?
