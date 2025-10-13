@@ -68,7 +68,7 @@ class DataLoader:
         Args:
             data_dir (str): Path to the directory containing data files. This is the preferred parameter.
             config_dir (str): Path to the configuration directory.
-            data_path (str, optional): [DEPRECATED] Path to the data directory. If `data_path` is provided (not None), it will be used instead of `data_dir` for backward compatibility. Otherwise, `data_dir` is used. This parameter is maintained for backward compatibility and will be removed in a future release.
+            data_path (str, optional): [DEPRECATED] For backward compatibility only. Use `data_dir` instead. If provided, overrides `data_dir`. This parameter will be removed in a future release.
 
         Note:
             Use `data_dir` to specify the data directory. If `data_path` is provided, it will override `data_dir`, but its use is deprecated and should be avoided in new code.
