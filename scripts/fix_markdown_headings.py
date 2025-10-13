@@ -153,6 +153,9 @@ def strip_outer_emphasis(content: str) -> Tuple[str, bool]:
         return content, False
 
     leading_index = content.find(original_stripped)
+    # Defensive fallback: In rare cases (e.g., non-standard whitespace or invisible characters),
+    # original_stripped may not be found in content. In such cases, we return the stripped content,
+    # even though this may lose leading/trailing whitespace.
     if leading_index == -1:
         return stripped, True
 
