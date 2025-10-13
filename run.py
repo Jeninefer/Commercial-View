@@ -584,25 +584,29 @@ async def get_executive_summary() -> Dict[str, Any]:
         risk_indicators = {}
         
         if loan_df is not None and not loan_df.empty:
+            # Check for required columns once
+            has_outstanding_loan_value = "Outstanding Loan Value" in loan_df.columns
+            has_cliente = "Cliente" in loan_df.columns
+            has_days_in_default = "Days in Default" in loan_df.columns
+
             portfolio_overview = {
-                "outstanding_balance": float(loan_df["Outstanding Loan Value"].sum()) if "Outstanding Loan Value" in loan_df.columns else 0,
-                "active_clients": int(loan_df["Cliente"].nunique()) if "Cliente" in loan_df.columns else 0,
+                "outstanding_balance": float(loan_df["Outstanding Loan Value"].sum()) if has_outstanding_loan_value else 0,
+                "active_clients": int(loan_df["Cliente"].nunique()) if has_cliente else 0,
                 "total_loans": len(loan_df),
             }
             
             # Calculate DPD distribution if available
-            if "Days in Default" in loan_df.columns:
+            if has_days_in_default:
                 dpd_buckets = {}
                 current_loans = len(loan_df[loan_df["Days in Default"] == 0])
                 dpd_30 = len(loan_df[(loan_df["Days in Default"] > 0) & (loan_df["Days in Default"] <= 30)])
                 
                 if current_loans > 0:
-                    dpd_buckets["Current"] = float(loan_df[loan_df["Days in Default"] == 0]["Outstanding Loan Value"].sum()) if "Outstanding Loan Value" in loan_df.columns else 0
+                    dpd_buckets["Current"] = float(loan_df[loan_df["Days in Default"] == 0]["Outstanding Loan Value"].sum()) if has_outstanding_loan_value else 0
                 if dpd_30 > 0:
-                    dpd_buckets["30d"] = float(loan_df[(loan_df["Days in Default"] > 0) & (loan_df["Days in Default"] <= 30)]["Outstanding Loan Value"].sum()) if "Outstanding Loan Value" in loan_df.columns else 0
+                    dpd_buckets["30d"] = float(loan_df[(loan_df["Days in Default"] > 0) & (loan_df["Days in Default"] <= 30)]["Outstanding Loan Value"].sum()) if has_outstanding_loan_value else 0
                 
                 risk_indicators = {"dpd_distribution": dpd_buckets}
-        else:
             # No data, return default
             return default_response
         
