@@ -22,7 +22,9 @@ source .venv/bin/activate          # This is bash, not PowerShell!
 
 python validate_repository.py      # 'python' not in PATH
 pip install -r requirements.txt    # 'pip' not in PATH
+
 ```bash
+
 ---
 
 ## ✅ Correct Commands for macOS PowerShell
@@ -42,7 +44,9 @@ pip install -r requirements.txt    # 'pip' not in PATH
 # Verify activation
 
 & "./.venv/bin/python" --version
+
 ```bash
+
 ### 2. Install Dependencies
 
 ```powershell
@@ -54,7 +58,9 @@ pip install -r requirements.txt    # 'pip' not in PATH
 # Install specific package
 
 & "./.venv/bin/pip" install fastapi uvicorn pandas numpy
+
 ```bash
+
 ### 3. Run Scripts
 
 ```powershell
@@ -78,7 +84,9 @@ pip install -r requirements.txt    # 'pip' not in PATH
 # Run Abaco test
 
 & "./.venv/bin/python" scripts/final_abaco_production_test.py
+
 ```bash
+
 ### 4. Check Status
 
 ```powershell
@@ -94,7 +102,9 @@ pip install -r requirements.txt    # 'pip' not in PATH
 # Git status
 
 git status
+
 ```bash
+
 ---
 
 ## 🎯 Common Tasks
@@ -118,7 +128,9 @@ git status
 # 4. Run tests
 
 & "./.venv/bin/pytest" tests/
+
 ```bash
+
 ### Development Workflow
 
 ```powershell
@@ -134,7 +146,9 @@ git status
 # In another terminal, run tests
 
 & "./.venv/bin/pytest" tests/ -v
+
 ```bash
+
 ### Production Validation
 
 ```powershell
@@ -150,7 +164,9 @@ git status
 # 3. Generate production summary
 
 & "./.venv/bin/python" scripts/final_production_summary.py
+
 ```bash
+
 ### Git Operations
 
 ```powershell
@@ -171,7 +187,9 @@ git push origin main
 # Pull latest
 
 git pull origin main
+
 ```bash
+
 ---
 
 ## 💡 PowerShell on macOS - Key Differences
@@ -202,7 +220,9 @@ $env:PROCESSING_TARGET = "2.3"
 Write-Host "Records: $env:ABACO_RECORDS"
 Write-Host "Portfolio: `$$env:PORTFOLIO_VALUE USD"
 Write-Host "Target: $env:PROCESSING_TARGET minutes"
+
 ```bash
+
 ---
 
 ## 🎯 Quick Reference
@@ -224,7 +244,9 @@ Write-Host "Target: $env:PROCESSING_TARGET minutes"
 # Install ANY package (template)
 
 & "./.venv/bin/pip" install <package_name>
+
 ```bash
+
 ---
 
 ## ✅ Verification
@@ -252,7 +274,9 @@ Test-Path "./.venv/bin/python"
 # Check if dependencies are installed
 
 & "./.venv/bin/pip" list
+
 ```bash
+
 ---
 
 ## 🚨 Troubleshooting
@@ -267,7 +291,9 @@ Test-Path "./.venv/bin/python"
 # ✅ Solution: Use full path with &
 
 & "./.venv/bin/python" script.py
+
 ```bash
+
 ### Problem: Can't activate environment
 
 ```powershell
@@ -278,7 +304,9 @@ Test-Path "./.venv/bin/python"
 # ✅ Solution: Use Unix path
 
 ./activate_environment.ps1
+
 ```bash
+
 ### Problem: Module not found
 
 ```powershell
@@ -289,15 +317,21 @@ Test-Path "./.venv/bin/python"
 # ✅ Solution: Install dependencies
 
 & "./.venv/bin/pip" install -r requirements.txt
+
 ```bash
+
 ---
 
 ## 🎉 Success Checklist
 
 - ✅ You're in `/Users/jenineferderas/Documents/GitHub/Commercial-View`
+
 - ✅ Virtual environment exists at `./.venv/`
+
 - ✅ You can run: `./activate_environment.ps1`
+
 - ✅ You can run: `& "./.venv/bin/python" --version`
+
 - ✅ Dependencies installed: `& "./.venv/bin/pip" list`
 
 **You're ready to work! 🚀**

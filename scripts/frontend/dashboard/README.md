@@ -7,7 +7,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Prerequisites
 
 - Node.js 18+
+
 - npm or yarn
+
 - Commercial-View API running on http://localhost:8000
 
 ## Quick Start
@@ -25,6 +27,7 @@ npm start
 # Open http://localhost:3000 in your browser
 
 ```bash
+
 ## Available Scripts
 
 ### `npm start`
@@ -61,9 +64,13 @@ Formats code using Prettier (if configured).
 ## Dashboard Features
 
 - **Portfolio Overview**: Real-time portfolio metrics and KPIs
+
 - **Risk Analytics**: Risk assessment and scoring visualizations
+
 - **Data Export**: Download reports and analysis results
+
 - **Interactive Charts**: Dynamic data visualization with filtering
+
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 
 ## API Integration
@@ -71,8 +78,11 @@ Formats code using Prettier (if configured).
 The dashboard connects to the Commercial-View FastAPI backend:
 
 - **API Base URL**: http://localhost:8000
+
 - **Health Check**: GET /health
+
 - **Portfolio Data**: GET /executive-summary
+
 - **Documentation**: http://localhost:8000/docs
 
 ## Environment Configuration
@@ -82,13 +92,17 @@ Create a `.env` file in this directory:
 ```env
 REACT_APP_API_BASE_URL=http://localhost:8000
 REACT_APP_ENVIRONMENT=development
+
 ```bash
+
 For production:
 
 ```env
 REACT_APP_API_BASE_URL=https://your-api-domain.com
 REACT_APP_ENVIRONMENT=production
+
 ```bash
+
 ### Additional Environment Variables
 
 For local development, you may also set up a `.env.local` file with the following content:
@@ -97,7 +111,9 @@ For local development, you may also set up a `.env.local` file with the followin
 DATABASE_URL=postgresql://localhost/mydb
 API_KEY=your-api-key-here
 DEBUG=True
+
 ```bash
+
 ## Testing
 
 ### Local Testing
@@ -115,7 +131,9 @@ npm test -- --coverage
 # Run tests in CI mode (single run)
 
 npm test -- --ci --coverage --watchAll=false
+
 ```bash
+
 ### Backend Integration Testing
 
 Ensure the Commercial-View API is running before testing API integrations:
@@ -131,7 +149,9 @@ python server_control.py --port 8000
 
 cd frontend/dashboard
 npm test
+
 ```bash
+
 ⚠️ **Note**: `pytest -q` (backend tests) should not be run in read-only QA environments. Use dedicated development or testing environments for full test suite execution.
 
 ## Google Colab Integration
@@ -152,7 +172,9 @@ For cloud development and testing:
 !git clone https://github.com/Jeninefer/Commercial-View.git
 %cd Commercial-View/frontend/dashboard
 !npm install
+
 ```bash
+
 ### Development in Colab
 
 ```python
@@ -173,7 +195,9 @@ time.sleep(10)  # Wait for startup
 
 print("Dashboard server starting on port 3000")
 print("Use Colab's port forwarding or ngrok for external access")
+
 ```bash
+
 ### Export and Persistence
 
 ```python
@@ -190,7 +214,9 @@ print("Use Colab's port forwarding or ngrok for external access")
 
 from google.colab import files
 files.download('dashboard-build.zip')
+
 ```bash
+
 ### Cleanup (Important for Colab)
 
 ```python
@@ -202,7 +228,9 @@ try:
     print("React server stopped")
 except:
     print("Server was not running")
+
 ```bash
+
 ## Project Structure
 
 ```text
@@ -222,15 +250,21 @@ except:
 .gitignore
 package.json
 README.md
+
 ```bash
+
 ## Development Workflow
 
 ### With Commercial-View Backend
 
 1. **Start Backend**: Use `python server_control.py` in project root
+
 2. **Start Frontend**: Run `npm start` in this directory
+
 3. **Development**: Make changes with hot-reload enabled
+
 4. **Testing**: Run `npm test` for frontend, coordinate with backend team for integration tests
+
 5. **Export**: Use `abaco_runtime/exports/` integration for data persistence
 
 ### Data Export Integration
@@ -238,7 +272,9 @@ README.md
 The dashboard integrates with the Commercial-View export system:
 
 - **Export Location**: `../../abaco_runtime/exports/`
+
 - **Google Drive Sync**: Uses `scripts/upload_to_drive.py`
+
 - **Manual Export**: Download artifacts directly from dashboard UI
 
 ### Persist Outputs
@@ -246,7 +282,9 @@ The dashboard integrates with the Commercial-View export system:
 Export artifacts from:
 
 - `abaco_runtime/exports/` (backend generated)
+
 - `build/` (frontend production build)
+
 - `coverage/` (test coverage reports)
 
 Save to Google Drive or download manually when finished with development sessions.
@@ -254,12 +292,19 @@ Save to Google Drive or download manually when finished with development session
 This comprehensive README includes:
 
 1. **Complete setup instructions** for local and cloud development
+
 2. **API integration details** with the Commercial-View backend
+
 3. **Google Colab support** for cloud development
+
 4. **Testing guidance** with environment considerations
+
 5. **Deployment options** including Docker
+
 6. **Troubleshooting section** with common issues and solutions
+
 7. **Integration context** within the larger Commercial-View ecosystem
+
 8. **Development workflow** that aligns with the project structure
 
 The documentation provides developers with everything they need to work with the Commercial-View dashboard effectively.

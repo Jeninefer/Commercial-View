@@ -22,6 +22,7 @@ source .venv/bin/activate          # This is bash, not PowerShell!
 
 python validate_repository.py      # 'python' not in PATH
 pip install -r requirements.txt    # 'pip' not in PATH
+
 ```bash
 
 ---
@@ -43,6 +44,7 @@ pip install -r requirements.txt    # 'pip' not in PATH
 # Verify activation
 
 & "./.venv/bin/python" --version
+
 ```bash
 
 ### 2. Install Dependencies
@@ -56,6 +58,7 @@ pip install -r requirements.txt    # 'pip' not in PATH
 # Install specific package
 
 & "./.venv/bin/pip" install fastapi uvicorn pandas numpy
+
 ```bash
 
 ### 3. Run Scripts
@@ -81,6 +84,7 @@ pip install -r requirements.txt    # 'pip' not in PATH
 # Run Abaco test
 
 & "./.venv/bin/python" scripts/final_abaco_production_test.py
+
 ```bash
 
 ### 4. Check Status
@@ -98,6 +102,7 @@ pip install -r requirements.txt    # 'pip' not in PATH
 # Git status
 
 git status
+
 ```bash
 
 ---
@@ -123,6 +128,7 @@ git status
 # 4. Run tests
 
 & "./.venv/bin/pytest" tests/
+
 ```bash
 
 ### Development Workflow
@@ -140,6 +146,7 @@ git status
 # In another terminal, run tests
 
 & "./.venv/bin/pytest" tests/ -v
+
 ```bash
 
 ### Production Validation
@@ -157,6 +164,7 @@ git status
 # 3. Generate production summary
 
 & "./.venv/bin/python" scripts/final_production_summary.py
+
 ```bash
 
 ### Git Operations
@@ -179,6 +187,7 @@ git push origin main
 # Pull latest
 
 git pull origin main
+
 ```bash
 
 ---
@@ -211,6 +220,7 @@ $env:PROCESSING_TARGET = "2.3"
 Write-Host "Records: $env:ABACO_RECORDS"
 Write-Host "Portfolio: `$$env:PORTFOLIO_VALUE USD"
 Write-Host "Target: $env:PROCESSING_TARGET minutes"
+
 ```bash
 
 ---
@@ -234,6 +244,7 @@ Write-Host "Target: $env:PROCESSING_TARGET minutes"
 # Install ANY package (template)
 
 & "./.venv/bin/pip" install <package_name>
+
 ```bash
 
 ---
@@ -263,6 +274,7 @@ Test-Path "./.venv/bin/python"
 # Check if dependencies are installed
 
 & "./.venv/bin/pip" list
+
 ```bash
 
 ---
@@ -279,6 +291,7 @@ Test-Path "./.venv/bin/python"
 # ✅ Solution: Use full path with &
 
 & "./.venv/bin/python" script.py
+
 ```bash
 
 ### Problem: Can't activate environment
@@ -291,6 +304,7 @@ Test-Path "./.venv/bin/python"
 # ✅ Solution: Use Unix path
 
 ./activate_environment.ps1
+
 ```bash
 
 ### Problem: Module not found
@@ -303,6 +317,7 @@ Test-Path "./.venv/bin/python"
 # ✅ Solution: Install dependencies
 
 & "./.venv/bin/pip" install -r requirements.txt
+
 ```bash
 
 ---
@@ -310,9 +325,13 @@ Test-Path "./.venv/bin/python"
 ## 🎉 Success Checklist
 
 - ✅ You're in `/Users/jenineferderas/Documents/GitHub/Commercial-View`
+
 - ✅ Virtual environment exists at `./.venv/`
+
 - ✅ You can run: `./activate_environment.ps1`
+
 - ✅ You can run: `& "./.venv/bin/python" --version`
+
 - ✅ Dependencies installed: `& "./.venv/bin/pip" list`
 
 **You're ready to work! 🚀**

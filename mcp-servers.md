@@ -17,6 +17,7 @@ npx @figma/mcp-server-figma
 # GitHub Repository
 
 https://github.com/figma/mcp-server-figma
+
 ```bash
 
 ### Authentication (No OAuth Support)
@@ -32,16 +33,23 @@ https://github.com/figma/mcp-server-figma
 #### Possible Causes
 
 1. **Token Expired**: Personal access tokens can expire
+
 2. **Invalid Token**: Token may be malformed or revoked
+
 3. **Insufficient Permissions**: Token lacks required scopes
+
 4. **Account Issues**: Figma account may have restrictions
 
 #### Steps to Fix
 
 1. **Generate New Token**:
+
    - Go to [Figma Settings > Personal Access Tokens](https://www.figma.com/settings/account)
+
    - Delete the old token: `figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK`
+
    - Create new token with name "Commercial-View MCP"
+
    - Copy the new token (starts with `figd_`)
 
 2. **Verify Token Format**:
@@ -56,7 +64,7 @@ https://github.com/figma/mcp-server-figma
 
    # Starts with: figd_
 
-   ```
+```text
 
 3. **Test New Token**:
 
@@ -71,7 +79,7 @@ https://github.com/figma/mcp-server-figma
 
    # {"id":"123456789","email":"your-email@domain.com","handle":"YourName"}
 
-   ```
+```text
 
 ### Configuration Template
 
@@ -101,6 +109,7 @@ https://github.com/figma/mcp-server-figma
     }
   }
 }
+
 ```bash
 
 ### Environment Variables
@@ -120,6 +129,7 @@ FIGMA_PERSONAL_ACCESS_TOKEN=REPLACE_WITH_NEW_FIGMA_TOKEN
 
 COMMERCIAL_VIEW_API_URL=http://localhost:8000
 COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
+
 ```bash
 
 ### Token Validation
@@ -133,13 +143,17 @@ curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
 # If successful, update all configurations:
 
 export FIGMA_PERSONAL_ACCESS_TOKEN="YOUR_NEW_TOKEN"
+
 ```bash
 
 ### Required Actions
 
 1. **Get New Figma Token**: Visit https://www.figma.com/settings/account
+
 2. **Update Configuration**: Replace old token in all config files
+
 3. **Test Connection**: Verify new token works before using MCP server
+
 4. **Restart Services**: Restart MCP server with new token
 
 ### Alternative Configuration (Disable Figma Temporarily)
@@ -167,6 +181,7 @@ export FIGMA_PERSONAL_ACCESS_TOKEN="YOUR_NEW_TOKEN"
     }
   }
 }
+
 ```bash
 
 ### Production Setup
@@ -188,6 +203,7 @@ npx @figma/mcp-server-figma
 # Verify all endpoints
 
 curl http://localhost:8000/health
+
 ```bash
 
 ### Integration Commands
@@ -214,6 +230,7 @@ python server_control.py --check-only --port 8000
 # Monitor SSE stream
 
 curl -N http://localhost:8000/sse
+
 ```bash
 
 ### Quick Test Commands
@@ -222,7 +239,8 @@ curl -N http://localhost:8000/sse
 
    ```bash
    curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://api.figma.com/v1/me
-   ```
+
+```text
 
 2. **Get New Token**: Visit https://www.figma.com/settings/account
 
@@ -230,7 +248,8 @@ curl -N http://localhost:8000/sse
 
    ```bash
    curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
-   ```
+
+```text
 
 4. **Update Configuration**: Replace token in config files manually
 
@@ -258,8 +277,11 @@ npx @modelcontextprotocol/server-github
 ### Server Overview
 
 - **Figma**: Design file access (Personal Access Token only)
+
 - **GitHub**: Repository management (Personal Access Token only)
+
 - **Commercial-View**: Portfolio analytics API (Custom auth)
+
 - **Google Drive**: File storage integration (Service Account JSON)
 
 ### OAuth Error Resolution
@@ -281,6 +303,7 @@ npx @modelcontextprotocol/server-github
 
 export FIGMA_PERSONAL_ACCESS_TOKEN="figd_your_actual_token"
 npx @figma/mcp-server-figma
+
 ```bash
 
 ### Quick Setup
@@ -298,6 +321,7 @@ npx @figma/mcp-server-figma
 # Test connection
 
 python scripts/mcp_server.py test-figma
+
 ```bash
 
 ### Testing Commands
@@ -315,6 +339,7 @@ python scripts/mcp_server.py test-all
 # Debug OAuth issues
 
 python scripts/mcp_server.py debug-auth
+
 ```bash
 
 ### Environment Setup
@@ -328,24 +353,31 @@ python scripts/mcp_server.py debug-auth
 # Direct test - just run this one command:
 
 curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://api.figma.com/v1/me
+
 ```bash
 
 ### Expected Results
 
 - **403 Forbidden**: Token is invalid/expired (need new token)
+
 - **200 OK**: Token is working (rare, given previous errors)
 
 ### New Token Process
 
 1. **Visit**: https://www.figma.com/settings/account
+
 2. **Delete old token**: `figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK`
+
 3. **Create new token**: Name it "Commercial-View MCP"
+
 4. **Copy new token**: Will start with `figd_`
+
 5. **Test new token**:
 
    ```bash
    curl -H "X-Figma-Token: YOUR_NEW_TOKEN_HERE" https://api.figma.com/v1/me
-   ```
+
+```text
 
 ### Final Configuration
 
@@ -375,6 +407,7 @@ curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://a
     }
   }
 }
+
 ```bash
 
 ### Environment Template
@@ -389,13 +422,17 @@ FIGMA_PERSONAL_ACCESS_TOKEN=YOUR_NEW_TOKEN_HERE
 
 COMMERCIAL_VIEW_API_URL=http://localhost:8000
 COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
+
 ```bash
 
 ### Status Summary
 
 - ❌ **Figma Token**: `figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK` (Invalid - 403 Error)
+
 - ⏳ **Action Required**: Get new token from Figma settings
+
 - ✅ **Commercial-View API**: Ready on `http://localhost:8000`
+
 - ✅ **SSE Endpoint**: Available at `http://localhost:8000/sse`
 
 ### Final Test Commands
@@ -444,8 +481,11 @@ COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
 ### Current Status Summary
 
 - ❌ **Figma Token**: `figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK` (Invalid - 403 Error)
+
 - ⏳ **Action Required**: Get new token from Figma settings
+
 - ✅ **Commercial-View API**: Ready on `http://localhost:8000`
+
 - ✅ **SSE Endpoint**: Available at `http://localhost:8000/sse`
 
 ### Simple Test Commands

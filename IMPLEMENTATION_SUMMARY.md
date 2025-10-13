@@ -13,8 +13,11 @@ This document summarizes the complete implementation of the Commercial-View anal
 **Implementation**:
 
 - ✅ Input field mappings (loan_data, payment_data, customer_data)
+
 - ✅ Contract-compliant output fields:
+
     - **DPD Frame**: past_due_amount, days_past_due, first_arrears_date, last_payment_date, last_due_date, is_default, reference_date
+
     - **Buckets**: dpd_bucket, dpd_bucket_value, dpd_bucket_description, default_flag
 
 **Usage**: Customize right-side values to match your dataset field names.
@@ -26,6 +29,7 @@ This document summarizes the complete implementation of the Commercial-View anal
 **Files**: 
 
 - `config/pricing_config.yml` (configuration)
+
 - `data/pricing/*.csv` (pricing data)
 
 **Band Keys Implementation** (as specified):
@@ -38,6 +42,7 @@ band_keys:
   amount:
     lower_bound: "amount_min"
     upper_bound: "amount_max"
+
 ```bash
 
 This matches the required format: `{feature: (low_col, high_col)}`
@@ -45,8 +50,11 @@ This matches the required format: `{feature: (low_col, high_col)}`
 **Example Files Provided**:
 
 - ✅ `main_pricing.csv` - Primary pricing grid
+
 - ✅ `commercial_loans_pricing.csv` - Commercial loan pricing
+
 - ✅ `retail_loans_pricing.csv` - Retail loan pricing  
+
 - ✅ `risk_based_pricing.csv` - Credit score-based pricing
 
 All files include the required columns: tenor_min, tenor_max, amount_min, amount_max, base_rate, margin, total_rate
@@ -60,14 +68,23 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **Implementation**:
 
 - ✅ Default threshold: 180 days (configurable to 90 or 120)
+
 - ✅ Alternative thresholds documented: 90 (conservative), 120 (moderate), 180 (standard)
+
 - ✅ 7 DPD buckets defined:
+
   1. Current (0 days)
+
   2. 1-30 Days
+
   3. 31-60 Days
+
   4. 61-90 Days
+
   5. 91-120 Days
+
   6. 121-180 Days
+
   7. 180+ Days (Default)
 
 **To change**: Update `default_threshold.days` in the configuration file.
@@ -81,13 +98,21 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **Implementation**:
 
 - ✅ Default base path: `./abaco_runtime/exports`
+
 - ✅ Subdirectories configured:
+
     - KPI JSON: `./abaco_runtime/exports/kpi/json`
+
     - KPI CSV: `./abaco_runtime/exports/kpi/csv`
+
     - DPD Frame: `./abaco_runtime/exports/dpd_frame`
+
     - Buckets: `./abaco_runtime/exports/buckets`
+
 - ✅ File naming conventions with timestamps
+
 - ✅ Multiple export formats (CSV, JSON, Parquet)
+
 - ✅ Archival settings (30-day rotation, 365-day retention)
 
 **To change**: Update `export_paths.base_path` in the configuration file.
@@ -101,13 +126,21 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **Implementation**:
 
 - ✅ Portfolio size expectations:
+
     - Small (< 10K loans): < 5 min, < 2GB
+
     - Medium (10K-100K loans): < 15 min, 2-8GB, chunking recommended
+
     - Large (100K-1M loans): < 60 min, 8-16GB, chunking required
+
     - Extra-large (> 1M loans): < 2 hours, 16-32GB, distributed processing
+
 - ✅ Memory management with chunking strategy (10K or 5K records per chunk)
+
 - ✅ Performance optimization techniques
+
 - ✅ Benchmarking guidelines
+
 - ✅ SLO monitoring and review process
 
 **Tuning**: Adjust chunk sizes and memory thresholds based on actual portfolio size.
@@ -121,16 +154,27 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **Implementation**:
 
 - ✅ PII identification and classification
+
 - ✅ Masking strategies before export:
+
     - Customer IDs: SHA-256 hashing
+
     - Customer names: Partial masking
+
     - Email addresses: Domain-preserving masking
+
     - Phone numbers: Middle-digit masking
+
     - Account numbers: Last-4-digits retention
+
 - ✅ Data classification levels (Public, Internal, Confidential, Highly Confidential)
+
 - ✅ Export security controls by output type
+
 - ✅ Compliance framework (GDPR, SOX, PCI DSS)
+
 - ✅ Audit logging requirements
+
 - ✅ Incident response procedures
 
 **Configuration**: All exports configured with PII masking enabled by default.
@@ -144,18 +188,31 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 **Implementation**:
 
 - ✅ Tag format: `v{MAJOR}.{MINOR}.{PATCH}[-{PRERELEASE}]`
+
 - ✅ Examples: `v1.0.0`, `v1.2.3`, `v2.0.0-beta.1`
+
 - ✅ Release workflow:
+
     - Regular releases from release branches
+
     - Hotfixes from main branch
+
     - Semantic versioning (MAJOR.MINOR.PATCH)
+
 - ✅ Branch strategy:
+
     - `main`: Production-ready code
+
     - `develop`: Integration branch
+
     - `feature/*`: Feature development
+
     - `release/*`: Release preparation
+
     - `hotfix/*`: Emergency fixes
+
 - ✅ CI/CD integration with automated version validation
+
 - ✅ Changelog management (Keep a Changelog format)
 
 **Usage**: Follow documented workflow in `docs/versioning.md` for releases.
@@ -171,12 +228,19 @@ All files include the required columns: tenor_min, tenor_max, amount_min, amount
 Features:
 
 - ✅ Version validation
+
 - ✅ Code linting (Black, isort, Flake8, Pylint)
+
 - ✅ Configuration validation
+
 - ✅ Testing across Python 3.8, 3.9, 3.10
+
 - ✅ Security scanning (Safety, Bandit)
+
 - ✅ Build artifacts
+
 - ✅ Automated deployment (staging & production)
+
 - ✅ GitHub release creation
 
 ### Pre-commit Configuration
@@ -186,12 +250,19 @@ Features:
 Features:
 
 - ✅ Python formatting (Black, isort)
+
 - ✅ Linting (Flake8)
+
 - ✅ Security checks (Bandit)
+
 - ✅ YAML validation
+
 - ✅ Markdown linting
+
 - ✅ Type checking (mypy)
+
 - ✅ Spell checking
+
 - ✅ Secret detection
 
 ### Schema Validator
@@ -201,10 +272,15 @@ Features:
 Features:
 
 - ✅ Validates all configuration files
+
 - ✅ Checks required fields
+
 - ✅ Validates data types
+
 - ✅ Verifies bucket definitions
+
 - ✅ Detailed error reporting
+
 - ✅ Can be run manually or in CI/CD
 
 **Run with**: `python validators/schema_validator.py`
@@ -214,16 +290,23 @@ Features:
 **Files Created**:
 
 - ✅ `README.md` - Comprehensive project documentation
+
 - ✅ `QUICKSTART.md` - Immediate setup guide
+
 - ✅ `DEPLOYMENT_GUIDE.md` - Direct answers to configuration questions
+
 - ✅ `CHANGELOG.md` - Version history
+
 - ✅ `LICENSE` - MIT license
+
 - ✅ `VERSION` - Current version (1.0.0)
 
 ### Supporting Files
 
 - ✅ `.gitignore` - Excludes runtime exports and build artifacts
+
 - ✅ `requirements.txt` - Core dependencies
+
 - ✅ `requirements-dev.txt` - Development dependencies
 
 ---
@@ -261,6 +344,7 @@ Commercial-View/
 ├── VERSION                         # Version number
 ├── requirements.txt                # Dependencies
 └── requirements-dev.txt            # Dev dependencies
+
 ```bash
 
 ---
@@ -294,6 +378,7 @@ Validation Summary
 
 ✅ All validations passed!
 ======================================================================
+
 ```bash
 
 ---
@@ -316,18 +401,27 @@ Validation Summary
 **DPD Frame**:
 
 - past_due_amount
+
 - days_past_due
+
 - first_arrears_date
+
 - last_payment_date
+
 - last_due_date
+
 - is_default
+
 - reference_date
 
 **Buckets**:
 
 - dpd_bucket
+
 - dpd_bucket_value
+
 - dpd_bucket_description
+
 - default_flag
 
 ### Commands
@@ -354,6 +448,7 @@ pre-commit run --all-files
 # Create export directories
 
 mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archive}
+
 ```bash
 
 ---
@@ -361,12 +456,19 @@ mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archi
 ## Next Steps
 
 1. **Review Configuration**: Check `DEPLOYMENT_GUIDE.md` for detailed answers to all questions
+
 2. **Customize Column Maps**: Update `config/column_maps.yml` with your field names
+
 3. **Provide/Review Pricing Files**: Check `data/pricing/` and update as needed
+
 4. **Confirm DPD Threshold**: Verify 180-day default threshold or change in `config/dpd_policy.yml`
+
 5. **Test with Sample Data**: Run with small dataset to validate configuration
+
 6. **Deploy to Staging**: Test in staging environment first
+
 7. **Monitor Performance**: Adjust chunking and memory settings as needed
+
 8. **Deploy to Production**: Deploy after successful staging validation
 
 ---
@@ -374,8 +476,11 @@ mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archi
 ## Support
 
 - **Documentation**: See `docs/` folder for detailed guides
+
 - **Quick Setup**: See `QUICKSTART.md` for immediate setup steps
+
 - **Deployment**: See `DEPLOYMENT_GUIDE.md` for configuration answers
+
 - **Issues**: Open GitHub issue for questions or problems
 
 ---

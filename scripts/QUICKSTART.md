@@ -13,19 +13,25 @@ pip install -r requirements.txt
 # For development (includes testing and linting tools)
 
 pip install -r requirements-dev.txt
+
 ```bash
+
 ### 2. Validate Configuration
 
 Run the schema validator to ensure all configuration files are correct:
 
 ```bash
 python validators/schema_validator.py
+
 ```bash
+
 Expected output:
 
 ```text
 ✅ All validations passed!
+
 ```bash
+
 ### 3. Customize Configuration
 
 #### A. Column Mappings (REQUIRED)
@@ -37,7 +43,9 @@ Edit `config/column_maps.yml` to match your data schema:
 # Open in your editor
 
 nano config/column_maps.yml  # or vi, vim, code, etc.
+
 ```bash
+
 Update field mappings:
 
 ```yaml
@@ -49,10 +57,13 @@ loan_data:
   # ... etc
 
 ```bash
+
 #### B. Pricing Files (REQUIRED)
 
 1. Review example pricing files in `data/pricing/`
+
 2. Either modify them or create your own following the same structure
+
 3. Update paths in `config/pricing_config.yml` if needed
 
 Example pricing file structure:
@@ -60,7 +71,9 @@ Example pricing file structure:
 ```csv
 tenor_min,tenor_max,amount_min,amount_max,base_rate,margin,total_rate
 0,90,0,50000,0.0500,0.0200,0.0700
+
 ```bash
+
 #### C. DPD Policy (REVIEW REQUIRED)
 
 Choose your default threshold in `config/dpd_policy.yml`:
@@ -68,7 +81,9 @@ Choose your default threshold in `config/dpd_policy.yml`:
 ```yaml
 default_threshold:
   days: 180 # Options: 90, 120, or 180
+
 ```bash
+
 Review and adjust DPD buckets if needed.
 
 #### D. Export Path (OPTIONAL)
@@ -81,21 +96,27 @@ Default export path is `./abaco_runtime/exports`. To change:
 
 export_paths:
   base_path: "/your/preferred/path"
+
 ```bash
+
 ### 4. Validate Your Changes
 
 After customization, run validation again:
 
 ```bash
 python validators/schema_validator.py
+
 ```bash
+
 ### 5. Directory Setup
 
 Create the export directories:
 
 ```bash
 mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archive}
+
 ```bash
+
 ### 6. Test Run (When Implementation Ready)
 
 Once your processing code is implemented:
@@ -108,6 +129,7 @@ Once your processing code is implemented:
 # python src/process_portfolio.py --config config/
 
 ```bash
+
 ### 7. Set Up Pre-commit Hooks (Development)
 
 If you're developing:
@@ -115,25 +137,38 @@ If you're developing:
 ```bash
 pip install pre-commit
 pre-commit install
+
 ```bash
+
 Test pre-commit:
 
 ```bash
 pre-commit run --all-files
+
 ```bash
+
 ## Configuration Checklist
 
 Before running in production:
 
 - [ ] Column mappings updated for your data schema
+
 - [ ] Pricing files created/updated in `data/pricing/`
+
 - [ ] Pricing file paths configured in `config/pricing_config.yml`
+
 - [ ] DPD default threshold set (90, 120, or 180 days)
+
 - [ ] DPD buckets reviewed
+
 - [ ] Export paths configured
+
 - [ ] Export directories created
+
 - [ ] Schema validation passes
+
 - [ ] Performance settings reviewed (see `docs/performance_slos.md`)
+
 - [ ] Security controls reviewed (see `docs/security_constraints.md`)
 
 ## Quick Reference
@@ -170,29 +205,41 @@ pre-commit run --all-files
 # Check Python version
 
 python --version  # Should be 3.8+
+
 ```bash
+
 ### Outputs
 
 After processing, find results in:
 
 - KPI JSON: `./abaco_runtime/exports/kpi/json/`
+
 - KPI CSV: `./abaco_runtime/exports/kpi/csv/`
+
 - DPD Frame: `./abaco_runtime/exports/dpd_frame/`
+
 - Buckets: `./abaco_runtime/exports/buckets/`
 
 ## Need Help?
 
 1. **Configuration Issues**: Run `python validators/schema_validator.py` for detailed error messages
+
 2. **Documentation**: Check `docs/` directory for detailed guides
+
 3. **Examples**: Review example pricing files in `data/pricing/`
+
 4. **Issues**: Open an issue on GitHub
 
 ## Next Steps
 
 1. Complete the configuration checklist above
+
 2. Review documentation in `docs/` folder
+
 3. Test with a small dataset first
+
 4. Scale up to production portfolio sizes
+
 5. Set up monitoring and alerts
 
 For detailed information, see the main [README.md](README.md).

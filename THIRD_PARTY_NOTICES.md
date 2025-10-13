@@ -65,15 +65,21 @@ The following projects are licensed under the Apache License 2.0:
 ### Data Processing Components
 
 - **Spanish Language Processing**: UTF-8 client name handling for "SERVICIOS TECNICOS MEDICOS, S.A. DE C.V."
+
 - **USD Factoring Validation**: Currency and product type validation for exclusive factoring products
+
 - **Performance Optimization**: Memory management for 847MB peak usage processing 48,853 records
+
 - **Export Generation**: CSV/JSON output with proper UTF-8 encoding
 
 ### Performance Impact Assessment
 
 - **Runtime Dependencies**: Core libraries only (pandas, numpy, pyyaml)
+
 - **Development Dependencies**: Build-time tools with zero runtime impact
+
 - **License Compliance**: Automated scanning with no performance overhead
+
 - **Security Validation**: Continuous monitoring integrated into CI/CD pipeline
 
 ## Full License Texts
@@ -102,6 +108,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
 ```bash
 
 ### BSD 3-Clause License
@@ -138,6 +145,7 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 ```bash
 
 ### Apache License 2.0
@@ -324,6 +332,7 @@ incurred by, or claims asserted against, such Contributor by reason
 of your accepting any such warranty or additional support.
 
 END OF TERMS AND CONDITIONS
+
 ```bash
 
 ## Compliance Verification
@@ -331,8 +340,11 @@ END OF TERMS AND CONDITIONS
 This Commercial-View Abaco integration has been verified for license compliance through:
 
 - **Automated License Scanning**: Continuous monitoring of all dependencies
+
 - **Legal Review**: Professional verification of license compatibility
+
 - **Audit Trail**: Complete documentation of all third-party components
+
 - **Update Monitoring**: Automated tracking of license changes in dependencies
 
 For questions regarding license compliance or to report license issues, please contact the Commercial-View development team.
@@ -377,18 +389,25 @@ python3 integration_summary.py
 deactivate
 
 echo "✅ Integration summary completed successfully!"
+
 ```bash
 
 ### Usage
 
 1. **Save Script**: Save the above script as `run_integration_summary.sh`.
+
 2. **Make Executable**: Run `chmod +x run_integration_summary.sh` to make it executable.
+
 3. **Execute**: Run `./run_integration_summary.sh` to execute the script.
 
 ### Script Details
 
 - **Change Directory**: Navigates to the script's directory.
+
 - **Activate Virtual Environment**: Activates the Python virtual environment.
+
 - **Run Integration Summary**: Executes the integration summary Python script.
+
 - **Deactivate Virtual Environment**: Deactivates the Python virtual environment.
+
 - **Success Message**: Displays a success message upon completion.
