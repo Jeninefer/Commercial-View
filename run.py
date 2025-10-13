@@ -607,8 +607,6 @@ async def get_executive_summary() -> Dict[str, Any]:
                     dpd_buckets["30d"] = float(loan_df[(loan_df["Days in Default"] > 0) & (loan_df["Days in Default"] <= 30)]["Outstanding Loan Value"].sum()) if has_outstanding_loan_value else 0
                 
                 risk_indicators = {"dpd_distribution": dpd_buckets}
-            # No data, return default
-            return default_response
         
         return {
             "portfolio_overview": portfolio_overview,
