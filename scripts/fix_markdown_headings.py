@@ -71,7 +71,8 @@ def fix_markdown_file(file_path: Path) -> bool:
     if not modified:
         return False
 
-    new_content = "\n".join(lines) + ("\n" if original_content.endswith("\n") else "")
+    trailing_newline = "\n" if original_content.endswith("\n") else ""
+    new_content = "\n".join(lines) + trailing_newline
     try:
         file_path.write_text(new_content, encoding="utf-8")
     except OSError as exc:  # pragma: no cover - defensive guard
