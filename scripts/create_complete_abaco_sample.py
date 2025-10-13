@@ -183,7 +183,7 @@ class AbacoSampleDataGenerator:
                     "True Other Payment": other,
                     "True Tax Payment": tax,
                     "True Fee Tax Payment": round(fee * 0.13, 2),
-                    "True Rabates": 0,  # Usually 0
+                    "True Rebates": 0,  # Usually 0
                     "True Outstanding Loan Value": outstanding,
                     "True Payment Status": random.choice(self.payment_statuses)
                 }
