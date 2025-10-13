@@ -23,8 +23,8 @@ try:
     # Import Abaco-specific modules
     from data_loader import DataLoader
     # ABACO_RECORDS_EXPECTED is the number of records in the Abaco dataset as of 2024-06.
-    # Import from shared constants module to avoid duplication.
-    from constants import ABACO_RECORDS_EXPECTED
+    # Import from data_loader where the constant is defined.
+    from data_loader import ABACO_RECORDS_EXPECTED
 except ImportError as e:
     print(f"❌ Import error: {e}")
     print("Please run: pip install fastapi uvicorn[standard] pandas numpy")
