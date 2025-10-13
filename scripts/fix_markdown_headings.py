@@ -66,7 +66,7 @@ def fix_markdown_file(file_path: Path) -> bool:
             fence = fence_match.group("fence")
             if current_fence is None:
                 current_fence = fence
-            elif fence[0] == current_fence[0]:
+            elif fence == current_fence:
                 current_fence = None
             continue
 
