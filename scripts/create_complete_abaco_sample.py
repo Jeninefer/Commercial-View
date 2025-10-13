@@ -101,7 +101,7 @@ class AbacoSampleDataGenerator:
             disbursement_date = (base_date + timedelta(days=days_offset)).strftime("%Y-%m-%d")
             
             # Interest rate within validated range
-            interest_rate = round(random.uniform(self.min_apr, self.max_apr), 4)
+            interest_rate = round(random.uniform(self.MIN_APR_RATE, self.MAX_APR_RATE), 4)
             
             # Term selection
             term = random.choice(self.terms)
