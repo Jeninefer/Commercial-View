@@ -115,9 +115,10 @@ def fix_markdown_file(file_path: Path) -> bool:
     if not modified:
         return False
 
-    new_content = "\n".join(lines)
-    if original_content.endswith("\n"):
-        new_content += "\n"
+    # Preserve exact trailing whitespace (including multiple newlines)
+    match = re.match(r"(?s)(.*?)(\s*)\Z", original_content)
+    trailing_ws = match.group(2) if match else ""
+    new_content = "\n".join(lines) + trailing_ws
 
     try:
         file_path.write_text(new_content, encoding="utf-8")
