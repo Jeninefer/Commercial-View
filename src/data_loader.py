@@ -61,15 +61,15 @@ class DataLoader:
     Handles exact schema structure: 16,205 + 16,443 + 16,205 = 48,853 records
     """
 
-    def __init__(self, data_dir: str = "data", data_path: str = None, config_dir: str = "config"):
+    def __init__(self, data_dir: str = "data", config_dir: str = "config", data_path: str = None):
         """
         Initialize DataLoader with Abaco-specific configuration.
 
         Args:
             data_dir (str): Path to the directory containing data files. This is the preferred parameter.
+            config_dir (str): Path to the configuration directory.
             data_path (str, optional): [DEPRECATED] Path to the data directory. If both `data_dir` and `data_path` are provided,
                 `data_path` takes precedence. This parameter is maintained for backward compatibility and will be removed in a future release.
-            config_dir (str): Path to the configuration directory.
 
         Note:
             Use `data_dir` to specify the data directory. `data_path` is deprecated and should not be used in new code.
