@@ -39,7 +39,7 @@ class RepositoryValidator:
             "product_type": "factoring",
         }
         # Dummy data patterns to find and replace
-        DUMMY_PATTERNS = [
+        self.DUMMY_PATTERNS = [
             (r"example\.com", "Dummy email domain"),
             (r"test@test\.com", "Test email"),
             (r"TODO", "TODO comment"),
@@ -51,7 +51,6 @@ class RepositoryValidator:
             (r"placeholder", "Placeholder text"),
             (r"12345", "Example ID (unless part of real data)"),
             (r"foo|bar|baz", "Placeholder variable names"),
-        ]
         ]
 
     def check_python_syntax(self):
@@ -115,7 +114,7 @@ class RepositoryValidator:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
-                for pattern, description in DUMMY_PATTERNS:
+                for pattern, description in self.DUMMY_PATTERNS:
                     matches = list(re.finditer(pattern, content, re.IGNORECASE))
                     if matches:
                         for match in matches:
@@ -130,7 +129,6 @@ class RepositoryValidator:
                             )
                             print(
                                 f"   ⚠️  {file_path.name}:{line_num} - {description}: '{match.group()}'"
-                            )
                             )
             except Exception:
                 continue

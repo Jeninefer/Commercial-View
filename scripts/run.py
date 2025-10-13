@@ -490,8 +490,3 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"Server failed to start: {e}")
         sys.exit(1)
-
-"To properly fix all errors, I need to see:
-- run.py (where the NameError occurs)
-- activate_environment.ps1 (where variable conflicts occur)
-- Any other files that have runtime issues"
