@@ -167,6 +167,8 @@ venv_packages_backup*.txt
 # data/raw/*.csv
 # data/processed/*.csv
 # *.csv
+# Ignore generated Abaco sample data
+data/Abaco - Loan Tape*.csv
 
 # ============================================
 # Validation & Reports (Regenerable)
