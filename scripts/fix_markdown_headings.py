@@ -6,7 +6,7 @@ This utility walks the repository, finds Markdown files, and applies two fixes:
    demoted to level two.
 2. Bold and italic markers within headings are removed to avoid styling issues.
 
-Any path containing directories such as ``node_modules``, ``.venv``, or ``.archive`` is skipped
+Any path containing directories such as `node_modules`, `.venv`, or `.archive` is skipped
 while traversing the repository.
 """
 
