@@ -19,7 +19,7 @@ class DataLoaderError(Exception):
 
 
 # Expected record counts for Abaco integration
-# 48,853 = 16,205 (dataset A) + 16,443 (dataset B) + 16,205 (dataset C)
+# 48,853 = 16,205 (loan_data) + 16,443 (payment_history) + 16,205 (payment_schedule)
 ABACO_RECORDS_EXPECTED = 48853
 
 
