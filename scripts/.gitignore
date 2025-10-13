@@ -285,3 +285,6 @@ github_workflows_backup/
 *example*
 *sample*
 test_*.py
+
+# Exception: Allow the Abaco sample data generator script
+!create_complete_abaco_sample.py
