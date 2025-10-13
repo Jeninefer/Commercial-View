@@ -22,7 +22,12 @@ try:
 
     # Import Abaco-specific modules
     from data_loader import DataLoader
-    # Define ABACO_RECORDS_EXPECTED directly to avoid circular import
+    # ABACO_RECORDS_EXPECTED is the number of records in the Abaco dataset as of 2024-06.
+    # Ideally, this constant would be imported from data_loader to avoid duplication.
+    # However, importing from data_loader here would cause a circular import because
+    # data_loader depends on modules initialized in this file (run.py).
+    # To resolve this in the future, consider moving shared constants (like ABACO_RECORDS_EXPECTED)
+    # to a separate config/constants module that can be safely imported by both run.py and data_loader.
     ABACO_RECORDS_EXPECTED = 48853
 except ImportError as e:
     print(f"❌ Import error: {e}")
