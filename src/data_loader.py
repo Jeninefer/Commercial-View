@@ -370,9 +370,9 @@ def load_abaco_data_standalone(data_type: str = "all") -> Dict[str, pd.DataFrame
         return {}
 
 
-def load_abaco_data(data_type: str = "all") -> Dict[str, pd.DataFrame]:
+def load_abaco_data_legacy(data_type: str = "all") -> Dict[str, pd.DataFrame]:
     """
-    Alias for backward compatibility: load Abaco data by type or all data.
+    Legacy alias for backward compatibility: load Abaco data by type or all data.
     Prefer using `load_abaco_data_standalone` directly for new code.
     """
     return load_abaco_data_standalone(data_type)
