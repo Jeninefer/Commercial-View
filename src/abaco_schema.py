@@ -14,15 +14,118 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-# Constants to eliminate code duplication (addressing SonarLint issues)
-CUSTOMER_ID_COLUMN = "Customer ID"
+# Column name constants (from your schema)
 DAYS_IN_DEFAULT_COLUMN = "Days in Default"
+INTEREST_RATE_APR_COLUMN = "Interest Rate APR"
 OUTSTANDING_LOAN_VALUE_COLUMN = "Outstanding Loan Value"
+LOAN_CURRENCY_COLUMN = "Loan Currency"
+PRODUCT_TYPE_COLUMN = "Product Type"
+CUSTOMER_ID_COLUMN = "Customer ID"
+LOAN_ID_COLUMN = "Loan ID"
 DISBURSEMENT_DATE_COLUMN = "Disbursement Date"
-TRUE_PAYMENT_DATE_COLUMN = "True Payment Date"
 DISBURSEMENT_AMOUNT_COLUMN = "Disbursement Amount"
+TRUE_PAYMENT_DATE_COLUMN = "True Payment Date"
+CLIENTE_COLUMN = "Cliente"
+PAYMENT_FREQUENCY_COLUMN = "Payment Frequency"
+
+# Business constants
+USD_CURRENCY = "USD"
+FACTORING_PRODUCT = "factoring"
+BULLET_FREQUENCY = "bullet"
+ABACO_TECHNOLOGIES = "Abaco Technologies"
+ABACO_FINANCIAL = "Abaco Financial"
+
+# Expected values
+EXPECTED_TOTAL_RECORDS = 48853
+EXPECTED_LOAN_RECORDS = 16205
+EXPECTED_PAYMENT_RECORDS = 16443
+EXPECTED_SCHEDULE_RECORDS = 16205
+EXPECTED_PORTFOLIO_VALUE = 208192588.65
+
+# Constants to eliminate code duplication (addressing SonarLint issues)
 DATA_LOADER_NOT_AVAILABLE_MSG = "Data loader not available"
 ABACO_SCHEMA_FILENAME = "abaco_schema_autodetected.json"
+
+def validate_schema(schema_data: Dict[str, Any]) -> bool:
+    """
+    Validate Abaco schema structure and content.
+    
+    Args:
+        schema_data: Dictionary containing schema information
+        
+    Returns:
+        True if schema is valid, False otherwise
+    """
+    try:
+        # Check for required datasets
+        if 'datasets' not in schema_data:
+            logger.error("Missing 'datasets' key in schema")
+            return False
+        
+        datasets = schema_data['datasets']
+        required_datasets = ['Loan Data', 'Historic Real Payment', 'Payment Schedule']
+        
+        for dataset_name in required_datasets:
+            if dataset_name not in datasets:
+                logger.error(f"Missing required dataset: {dataset_name}")
+                return False
+        
+        # Validate record counts
+        loan_data = datasets.get('Loan Data', {})
+        payment_data = datasets.get('Historic Real Payment', {})
+        schedule_data = datasets.get('Payment Schedule', {})
+        
+        if loan_data.get('rows') != EXPECTED_LOAN_RECORDS:
+            logger.warning(f"Unexpected loan record count: {loan_data.get('rows')}")
+        
+        if payment_data.get('rows') != EXPECTED_PAYMENT_RECORDS:
+            logger.warning(f"Unexpected payment record count: {payment_data.get('rows')}")
+        
+        if schedule_data.get('rows') != EXPECTED_SCHEDULE_RECORDS:
+            logger.warning(f"Unexpected schedule record count: {schedule_data.get('rows')}")
+        
+        logger.info("✅ Schema validation passed")
+        return True
+    
+    except Exception as e:
+        logger.error(f"Schema validation error: {e}")
+        return False
+
+
+def load_schema(schema_path: Path) -> Dict[str, Any]:
+    """
+    Load Abaco schema from JSON file.
+    
+    Args:
+        schema_path: Path to schema JSON file
+        
+    Returns:
+        Schema dictionary
+    """
+    try:
+        with open(schema_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading schema: {e}")
+        raise
+
+
+def get_column_names() -> Dict[str, str]:
+    """Get dictionary of all column name constants."""
+    return {
+        'days_in_default': DAYS_IN_DEFAULT_COLUMN,
+        'interest_rate_apr': INTEREST_RATE_APR_COLUMN,
+        'outstanding_loan_value': OUTSTANDING_LOAN_VALUE_COLUMN,
+        'loan_currency': LOAN_CURRENCY_COLUMN,
+        'product_type': PRODUCT_TYPE_COLUMN,
+        'customer_id': CUSTOMER_ID_COLUMN,
+        'loan_id': LOAN_ID_COLUMN,
+        'disbursement_date': DISBURSEMENT_DATE_COLUMN,
+        'disbursement_amount': DISBURSEMENT_AMOUNT_COLUMN,
+        'true_payment_date': TRUE_PAYMENT_DATE_COLUMN,
+        'cliente': CLIENTE_COLUMN,
+        'payment_frequency': PAYMENT_FREQUENCY_COLUMN
+    }
 
 class AbacoSchemaManager:
     """

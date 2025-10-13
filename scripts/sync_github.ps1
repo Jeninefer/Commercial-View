@@ -7,10 +7,11 @@ Supports both Windows and macOS PowerShell environments
 #>
 
 # Detect operating system
-$isMacOS = $PSVersionTable.OS -like "*Darwin*" -or $env:HOME -ne $null
-$isWindows = $PSVersionTable.Platform -eq "Win32NT" -or $env:USERPROFILE -ne $null
+# Use PowerShell Core automatic variables for OS detection
+$isMacOS = $IsMacOS
+# $IsWindows is a built-in automatic variable in PowerShell Core
 
-Write-Host "🔄 Commercial-View GitHub Sync ($(if($isMacOS){'macOS'}else{'Windows'}) PowerShell)" -ForegroundColor Cyan
+Write-Host "🔄 Commercial-View GitHub Sync ($(if($isMacOS){'macOS'}elseif($IsWindows){'Windows'}else{'Other'}) PowerShell)" -ForegroundColor Cyan
 Write-Host "48,853 Records | Spanish Clients | USD Factoring | $208M+ Portfolio" -ForegroundColor Yellow
 Write-Host "=================================================================="
 
@@ -23,8 +24,12 @@ if ($isMacOS) {
     $venvPython = "./.venv/bin/python"
     $schemaPath = "/Users/jenineferderas/Downloads/abaco_schema_autodetected.json"
 }
-else {
+elseif ($IsWindows) {
     $venvPython = ".\.venv\Scripts\python.exe"
+    $schemaPath = "C:\Users\jenineferderas\Downloads\abaco_schema_autodetected.json"
+}
+else {
+    $venvPython = "./.venv/bin/python"
     $schemaPath = "/Users/jenineferderas/Downloads/abaco_schema_autodetected.json"
 }
 

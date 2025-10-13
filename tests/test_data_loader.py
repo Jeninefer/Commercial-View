@@ -1,4 +1,3 @@
-
 # Abaco Integration Constants - 48,853 Records
 # Spanish Clients | USD Factoring | Commercial Lending
 DAYS_IN_DEFAULT = DAYS_IN_DEFAULT
@@ -395,3 +394,42 @@ class TestDataLoader:
                 # Should be able to load data from CLI path, not env path
                 loan_df = loader.load_loan_data()
                 assert loan_df is not None
+
+
+"""Tests for data loader functionality."""
+
+import pytest
+from pathlib import Path
+from src.data_loader import (
+    load_loan_data,
+    load_historic_real_payment,
+    load_payment_schedule
+)
+# Import constants from abaco_schema
+from src.abaco_schema import (
+    DAYS_IN_DEFAULT_COLUMN,
+    INTEREST_RATE_APR_COLUMN,
+    OUTSTANDING_LOAN_VALUE_COLUMN,
+    LOAN_CURRENCY_COLUMN,
+    PRODUCT_TYPE_COLUMN,
+    CUSTOMER_ID_COLUMN,
+    LOAN_ID_COLUMN
+)
+
+
+class TestDataLoader:
+    """Test data loading functionality."""
+    
+    def test_column_constants_defined(self):
+        """Test that all column constants are defined."""
+        assert DAYS_IN_DEFAULT_COLUMN == "Days in Default"
+        assert INTEREST_RATE_APR_COLUMN == "Interest Rate APR"
+        assert OUTSTANDING_LOAN_VALUE_COLUMN == "Outstanding Loan Value"
+        assert LOAN_CURRENCY_COLUMN == "Loan Currency"
+        assert PRODUCT_TYPE_COLUMN == "Product Type"
+    
+    def test_load_functions_exist(self):
+        """Test that load functions are callable."""
+        assert callable(load_loan_data)
+        assert callable(load_historic_real_payment)
+        assert callable(load_payment_schedule)

@@ -17,7 +17,8 @@ class RepositoryValidator:
     """Comprehensive validator for Commercial-View repository."""
 
     def __init__(self):
-        self.base_path = Path("/Users/jenineferderas/Documents/GitHub/Commercial-View")
+        # Use environment variable or fallback to current working directory for portability
+        self.base_path = Path(os.environ.get("REPO_BASE_PATH", Path.cwd()))
         self.errors = []
         self.warnings = []
         self.duplicates = []
@@ -37,9 +38,8 @@ class RepositoryValidator:
             "payment_frequency": "bullet",
             "product_type": "factoring",
         }
-
         # Dummy data patterns to find and replace
-        self.DUMMY_PATTERNS = [
+        DUMMY_PATTERNS = [
             (r"example\.com", "Dummy email domain"),
             (r"test@test\.com", "Test email"),
             (r"TODO", "TODO comment"),
@@ -51,6 +51,7 @@ class RepositoryValidator:
             (r"placeholder", "Placeholder text"),
             (r"12345", "Example ID (unless part of real data)"),
             (r"foo|bar|baz", "Placeholder variable names"),
+        ]
         ]
 
     def check_python_syntax(self):
@@ -114,8 +115,7 @@ class RepositoryValidator:
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
-
-                for pattern, description in self.DUMMY_PATTERNS:
+                for pattern, description in DUMMY_PATTERNS:
                     matches = list(re.finditer(pattern, content, re.IGNORECASE))
                     if matches:
                         for match in matches:
@@ -130,6 +130,7 @@ class RepositoryValidator:
                             )
                             print(
                                 f"   ⚠️  {file_path.name}:{line_num} - {description}: '{match.group()}'"
+                            )
                             )
             except Exception:
                 continue

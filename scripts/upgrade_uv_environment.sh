@@ -53,9 +53,13 @@ fi
 # Step 3: Setup UV shell completion
 echo -e "\n${YELLOW}🔍 Step 3: Setting up UV shell completion...${NC}"
 
-# Add bash completion for UV
-echo 'eval "$(uv generate-shell-completion bash)"' >> ~/.bashrc
-echo 'eval "$(uvx --generate-shell-completion bash)"' >> ~/.bashrc
+# Add bash completion for UV if not already present
+if ! grep -Fxq 'eval "$(uv generate-shell-completion bash)"' ~/.bashrc; then
+    echo 'eval "$(uv generate-shell-completion bash)"' >> ~/.bashrc
+fi
+if ! grep -Fxq 'eval "$(uvx --generate-shell-completion bash)"' ~/.bashrc; then
+    echo 'eval "$(uvx --generate-shell-completion bash)"' >> ~/.bashrc
+fi
 
 echo -e "${GREEN}✅ Shell completion configured${NC}"
 echo -e "${BLUE}💡 Note: Restart your shell or run 'source ~/.bashrc' to enable completion${NC}"
