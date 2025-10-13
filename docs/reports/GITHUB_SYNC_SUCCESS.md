@@ -63,7 +63,7 @@
 
 Your Commercial-View system now has **100% validated real Abaco data**:
 
-### Financial Data (from abaco_schema_autodetected.json)
+### Financial Data (from abacoschemaautodetected.json)
 
 - **Total Records**: 48,853 (16,205 + 16,443 + 16,205)
 

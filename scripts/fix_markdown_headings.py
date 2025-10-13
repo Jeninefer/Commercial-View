@@ -1,197 +1,181 @@
 #!/usr/bin/env python3
-"""
-Script to fix heading levels and remove emphasis in all Markdown files
+"""Normalize heading levels and remove emphasis from Markdown headings.
 
-This script:cat > scripts/fix_markdown_headings.py << 'EOF'
-#!/usr/bin/env python3
-"""
-Script to fix heading levels and remove emphasis in all Markdown files
+This utility walks the repository, finds Markdown files, and applies two fixes:
+1. Only the first level-one heading is kept; subsequent level-one headings are
+   demoted to level two.
+2. Bold and italic markers within headings are removed to avoid styling issues.
 
-This script:
-1. Finds all .md files in the repository
-2. Ensures only one H1 (# heading) at the top
-3. Changes additional H1 headings to H2 (## heading)
-4. Removes emphasis markers (**, _, __, *) from all headings
+Directories such as ``node_modules``, ``.venv``, and ``.archive`` are skipped
+while traversing the repository.
 """
+
+from __future__ import annotations
 
 import os
 import re
-import sys
 from pathlib import Path
+from typing import Iterable, Tuple
+
+# Regular expressions compiled once for efficiency
+HEADING_PATTERN = re.compile(
+    r"^(?P<indent>\s*)(?P<hashes>#{1,6})(?P<space>\s+)(?P<content>.*)$"
+)
+EXCLUDED_PARTS = {"node_modules", ".venv", ".archive", ".git"}
+EMPHASIS_MARKERS = ("**", "__", "*", "_")
+CODE_FENCE_PATTERN = re.compile(r"^\s*(?P<fence>`{3,}|~{3,})")
 
 
-def fix_markdown_file(file_path):
-    """Fix heading levels and emphasis in a markdown file."""
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-            
-        lines = content.split('\n')
-        found_first_h1 = False
-        modified = False
-        
-        for i in range(len(lines)):
-            # Check for H1 headings
-            if re.match(r'^\s*# ', lines[i]):
-                if found_first_h1:
-                    # Convert additional H1 to H2
-                    lines[i] = re.sub(r'^\s*# ', '## ', lines[i])
-                    modified = True
-                    print(f"  Fixed additional H1 heading on line {i+1} in {file_path}")
-                else:
-                    found_first_h1 = True
-                    
-            # Check for headings with emphasis
-            if re.match(r'^\s*#{1,6} .*(\*\*|\*|__|_)', lines[i]):
-                # Remove emphasis markers from headings
-                original = lines[i]
-                lines[i] = re.sub(r'(\*\*|\*|__|_)', '', lines[i])
-                modified = True
-                print(f"  Removed emphasis from heading on line {i+1} in {file_path}")
-        
-        if modified:
-            # Write back the modified content
-            with open(file_path, 'w', encoding='utf-8') as f:
-                f.write('\n'.join(lines))
-            return True
-        return False
-    except Exception as e:
-        print(f"Error processing {file_path}: {str(e)}")
-        return False
+def iter_markdown_files(root: Path) -> Iterable[Path]:
+    """Yield Markdown files underneath *root*, ignoring excluded directories."""
+    for current_root, dirs, files in os.walk(root):
+        path = Path(current_root)
 
+        # Prune excluded directories in-place to avoid walking them entirely
+        dirs[:] = [d for d in dirs if d not in EXCLUDED_PARTS]
 
-def main():
-    """Find and fix markdown files in the repository."""
-    # Get repository root (parent of the scripts directory)
-    repo_root = Path(__file__).parent.parent
-    
-    # Find all markdown files
-    md_files = []
-    for root, _, files in os.walk(repo_root):
-        path = Path(root)
-        if any(part in str(path) for part in ['node_modules', '.venv', '.archive']):
+        # Skip traversal when the current path already includes an excluded directory
+        if any(part in EXCLUDED_PARTS for part in path.parts):
             continue
-            
-        for file in files:
-            if file.endswith('.md'):
-                md_files.append(path / file)
-    
-    print(f"Found {len(md_files)} markdown files to process")
-    
-    fixed_files = 0
-    unchanged_files = 0
-    
-    for file_path in md_files:
-        print(f"Processing: {file_path}")
-        if fix_markdown_file(file_path):
-            fixed_files += 1
-            print(f"  Fixed issues in file: {file_path.name}")
+
+        for filename in files:
+            if filename.lower().endswith(".md"):
+                yield path / filename
+
+
+def fix_markdown_file(file_path: Path) -> bool:
+    """Apply heading corrections to *file_path*.
+
+    Returns ``True`` if the file was modified, otherwise ``False``.
+    """
+    try:
+        original_content = file_path.read_text(encoding="utf-8")
+    except OSError as exc:  # pragma: no cover - defensive guard
+        print(f"Error reading {file_path}: {exc}")
+        return False
+
+    lines = original_content.splitlines()
+    first_h1_seen = False
+    modified = False
+
+    current_fence: str | None = None
+
+    for index, line in enumerate(lines):
+        fence_match = CODE_FENCE_PATTERN.match(line)
+        if fence_match:
+            fence = fence_match.group("fence")
+            if current_fence is None:
+                current_fence = fence
+            elif fence[0] == current_fence[0]:
+                current_fence = None
+            continue
+
+        if current_fence is not None:
+            continue
+
+        heading_match = HEADING_PATTERN.match(line)
+        if not heading_match:
+            continue
+
+        indent = heading_match.group("indent")
+        hashes = heading_match.group("hashes")
+        space = heading_match.group("space")
+        content = heading_match.group("content")
+        content_leading_stripped = content.lstrip()
+        is_h1_candidate = bool(content_leading_stripped) and not content_leading_stripped[0].islower()
+
+        current_hashes = hashes
+        line_modified = False
+
+        if len(current_hashes) == 1 and is_h1_candidate:
+            if first_h1_seen:
+                current_hashes = "##"
+                line_modified = True
+                modified = True
+                print(f"  Demoted extra H1 on line {index + 1} in {file_path}")
+            else:
+                first_h1_seen = True
+
+        cleaned_content, removed_emphasis = strip_outer_emphasis(content)
+        if removed_emphasis:
+            content = cleaned_content
+            line_modified = True
+            modified = True
+            print(f"  Removed outer emphasis on line {index + 1} in {file_path}")
+
+        if line_modified:
+            lines[index] = f"{indent}{current_hashes}{space}{content}"
+
+    if not modified:
+        return False
+
+    new_content = "\n".join(lines)
+    if original_content.endswith("\n"):
+        new_content += "\n"
+
+    try:
+        file_path.write_text(new_content, encoding="utf-8")
+    except OSError as exc:  # pragma: no cover - defensive guard
+        print(f"Error writing {file_path}: {exc}")
+        return False
+
+    return True
+
+def strip_outer_emphasis(content: str) -> Tuple[str, bool]:
+    """Remove emphasis markers that wrap the entire heading content."""
+
+    stripped = content.strip()
+    if not stripped:
+        return content, False
+
+    original_stripped = stripped
+    changed = False
+
+    while True:
+        for marker in EMPHASIS_MARKERS:
+            if stripped.startswith(marker) and stripped.endswith(marker):
+                inner = stripped[len(marker) : -len(marker)]
+                if not inner.strip():
+                    continue
+                stripped = inner.strip()
+                changed = True
+                break
         else:
-            unchanged_files += 1
-            print(f"  No issues found in: {file_path.name}")
-    
-    print("\n✅ Process completed!")
-    print(f"  Fixed files: {fixed_files}")
-    print(f"  Files without issues: {unchanged_files}")
-    print(f"  Total files processed: {len(md_files)}")
+            break
+
+    if not changed:
+        return content, False
+
+    leading_index = content.find(original_stripped)
+    if leading_index == -1:
+        return stripped, True
+
+    leading = content[:leading_index]
+    trailing = content[leading_index + len(original_stripped) :]
+    return f"{leading}{stripped}{trailing}", True
+
+
+def main() -> None:
+    """Entry point for the CLI script."""
+    repo_root = Path(__file__).resolve().parent.parent
+    markdown_files = list(iter_markdown_files(repo_root))
+
+    print(f"Found {len(markdown_files)} markdown files to process")
+
+    fixed_count = 0
+    for md_file in markdown_files:
+        print(f"Processing: {md_file}")
+        if fix_markdown_file(md_file):
+            fixed_count += 1
+            print(f"  Updated: {md_file.name}")
+        else:
+            print(f"  No changes required for: {md_file.name}")
+
+    print("\n✅ Markdown heading normalization complete")
+    print(f"  Files updated: {fixed_count}")
+    print(f"  Files unchanged: {len(markdown_files) - fixed_count}")
+    print(f"  Total processed: {len(markdown_files)}")
 
 
 if __name__ == "__main__":
     main()
-EOF
-
-# Make the script executable
-chmod +x scripts/fix_markdown_headings.py1. Finds all .md files in the repository
-2. Ensures only one H1 (# heading) at the top
-3. Changes additional H1 headings to H2 (## heading)
-4. Removes emphasis markers (**, _, __, *) from all headings
-"""
-
-import os
-import re
-import sys
-from pathlib import Path
-
-
-def fix_markdown_file(file_path):
-    """Fix heading levels and emphasis in a markdown file."""
-    try:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-            
-        lines = content.split('\n')
-        found_first_h1 = False
-        modified = False
-        
-        for i in range(len(lines)):
-            # Check for H1 headings
-            if re.match(r'^\s*# ', lines[i]):
-                if found_first_h1:
-                    # Convert additional H1 to H2
-                    lines[i] = re.sub(r'^\s*# ', '## ', lines[i])
-                    modified = True
-                    print(f"  Fixed additional H1 heading on line {i+1} in {file_path}")
-                else:
-                    found_first_h1 = True
-                    
-            # Check for headings with emphasis
-            if re.match(r'^\s*#{1,6} .*(\*\*|\*|__|_)', lines[i]):
-                # Remove emphasis markers from headings
-                original = lines[i]
-                lines[i] = re.sub(r'(\*\*|\*|__|_)', '', lines[i])
-                modified = True
-                print(f"  Removed emphasis from heading on line {i+1} in {file_path}")
-        
-        if modified:
-            # Write back the modified content
-            with open(file_path, 'w', encoding='utf-8') as f:
-                f.write('\n'.join(lines))
-            return True
-        return False
-    except Exception as e:
-        print(f"Error processing {file_path}: {str(e)}")
-        return False
-
-
-def main():
-    """Find and fix markdown files in the repository."""
-    # Get repository root (parent of the scripts directory)
-    repo_root = Path(__file__).parent.parent
-    
-    # Find all markdown files
-    md_files = []
-    for root, _, files in os.walk(repo_root):
-        path = Path(root)
-        if any(part in str(path) for part in ['node_modules', '.venv', '.archive']):
-            continue
-            
-        for file in files:
-            if file.endswith('.md'):
-                md_files.append(path / file)
-    
-    print(f"Found {len(md_files)} markdown files to process")
-    
-    fixed_files = 0
-    unchanged_files = 0
-    
-    for file_path in md_files:
-        print(f"Processing: {file_path}")
-        if fix_markdown_file(file_path):
-            fixed_files += 1
-            print(f"  Fixed issues in file: {file_path.name}")
-        else:
-            unchanged_files += 1
-            print(f"  No issues found in: {file_path.name}")
-    
-    print("\n✅ Process completed!")
-    print(f"  Fixed files: {fixed_files}")
-    print(f"  Files without issues: {unchanged_files}")
-    print(f"  Total files processed: {len(md_files)}")
-
-
-if __name__ == "__main__":
-    main()
-# Make the script executable
-
-# Run the script
-python3 scripts/fix_markdown_headings.py

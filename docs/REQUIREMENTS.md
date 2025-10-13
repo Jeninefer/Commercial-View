@@ -88,22 +88,22 @@ The platform validates against the exact schema file:
 
 ```bash
 
-# Clone repository
+## Clone repository
 
 git clone https://github.com/Jeninefer/Commercial-View.git
 cd Commercial-View
 
-# Set up environment
+## Set up environment
 
 python -m venv .venv
 source .venv/bin/activate
 
-# Install dependencies
+## Install dependencies
 
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 
-# Validate installation
+## Validate installation
 
 python setup_project.py
 

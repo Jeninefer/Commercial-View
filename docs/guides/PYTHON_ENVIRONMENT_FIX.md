@@ -32,10 +32,10 @@ Installed all required development packages:
 #### 3. Environment Verification
 
 ```bash
-# Virtual environment is active:
+## Virtual environment is active:
 (.venv) [MacBook-Pro-2:~/Commercial-View] jenineferderas%
 
-# All imports working:
+## All imports working:
 ✅ pytest: 8.4.2
 ✅ pandas: 2.3.3  
 ✅ numpy: 2.3.3
@@ -53,12 +53,12 @@ Installed all required development packages:
 #### Option 2: Activate Environment in Terminal
 
 ```bash
-# For tcsh shell (your current shell):
+## For tcsh shell (your current shell):
 source .venv/bin/activate.csh
 
-# Verify activation:
+## Verify activation:
 which python
-# Should show: /Users/jenineferderas/Commercial-View/.venv/bin/python
+## Should show: /Users/jenineferderas/Commercial-View/.venv/bin/python
 ```
 
 #### Option 3: Launch Jupyter from Virtual Environment
@@ -66,7 +66,7 @@ which python
 ```bash
 source .venv/bin/activate.csh
 jupyter notebook
-# or
+## or
 jupyter lab
 ```
 

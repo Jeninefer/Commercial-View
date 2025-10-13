@@ -51,7 +51,7 @@ This directory contains all configuration files for the Commercial-View Abaco in
 ```python
 from config.production_config import ABACO_CONFIG
 
-# Access configuration
+## Access configuration
 
 total_records = ABACO_CONFIG['total_records']
 portfolio_value = ABACO_CONFIG['financial_summary']['total_loan_exposure_usd']

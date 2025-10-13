@@ -10,15 +10,15 @@
 
 ```powershell
 
-# ❌ DON'T use bash commands in PowerShell
+## ❌ DON'T use bash commands in PowerShell
 
 source .venv/bin/activate          # This is bash, not PowerShell!
 
-# ❌ DON'T use Windows paths on macOS
+## ❌ DON'T use Windows paths on macOS
 
 .\.venv\Scripts\Activate.ps1       # Windows path doesn't exist on macOS!
 
-# ❌ DON'T use bare commands (they won't work)
+## ❌ DON'T use bare commands (they won't work)
 
 python validate_repository.py      # 'python' not in PATH
 pip install -r requirements.txt    # 'pip' not in PATH
@@ -33,15 +33,15 @@ pip install -r requirements.txt    # 'pip' not in PATH
 
 ```powershell
 
-# Option 1: Use the activation script (Recommended)
+## Option 1: Use the activation script (Recommended)
 
 ./activate_environment.ps1
 
-# Option 2: Direct activation
+## Option 2: Direct activation
 
 & "./.venv/bin/activate"
 
-# Verify activation
+## Verify activation
 
 & "./.venv/bin/python" --version
 
@@ -51,11 +51,11 @@ pip install -r requirements.txt    # 'pip' not in PATH
 
 ```powershell
 
-# Install all requirements
+## Install all requirements
 
 & "./.venv/bin/pip" install -r requirements.txt
 
-# Install specific package
+## Install specific package
 
 & "./.venv/bin/pip" install fastapi uvicorn pandas numpy
 
@@ -65,23 +65,23 @@ pip install -r requirements.txt    # 'pip' not in PATH
 
 ```powershell
 
-# Run validation
+## Run validation
 
 & "./.venv/bin/python" validate_repository.py
 
-# Start server
+## Start server
 
 & "./.venv/bin/python" server_control.py
 
-# Run tests
+## Run tests
 
 & "./.venv/bin/pytest" tests/
 
-# Generate reports
+## Generate reports
 
 & "./.venv/bin/python" examples/schema_usage_example.py
 
-# Run Abaco test
+## Run Abaco test
 
 & "./.venv/bin/python" scripts/final_abaco_production_test.py
 
@@ -91,15 +91,15 @@ pip install -r requirements.txt    # 'pip' not in PATH
 
 ```powershell
 
-# Quick status check
+## Quick status check
 
 & "./.venv/bin/python" scripts/quick_status_check.py
 
-# Repository validation
+## Repository validation
 
 & "./.venv/bin/python" validate_repository.py
 
-# Git status
+## Git status
 
 git status
 
@@ -113,19 +113,19 @@ git status
 
 ```powershell
 
-# 1. Activate environment
+## 1. Activate environment
 
 ./activate_environment.ps1
 
-# 2. Install/Update dependencies
+## 2. Install/Update dependencies
 
 & "./.venv/bin/pip" install -r requirements.txt --upgrade
 
-# 3. Validate repository
+## 3. Validate repository
 
 & "./.venv/bin/python" validate_repository.py
 
-# 4. Run tests
+## 4. Run tests
 
 & "./.venv/bin/pytest" tests/
 
@@ -135,15 +135,15 @@ git status
 
 ```powershell
 
-# 1. Activate environment
+## 1. Activate environment
 
 ./activate_environment.ps1
 
-# 2. Start development server
+## 2. Start development server
 
 & "./.venv/bin/python" server_control.py
 
-# In another terminal, run tests
+## In another terminal, run tests
 
 & "./.venv/bin/pytest" tests/ -v
 
@@ -153,15 +153,15 @@ git status
 
 ```powershell
 
-# 1. Run comprehensive validation
+## 1. Run comprehensive validation
 
 & "./.venv/bin/python" scripts/validate_production_data.py
 
-# 2. Run production test
+## 2. Run production test
 
 & "./.venv/bin/python" scripts/final_abaco_production_test.py
 
-# 3. Generate production summary
+## 3. Generate production summary
 
 & "./.venv/bin/python" scripts/final_production_summary.py
 
@@ -171,20 +171,20 @@ git status
 
 ```powershell
 
-# Check status
+## Check status
 
 git status
 
-# Add and commit
+## Add and commit
 
 git add .
 git commit -m "Your commit message"
 
-# Push to GitHub
+## Push to GitHub
 
 git push origin main
 
-# Pull latest
+## Pull latest
 
 git pull origin main
 
@@ -209,13 +209,13 @@ git pull origin main
 
 ```powershell
 
-# Set environment variables for Abaco
+## Set environment variables for Abaco
 
 $env:ABACO_RECORDS = "48853"
 $env:PORTFOLIO_VALUE = "208192588.65"
 $env:PROCESSING_TARGET = "2.3"
 
-# Verify
+## Verify
 
 Write-Host "Records: $env:ABACO_RECORDS"
 Write-Host "Portfolio: `$$env:PORTFOLIO_VALUE USD"
@@ -229,19 +229,19 @@ Write-Host "Target: $env:PROCESSING_TARGET minutes"
 
 ```powershell
 
-# Activate environment
+## Activate environment
 
 ./activate_environment.ps1
 
-# Run ANY Python script (template)
+## Run ANY Python script (template)
 
 & "./.venv/bin/python" <script_name>.py
 
-# Run ANY Python module (template)
+## Run ANY Python module (template)
 
 & "./.venv/bin/python" -m <module_name>
 
-# Install ANY package (template)
+## Install ANY package (template)
 
 & "./.venv/bin/pip" install <package_name>
 
@@ -253,25 +253,25 @@ Write-Host "Target: $env:PROCESSING_TARGET minutes"
 
 ```powershell
 
-# Check if you're in the right directory
+## Check if you're in the right directory
 
 Get-Location
 
-# Should output: /Users/jenineferderas/Documents/GitHub/Commercial-View
+## Should output: /Users/jenineferderas/Documents/GitHub/Commercial-View
 
-# Check if virtual environment exists
+## Check if virtual environment exists
 
 Test-Path "./.venv/bin/python"
 
-# Should output: True
+## Should output: True
 
-# Check Python version
+## Check Python version
 
 & "./.venv/bin/python" --version
 
-# Should output: Python 3.13.7 (or similar)
+## Should output: Python 3.13.7 (or similar)
 
-# Check if dependencies are installed
+## Check if dependencies are installed
 
 & "./.venv/bin/pip" list
 
@@ -285,10 +285,10 @@ Test-Path "./.venv/bin/python"
 
 ```powershell
 
-# ❌ Error: The term 'python' is not recognized
+## ❌ Error: The term 'python' is not recognized
 
 
-# ✅ Solution: Use full path with &
+## ✅ Solution: Use full path with &
 
 & "./.venv/bin/python" script.py
 
@@ -298,10 +298,10 @@ Test-Path "./.venv/bin/python"
 
 ```powershell
 
-# ❌ Error: .\.venv\Scripts\Activate.ps1 not found
+## ❌ Error: .\.venv\Scripts\Activate.ps1 not found
 
 
-# ✅ Solution: Use Unix path
+## ✅ Solution: Use Unix path
 
 ./activate_environment.ps1
 
@@ -311,10 +311,10 @@ Test-Path "./.venv/bin/python"
 
 ```powershell
 
-# ❌ Error: No module named 'fastapi'
+## ❌ Error: No module named 'fastapi'
 
 
-# ✅ Solution: Install dependencies
+## ✅ Solution: Install dependencies
 
 & "./.venv/bin/pip" install -r requirements.txt
 
