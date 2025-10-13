@@ -68,11 +68,10 @@ class DataLoader:
         Args:
             data_dir (str): Path to the directory containing data files. This is the preferred parameter.
             config_dir (str): Path to the configuration directory.
-            data_path (str, optional): [DEPRECATED] Path to the data directory. If both `data_dir` and `data_path` are provided,
-                `data_path` takes precedence. This parameter is maintained for backward compatibility and will be removed in a future release.
+            data_path (str, optional): [DEPRECATED] Path to the data directory. If `data_path` is provided (not None), it will be used instead of `data_dir` for backward compatibility. Otherwise, `data_dir` is used. This parameter is maintained for backward compatibility and will be removed in a future release.
 
         Note:
-            Use `data_dir` to specify the data directory. `data_path` is deprecated and should not be used in new code.
+            Use `data_dir` to specify the data directory. If `data_path` is provided, it will override `data_dir`, but its use is deprecated and should be avoided in new code.
         """
         # Support both data_dir and data_path for backwards compatibility
         self.data_dir = Path(data_path) if data_path is not None else Path(data_dir)
