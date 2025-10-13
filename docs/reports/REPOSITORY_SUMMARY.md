@@ -92,7 +92,7 @@
 
 - Portfolio-level analytics and reporting
 
-### 4. Schema Management (`config/abacoschemaautodetected.json`)  
+### 4. Schema Management (`config/abaco_schema_autodetected.json`)  
 
 - Complete schema definition for 48,853 records
 
