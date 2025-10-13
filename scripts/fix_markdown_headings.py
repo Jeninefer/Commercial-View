@@ -29,7 +29,7 @@ def iter_markdown_files(root: Path) -> Iterable[Path]:
     for current_root, dirs, files in os.walk(root):
         path = Path(current_root)
         # Skip any directory containing an excluded part in its path
-        if any(part in path.parts for part in EXCLUDED_PARTS):
+        if any(part in EXCLUDED_PARTS for part in path.parts):
             continue
 
         for filename in files:
