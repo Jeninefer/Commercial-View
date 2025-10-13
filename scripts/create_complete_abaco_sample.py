@@ -63,9 +63,11 @@ class AbacoSampleDataGenerator:
         self.terms = [30, 90, 120]  # days
         
         # Interest rate range from schema: 29.47% - 36.99%
-        self.min_apr = 0.2947
-        self.max_apr = 0.3699
 
+
+    # Class-level constants for APR rates
+    MIN_APR_RATE = 0.2947
+    MAX_APR_RATE = 0.3699
     def generate_loan_id(self, index: int) -> str:
         """Generate a loan ID in Abaco format."""
         year = random.randint(17, 25)
