@@ -61,7 +61,7 @@ class DataLoader:
     Handles exact schema structure: 16,205 + 16,443 + 16,205 = 48,853 records
     """
 
-    def __init__(self, data_dir: str = "data", config_dir: str = "config", data_path: Optional[str] = None):
+    def __init__(self, data_dir: str = "data", config_dir: str = "config", *, data_path: Optional[str] = None):
         """
         Initialize DataLoader with Abaco-specific configuration.
 
