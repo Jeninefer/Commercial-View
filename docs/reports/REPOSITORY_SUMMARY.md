@@ -62,7 +62,7 @@
 
 ## 🏗️ Core Components
 
-### 1. DataLoader (`src/dataloader.py`)
+### 1. DataLoader (`src/data_loader.py`)
 
 - Complete schema validation against 48,853 record structure
 
