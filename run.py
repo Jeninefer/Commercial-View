@@ -18,7 +18,6 @@ try:
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.responses import JSONResponse
     import uvicorn
-    import pandas as pd
 
     # Import Abaco-specific modules
     from data_loader import DataLoader
