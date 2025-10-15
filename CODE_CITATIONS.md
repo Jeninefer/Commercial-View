@@ -44,6 +44,10 @@ test('Numbers', function (t) {
   t.end();
 });
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 This pattern has been adapted in our test implementation to validate similar behavior in our number detection utilities.

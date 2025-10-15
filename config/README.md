@@ -56,6 +56,10 @@ from config.production_config import ABACO_CONFIG
 total_records = ABACO_CONFIG['total_records']
 portfolio_value = ABACO_CONFIG['financial_summary']['total_loan_exposure_usd']
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Directory Structure

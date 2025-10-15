@@ -76,7 +76,11 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 pip install -r requirements.txt
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### 2. Process Abaco Data
 
@@ -92,7 +96,11 @@ python scripts/create_complete_abaco_sample.py
 
 python portfolio.py --config config
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### With Real Abaco Data
 
@@ -100,6 +108,7 @@ python portfolio.py --config config
 
 # Place your CSV files in data/ directory:
 
+<<<<<<< Updated upstream
 
 #   - Abaco - Loan Tape_Loan Data_Table.csv (16,205 records)
 
@@ -107,6 +116,12 @@ python portfolio.py --config config
 #   - Abaco - Loan Tape_Historic Real Payment_Table.csv (16,443 records)  
 
 
+=======
+#   - Abaco - Loan Tape_Loan Data_Table.csv (16,205 records)
+
+#   - Abaco - Loan Tape_Historic Real Payment_Table.csv (16,443 records)  
+
+>>>>>>> Stashed changes
 #   - Abaco - Loan Tape_Payment Schedule_Table.csv (16,205 records)
 
 # Process real data
@@ -117,7 +132,11 @@ python portfolio.py --config config --abaco-only
 
 ls abaco_runtime/exports/
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## 📊 Exact Data Structure Validation
 
@@ -150,7 +169,11 @@ Payment_Frequency: [bullet]
 Days_in_Default: [0, 1, 3]
 Loan_Status: [Current, Complete, Default]
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Historic Real Payment Table (16,443 records × 18 columns)
 
@@ -162,7 +185,11 @@ Payment_Currency: [USD]
 Total_Payment_Range: [$461.33, $62,115.89]
 Outstanding_Range: [$0.0, $8,054.78]
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Payment Schedule Table (16,205 records × 16 columns)
 
@@ -173,7 +200,11 @@ TPV_Range: [$1,731.5, $21,784.0]
 Total_Payment_Range: [$1,558.35, $21,889.957376]
 Outstanding_Loan_Value: [0] # All completed
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## 🔧 Key Features
 
@@ -224,7 +255,11 @@ python portfolio.py --config config
 
 python scripts/production_validation_complete.py
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## 📈 Business Logic - Abaco Specialized
 
@@ -303,7 +338,11 @@ Multi-factor risk assessment calibrated for Abaco factoring products:
   }
 }
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## 🏆 Production Readiness Checklist
 

@@ -23,7 +23,11 @@ source .venv/bin/activate          # This is bash, not PowerShell!
 python validate_repository.py      # 'python' not in PATH
 pip install -r requirements.txt    # 'pip' not in PATH
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ---
 
@@ -45,7 +49,11 @@ pip install -r requirements.txt    # 'pip' not in PATH
 
 & "./.venv/bin/python" --version
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ### 2. Install Dependencies
 
@@ -59,7 +67,11 @@ pip install -r requirements.txt    # 'pip' not in PATH
 
 & "./.venv/bin/pip" install fastapi uvicorn pandas numpy
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ### 3. Run Scripts
 
@@ -85,7 +97,11 @@ pip install -r requirements.txt    # 'pip' not in PATH
 
 & "./.venv/bin/python" scripts/final_abaco_production_test.py
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ### 4. Check Status
 
@@ -103,7 +119,11 @@ pip install -r requirements.txt    # 'pip' not in PATH
 
 git status
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ---
 
@@ -129,7 +149,11 @@ git status
 
 & "./.venv/bin/pytest" tests/
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ### Development Workflow
 
@@ -147,7 +171,11 @@ git status
 
 & "./.venv/bin/pytest" tests/ -v
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ### Production Validation
 
@@ -165,7 +193,11 @@ git status
 
 & "./.venv/bin/python" scripts/final_production_summary.py
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ### Git Operations
 
@@ -188,7 +220,11 @@ git push origin main
 
 git pull origin main
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ---
 
@@ -221,7 +257,11 @@ Write-Host "Records: $env:ABACO_RECORDS"
 Write-Host "Portfolio: `$$env:PORTFOLIO_VALUE USD"
 Write-Host "Target: $env:PROCESSING_TARGET minutes"
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ---
 
@@ -245,7 +285,11 @@ Write-Host "Target: $env:PROCESSING_TARGET minutes"
 
 & "./.venv/bin/pip" install <package_name>
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ---
 
@@ -275,7 +319,11 @@ Test-Path "./.venv/bin/python"
 
 & "./.venv/bin/pip" list
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ---
 
@@ -287,12 +335,19 @@ Test-Path "./.venv/bin/python"
 
 # ❌ Error: The term 'python' is not recognized
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 
+=======
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 # ✅ Solution: Use full path with &
 
 & "./.venv/bin/python" script.py
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ### Problem: Can't activate environment
 
@@ -300,12 +355,19 @@ Test-Path "./.venv/bin/python"
 
 # ❌ Error: .\.venv\Scripts\Activate.ps1 not found
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 
+=======
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 # ✅ Solution: Use Unix path
 
 ./activate_environment.ps1
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ### Problem: Module not found
 
@@ -313,12 +375,19 @@ Test-Path "./.venv/bin/python"
 
 # ❌ Error: No module named 'fastapi'
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 
+=======
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 # ✅ Solution: Install dependencies
 
 & "./.venv/bin/pip" install -r requirements.txt
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START_MACOS_POWERSHELL.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/QUICK_START_MACOS_POWERSHELL.md
 
 ---
 

@@ -49,7 +49,11 @@ abaco_data = loader.load_abaco_data()
 
 python portfolio.py --config config --abaco-only
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Validation Status
 

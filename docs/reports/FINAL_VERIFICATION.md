@@ -26,7 +26,11 @@
   "payment_frequency": "bullet (exclusive)"
 }
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 ### 2. Configuration Files ✅
 
@@ -37,7 +41,11 @@
 ✅ .vscode/settings.json - Cleaned (no Abaco data)
 ✅ .gitignore - Comprehensive exclusions
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 ### 3. Documentation Files ✅
 
@@ -49,7 +57,11 @@
 ✅ COMPREHENSIVE_CHECK.md - Validation results
 ✅ scripts/README.md - Complete scripts documentation
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 ### 4. Core Application Files ✅
 
@@ -60,7 +72,11 @@
 ✅ activate_environment.ps1 - Cross-platform activation
 ✅ requirements.txt - All dependencies listed
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 ### 5. Scripts Directory ✅
 
@@ -70,7 +86,11 @@
 ✅ All categories documented (8 categories)
 ✅ Usage examples provided for all scripts
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 ---
 
@@ -155,7 +175,11 @@ Commercial-View/                           ✅ Root directory
 ├── server_control.py                    ✅ Server management
 └── validate_repository.py               ✅ Validator
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 ---
 
@@ -169,7 +193,11 @@ git status
 
 # Expected: Clean working tree or ready to commit
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 **Latest Commits**:
 
@@ -206,7 +234,11 @@ git status
 
 & "./.venv/bin/pytest" tests/
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 **❌ Incorrect Commands** (Don't use these):
 
@@ -219,7 +251,11 @@ source .venv/bin/activate           # Bash command
 python script.py                    # Not in PATH
 pip install package                 # Not in PATH
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 ---
 
@@ -369,7 +405,11 @@ git status
 
 # Should output: ✅ All imports work
 
+<<<<<<< Updated upstream:docs/reports/FINAL_VERIFICATION.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_VERIFICATION.md
 
 ---
 

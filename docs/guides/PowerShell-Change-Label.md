@@ -41,7 +41,11 @@ zsh setup_commercial_view.sh      ✅ PASSED
 csh setup_commercial_view.sh      ✅ PASSED
 PowerShell .\run_correctly.ps1    ✅ PASSED
 
+<<<<<<< Updated upstream:docs/guides/PowerShell-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/PowerShell-Change-Label.md
 
 **2. Environment Detection Testing**
 
@@ -59,7 +63,11 @@ bash: ✅ PASSED
 zsh: ✅ PASSED
 csh/tcsh: ✅ PASSED
 
+<<<<<<< Updated upstream:docs/guides/PowerShell-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/PowerShell-Change-Label.md
 
 **3. Abaco Integration Testing**
 
@@ -147,7 +155,11 @@ detect_environment() {
     echo "✅ Detected: $OS with $CURRENT_SHELL shell"
 }
 
+<<<<<<< Updated upstream:docs/guides/PowerShell-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/PowerShell-Change-Label.md
 
 **Virtual Environment Handling:**
 
@@ -167,7 +179,11 @@ setup_venv() {
     fi
 }
 
+<<<<<<< Updated upstream:docs/guides/PowerShell-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/PowerShell-Change-Label.md
 
 **Abaco Integration Validation:**
 
@@ -195,7 +211,11 @@ print('✅ USD factoring compliance ready')
 "
 }
 
+<<<<<<< Updated upstream:docs/guides/PowerShell-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/PowerShell-Change-Label.md
 
 ## Performance Impact
 
@@ -313,7 +333,11 @@ source .venv/bin/activate.csh    # csh/tcsh
 python run.py                    # API server
 python process_abaco_data.py     # Process 48,853 records
 
+<<<<<<< Updated upstream:docs/guides/PowerShell-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/PowerShell-Change-Label.md
 
 **🎯 CHANGE STATUS: PRODUCTION READY ✅**
 

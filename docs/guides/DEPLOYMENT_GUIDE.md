@@ -58,7 +58,11 @@ loan_data:
 
   # Keep left side unchanged, update right side
 
+<<<<<<< Updated upstream:docs/guides/DEPLOYMENT_GUIDE.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/DEPLOYMENT_GUIDE.md
 
 ## 2. Pricing Files
 
@@ -75,7 +79,11 @@ pricing_files:
   retail_loans: "./data/pricing/retail_loans_pricing.csv"
   risk_based_pricing: "./data/pricing/risk_based_pricing.csv"
 
+<<<<<<< Updated upstream:docs/guides/DEPLOYMENT_GUIDE.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/DEPLOYMENT_GUIDE.md
 
 ### Interval Bands (Grid Ranges)
 
@@ -91,7 +99,11 @@ band_keys:
     lower_bound: "amount_min"
     upper_bound: "amount_max"
 
+<<<<<<< Updated upstream:docs/guides/DEPLOYMENT_GUIDE.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/DEPLOYMENT_GUIDE.md
 
 This matches the specification: `{feature: (low_col, high_col)}`
 
@@ -117,7 +129,11 @@ Four example pricing CSV files are included in `data/pricing/`:
 tenor_min,tenor_max,amount_min,amount_max,base_rate,margin,total_rate,product_type,customer_segment
 0,90,0,50000,0.0500,0.0200,0.0700,Commercial,Standard
 
+<<<<<<< Updated upstream:docs/guides/DEPLOYMENT_GUIDE.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/DEPLOYMENT_GUIDE.md
 
 ### How to Use Your Own Files
 
@@ -140,7 +156,11 @@ default_threshold:
   days: 180  # Standard default threshold
   description: "Loans with DPD >= 180 days are considered defaulted"
 
+<<<<<<< Updated upstream:docs/guides/DEPLOYMENT_GUIDE.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/DEPLOYMENT_GUIDE.md
 
 ### Alternative Thresholds Available
 
@@ -150,7 +170,11 @@ alternatives:
   moderate: 120      # Moderate approach
   standard: 180      # Current setting
 
+<<<<<<< Updated upstream:docs/guides/DEPLOYMENT_GUIDE.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/DEPLOYMENT_GUIDE.md
 
 ### Recommendation
 
@@ -200,7 +224,11 @@ export_paths:
   reports: "./abaco_runtime/exports/reports"
   archive: "./abaco_runtime/exports/archive"
 
+<<<<<<< Updated upstream:docs/guides/DEPLOYMENT_GUIDE.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/DEPLOYMENT_GUIDE.md
 
 ### Output File Locations
 
@@ -222,7 +250,11 @@ Update `base_path` in `config/export_config.yml` to your preferred location:
 export_paths:
   base_path: "/your/custom/path"
 
+<<<<<<< Updated upstream:docs/guides/DEPLOYMENT_GUIDE.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/DEPLOYMENT_GUIDE.md
 
 ### Recommendation
 
@@ -251,7 +283,11 @@ chunking:
   default_chunk_size: 10000
   adaptive_chunking: true
 
+<<<<<<< Updated upstream:docs/guides/DEPLOYMENT_GUIDE.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/DEPLOYMENT_GUIDE.md
 
 ### What We Need
 

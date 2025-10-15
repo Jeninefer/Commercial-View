@@ -65,7 +65,11 @@ python src/process_portfolio.py --config config/
 ls -la abaco_runtime/exports/
 ✅ All directories and files created properly
 
+<<<<<<< Updated upstream:docs/reports/SYSTEM_STATUS.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:SYSTEM_STATUS.md
 
 ## Next Steps for Production
 

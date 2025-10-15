@@ -14,7 +14,11 @@ pip install -r requirements.txt
 
 pip install -r requirements-dev.txt
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 ### 2. Validate Configuration
 
@@ -23,14 +27,22 @@ Run the schema validator to ensure all configuration files are correct:
 ```bash
 python validators/schema_validator.py
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 Expected output:
 
 ```text
 ✅ All validations passed!
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 ### 3. Customize Configuration
 
@@ -44,7 +56,11 @@ Edit `config/column_maps.yml` to match your data schema:
 
 nano config/column_maps.yml  # or vi, vim, code, etc.
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 Update field mappings:
 
@@ -56,7 +72,11 @@ loan_data:
 
   # ... etc
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 #### B. Pricing Files (REQUIRED)
 
@@ -72,7 +92,11 @@ Example pricing file structure:
 tenor_min,tenor_max,amount_min,amount_max,base_rate,margin,total_rate
 0,90,0,50000,0.0500,0.0200,0.0700
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 #### C. DPD Policy (REVIEW REQUIRED)
 
@@ -82,7 +106,11 @@ Choose your default threshold in `config/dpd_policy.yml`:
 default_threshold:
   days: 180 # Options: 90, 120, or 180
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 Review and adjust DPD buckets if needed.
 
@@ -97,7 +125,11 @@ Default export path is `./abaco_runtime/exports`. To change:
 export_paths:
   base_path: "/your/preferred/path"
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 ### 4. Validate Your Changes
 
@@ -106,7 +138,11 @@ After customization, run validation again:
 ```bash
 python validators/schema_validator.py
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 ### 5. Directory Setup
 
@@ -115,7 +151,11 @@ Create the export directories:
 ```bash
 mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archive}
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 ### 6. Test Run (When Implementation Ready)
 
@@ -125,10 +165,16 @@ Once your processing code is implemented:
 
 # Example command structure
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 
 # python src/process_portfolio.py --config config/
 
 ```bash
+=======
+# python src/process_portfolio.py --config config/
+
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 ### 7. Set Up Pre-commit Hooks (Development)
 
@@ -138,14 +184,22 @@ If you're developing:
 pip install pre-commit
 pre-commit install
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 Test pre-commit:
 
 ```bash
 pre-commit run --all-files
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 ## Configuration Checklist
 
@@ -206,7 +260,11 @@ pre-commit run --all-files
 
 python --version  # Should be 3.8+
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICKSTART.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICKSTART.md
 
 ### Outputs
 

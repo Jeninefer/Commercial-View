@@ -124,7 +124,11 @@ These TypeScript KPI calculation concepts could be adapted for the current Pytho
 
 - Automated daily data refresh from Google Drive
 
+<<<<<<< Updated upstream
 - GitHub Actions workflow (cron: "0 6 _ _ *")
+=======
+- GitHub Actions workflow (cron: "0 6 * * *")
+>>>>>>> Stashed changes
 
 - Comprehensive data management script (scripts/refresh_data.py)
 

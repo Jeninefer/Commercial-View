@@ -23,7 +23,11 @@ scripts/
 ├── Maintenance & Utilities (8)            # System maintenance
 └── External Integrations (4)              # Figma, Drive, etc.
 
+<<<<<<< Updated upstream:docs/reports/SCRIPTS_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/SCRIPTS_SUMMARY.md
 
 ---
 
@@ -123,7 +127,11 @@ graph TD
     F --> H[Sync GitHub]
     H --> I[Deploy Production]
 
+<<<<<<< Updated upstream:docs/reports/SCRIPTS_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/SCRIPTS_SUMMARY.md
 
 **Commands**:
 
@@ -153,7 +161,11 @@ python scripts/master_orchestrator.py
 
 python scripts/sync_github.py
 
+<<<<<<< Updated upstream:docs/reports/SCRIPTS_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/SCRIPTS_SUMMARY.md
 
 ---
 

@@ -30,7 +30,11 @@ Your Commercial-View platform has been thoroughly cleaned and validated with **1
    • Found in: Multiple documentation files
    • Accuracy: 99.97% validated
 
+<<<<<<< Updated upstream:docs/reports/FINAL_CLEANUP_SUCCESS.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/FINAL_CLEANUP_SUCCESS.md
 
 ### 🧹 **CLEANUP RESULTS**
 

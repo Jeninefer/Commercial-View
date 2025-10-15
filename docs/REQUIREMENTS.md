@@ -27,7 +27,11 @@ PyYAML>=6.0            # Configuration file processing
 jsonschema>=4.0.0      # Schema validation (Abaco schema compliance)
 python-dateutil>=2.8.0 # Date processing (payment dates, schedules)
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Development Dependencies (requirements-dev.txt)
 
@@ -38,7 +42,11 @@ flake8>=6.0.0          # Code linting
 mypy>=1.0.0            # Type checking
 jupyter>=1.0.0         # Data analysis notebooks
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Abaco Data Requirements
 
@@ -107,7 +115,11 @@ pip install -r requirements-dev.txt
 
 python setup_project.py
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Configuration Files Required
 

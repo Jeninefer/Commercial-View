@@ -1,8 +1,26 @@
+# Core API Framework
 fastapi>=0.68.0
 uvicorn[standard]>=0.15.0
+
+# Data Processing
 pandas>=1.5.0
 numpy>=1.21.0
+
+# Utilities
 pyyaml>=6.0
 requests>=2.28.0
-pytest>=7.0.0
 python-multipart>=0.0.5
+
+# Testing
+pytest>=7.0.0
+httpx>=0.24.0
+
+# Performance Monitoring
+psutil>=5.9.0
+
+# Data Download (for production data manager)
+gdown>=4.7.0
+
+# Additional Testing Dependencies
+pytest-cov>=4.0.0
+pytest-asyncio>=0.21.0

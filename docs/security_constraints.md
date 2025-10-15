@@ -81,7 +81,11 @@ example:
   original: "John Smith"
   masked: "J*** S****"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### 2. Customer IDs
 
@@ -93,7 +97,11 @@ example:
   original: "CUST-12345"
   masked: "HSH-89AB4F2E"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### 3. Email Addresses
 
@@ -104,7 +112,11 @@ example:
   original: "john.smith@example.com"
   masked: "j***@example.com"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### 4. Phone Numbers
 
@@ -115,7 +127,11 @@ example:
   original: "+1-555-123-4567"
   masked: "+1-555-XXX-XX67"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### 5. Account Numbers
 
@@ -126,7 +142,11 @@ example:
   original: "1234567890123456"
   masked: "************3456"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### 6. Business Tax ID / EIN
 
@@ -137,7 +157,11 @@ example:
   original: "12-3456789"
   masked: "12-****789"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### 7. DUNS Numbers
 
@@ -149,7 +173,11 @@ example:
   original: "123456789"
   masked: "HSH-45A7B9C2"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### 8. Collateral Addresses
 
@@ -160,7 +188,11 @@ example:
   original: "123 Main Street, Anytown, CA 90210"
   masked: "*** *** ******, *******, CA 90210"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### 9. Financial Ratios (Sensitive Business Data)
 
@@ -171,7 +203,11 @@ example:
   original: "DSCR: 1.47"
   masked: "DSCR: 1.25-1.50"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### 10. Loan Amounts (Large Commercial Loans)
 
@@ -182,7 +218,11 @@ example:
   original: "$2,450,000"
   masked: "$2M-$5M"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Enhanced Data Classification Levels
 
@@ -272,7 +312,11 @@ encryption_at_rest: true
 encryption_in_transit: true
 watermarking: true
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### Risk Assessment Reports (Highly Confidential)
 
@@ -288,7 +332,11 @@ audit_logging: true
 retention_period_days: 2555 # 7 years for regulatory compliance
 digital_signatures: required
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### Regulatory Reporting Exports (Restricted)
 
@@ -303,7 +351,11 @@ encryption_in_transit: true
 regulatory_approval_required: true
 transmission_controls: "secure_regulatory_portal_only"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### KPI JSON/CSV Exports (Public/Internal)
 
@@ -320,7 +372,11 @@ access_control: "role_based"
 encryption_at_rest: true
 encryption_in_transit: true
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### DPD Frame Exports (Internal/Confidential)
 
@@ -337,7 +393,11 @@ access_control: "role_based"
 audit_logging: true
 retention_period_days: 90
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 #### Buckets Exports (Internal)
 
@@ -351,7 +411,11 @@ masking_rules:
 aggregation_required: false
 access_control: "role_based"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Access Control
 
@@ -618,7 +682,11 @@ bcdr_requirements:
 
     - media_relations_protocol
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Enhanced Security Training and Awareness
 
@@ -660,7 +728,11 @@ training_matrix:
 
     - regulatory_examination_preparation
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 This comprehensive security framework ensures the Commercial-View platform meets the stringent security requirements of commercial lending operations while maintaining regulatory compliance and protecting sensitive financial data.
 

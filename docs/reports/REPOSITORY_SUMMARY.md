@@ -117,7 +117,11 @@
 ```bash
 python portfolio.py --abaco-only
 
+<<<<<<< Updated upstream:docs/reports/REPOSITORY_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/REPOSITORY_SUMMARY.md
 
 ### Schema Validation
 
@@ -126,7 +130,11 @@ from src.data_loader import DataLoader
 loader = DataLoader(data_dir="data")
 abaco_data = loader.load_abaco_data()
 
+<<<<<<< Updated upstream:docs/reports/REPOSITORY_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/REPOSITORY_SUMMARY.md
 
 ### Risk Scoring
 
@@ -135,7 +143,11 @@ from src.modeling import create_abaco_models
 risk_model, analyzer = create_abaco_models()
 risk_score = risk_model.calculate_abaco_risk_score(loan_record)
 
+<<<<<<< Updated upstream:docs/reports/REPOSITORY_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:scripts/REPOSITORY_SUMMARY.md
 
 ## 📊 Repository Statistics
 

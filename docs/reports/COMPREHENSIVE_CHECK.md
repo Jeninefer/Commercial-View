@@ -61,7 +61,11 @@
 ✅ .vscode/settings.json - Valid JSON (cleaned)
 ✅ .gitignore - Comprehensive exclusions
 
+<<<<<<< Updated upstream:docs/reports/COMPREHENSIVE_CHECK.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:COMPREHENSIVE_CHECK.md
 
 ### 4. **Scripts Validation** ✅
 
@@ -86,6 +90,7 @@ git status
 
 # Expected output:
 
+<<<<<<< Updated upstream:docs/reports/COMPREHENSIVE_CHECK.md
 
 # On branch main
 
@@ -96,6 +101,15 @@ git status
 # nothing to commit, working tree clean
 
 ```bash
+=======
+# On branch main
+
+# Your branch is up to date with 'origin/main'
+
+# nothing to commit, working tree clean
+
+```text
+>>>>>>> Stashed changes:COMPREHENSIVE_CHECK.md
 
 **Latest Commit**: d636083 ✅  
 **GitHub Sync**: Current ✅  
@@ -123,7 +137,11 @@ Test-Path "./.venv/bin/python"
 
 # Should include: fastapi, uvicorn, pandas, numpy, etc. ✅
 
+<<<<<<< Updated upstream:docs/reports/COMPREHENSIVE_CHECK.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:COMPREHENSIVE_CHECK.md
 
 ### 7. **File Structure** ✅
 
@@ -159,7 +177,11 @@ Commercial-View/
 ├── ✅ server_control.py
 └── ✅ validate_repository.py
 
+<<<<<<< Updated upstream:docs/reports/COMPREHENSIVE_CHECK.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:COMPREHENSIVE_CHECK.md
 
 ---
 
@@ -181,7 +203,11 @@ Commercial-View/
   }
 }
 
+<<<<<<< Updated upstream:docs/reports/COMPREHENSIVE_CHECK.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:COMPREHENSIVE_CHECK.md
 
 ### Data Consistency Check ✅
 
@@ -216,7 +242,11 @@ source .venv/bin/activate        # Bash command
 .\.venv\Scripts\Activate.ps1     # Windows path
 python script.py                 # Not in PATH
 
+<<<<<<< Updated upstream:docs/reports/COMPREHENSIVE_CHECK.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:COMPREHENSIVE_CHECK.md
 
 **Documentation Status**: ✅ All corrected in QUICK_START_MACOS_POWERSHELL.md
 
@@ -342,7 +372,11 @@ git status
 
 # Should output: ✅ All imports work ✅
 
+<<<<<<< Updated upstream:docs/reports/COMPREHENSIVE_CHECK.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:COMPREHENSIVE_CHECK.md
 
 ---
 

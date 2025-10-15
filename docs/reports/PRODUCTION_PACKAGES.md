@@ -20,7 +20,11 @@ Your Commercial-View system uses these validated production packages:
 ✅ pyyaml>=6.0.0            # Configuration file support
 ✅ requests>=2.31.0         # HTTP client library
 
+<<<<<<< Updated upstream:docs/reports/PRODUCTION_PACKAGES.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:PRODUCTION_PACKAGES.md
 
 ### **Production Performance Metrics**
 
@@ -45,7 +49,11 @@ Your package configuration delivers:
 ✅ Consolidated: All packages into production requirements.txt
 ✅ Validated: All dependencies working perfectly
 
+<<<<<<< Updated upstream:docs/reports/PRODUCTION_PACKAGES.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:PRODUCTION_PACKAGES.md
 
 ## 🚀 **PRODUCTION PACKAGE INSTALLATION**
 
@@ -59,10 +67,15 @@ python3 -m venv .venv
 
 # Activate (platform-specific)
 
+<<<<<<< Updated upstream:docs/reports/PRODUCTION_PACKAGES.md
 
 # Windows: .\.venv\Scripts\Activate.ps1
 
 
+=======
+# Windows: .\.venv\Scripts\Activate.ps1
+
+>>>>>>> Stashed changes:PRODUCTION_PACKAGES.md
 # macOS/Linux: source .venv/bin/activate
 
 # Install production packages
@@ -73,7 +86,11 @@ pip install -r requirements.txt
 
 pip list
 
+<<<<<<< Updated upstream:docs/reports/PRODUCTION_PACKAGES.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:PRODUCTION_PACKAGES.md
 
 ## 📊 **PACKAGE VALIDATION RESULTS**
 

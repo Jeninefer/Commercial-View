@@ -490,3 +490,14 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(f"Server failed to start: {e}")
         sys.exit(1)
+<<<<<<< Updated upstream:src/run.py
+=======
+
+# Help message for error resolution
+help_text = """To properly fix all errors, I need to see:
+1. The complete error messages
+2. Your repository structure
+3. The specific files with issues"""
+
+print(help_text)
+>>>>>>> Stashed changes:scripts/run.py

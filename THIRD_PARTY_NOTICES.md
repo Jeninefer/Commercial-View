@@ -109,7 +109,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### BSD 3-Clause License
 
@@ -146,7 +150,11 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Apache License 2.0
 
@@ -333,7 +341,11 @@ of your accepting any such warranty or additional support.
 
 END OF TERMS AND CONDITIONS
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Compliance Verification
 
@@ -365,7 +377,10 @@ Create a quick run script for future use:
 
 #!/bin/bash
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 # filepath: /Users/jenineferderas/Documents/GitHub/Commercial-View/run_integration_summary.sh
 
 echo "🎉 Running Commercial-View Integration Summary"
@@ -390,7 +405,11 @@ deactivate
 
 echo "✅ Integration summary completed successfully!"
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Usage
 

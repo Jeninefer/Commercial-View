@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "total_checks": 20,
+  "passed": 20,
+  "failed": 0,
+  "warnings": 0,
+  "details": {
+    "passed": [
+      "\u2705 Schema contains Loan Data",
+      "\u2705 Schema contains Historic Real Payment",
+      "\u2705 Schema contains Payment Schedule",
+      "\u2705 Loan Data: 16,205 records (expected: 16,205)",
+      "\u2705 Payment History: 16,443 records (expected: 16,443)",
+      "\u2705 Payment Schedule: 16,205 records (expected: 16,205)",
+      "\u2705 Total Records: 48,853 (expected: 48,853)",
+      "\u2705 Spanish client names detected: 2 samples",
+      "\u2705 UTF-8 character encoding supported",
+      "\u2705 Currency: USD (expected: USD)",
+      "\u2705 Product Type: factoring (expected: factoring)",
+      "\u2705 APR Range: 29.47% - 36.99%",
+      "\u2705 Payment Frequency: bullet (expected: bullet)",
+      "\u2705 Portfolio Value: $208,192,588.65 USD",
+      "\u2705 Total Disbursed: $200,455,057.90 USD",
+      "\u2705 Total Outstanding: $145,167,389.70 USD",
+      "\u2705 Customer ID: Zero null values",
+      "\u2705 Loan ID: Zero null values",
+      "\u2705 Product Type: Zero null values",
+      "\u2705 Loan Currency: Zero null values"
+    ],
+    "failed": [],
+    "warnings": []
+  },
+  "timestamp": "2025-10-12T17:43:39.193575"
+}

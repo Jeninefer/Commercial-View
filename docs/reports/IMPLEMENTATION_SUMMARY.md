@@ -43,7 +43,11 @@ band_keys:
     lower_bound: "amount_min"
     upper_bound: "amount_max"
 
+<<<<<<< Updated upstream:docs/reports/IMPLEMENTATION_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:IMPLEMENTATION_SUMMARY.md
 
 This matches the required format: `{feature: (low_col, high_col)}`
 
@@ -313,7 +317,11 @@ Features:
 
 ## Project Structure
 
+<<<<<<< Updated upstream:docs/reports/IMPLEMENTATION_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:IMPLEMENTATION_SUMMARY.md
 Commercial-View/
 ├── config/                          # Configuration files
 │   ├── column_maps.yml             # Field mappings
@@ -345,7 +353,11 @@ Commercial-View/
 ├── requirements.txt                # Dependencies
 └── requirements-dev.txt            # Dev dependencies
 
+<<<<<<< Updated upstream:docs/reports/IMPLEMENTATION_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:IMPLEMENTATION_SUMMARY.md
 
 ---
 
@@ -353,7 +365,11 @@ Commercial-View/
 
 All configuration files have been validated:
 
+<<<<<<< Updated upstream:docs/reports/IMPLEMENTATION_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:IMPLEMENTATION_SUMMARY.md
 $ python validators/schema_validator.py
 
 Configuration Validation Report
@@ -373,8 +389,14 @@ Configuration Validation Report
 Validation Summary
 
 ✅ All validations passed!
+<<<<<<< Updated upstream:docs/reports/IMPLEMENTATION_SUMMARY.md
 
 ```bash
+=======
+======================================================================
+
+```text
+>>>>>>> Stashed changes:IMPLEMENTATION_SUMMARY.md
 
 ---
 
@@ -444,7 +466,11 @@ pre-commit run --all-files
 
 mkdir -p abaco_runtime/exports/{kpi/json,kpi/csv,dpd_frame,buckets,reports,archive}
 
+<<<<<<< Updated upstream:docs/reports/IMPLEMENTATION_SUMMARY.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:IMPLEMENTATION_SUMMARY.md
 
 ---
 

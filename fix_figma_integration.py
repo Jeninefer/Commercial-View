@@ -3,9 +3,12 @@ Fix Figma integration issues in Commercial-View Abaco platform
 Ensures core functionality remains unaffected by Figma login problems
 """
 
+import sys  # Add this at the top
 import os
+import shutil
 from pathlib import Path
 import json
+import logging
 
 
 def fix_figma_integration_issues():

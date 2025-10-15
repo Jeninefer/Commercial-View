@@ -26,7 +26,11 @@ npm start
 
 # Open http://localhost:3000 in your browser
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Available Scripts
 
@@ -93,7 +97,11 @@ Create a `.env` file in this directory:
 REACT_APP_API_BASE_URL=http://localhost:8000
 REACT_APP_ENVIRONMENT=development
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 For production:
 
@@ -101,7 +109,11 @@ For production:
 REACT_APP_API_BASE_URL=https://your-api-domain.com
 REACT_APP_ENVIRONMENT=production
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Additional Environment Variables
 
@@ -112,7 +124,11 @@ DATABASE_URL=postgresql://localhost/mydb
 API_KEY=your-api-key-here
 DEBUG=True
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Testing
 
@@ -132,7 +148,11 @@ npm test -- --coverage
 
 npm test -- --ci --coverage --watchAll=false
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Backend Integration Testing
 
@@ -150,7 +170,11 @@ python server_control.py --port 8000
 cd frontend/dashboard
 npm test
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ⚠️ **Note**: `pytest -q` (backend tests) should not be run in read-only QA environments. Use dedicated development or testing environments for full test suite execution.
 
@@ -173,7 +197,11 @@ For cloud development and testing:
 %cd Commercial-View/frontend/dashboard
 !npm install
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Development in Colab
 
@@ -196,7 +224,11 @@ time.sleep(10)  # Wait for startup
 print("Dashboard server starting on port 3000")
 print("Use Colab's port forwarding or ngrok for external access")
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Export and Persistence
 
@@ -215,7 +247,11 @@ print("Use Colab's port forwarding or ngrok for external access")
 from google.colab import files
 files.download('dashboard-build.zip')
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ### Cleanup (Important for Colab)
 
@@ -229,7 +265,11 @@ try:
 except:
     print("Server was not running")
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Project Structure
 
@@ -251,7 +291,11 @@ except:
 package.json
 README.md
 
+<<<<<<< Updated upstream
 ```bash
+=======
+```text
+>>>>>>> Stashed changes
 
 ## Development Workflow
 

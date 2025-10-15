@@ -15,7 +15,11 @@
 chmod +x activate_commercial_view.sh
 ./activate_commercial_view.sh
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICK_START.md
 
 ### 2. Install Dependencies (in activated environment)
 
@@ -23,21 +27,33 @@ chmod +x activate_commercial_view.sh
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICK_START.md
 
 1. Run setup script
 
 ```bash
 python setup_project.py
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICK_START.md
 
 ### 4. Validate Production Readiness
 
 ```bash
 python scripts/production_validation_complete.py
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICK_START.md
 
 ## 📊 Process Abaco Data
 
@@ -53,7 +69,11 @@ python scripts/create_complete_abaco_sample.py
 
 python portfolio.py --config config
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICK_START.md
 
 ### With Real Abaco Data
 
@@ -70,7 +90,11 @@ python portfolio.py --config config
 ```bash
 python portfolio.py --config config --abaco-only
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICK_START.md
 
 3. Check results in `abaco_runtime/exports/`
 
@@ -105,7 +129,11 @@ python -m venv .venv
 ./activate_commercial_view.sh
 pip install -r requirements.txt
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICK_START.md
 
 ### Git Issues
 
@@ -116,7 +144,11 @@ pip install -r requirements.txt
 git reset --soft HEAD~1
 ./sync_github.sh
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICK_START.md
 
 ### Import Issues
 
@@ -127,7 +159,11 @@ git reset --soft HEAD~1
 export PYTHONPATH="${PWD}/src:${PYTHONPATH}"
 python -c "import src.data_loader; print('✅ DataLoader working')"
 
+<<<<<<< Updated upstream:docs/quickstarts/QUICK_START.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:emergency_backup_20251012_100844/QUICK_START.md
 
 ## 🎯 Production Ready
 

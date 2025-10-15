@@ -100,7 +100,11 @@ function Get-CommercialViewEnvironment {
     return $env
 }
 
+<<<<<<< Updated upstream:docs/guides/Commercial-View-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:Commercial-View-Change-Label.md
 
 **Abaco Integration Preservation**:
 
@@ -145,7 +149,11 @@ print(f'✅ Performance: {"PASSED" if end-start < 5.0 else "REVIEW"}')
     return $LASTEXITCODE -eq 0
 }
 
+<<<<<<< Updated upstream:docs/guides/Commercial-View-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:Commercial-View-Change-Label.md
 
 ### 📋 **Files Modified**
 
@@ -189,7 +197,11 @@ $TestMatrix = @(
     @{ Platform = "Ubuntu 22.04"; PowerShell = "7.3"; Status = "✅ PASSED" }
 )
 
+<<<<<<< Updated upstream:docs/guides/Commercial-View-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:Commercial-View-Change-Label.md
 
 **2. Abaco Integration Validation**
 
@@ -228,7 +240,11 @@ function Test-AbacoPerformanceBenchmark {
     return $allPassed
 }
 
+<<<<<<< Updated upstream:docs/guides/Commercial-View-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:Commercial-View-Change-Label.md
 
 ### 🔄 **Previous Testing Gaps Addressed**
 
@@ -305,7 +321,11 @@ function Test-ChangeRiskMitigation {
     }
 }
 
+<<<<<<< Updated upstream:docs/guides/Commercial-View-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:Commercial-View-Change-Label.md
 
 **2. Rollback Procedures**
 
@@ -337,7 +357,11 @@ function Invoke-EmergencyRollback {
     }
 }
 
+<<<<<<< Updated upstream:docs/guides/Commercial-View-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:Commercial-View-Change-Label.md
 
 **3. Monitoring and Alerting**
 
@@ -530,7 +554,11 @@ function Start-ChangeRollback {
     Write-Host "📧 Notifying change control board..." -ForegroundColor Blue
 }
 
+<<<<<<< Updated upstream:docs/guides/Commercial-View-Change-Label.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:Commercial-View-Change-Label.md
 
 **Recovery Time Objectives**:
 
@@ -671,6 +699,7 @@ I've created a comprehensive change management system for your Commercial-View A
 
 # This will:
 
+<<<<<<< Updated upstream:docs/guides/Commercial-View-Change-Label.md
 
 # ✅ Detect your platform automatically
 
@@ -687,3 +716,16 @@ I've created a comprehensive change management system for your Commercial-View A
 # ✅ Generate a comprehensive setup report
 
 ```bash
+=======
+# ✅ Detect your platform automatically
+
+# ✅ Setup the correct Python environment
+
+# ✅ Install Abaco dependencies
+
+# ✅ Validate 48,853 record processing capability
+
+# ✅ Generate a comprehensive setup report
+
+```text
+>>>>>>> Stashed changes:Commercial-View-Change-Label.md

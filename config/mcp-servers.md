@@ -18,7 +18,11 @@ npx @figma/mcp-server-figma
 
 https://github.com/figma/mcp-server-figma
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Authentication (No OAuth Support)
 
@@ -110,7 +114,11 @@ https://github.com/figma/mcp-server-figma
   }
 }
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Environment Variables
 
@@ -118,7 +126,10 @@ https://github.com/figma/mcp-server-figma
 
 # OLD TOKEN (403 Forbidden - DO NOT USE)
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 
+=======
+>>>>>>> Stashed changes:mcp-servers.md
 # FIGMA_PERSONAL_ACCESS_TOKEN=figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK
 
 # NEW TOKEN (Replace with your new token)
@@ -130,7 +141,11 @@ FIGMA_PERSONAL_ACCESS_TOKEN=REPLACE_WITH_NEW_FIGMA_TOKEN
 COMMERCIAL_VIEW_API_URL=http://localhost:8000
 COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Token Validation
 
@@ -144,7 +159,11 @@ curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
 
 export FIGMA_PERSONAL_ACCESS_TOKEN="YOUR_NEW_TOKEN"
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Required Actions
 
@@ -182,7 +201,11 @@ export FIGMA_PERSONAL_ACCESS_TOKEN="YOUR_NEW_TOKEN"
   }
 }
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Production Setup
 
@@ -204,7 +227,11 @@ npx @figma/mcp-server-figma
 
 curl http://localhost:8000/health
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Integration Commands
 
@@ -220,7 +247,10 @@ curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://a
 
 # After getting new token, test it:
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 
+=======
+>>>>>>> Stashed changes:mcp-servers.md
 # curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
 
 # Check Commercial-View API status
@@ -231,7 +261,11 @@ python server_control.py --check-only --port 8000
 
 curl -N http://localhost:8000/sse
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Quick Test Commands
 
@@ -263,7 +297,11 @@ npx @modelcontextprotocol/server-github
 
 # GitHub also uses Personal Access Tokens, not OAuth for MCP
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Authentication Summary
 
@@ -290,6 +328,7 @@ npx @modelcontextprotocol/server-github
 
 # 1. Remove any OAuth configuration from your MCP setup
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 
 # 2. Use only Personal Access Tokens
 
@@ -297,6 +336,12 @@ npx @modelcontextprotocol/server-github
 # 3. Verify token format and permissions
 
 
+=======
+# 2. Use only Personal Access Tokens
+
+# 3. Verify token format and permissions
+
+>>>>>>> Stashed changes:mcp-servers.md
 # 4. Restart MCP server with token-based config
 
 # Example working configuration:
@@ -304,7 +349,11 @@ npx @modelcontextprotocol/server-github
 export FIGMA_PERSONAL_ACCESS_TOKEN="figd_your_actual_token"
 npx @figma/mcp-server-figma
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Quick Setup
 
@@ -322,7 +371,11 @@ npx @figma/mcp-server-figma
 
 python scripts/mcp_server.py test-figma
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Testing Commands
 
@@ -340,7 +393,11 @@ python scripts/mcp_server.py test-all
 
 python scripts/mcp_server.py debug-auth
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Environment Setup
 
@@ -354,7 +411,11 @@ python scripts/mcp_server.py debug-auth
 
 curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://api.figma.com/v1/me
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Expected Results
 
@@ -408,7 +469,11 @@ curl -H "X-Figma-Token: figd_eh6CUq7fBvqvmlWjPX875tdiyrkoPzC3s-TfrdVK" https://a
   }
 }
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Environment Template
 
@@ -423,7 +488,11 @@ FIGMA_PERSONAL_ACCESS_TOKEN=YOUR_NEW_TOKEN_HERE
 COMMERCIAL_VIEW_API_URL=http://localhost:8000
 COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Status Summary
 
@@ -449,10 +518,16 @@ curl http://localhost:8000/health
 
 # 3. After getting new Figma token, test it
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 
 # curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
 
 ```bash
+=======
+# curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
+
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
       "authentication": {
         "type": "none"
@@ -461,7 +536,11 @@ curl http://localhost:8000/health
   }
 }
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Environment Variables Template
 
@@ -476,7 +555,11 @@ FIGMA_PERSONAL_ACCESS_TOKEN=YOUR_NEW_TOKEN_HERE
 COMMERCIAL_VIEW_API_URL=http://localhost:8000
 COMMERCIAL_VIEW_SSE_URL=http://localhost:8000/sse
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 ```bash
+=======
+```text
+>>>>>>> Stashed changes:mcp-servers.md
 
 ### Current Status Summary
 
@@ -502,7 +585,13 @@ curl http://localhost:8000/health
 
 # 3. After getting new Figma token, test it
 
+<<<<<<< Updated upstream:config/mcp-servers.md
 
 # curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
 
 ```bash
+=======
+# curl -H "X-Figma-Token: YOUR_NEW_TOKEN" https://api.figma.com/v1/me
+
+```text
+>>>>>>> Stashed changes:mcp-servers.md

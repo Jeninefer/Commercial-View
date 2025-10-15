@@ -1,5 +1,6 @@
-# Commercial-View Documentation Index
+# Documentation
 
+<<<<<<< Updated upstream
 ## 📚 Complete Documentation Suite (45,000+ Words)
 
 Welcome to the comprehensive Commercial-View documentation. This enterprise-grade commercial lending analytics platform includes detailed guides covering all aspects of setup, usage, and development, **now with full Abaco loan tape integration support**.
@@ -172,3 +173,6 @@ For documentation questions:
 
 _Last Updated: 2024-12-19 | Version: 1.0.0 | Total Documentation: 47,500+ words_
 _**Latest**: Full Abaco loan tape integration with automated risk scoring_
+=======
+This is the documentation for the project.
+>>>>>>> Stashed changes

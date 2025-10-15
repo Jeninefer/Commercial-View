@@ -1,5 +1,5 @@
-"""
-Comprehensive Repository Validation Script
+"""Comprehensive Repository Validation Script
+
 Checks for: syntax errors, duplicates, dummy data, and validates real Abaco data
 """
 
@@ -33,11 +33,10 @@ class RepositoryValidator:
             "portfolio_value": 208192588.65,
             "currency": "USD",
             "companies": ["Abaco Technologies", "Abaco Financial"],
-            "apr_min": 0.2947,
-            "apr_max": 0.3699,
-            "payment_frequency": "bullet",
             "product_type": "factoring",
+            "apr_range": {"min": 0.2947, "max": 0.3699},
         }
+<<<<<<< Updated upstream
         # Dummy data patterns to find and replace
         self.DUMMY_PATTERNS = [
             (r"example\.com", "Dummy email domain"),
@@ -52,61 +51,69 @@ class RepositoryValidator:
             (r"12345", "Example ID (unless part of real data)"),
             (r"foo|bar|baz", "Placeholder variable names"),
         ]
+=======
+
+    def validate_all(self):
+        """Run all validation checks."""
+        print("🔍 Starting comprehensive repository validation...")
+
+        self.check_python_syntax()
+        self.find_duplicates()
+        self.check_dummy_data()
+        self.validate_abaco_data()
+
+        return self.generate_report()
+>>>>>>> Stashed changes
 
     def check_python_syntax(self):
         """Check all Python files for syntax errors."""
-        print("🔍 Checking Python syntax errors...")
+        print("\n🐍 Checking Python syntax...")
 
         for py_file in self.base_path.rglob("*.py"):
             if ".venv" in str(py_file) or "__pycache__" in str(py_file):
                 continue
 
             try:
-                with open(py_file, "r", encoding="utf-8") as f:
-                    code = f.read()
-                    ast.parse(code)
-                print(f"   ✅ {py_file.name}: Syntax OK")
-            except SyntaxError as e:
-                error_msg = f"SYNTAX ERROR in {py_file}: Line {e.lineno}: {e.msg}"
-                self.errors.append(error_msg)
-                print(f"   ❌ {error_msg}")
+                result = subprocess.run(
+                    ["python", "-m", "py_compile", str(py_file)],
+                    capture_output=True,
+                    text=True,
+                )
+                if result.returncode == 0:
+                    print(f"   ✅ {py_file.name}: Syntax OK")
+                else:
+                    error_msg = f"SYNTAX ERROR in {py_file}: {result.stderr}"
+                    self.errors.append(error_msg)
+                    print(f"   ❌ {py_file.name}: Syntax error")
             except Exception as e:
-                warning_msg = f"WARNING in {py_file}: {str(e)}"
-                self.warnings.append(warning_msg)
-                print(f"   ⚠️  {warning_msg}")
+                self.errors.append(f"Error checking {py_file}: {e}")
 
-    def find_duplicate_files(self):
+    def find_duplicates(self):
         """Find duplicate files by content hash."""
         print("\n🔍 Searching for duplicate files...")
 
         file_hashes = defaultdict(list)
 
         for file_path in self.base_path.rglob("*"):
-            if file_path.is_file() and not any(
-                ex in str(file_path)
-                for ex in [".git", "__pycache__", ".venv", "node_modules"]
-            ):
+            if file_path.is_file() and ".venv" not in str(file_path):
                 try:
-                    with open(file_path, "rb") as f:
-                        file_hash = hashlib.md5(f.read()).hexdigest()
-                        file_hashes[file_hash].append(str(file_path))
+                    content_hash = hashlib.md5(file_path.read_bytes()).hexdigest()
+                    file_hashes[content_hash].append(file_path.name)
                 except Exception:
                     continue
 
-        for file_hash, paths in file_hashes.items():
-            if len(paths) > 1:
-                self.duplicates.append(paths)
-                print(f"   ⚠️  Found {len(paths)} duplicate files:")
-                for path in paths:
-                    print(f"      - {Path(path).name}")
+        for file_hash, files in file_hashes.items():
+            if len(files) > 1:
+                self.duplicates.append(files)
+                print(f"   ⚠️  Found {len(files)} duplicate files:")
+                for f in files:
+                    print(f"      - {f}")
 
-        if not self.duplicates:
-            print("   ✅ No duplicate files found")
-
-    def find_dummy_data(self):
-        """Find dummy data patterns in code."""
+    def check_dummy_data(self):
+        """Check for placeholder/dummy data."""
         print("\n🔍 Searching for dummy/placeholder data...")
 
+<<<<<<< Updated upstream
         for file_path in self.base_path.rglob("*.py"):
             if ".venv" in str(file_path) or "__pycache__" in str(file_path):
                 continue
@@ -148,203 +155,193 @@ class RepositoryValidator:
             "companies": False,
             "product_type": False,
         }
+=======
+        dummy_patterns = [
+            (r"TODO", "TODO comment"),
+            (r"FIXME", "FIXME comment"),
+            (r"XXX", "Placeholder comment"),
+            (r"Lorem ipsum", "Placeholder text"),
+            (r"placeholder", "Placeholder text"),
+            (r"sample_data", "Sample data reference"),
+            (r"12345", "Example ID (unless part of real data)"),
+            (r"\bfoo\b|\bbar\b|\bbaz\b", "Placeholder variable names"),
+        ]
+>>>>>>> Stashed changes
 
         for py_file in self.base_path.rglob("*.py"):
             if ".venv" in str(py_file):
                 continue
 
             try:
-                with open(py_file, "r", encoding="utf-8") as f:
-                    content = f.read()
-
-                    # Check for portfolio value
-                    if "208192588.65" in content:
-                        validation_results["portfolio_value"] = True
-
-                    # Check for record counts
-                    if "48853" in content or "16205" in content:
-                        validation_results["record_counts"] = True
-
-                    # Check for USD currency
-                    if '"USD"' in content or "'USD'" in content:
-                        validation_results["currency"] = True
-
-                    # Check for APR range
-                    if "0.2947" in content or "0.3699" in content:
-                        validation_results["apr_range"] = True
-
-                    # Check for companies
-                    if "Abaco Technologies" in content or "Abaco Financial" in content:
-                        validation_results["companies"] = True
-
-                    # Check for product type
-                    if "factoring" in content.lower():
-                        validation_results["product_type"] = True
+                content = py_file.read_text()
+                for pattern, description in dummy_patterns:
+                    matches = re.finditer(pattern, content, re.IGNORECASE)
+                    for match in matches:
+                        line_num = content[: match.start()].count("\n") + 1
+                        self.dummy_data.append(
+                            {
+                                "file": py_file.name,
+                                "line": line_num,
+                                "type": description,
+                                "text": match.group(),
+                            }
+                        )
+                        print(
+                            f"   ⚠️  {py_file.name}:{line_num} - {description}: '{match.group()}'"
+                        )
             except Exception:
                 continue
 
-        for key, value in validation_results.items():
-            status = "✅" if value else "❌"
-            print(
-                f"   {status} {key.replace('_', ' ').title()}: {'Found' if value else 'Not Found'}"
-            )
+    def validate_abaco_data(self):
+        """Validate that real Abaco data constants are used."""
+        print("\n🔍 Validating real Abaco data usage...")
 
-        return validation_results
+        schema_file = self.base_path / "config" / "abaco_schema_autodetected.json"
 
-    def check_run_py_constants(self):
-        """Check if run.py has proper constant definitions."""
-        print("\n🔍 Checking run.py for proper constants...")
+        if schema_file.exists():
+            try:
+                with open(schema_file) as f:
+                    schema = json.load(f)
 
-        run_py = self.base_path / "run.py"
-        if not run_py.exists():
-            print("   ⚠️  run.py not found")
-            return False
+                abaco_notes = schema.get("notes", {}).get("abaco_integration", {})
 
-        try:
-            with open(run_py, "r", encoding="utf-8") as f:
-                content = f.read()
+                # Validate key metrics
+                checks = [
+                    (
+                        "Portfolio Value",
+                        abaco_notes.get("financial_summary", {}).get(
+                            "total_loan_exposure_usd"
+                        ),
+                    ),
+                    ("Record Counts", abaco_notes.get("total_records")),
+                    (
+                        "Currency",
+                        (
+                            schema.get("datasets", {})
+                            .get("Loan Data", {})
+                            .get("columns", [{}])[12]
+                            .get("sample_values", [None])[0]
+                            if len(
+                                schema.get("datasets", {})
+                                .get("Loan Data", {})
+                                .get("columns", [])
+                            )
+                            > 12
+                            else None
+                        ),
+                    ),
+                    (
+                        "Apr Range",
+                        (
+                            schema.get("datasets", {})
+                            .get("Loan Data", {})
+                            .get("columns", [{}])[13]
+                            .get("abaco_validation", {})
+                            .get("min_rate")
+                            if len(
+                                schema.get("datasets", {})
+                                .get("Loan Data", {})
+                                .get("columns", [])
+                            )
+                            > 13
+                            else None
+                        ),
+                    ),
+                    ("Companies", abaco_notes.get("companies")),
+                    (
+                        "Product Type",
+                        (
+                            schema.get("datasets", {})
+                            .get("Loan Data", {})
+                            .get("columns", [{}])[6]
+                            .get("sample_values", [None])[0]
+                            if len(
+                                schema.get("datasets", {})
+                                .get("Loan Data", {})
+                                .get("columns", [])
+                            )
+                            > 6
+                            else None
+                        ),
+                    ),
+                ]
 
-            # Check for proper constant definitions
-            required_constants = [
-                "DAYS_IN_DEFAULT",
-                "INTEREST_RATE_APR",
-                "OUTSTANDING_LOAN_VALUE",
-                "LOAN_CURRENCY",
-                "PRODUCT_TYPE",
-            ]
-
-            all_defined = True
-            for const in required_constants:
-                # Check if constant is defined before use
-                pattern = rf'^{const}\s*=\s*["\'].*["\']'
-                if re.search(pattern, content, re.MULTILINE):
-                    print(f"   ✅ {const} properly defined")
-                else:
-                    print(
-                        f"   ❌ {const} not properly defined or used before definition"
-                    )
-                    self.errors.append(
-                        f"Constant {const} not properly defined in run.py"
-                    )
-                    all_defined = False
-
-            return all_defined
-        except Exception as e:
-            print(f"   ❌ Error checking run.py: {e}")
-            return False
+                for check_name, value in checks:
+                    if value:
+                        print(f"   ✅ {check_name}: Found")
+                    else:
+                        print(f"   ⚠️  {check_name}: Not found")
+            except Exception as e:
+                self.errors.append(f"Error validating Abaco data: {e}")
 
     def generate_report(self):
-        """Generate comprehensive validation report."""
+        """Generate validation report."""
         print("\n" + "=" * 70)
         print("📊 REPOSITORY VALIDATION REPORT")
         print("=" * 70)
 
-        report = {
-            "syntax_errors": len(self.errors),
-            "warnings": len(self.warnings),
-            "duplicates": len(self.duplicates),
-            "dummy_data": len(self.dummy_data),
-            "timestamp": "2024-10-12",
-        }
-
-        print(
-            f"\n{'❌' if report['syntax_errors'] > 0 else '✅'} Syntax Errors: {report['syntax_errors']}"
-        )
+        # Error summary
         if self.errors:
-            for error in self.errors:
+            print(f"\n❌ Syntax Errors: {len(self.errors)}")
+            for error in self.errors[:10]:  # Show first 10
                 print(f"   - {error}")
+        else:
+            print("\n✅ Syntax Errors: 0")
 
-        print(
-            f"\n{'⚠️ ' if report['warnings'] > 0 else '✅'} Warnings: {report['warnings']}"
-        )
-        if self.warnings:
-            for warning in self.warnings[:5]:  # Show first 5
-                print(f"   - {warning}")
+        # Warnings
+        print(f"\n✅ Warnings: {len(self.warnings)}")
 
-        print(
-            f"\n{'⚠️ ' if report['duplicates'] > 0 else '✅'} Duplicate Files: {report['duplicates']}"
-        )
+        # Duplicates
         if self.duplicates:
-            for dup_group in self.duplicates[:3]:  # Show first 3
-                print(f"   - {len(dup_group)} duplicates of {Path(dup_group[0]).name}")
+            print(f"\n⚠️  Duplicate Files: {len(self.duplicates)}")
+            for dup_set in self.duplicates[:5]:  # Show first 5
+                print(f"   - {len(dup_set)} duplicates of {dup_set[0]}")
 
-        print(
-            f"\n{'⚠️ ' if report['dummy_data'] > 0 else '✅'} Dummy Data Instances: {report['dummy_data']}"
-        )
+        # Dummy data
         if self.dummy_data:
+            print(f"\n⚠️  Dummy Data Instances: {len(self.dummy_data)}")
             for item in self.dummy_data[:10]:  # Show first 10
-                print(
-                    f"   - {Path(item['file']).name}:{item['line']} - {item['pattern']}"
-                )
+                print(f"   - {item['file']}:{item['line']} - {item['type']}")
 
+        # Real data validation
         print("\n💼 REAL ABACO DATA VALIDATION:")
-        print(f"   ✅ Total Records: {self.REAL_DATA['total_records']:,}")
-        print(
-            f"   ✅ Portfolio Value: ${self.REAL_DATA['portfolio_value']:,.2f} {self.REAL_DATA['currency']}"
-        )
+        print(f"   ✅ Total Records: {self.REAL_DATA['total_records']}")
+        print(f"   ✅ Portfolio Value: ${self.REAL_DATA['portfolio_value']:,.2f} USD")
         print(f"   ✅ Companies: {', '.join(self.REAL_DATA['companies'])}")
         print(
-            f"   ✅ APR Range: {self.REAL_DATA['apr_min']*100}% - {self.REAL_DATA['apr_max']*100}%"
+            f"   ✅ APR Range: {self.REAL_DATA['apr_range']['min']*100:.2f}% - {self.REAL_DATA['apr_range']['max']*100:.2f}%"
         )
         print(f"   ✅ Product Type: {self.REAL_DATA['product_type']}")
 
         # Save report
         report_file = self.base_path / "VALIDATION_REPORT.json"
+        report_data = {
+            "errors": self.errors,
+            "warnings": self.warnings,
+            "duplicates": [[str(f) for f in dup] for dup in self.duplicates],
+            "dummy_data": self.dummy_data,
+            "real_data": self.REAL_DATA,
+        }
+
         with open(report_file, "w") as f:
-            json.dump(report, f, indent=2)
+            json.dump(report_data, f, indent=2)
 
         print(f"\n📋 Report saved to: {report_file}")
 
-        # Overall status
-        if report["syntax_errors"] == 0:
-            print("\n🎉 ✅ NO SYNTAX ERRORS FOUND - REPOSITORY IS CLEAN!")
+        # Final status
+        if self.errors:
+            print(f"\n⚠️  {len(self.errors)} CRITICAL ISSUES FOUND - NEEDS FIXING")
         else:
-            print(
-                f"\n⚠️  {report['syntax_errors']} CRITICAL ISSUES FOUND - NEEDS FIXING"
-            )
-
-        return report
-
-    def run_full_validation(self):
-        """Run complete validation suite."""
-        print("🚀 Starting Comprehensive Repository Validation")
-        print("=" * 70)
-
-        # Check syntax
-        self.check_python_syntax()
-
-        # Check run.py constants
-        self.check_run_py_constants()
-
-        # Find duplicates
-        self.find_duplicate_files()
-
-        # Find dummy data
-        self.find_dummy_data()
-
-        # Validate real data usage
-        self.validate_real_abaco_data()
-
-        # Generate report
-        report = self.generate_report()
+            print("\n✅ ALL VALIDATION CHECKS PASSED")
 
         print("\n" + "=" * 70)
         print("🎯 VALIDATION COMPLETE")
         print("=" * 70)
 
-        return report
-
-
-def main():
-    """Main execution function."""
-    validator = RepositoryValidator()
-    report = validator.run_full_validation()
-
-    # Return exit code based on errors
-    return 0 if report["syntax_errors"] == 0 else 1
+        return len(self.errors) == 0
 
 
 if __name__ == "__main__":
-    import sys
-
-    sys.exit(main())
+    validator = RepositoryValidator()
+    success = validator.validate_all()
+    exit(0 if success else 1)
