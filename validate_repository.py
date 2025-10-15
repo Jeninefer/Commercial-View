@@ -11,6 +11,7 @@ import hashlib
 from pathlib import Path
 from collections import defaultdict
 import subprocess
+from datetime import datetime
 
 
 class RepositoryValidator:
@@ -245,7 +246,7 @@ class RepositoryValidator:
             "warnings": len(self.warnings),
             "duplicates": len(self.duplicates),
             "dummy_data": len(self.dummy_data),
-            "timestamp": "2024-10-12",
+            "timestamp": datetime.now().strftime("%Y-%m-%d"),
         }
 
         print(

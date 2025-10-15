@@ -12,6 +12,7 @@ import hashlib
 from pathlib import Path
 from collections import defaultdict
 import re
+from datetime import datetime
 
 
 class CommercialViewCleanup:
@@ -249,7 +250,7 @@ class CommercialViewCleanup:
             "errors": len(self.errors_found),
             "dummy_data": len(self.dummy_data_found),
             "real_data": self.REAL_DATA,
-            "timestamp": "2024-10-12",
+            "timestamp": datetime.now().strftime("%Y-%m-%d"),
         }
 
         print(f"\n✅ Duplicate Files: {report['duplicates']}")
